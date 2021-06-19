@@ -68,3 +68,17 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+### Hi There 👋
+
+I´m currently learning about software and web development at Platzi, and finishing my high school studies in the career Professional computer technologist.
+
+[Link to the website](https://brandonargel.github.io)
+
+## Credits
+
+This portfolio was designed with the inspiration from some repositories in github:
+
+- [Vincent Garreau](https://github.com/VincentGarreau/particles.js/)
+- [Brittany Chiang](https://github.com/bchiang7/v4)
+- [FalconMasters](https://github.com/falconmasters/texto-animado/tree/master)
