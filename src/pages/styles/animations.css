@@ -1,7 +1,17 @@
-
 .fadeInDown {
-    animation-duration: .5s;
-    animation-name: fadeInDown;
+    animation: fadeInDown .5s both;
+}
+
+.delay2 {
+    animation-delay: .2s;
+}
+
+.delay4 {
+    animation-delay: .4s;
+}
+
+.delay6 {
+    animation-delay: .6s;
 }
 
 @keyframes fadeInDown {
@@ -19,9 +29,7 @@
 }
 
 .fadeInLeft {
-    animation-duration: 1s;
-    animation-fill-mode: both;
-    animation-name: fadeInLeft;
+    animation: fadeInLeft 1s both;
 }
 
 @keyframes fadeInLeft {

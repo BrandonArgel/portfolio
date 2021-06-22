@@ -1,0 +1,97 @@
+fieldset {
+    border: 5px solid var(--couleur-special);
+    border-radius: 20px;
+    margin: 50px 0;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    align-self: center;
+    background-color: #00000055;
+}
+
+legend {
+    position: relative;
+    top: 10px;
+    padding: 0 5px;
+}
+
+form {
+    background-color: none;
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px 20px;
+    align-items: baseline;
+    width: 100%;
+}
+
+label {
+    margin: 10px 0 10px;
+    font-weight: bold;
+}
+
+label[for=message]{
+    margin-top: 50px;
+}
+
+input, textarea {
+    width: 100%;
+    border-radius: 5px;
+    padding: 12px;
+    background-color: transparent;
+    caret-color: var(--couleur-special);
+    outline: none;
+    border: none;
+    color: var(--couleur-special);
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+input:hover, input:active, input:focus, textarea:hover, textarea:active, textarea:focus {
+    box-shadow: inset -1px -1px 5px 0 var(--couleur-special);
+}
+
+input::placeholder, textarea::placeholder {
+    color: var(--couleur);
+    font-size: 1.6rem;
+}
+
+/* Change the white to any color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active
+{
+ -webkit-box-shadow: 0 0 0 30px var(--couleur-special) inset !important;
+ box-shadow: 0 0 0 30px var(--couleur-special) inset !important;
+}
+
+/*Change text in autofill textbox*/
+input:-webkit-autofill
+{
+ -webkit-text-fill-color: black !important;
+}
+
+
+textarea {
+    height: 20rem;
+}
+
+button[type=submit]{
+    background-color: transparent;
+    color: var(--couleur-special);
+    padding: 10px 20px;
+    display: block;
+    margin: 20px auto 0;
+    border-radius: 5px;
+    box-shadow: inset -2px -2px 5px 1px var(--couleur-special);
+    cursor: pointer;
+    border: 1px solid var(--couleur-special);
+}
+
+button[type=submit]:hover, button[type=submit]:active, button[type=submit]:focus{
+    filter: brightness(90%);
+}
+
+.form-response {
+    margin: 50px 0 20px;
+}

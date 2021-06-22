@@ -1,5 +1,4 @@
 :root {
-    --dark-fond: #0D1416;
     --fond: #0a101e;
     --light-fond: #0a102b;
     --couleur-special: #16FFE2;
@@ -9,10 +8,14 @@
     --transition: all 0.30s cubic-bezier(0.700, 0.050, 0.460, 1);
 }
 
+#root {
+    width: 100%;
+}
+
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 html {
@@ -49,6 +52,7 @@ body {
 .underlined {
     font-size: 1.6rem;
     font-weight: bold;
+    display: inline-block;
 }
 
 .underlined::after {

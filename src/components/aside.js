@@ -9,9 +9,9 @@ class Aside extends Component {
             <aside id="aside">
                 <nav>
                     <ul>
-                        <li><a href="#1">Sobre mí</a></li>
-                        <li><a href="#2">Proyectos</a></li>
-                        <li><a href="#3">Contacto</a></li>
+                        <li><a href="#about">Sobre mí</a></li>
+                        <li><a href="#projects">Proyectos</a></li>
+                        <li><a href="#contact">Contacto</a></li>
                     </ul>
                 </nav>
             </aside>

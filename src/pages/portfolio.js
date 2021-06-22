@@ -2,6 +2,9 @@ import React, { Component} from 'react'
 
 import './styles/portfolio.css'
 import './styles/animations.css'
+import About from '../components/about'
+import Projects from '../components/projects'
+import Contact from '../components/contact'
 import Pdf from '../components/Curriculum.pdf'
 import Button from '../components/button'
 
@@ -70,7 +73,7 @@ class Portfolio extends Component{
               animate[i].classList.add('transform_'+direction)
               if(distancia <= altura){
                   animate[i].classList.add('appear');
-              } else {
+                } else {
                   animate[i].classList.remove('appear');
               }
           }
@@ -100,14 +103,14 @@ class Portfolio extends Component{
                         <p className="main__hero--info">Soy un<span className="main__hero--info-career"> Frontend Developer </span>en constante aprendizaje y evolución que vive en la ciudad de Guadalajara, México y me especializo en construir sitios web.</p>
                     </div>
                     <div className="main__hero--buttons">
-                        {/* <a className="button" role="button" href="mailto:brandargel@gmail.com">Ponerse en contacto</a>
-                        <a className="button main__button--cv" role="button" target="_blank" rel="noopener" href="./Curriculum.pdf">Currículum</a> */}
                         <Button href="mailto:brandargel@gmail.com" text="Ponerse en contacto" />
                         <Button href={Pdf} text="Currículum" />
                     </div>
-
                 </section>
-            </main> 
+                <About />
+                <Projects />
+                <Contact />
+            </main>
         )
     }
 }

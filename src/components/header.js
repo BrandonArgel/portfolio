@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { Link } from "react-router-dom";
 
 import Aside from './aside'
+import Navbar from './navbar';
 
 import './styles/header.css'
-import logo from '../assets/svg/logo.svg'
+import logo from '../assets/svg/Logo.svg'
 
 class Header extends Component {
     componentDidMount(){
@@ -48,27 +49,15 @@ class Header extends Component {
         }
     }
 
-    // const animated = document.querySelectorAll('fadeInDown')
-    // for(let i = 0; i <= animated; i++){
-    //     animated[i].style.animationDelay = `${i+1}s`;
-    //     console.log("Hola")
-    // }
-
     render(){
         return(
             <header id="header" className="header">
                 <div className="header__invisible">
-                    <Link className="header__logo" to="/"><img className="header__logo-img" src={logo} alt="Logo" /></Link>
+                    <Link className="header__logo fadeInDown" to="/"><img className="header__logo-img" src={logo} alt="Logo" /></Link>
                     <div onClick={this.toggleMenu} className="header__menu--icon-container">
                         <div id="menu-icon" className="header__menu--icon"></div>
                     </div>
-                    <nav className="header__navbar">
-                        <ul>
-                            <li><a className="underlined fadeInDown" href="#1">Sobre mí</a></li>
-                            <li><a className="underlined fadeInDown" href="#2">Proyectos</a></li>
-                            <li><a className="underlined fadeInDown" href="#3">Contacto</a></li>
-                        </ul>
-                    </nav>
+                    <Navbar />
                     <Aside />
                 </div>
             </header>
