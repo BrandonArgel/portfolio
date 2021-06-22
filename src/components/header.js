@@ -53,7 +53,7 @@ class Header extends Component {
         return(
             <header id="header" className="header">
                 <div className="header__invisible">
-                    <Link className="header__logo fadeInDown" to="/"><img className="header__logo-img" src={logo} alt="Logo" /></Link>
+                    <Link className="header__logo fadeInDown" to="/brandonargel.github.io/"><img className="header__logo-img" src={logo} alt="Logo" /></Link>
                     <div onClick={this.toggleMenu} className="header__menu--icon-container">
                         <div id="menu-icon" className="header__menu--icon"></div>
                     </div>
