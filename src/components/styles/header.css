@@ -114,8 +114,12 @@ header {
     pointer-events: none !important;
 }
 
-@media screen and (min-width: 777px) {
+@media screen and (min-width: 778px) {
     .header__menu--icon-container {
+        display: none;
+    }
+
+    #aside {
         display: none;
     }
 }

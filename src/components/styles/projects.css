@@ -24,6 +24,7 @@
     width: 130px;
     display: block;
     margin: 0 auto;
+    background-color: transparent;
 }
 
 .main__button--projects {

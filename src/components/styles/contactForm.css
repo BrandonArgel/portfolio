@@ -1,18 +1,29 @@
 fieldset {
-    border: 5px solid var(--couleur-special);
+    border: 5px solid #16FFE2aa;
     border-radius: 20px;
     margin: 50px 0;
     width: 100%;
     max-width: 500px;
     display: flex;
     align-self: center;
-    background-color: #00000055;
+}
+
+fieldset:active, fieldset:hover, fieldset:focus, fieldset:focus-within {
+    border: 5px solid var(--couleur-special);
+}
+
+fieldset:active legend h2.main__section--title, fieldset:hover legend h2.main__section--title, fieldset:focus legend h2.main__section--title, fieldset:focus-within legend h2.main__section--title {
+    color: var(--couleur-special);
 }
 
 legend {
     position: relative;
     top: 10px;
     padding: 0 5px;
+}
+
+legend h2.main__section--title {
+    color: #16FFE2aa;
 }
 
 form {
@@ -44,10 +55,11 @@ input, textarea {
     color: var(--couleur-special);
     letter-spacing: 1px;
     font-weight: bold;
+    box-shadow: inset -1px -1px 5px 0 var(--couleur-special);
 }
 
 input:hover, input:active, input:focus, textarea:hover, textarea:active, textarea:focus {
-    box-shadow: inset -1px -1px 5px 0 var(--couleur-special);
+    box-shadow: inset 0 0 10px var(--couleur-special);
 }
 
 input::placeholder, textarea::placeholder {
@@ -77,19 +89,24 @@ textarea {
 }
 
 button[type=submit]{
-    background-color: transparent;
+    background-color: black;
     color: var(--couleur-special);
     padding: 10px 20px;
     display: block;
     margin: 20px auto 0;
     border-radius: 5px;
-    box-shadow: inset -2px -2px 5px 1px var(--couleur-special);
     cursor: pointer;
-    border: 1px solid var(--couleur-special);
+    border: 3px inset var(--couleur-special);
+    transition: var(--transition);
 }
 
-button[type=submit]:hover, button[type=submit]:active, button[type=submit]:focus{
-    filter: brightness(90%);
+button[type=submit]:hover, button[type=submit]:focus{
+    border: 3px outset var(--couleur-special);
+    outline: none;
+}
+
+button[type=submit]:active {
+    transform: translateY(5px);
 }
 
 .form-response {

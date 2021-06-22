@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
       <Layout>
         <Switch>
-          <Route exact path="/brandonargel.github.io/" component={Portfolio} />
+          <Route exact path="/" component={Portfolio} />
           {/* <Route component={NotFound} /> */}
         </Switch>
       </Layout>

@@ -67,7 +67,7 @@ export default class Projects extends Component {
                         <CardProject title="Calabaza animada" description="Calabaza con animaciones CSS, pseudoelementos y keyframes." image={animatedPumpkin} project="https://brandonargel.github.io/Animated-Pumpkin/" github="https://github.com/BrandonArgel/Animated-Pumpkin" right={true} />
                     </div>
                 </div>
-                <div id="button" className="button button-projects">Show more</div>
+                <button id="button" className="button button-projects">Show more</button>
             </section>
         )
     }

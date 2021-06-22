@@ -19,7 +19,7 @@ export default function ContactForm() {
         <legend><h2 className="main__section--title">¡Hablemos!</h2></legend>
         <form onSubmit={handleSubmit}>
             <label htmlFor="email">Correo electrónico:</label>
-            <input required id="email" type="email" name="email" placeholder="correo@empresa.com" />
+            <input required id="email" type="email" name="email" placeholder="correo@gmail.com" />
             <ValidationError prefix="Email" field="email" errors={state.errors} />
             <label htmlFor="message">Mensaje:</label>
             <textarea required id="message" name="message" placeholder="Hola, que tal..." />
