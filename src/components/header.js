@@ -44,6 +44,8 @@ class Header extends Component {
         menuIcon.classList.toggle('header__menu-close--icon') // Change the icon
 
         main.removeEventListener("click", this.toggleMenu)
+
+        // Cuando el aside será visible
         if(document.getElementById("aside").classList.contains("active")){
             main.addEventListener("click", this.toggleMenu)
         }
@@ -54,9 +56,9 @@ class Header extends Component {
             <header id="header" className="header">
                 <div className="header__invisible">
                     <Link className="header__logo fadeInDown" to="/"><img className="header__logo-img" src={logo} alt="Logo" /></Link>
-                    <div onClick={this.toggleMenu} className="header__menu--icon-container">
+                    <button aria-label="Menu" onClick={this.toggleMenu} className="header__menu--icon-container">
                         <div id="menu-icon" className="header__menu--icon"></div>
-                    </div>
+                    </button>
                     <Navbar />
                     <Aside />
                 </div>

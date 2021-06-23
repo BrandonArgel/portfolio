@@ -33,7 +33,7 @@ export default class Projects extends Component {
             for(let i=0; i<projectsHidden.length; i++){
                 projectsHidden[i].style.display='flex'
             }
-            button.innerHTML='Show less'
+            button.innerHTML='Ver menos proyectos'
         }
     }
 
@@ -67,7 +67,7 @@ export default class Projects extends Component {
                         <CardProject title="Calabaza animada" description="Calabaza con animaciones CSS, pseudoelementos y keyframes." image={animatedPumpkin} project="https://brandonargel.github.io/Animated-Pumpkin/" github="https://github.com/BrandonArgel/Animated-Pumpkin" right={true} />
                     </div>
                 </div>
-                <button id="button" className="button button-projects">Show more</button>
+                <button id="button" className="button button-projects">Ver más proyectos</button>
             </section>
         )
     }

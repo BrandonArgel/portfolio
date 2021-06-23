@@ -6,7 +6,7 @@ import './styles/aside.css'
 class Aside extends Component {
     render(){
         return(
-            <aside id="aside">
+            <aside aria-hidden="true" tabIndex="-1" id="aside">
                 <nav>
                     <ul>
                         <li><a href="#about">Sobre mí</a></li>

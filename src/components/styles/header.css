@@ -47,6 +47,14 @@ header {
     justify-content: center;
     cursor: pointer;
     z-index: 10;
+    background-color: transparent;
+    outline: none;
+    border: 0px;
+}
+
+.header__menu--icon-container:focus {
+    outline: 2px dashed var(--couleur-special);
+    border: 0px;
 }
 
 .header__menu--icon {
