@@ -28,11 +28,13 @@
     align-items: center;
     padding: 5px;
     transition: var(--transition);
+    filter: brightness(80%);
 }
 
 .main__social--networks:hover, .main__social--networks:focus {
     color: var(--couleur-special);
     transform: scale(1.3);
+    filter: brightness(100%);
 }
 
 .main__social--networks .main__social--icon {
