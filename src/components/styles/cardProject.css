@@ -49,8 +49,9 @@
     flex-wrap: wrap;
 }
 
-@media (min-width: 1024px){
+@media (min-width: 1024px) {
     .main__project {
         padding: 20px;
+        width: 100%;
     }
 }
