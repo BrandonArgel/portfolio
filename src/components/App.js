@@ -1,19 +1,19 @@
-import React from 'react'
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import React from "react";
+import { HashRouter, Switch, Route } from "react-router-dom";
 
-import Layout from './layout'
-import Portfolio from '../pages/portfolio.js'
+import Portfolio from "../pages/portfolio.js";
+// import Curriculum from "../pages/curriculum.js";
+import NotFound from "../pages/404.js";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Layout>
-        <Switch>
-          <Route exact path="/" component={Portfolio} />
-          {/* <Route component={NotFound} /> */}
-        </Switch>
-      </Layout>
-    </BrowserRouter>
+    <HashRouter>
+      <Switch>
+        <Route exact path="/" component={Portfolio} />
+        {/* <Route exact path="/curriculum" component={Curriculum} /> */}
+        <Route component={NotFound} />
+      </Switch>
+    </HashRouter>
   );
 }
 

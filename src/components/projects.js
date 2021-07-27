@@ -58,8 +58,8 @@ export default class Projects extends Component {
             title="Blog Personal"
             description="Si quieres aprender sobre temas como desarrollo personal, tecnología y salud. ¡Dale un vistazo a mi blog!"
             image={personalBlog}
-            project="https://brandonargel.github.io/brandblogs/"
-            github="https://github.com/BrandonArgel/brandblogs"
+            project="https://blog.brandonargel.me/"
+            github="https://github.com/BrandonArgel/blog"
           />
           <CardProject
             title="Reproductor de Música"

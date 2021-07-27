@@ -41,15 +41,6 @@ form {
     width: 100%;
 }
 
-label {
-    margin: 10px 0 10px;
-    font-weight: bold;
-}
-
-label[for=message] {
-    margin-top: 50px;
-}
-
 input,
 textarea {
     width: 100%;
@@ -63,6 +54,7 @@ textarea {
     letter-spacing: 1px;
     font-weight: bold;
     box-shadow: inset -1px -1px 5px 0 var(--couleur-special);
+    margin: 10px 0;
 }
 
 input:hover,
@@ -78,6 +70,7 @@ input::placeholder,
 textarea::placeholder {
     color: var(--couleur);
     font-size: 1.6rem;
+    font-family: var(--font-mono);
 }
 
 /* Change the white to any color */
