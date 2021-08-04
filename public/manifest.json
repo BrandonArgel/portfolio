@@ -3,7 +3,6 @@
   "name": "Portafolio de Brandon",
   "theme_color": "#0a102b",
   "background_color": "#0a102b",
-  "description": "Brandon Argel es un Frontend Developer en constante aprendizaje y evolución con 19 años que vive en Guadalajara Jal. México.",
   "orientation": "portrait",
   "start_url": "./?utm_source=web_app_manifest",
   "display": "standalone",
