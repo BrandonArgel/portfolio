@@ -22,6 +22,7 @@ export default function ContactForm() {
       <form onSubmit={handleSubmit}>
         <input
           required
+          autoComplete
           id="name"
           type="text"
           name="firstname"
@@ -30,6 +31,7 @@ export default function ContactForm() {
         />
         <ValidationError prefix="name" field="name" errors={state.errors} />
         <input
+          autoComplete
           required
           id="email"
           type="email"
@@ -44,6 +46,14 @@ export default function ContactForm() {
           errors={state.errors}
         />
         <button type="submit" disabled={state.submitting}>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
           Enviar
         </button>
       </form>

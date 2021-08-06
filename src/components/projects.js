@@ -27,12 +27,32 @@ export default class Projects extends Component {
       for (let i = 0; i < projectsHidden.length; i++) {
         projectsHidden[i].style.display = "none";
       }
-      button.innerHTML = "Show more";
+      button.innerHTML = `
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          Ver más proyectos
+      `;
     } else {
       for (let i = 0; i < projectsHidden.length; i++) {
         projectsHidden[i].style.display = "flex";
       }
-      button.innerHTML = "Ver menos proyectos";
+      button.innerHTML = `
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          Ver menos proyectos
+      `;
     }
   };
 
@@ -142,7 +162,15 @@ export default class Projects extends Component {
             />
           </div>
         </div>
-        <button id="button" className="button button-projects">
+        <button id="button" className="button-projects">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
           Ver más proyectos
         </button>
       </section>

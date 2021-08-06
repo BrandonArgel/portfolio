@@ -78,8 +78,9 @@ main {
     display: flex;
     flex-wrap: wrap;
     margin-top: 40px;
-    max-width: 500px;
-    justify-content: center;
+    max-width: 490px;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .main__section--title {
@@ -88,7 +89,7 @@ main {
     color: var(--couleur-special);
 }
 
-@media (min-width: 778px){
+@media (min-width: 778px) {
     main {
         width: 100%;
     }
@@ -96,16 +97,14 @@ main {
     .main__hero {
         padding: 50px 100px 20px;
     }
-    
+
     .main__hero--presentation {
         font-size: clamp(5rem, 8vw, 7rem);
     }
-
-    .main__hero--buttons {
-        justify-content: initial;
-    }
 }
 
-#about, #projects, #contact {
+#about,
+#projects,
+#contact {
     padding-top: 120px;
 }
