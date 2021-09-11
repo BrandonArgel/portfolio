@@ -105,7 +105,7 @@ const Formulario = () => {
 					<Form className="formulario">
 						<Field type="text" name="from_name" autoComplete="name" placeholder="Name" />
 						<ErrorMessage name="from_name" component={() => <p className="error">{errors.from_name}</p>} />
-						<Field type="text" name="reply_to" autoComplete="email" placeholder="your@mail.com" />
+						<Field type="text" name="reply_to" autoComplete="email" placeholder="Mail" />
 						<ErrorMessage name="reply_to" component={() => <p className="error">{errors.reply_to}</p>} />
 						<Field name="message" as="textarea" placeholder="Message" />
 						<ErrorMessage name="message" component={() => <p className="error">{errors.message}</p>} />
