@@ -5,6 +5,8 @@ import Form from "./Form";
 import Section from "../components/Section";
 import Title from "../components/Title";
 
+import "./styles/Contact.css";
+
 export default function Contact() {
 	return (
 		<Section id="contact">

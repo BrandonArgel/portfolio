@@ -78,12 +78,24 @@ export default function Hero() {
 					</p>
 				</div>
 				<div className="hero--buttons">
-					<ButtonHoverLarge>Resume</ButtonHoverLarge>
-					<ButtonHoverLarge as="a" href="mailto:brandargel@gmail.com">
-						Contact
+					<ButtonHoverLarge
+						external={true}
+						href="https://firebasestorage.googleapis.com/v0/b/personal-project-brandon.appspot.com/o/pdf%2Fresume.pdf?alt=media&token=40245e47-4a7f-4370-97d4-f79d85b717b1"
+					>
+						Resume
 					</ButtonHoverLarge>
+					<ButtonHoverLarge href="#contact">Contact</ButtonHoverLarge>
 				</div>
 			</div>
 		</Section>
 	);
 }
+
+const scrollToBottom = () => {
+	const main = document.getElementById("main");
+
+	const scrollHeight = main.scrollheight;
+	console.log(scrollHeight);
+	// main scroll to bottom
+	// main.scrollTo(0, scrollHeight);
+};

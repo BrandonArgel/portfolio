@@ -1,9 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-const ButtonHover = ({ children }) => {
+const ButtonHover = ({ children, href, external }) => {
 	return (
-		<Button>
+		<Button
+			as="a"
+			href={href}
+			target={external ? "_blank" : null}
+			rel={external ? "noopener noreferrer" : null}
+		>
 			<span></span>
 			<span></span>
 			<span></span>
