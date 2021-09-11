@@ -109,7 +109,7 @@ p.loading {
 }
 
 .swal-title {
-    color: var(--special-text);
+    color: var(--special-text) !important;
     font: 1.6rem/100% var(--font-mono) !important;
     margin: 10px !important;
 }
