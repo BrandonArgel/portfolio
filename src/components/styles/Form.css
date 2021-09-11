@@ -1,0 +1,115 @@
+fieldset {
+    border: 5px solid rgba(22, 255, 226, 0.7);
+    border-radius: 20px;
+    margin: 50px auto;
+    width: 100%;
+    max-width: 500px;
+}
+
+fieldset:active,
+fieldset:hover,
+fieldset:focus,
+fieldset:focus-within {
+    border: 5px solid var(--special-text);
+}
+
+fieldset:active legend h2,
+fieldset:hover legend h2,
+fieldset:focus legend h2,
+fieldset:focus-within legend h2 {
+    color: var(--special-text);
+}
+
+legend {
+    margin: 0 auto;
+    padding: 0 10px;
+    position: relative;
+}
+
+legend h2 {
+    color: #16FFE2aa;
+}
+
+form {
+    background-color: none;
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px 20px;
+    align-items: baseline;
+    width: 100%;
+}
+
+form input,
+form textarea {
+    width: 100%;
+    border-radius: 5px;
+    padding: 12px;
+    background-color: transparent;
+    caret-color: var(--special-text);
+    outline: none;
+    border: none;
+    color: var(--special-text);
+    letter-spacing: 1px;
+    font-weight: bold;
+    box-shadow: inset -1px -1px 5px 0 var(--special-text);
+    margin: 20px 0 10px;
+}
+
+form input:hover,
+form input:active,
+form input:focus,
+form textarea:hover,
+form textarea:active,
+form textarea:focus {
+    box-shadow: inset 0 0 10px var(--special-text);
+}
+
+form input::placeholder,
+form textarea::placeholder {
+    color: rgba(22, 255, 226, 0.7);
+    font-size: 1.6rem;
+    font-family: var(--font-mono);
+}
+
+/* Change the white to any color */
+form input:-webkit-autofill,
+form input:-webkit-autofill:hover,
+form input:-webkit-autofill:focus,
+form input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--special-text) inset !important;
+    box-shadow: 0 0 0 30px var(--special-text) inset !important;
+}
+
+/*Change text in autofill textbox*/
+form input:-webkit-autofill {
+    -webkit-text-fill-color: black !important;
+}
+
+form textarea {
+    height: 20rem;
+}
+
+p.error {
+    color: red;
+    margin: 0 auto;
+}
+
+p.loading {
+    color: var(--special-text);
+    margin: 20px auto 10px;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.swal2-toast {
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+.swal-title {
+    color: var(--special-text);
+    font: 1.6rem/100% var(--font-mono) !important;
+    margin: 10px !important;
+}

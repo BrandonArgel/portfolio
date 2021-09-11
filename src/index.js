@@ -1,6 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './globals.css';
-import App from './components/App';
+import React from "react";
+import ReactDOM from "react-dom";
 
-ReactDOM.render(<App />, document.getElementById('root'))
+import App from "./App.js";
+import GlobalStyle from "./styles/GlobalStyle";
+
+ReactDOM.render(
+	<React.StrictMode>
+		<GlobalStyle />
+		<App />
+	</React.StrictMode>,
+	document.getElementById("root")
+);

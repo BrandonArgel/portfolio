@@ -1,0 +1,91 @@
+.fadeInDown {
+    animation: fadeInDown .5s both;
+}
+
+.delay2 {
+    animation-delay: .2s;
+}
+
+.delay4 {
+    animation-delay: .4s;
+}
+
+.delay6 {
+    animation-delay: .6s;
+}
+
+.delay8 {
+    animation-delay: .8s;
+}
+
+.delay10 {
+    animation-delay: 1s;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.fadeInLeft {
+    animation: fadeInLeft 1s both;
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(-40%, 0, 0);
+        transform: translate3d(-40%, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.animation {
+    cursor: default;
+    opacity: 0;
+    transition: all 0.5s;
+}
+
+.transform_up {
+    transform: translateY(20%);
+}
+
+.transform_down {
+    transform: translateY(-20%);
+}
+
+.transform_right {
+    transform: translateX(20%);
+}
+
+.transform_left {
+    transform: translateX(-20%);
+}
+
+.transform_none {
+    transform: none;
+}
+
+.appear {
+    cursor: initial;
+    opacity: 1;
+    transform: none;
+}
+
+.line p {
+    padding: 0 10px;
+}

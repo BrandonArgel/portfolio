@@ -1,0 +1,54 @@
+.aside {
+    align-items: center;
+    display: flex;
+    height: 100vh;
+    justify-content: flex-end;
+    position: fixed;
+    width: 100%;
+}
+
+.aside nav {
+    align-items: center;
+    display: flex;
+    height: inherit;
+    padding: 70px 20px;
+    position: relative;
+    overflow: hidden;
+    width: 75%;
+}
+
+.aside nav ul {
+    list-style: none;
+    max-height: 100%;
+    overflow-y: scroll;
+    padding: 10px 0;
+    width: 100%;
+}
+
+.aside nav ul li::before {
+    content: none;
+}
+
+.aside nav ul li a {
+    color: var(--special-text);
+    cursor: pointer;
+    display: block;
+    font: bold 2rem/100% var(--font-mono);
+    text-decoration: none;
+    padding: 5px 0;
+    width: fit-content;
+}
+
+@media screen and (min-width: 768px) {
+    .aside nav {
+        width: 50%;
+        height: inherit;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .aside nav {
+        width: 40%;
+        height: inherit;
+    }
+}

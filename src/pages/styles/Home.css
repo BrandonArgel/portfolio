@@ -1,0 +1,29 @@
+#main {
+    background-color: var(--fond);
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    position: relative;
+    transition: transform 0.4s ease-in-out;
+    scroll-behavior: smooth;
+    width: 100%;
+}
+
+.transform {
+    box-shadow: -5px 5px 10px 10px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transform: perspective(1000px) scale(.9) translate(-70%) rotateY(25deg);
+}
+
+@media screen and (min-width: 768px) {
+    .transform {
+        transform: perspective(1000px) scale(.9) translate(-50%) rotateY(25deg);
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .transform {
+        transform: perspective(1000px) scale(.9) translate(-40%) rotateY(25deg);
+    }
+
+}

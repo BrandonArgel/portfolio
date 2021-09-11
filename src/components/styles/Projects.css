@@ -1,0 +1,19 @@
+.projects {
+    margin: 20px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    width: 100%;
+    grid-gap: 15px;
+    gap: 15px;
+}
+
+.animation.hide {
+    display: none;
+}
+
+@media screen and (min-width: 1024px) {
+    .projects {
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        margin: 50px 0;
+    }
+}

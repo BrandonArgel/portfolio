@@ -1,0 +1,82 @@
+.hero {
+    margin-bottom: 50px;
+    width: fit-content;
+}
+
+#hero-text {
+    width: fit-content;
+}
+
+.hero .hero--title {
+    color: var(--special-text);
+    font-size: 1.6rem;
+    font-weight: normal;
+    line-height: 2rem;
+}
+
+.hero--presentation {
+    color: var(--light-text);
+    font: bold clamp(3rem, 6vw, 10rem)/110% var(--font-mono);
+    padding-bottom: 20px;
+    text-decoration: none;
+    width: fit-content;
+}
+
+.hero--presentation-do {
+    color: var(--text);
+    width: fit-content;
+}
+
+.hero--animated-name {
+    display: flex;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--light-text);
+}
+
+.hero--animated-name>div {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: .3s ease all;
+}
+
+.hero--animated-name>div.animated {
+    transform: translateY(-100px);
+}
+
+.hero--animated-name .second-line {
+    position: absolute;
+    top: 100px;
+    color: var(--special-text);
+}
+
+.hero--info {
+    color: var(--text);
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    transition: all 0.20s cubic-bezier(0.700, 0.050, 0.460, 1);
+    max-width: 540px;
+}
+
+.hero--info-career {
+    color: var(--special-text);
+}
+
+#hero--text:hover .hero--presentation-do,
+#hero--text:hover .hero--info {
+    color: var(--light-text);
+}
+
+.hero--buttons {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-top: 50px;
+    max-width: 540px;
+}
+
+.hero--buttons button {
+    margin: 10px;
+}
