@@ -82,7 +82,7 @@ export default function Projects() {
 				<Card className="animation fade_right transform_right appear">
 					<CardTitle>Platzi Badges</CardTitle>
 					<CardDescription>
-						This is a project where I started learning about react, I made alsa a REST API to make, modify,
+						This is a project where I started learning about react, I made also a REST API to make, modify,
 						and delete the badges, you can also register your own badge!
 					</CardDescription>
 					<CardImage src={IMAGES.platziBadges} alt="Platzi Badges" />
