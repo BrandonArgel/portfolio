@@ -68,14 +68,6 @@ export default function Particles() {
 					},
 					retina_detect: true,
 				}}
-				style={{
-					height: "100vh",
-					left: "0",
-					pointerEvents: "none !important",
-					position: "fixed",
-					top: "0",
-					width: "100vw",
-				}}
 			/>
 		</Fragment>
 	);

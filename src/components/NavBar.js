@@ -54,11 +54,13 @@ export default function NavBar() {
 }
 
 const removeMenu = (id) => {
-	const main = document.querySelector("#main");
 	const hamburger = document.querySelector(".hamburger-icon");
+	const main = document.querySelector("#main");
+	const particles = document.querySelector("#tsparticles");
 	const section = document.getElementById(id);
 
 	main.classList.remove("transform");
+	particles.classList.remove("transform");
 	hamburger.classList.remove("active");
 	// The following code is to avoid the overscroll effect by the perspective of the page
 	// * console.log(section.getBoundingClientRect().top); // Didn't work

@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-const ButtonActive = ({ children, id }) => {
+const ButtonActive = ({ children, className, disabled, id }) => {
 	return (
-		<Button id={id} type="submit">
+		<Button id={id} className={className} disabled={disabled} type="submit">
 			<span></span>
 			<span></span>
 			<span></span>

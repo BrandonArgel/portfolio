@@ -11,9 +11,6 @@ import Platzi from "../assets/svg/Platzi.svg";
 export default function Footer() {
 	return (
 		<FooterContainer>
-			<p>
-				<span>©</span> Sitio construido por Brandon Argel 2021
-			</p>
 			<Social>
 				<a href="https://github.com/BrandonArgel">
 					<img src={Github} alt="Github" />
@@ -34,6 +31,9 @@ export default function Footer() {
 					<img src={Facebook} alt="Facebook" />
 				</a>
 			</Social>
+			<p>
+				<span>©</span> Sitio construido por Brandon Argel 2021
+			</p>
 		</FooterContainer>
 	);
 }
@@ -50,6 +50,7 @@ const FooterContainer = styled.footer`
 
 	p {
 		text-align: center;
+		font: 1.6rem/100% var(--font-mono);
 	}
 
 	span {

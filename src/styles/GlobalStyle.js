@@ -42,6 +42,17 @@ const GlobalStyle = createGlobalStyle`
         overflow: hidden;
     }
 
+    #tsparticles {
+        height: 100vh;
+        left: 0;
+        pointer-events: none !important;
+        position: fixed;
+        top: 0;
+        transition: transform 0.4s ease-in-out;
+        width: 100vw;
+        z-index: 1;
+    }
+
     #tsparticles canvas {
         pointer-events: none !important;
     }

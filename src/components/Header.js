@@ -10,28 +10,36 @@ export default function Header({ main }) {
 	const [header, setHeader] = useState(false);
 
 	const toggleMenu = () => {
+		const particles = document.querySelector("#tsparticles");
+
 		hamburgerIcon.current.classList.toggle("active");
 		main.current.classList.toggle("transform");
+		particles.classList.toggle("transform");
 
 		main.current.addEventListener("click", removeMenu);
 	};
 
 	const removeMenu = () => {
+		const particles = document.querySelector("#tsparticles");
+
 		main.current.removeEventListener("click", removeMenu);
 		hamburgerIcon.current.classList.remove("active");
 		main.current.classList.remove("transform");
-	};
-
-	const changeHeader = () => {
-		if (main.current.scrollTop > 0) {
-			setHeader(true);
-		} else {
-			setHeader(false);
-		}
+		particles.classList.remove("transform");
 	};
 
 	useEffect(() => {
+		const changeHeader = () => {
+			if (main.current.scrollTop > 0) {
+				setHeader(true);
+			} else {
+				setHeader(false);
+			}
+		};
+
 		main.current.addEventListener("scroll", changeHeader);
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

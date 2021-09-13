@@ -90,12 +90,3 @@ export default function Hero() {
 		</Section>
 	);
 }
-
-const scrollToBottom = () => {
-	const main = document.getElementById("main");
-
-	const scrollHeight = main.scrollheight;
-	console.log(scrollHeight);
-	// main scroll to bottom
-	// main.scrollTo(0, scrollHeight);
-};

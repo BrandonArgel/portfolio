@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 
-import Particles from "../components/Particles";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
 import About from "../components/About";
@@ -43,7 +42,6 @@ export default function Home() {
 
 	return (
 		<main ref={main} id="main">
-			<Particles />
 			<Header main={main} />
 			<Hero />
 			<About />

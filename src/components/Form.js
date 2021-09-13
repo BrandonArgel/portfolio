@@ -22,18 +22,17 @@ const Toast = Swal.mixin({
 
 const Formulario = () => {
 	const [loading, setLoading] = useState(false);
+	const [sent, setSent] = useState(false);
+	const [hack, setHack] = useState(false);
 
 	useEffect(() => {
 		// Check localStorage for form submission
 		if (localStorage.getItem("sentForm")) {
-			const submitBtn = document.getElementById("submit");
-			submitBtn.classList.add("disabled");
-			console.log("Submitted");
+			setSent(true);
 		} else {
-			const submitBtn = document.getElementById("submit");
-			submitBtn.classList.remove("disabled");
-			console.log("Nothing");
+			setSent(false);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
@@ -75,6 +74,20 @@ const Formulario = () => {
 				onSubmit={(values, { resetForm }) => {
 					setLoading(true);
 
+					if (sent) {
+						setLoading(false);
+						setHack(true);
+
+						Toast.fire({
+							customClass: {
+								title: "swal-title",
+							},
+							icon: "error",
+							title: "Something went wrong 😱",
+						});
+						return;
+					}
+
 					send("service_ikyapor", "template_5ve9h9n", values, "user_IWzCjeq3HOWY5GGq6Nwe1")
 						.then((response) => {
 							Toast.fire({
@@ -82,7 +95,7 @@ const Formulario = () => {
 									title: "swal-title",
 								},
 								icon: "success",
-								title: "Mail sent successfully!",
+								title: "Your message has been sent! 😎",
 							});
 							const submitBtn = document.getElementById("submit");
 							submitBtn.classList.add("disabled");
@@ -93,6 +106,9 @@ const Formulario = () => {
 						})
 						.catch((err) => {
 							Toast.fire({
+								customClass: {
+									title: "swal-title",
+								},
 								icon: "error",
 								title: "Something went wrong 😱",
 							});
@@ -103,15 +119,19 @@ const Formulario = () => {
 			>
 				{({ errors }) => (
 					<Form className="formulario">
-						<Field type="text" name="from_name" autoComplete="name" placeholder="Name" />
+						<Field type="text" name="from_name" autoComplete="name" placeholder="Name" disabled={sent} />
 						<ErrorMessage name="from_name" component={() => <p className="error">{errors.from_name}</p>} />
-						<Field type="text" name="reply_to" autoComplete="email" placeholder="Mail" />
+						<Field type="text" name="reply_to" autoComplete="email" placeholder="Mail" disabled={sent} />
 						<ErrorMessage name="reply_to" component={() => <p className="error">{errors.reply_to}</p>} />
-						<Field name="message" as="textarea" placeholder="Message" />
+						<Field name="message" as="textarea" placeholder="Message" disabled={sent} />
 						<ErrorMessage name="message" component={() => <p className="error">{errors.message}</p>} />
 
-						<ButtonActive id="submit">Send</ButtonActive>
+						<ButtonActive id="submit" className={sent ? "disabled" : null} disabled={sent ? true : null}>
+							Send
+						</ButtonActive>
 						{loading && <p className="loading">Sending your mail...</p>}
+						{hack && <p className="hack">You already sent an email 😱</p>}
+						{sent && <p className="sent">I'll check your mail as soon as possible!</p>}
 					</Form>
 				)}
 			</Formik>
