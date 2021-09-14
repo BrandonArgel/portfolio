@@ -6,6 +6,7 @@ const IMAGES = {
 	musicPlayer: require("../assets/img/musicPlayer.jpg").default,
 	platziBadges: require("../assets/img/platziBadges.jpg").default,
 	platziVideo: require("../assets/img/platziVideo.jpg").default,
+	pumpkin: require("../assets/img/pumpkin.gif").default,
 	rickAndMorty: require("../assets/img/rickAndMorty.jpg").default,
 	rockPaperAndScissors: require("../assets/img/rockPaperAndScissors.jpg").default,
 	simonSays: require("../assets/img/simonSays.jpg").default,

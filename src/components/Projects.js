@@ -7,7 +7,6 @@ import Section from "../components/Section";
 import Title from "../components/Title";
 
 import IMAGES from "../utils";
-import pumpkin from "../assets/img/pumpkin.gif";
 
 import "./styles/Projects.css";
 
@@ -209,7 +208,7 @@ export default function Projects() {
 							Raúl Martín
 						</Link>
 					</CardDescription>
-					<CardImage src={pumpkin} alt="Batatabit" />
+					<CardImage src={IMAGES.pumpkin} alt="Batatabit" />
 					<CardButtons>
 						<ButtonProject href="https://brandonargel.me/Animated-Pumpkin">Project</ButtonProject>
 						<ButtonProject href="https://github.com/BrandonArgel/Animated-Pumpkin" github={true}>
