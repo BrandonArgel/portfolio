@@ -32,8 +32,7 @@ const Formulario = () => {
 		} else {
 			setSent(false);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [sent]);
 
 	return (
 		<fieldset>
@@ -101,6 +100,7 @@ const Formulario = () => {
 							submitBtn.classList.add("disabled");
 							localStorage.setItem("sentForm", true);
 
+							setSent(true);
 							setLoading(false);
 							resetForm();
 						})

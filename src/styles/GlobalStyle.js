@@ -24,7 +24,7 @@ const GlobalStyle = createGlobalStyle`
     }
 
     ::-webkit-scrollbar-thumb {
-        background: linear-gradient(180deg, rgba(22, 255, 226, 0.6) 0%, rgba(22, 255, 226, .5) 25%, rgba(22, 255, 226, 1) 53%, rgba(22, 255, 226, .5) 75%, rgba(22, 255, 226, 0.6) 100%);
+        background: linear-gradient(180deg, rgba(22, 255, 226, 0.5) 0%, rgba(22, 255, 226, 0.6) 25%, rgba(22, 255, 226, 0.7) 53%, rgba(22, 255, 226, 0.6) 75%, rgba(22, 255, 226, 0.5) 100%);
     }
 
     ::-webkit-scrollbar-thumb:hover {

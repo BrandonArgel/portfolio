@@ -21,9 +21,6 @@ export default function Experience() {
 						>
 							<span>Axo Systems</span>
 						</button>
-						{/* <button className={`tabs__item ${activeTab === 1 ? "active" : ""}`} onClick={() => setActiveTab(1)}>
-					<span>Test</span>
-				</button> */}
 					</div>
 					<div className="tabs__panel">
 						<div className={`tabs__panel-item ${activeTab === 0 ? "active" : ""}`}>

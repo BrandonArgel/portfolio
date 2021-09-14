@@ -20,9 +20,12 @@
     background: none;
     border: none;
     color: var(--text);
+    cursor: pointer;
     font: 1.6rem/100% var(--font-mono);
-    padding: 5px 10px;
     min-width: 120px;
+    padding: 5px 10px 7px;
+    position: relative;
+    transition: transform 0.5s ease;
 }
 
 .tabs .tabs__list .tabs__item:hover,
@@ -32,10 +35,22 @@
     font-weight: bold;
 }
 
-.tabs .tabs__list .tabs__item.active {
-    border-bottom: 2px solid var(--special-text);
-    color: var(--special-text);
-    font-weight: bold;
+.tabs .tabs__list .tabs__item::before {
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: 2px;
+    background-color: var(--special-text);
+    transform: scaleX(0);
+    transform-origin: center bottom;
+    transition: transform 0.5s ease;
+}
+
+.tabs .tabs__list .tabs__item.active::before {
+    animation: active 0.5s ease-in-out forwards;
+    transform: scaleX(1);
 }
 
 .tabs__panel {

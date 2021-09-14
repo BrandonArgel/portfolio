@@ -36,7 +36,26 @@
     font: bold 2rem/100% var(--font-mono);
     text-decoration: none;
     padding: 5px 0;
+    position: relative;
     width: fit-content;
+}
+
+.aside nav ul li a::before {
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: 2px;
+    background-color: var(--special-text);
+    transform-origin: right bottom;
+    transform: scaleX(0);
+    transition: transform 0.5s ease 0s;
+}
+
+.aside nav ul li a:hover::before {
+    transform-origin: left bottom;
+    transform: scaleX(1);
 }
 
 @media screen and (min-width: 768px) {
