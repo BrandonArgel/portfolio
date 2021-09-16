@@ -7,7 +7,6 @@ const Card = ({ children, className }) => {
 
 const CardContainer = styled.div`
 	background-color: var(--light-fond);
-	border-radius: 5px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -48,7 +47,6 @@ const CardDescription = styled.p`
 `;
 
 const CardImage = styled.img`
-	border-radius: 5px;
 	filter: brightness(0.8);
 	transition: all 0.3s ease-in-out;
 	width: 100%;
