@@ -3,7 +3,7 @@ import React from "react";
 import Section from "../components/Section";
 import Title from "../components/Title";
 
-import Photo from "../assets/img/photo.jpg";
+import Me from "../assets/img/me.jpg";
 
 import "./styles/About.css";
 
@@ -33,7 +33,7 @@ export default function About() {
 					</ul>
 				</div>
 
-				<img className="about--photo" src={Photo} alt="Foto de Brandon" />
+				<img className="about--photo" src={Me} alt="Foto de Brandon" />
 			</div>
 		</Section>
 	);

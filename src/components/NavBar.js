@@ -71,5 +71,5 @@ const removeMenu = (id) => {
 
 	setTimeout(() => {
 		main.scrollTo(0, section.offsetTop - 100);
-	}, 0);
+	}, 1);
 };
