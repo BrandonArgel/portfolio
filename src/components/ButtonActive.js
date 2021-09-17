@@ -32,6 +32,12 @@ const Button = styled.button`
 	text-decoration: none;
 	transition: all cubic-bezier(0.215, 0.61, 0.355, 1) 0.5s;
 
+	&:hover,
+	&:active,
+	&:focus {
+		transform: scale(1.1);
+	}
+
 	& span:nth-child(1) {
 		position: absolute;
 		top: 0;

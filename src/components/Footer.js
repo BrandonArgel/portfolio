@@ -78,9 +78,9 @@ const Social = styled.div`
 			transition: all 0.3s ease-in-out;
 		}
 
-		img:hover,
-		img:focus,
-		img:active {
+		&:hover img,
+		&:focus img,
+		&:active img {
 			opacity: 1;
 			transform: scale(1.2);
 		}
