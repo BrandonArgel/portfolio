@@ -12,22 +12,22 @@ export default function Footer() {
 	return (
 		<FooterContainer>
 			<Social>
-				<a href="https://github.com/BrandonArgel">
+				<a href="https://github.com/BrandonArgel" target="_blank" rel="noopener noreferrer">
 					<img src={Github} alt="Github" />
 				</a>
-				<a href="https://twitter.com/BrandArgel">
+				<a href="https://twitter.com/BrandArgel" target="_blank" rel="noopener noreferrer">
 					<img src={Twitter} alt="Twitter" />
 				</a>
-				<a href="https://www.instagram.com/brandargel/">
+				<a href="https://www.instagram.com/brandargel/" target="_blank" rel="noopener noreferrer">
 					<img src={Instagram} alt="Instagram" />
 				</a>
-				<a href="https://www.linkedin.com/in/brandargel/">
+				<a href="https://www.linkedin.com/in/brandargel/" target="_blank" rel="noopener noreferrer">
 					<img src={Linkedin} alt="Linkedin" />
 				</a>
-				<a href="https://platzi.com/p/BrandArgel/">
+				<a href="https://platzi.com/p/BrandArgel/" target="_blank" rel="noopener noreferrer">
 					<img src={Platzi} alt="Platzi" />
 				</a>
-				<a href="https://www.facebook.com/brandonargel.dominguez/">
+				<a href="https://www.facebook.com/brandonargel.dominguez/" target="_blank" rel="noopener noreferrer">
 					<img src={Facebook} alt="Facebook" />
 				</a>
 			</Social>
@@ -78,7 +78,9 @@ const Social = styled.div`
 			transition: all 0.3s ease-in-out;
 		}
 
-		img:hover {
+		img:hover,
+		img:focus,
+		img:active {
 			opacity: 1;
 			transform: scale(1.2);
 		}
