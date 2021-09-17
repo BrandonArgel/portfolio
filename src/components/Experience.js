@@ -35,9 +35,9 @@ export default function Experience() {
 								</li>
 								<li>
 									Manually tested sites in various browsers and mobile devices to ensure cross-browser
-									compatibility and responsiveness
+									compatibility and responsiveness.
 								</li>
-								<li>Clients included CNI Consultores, Solar Center, and more</li>
+								<li>Clients included CNI Consultores, Solar Center, and more.</li>
 							</ul>
 						</div>
 						{/* <div className={`tabs__panel-item ${activeTab === 1 ? "active" : ""}`}>

@@ -70,8 +70,8 @@ export default function Hero() {
 						<p className="hero--presentation-do">And I build websites</p>
 					</div>
 					<p className="hero--info">
-						I am a <span className="hero--info-career"> Software Engineer </span> in constant learning and
-						evolution, with a passion for creating beautiful and functional websites.
+						I am a <span className="hero--info-career"> Front-End Engineer </span> in constant learning and
+						evolution, with passion in creating things for the web.
 						<br />
 						<br />
 						Currently I am living in Guadalajara, México, but I am always open to new opportunities.
@@ -80,7 +80,7 @@ export default function Hero() {
 				<div className="hero--buttons">
 					<ButtonHoverLarge
 						external={true}
-						href="https://firebasestorage.googleapis.com/v0/b/personal-project-brandon.appspot.com/o/pdf%2Fresume.pdf?alt=media&token=40245e47-4a7f-4370-97d4-f79d85b717b1"
+						href="https://firebasestorage.googleapis.com/v0/b/personal-project-brandon.appspot.com/o/pdf%2Fresume.pdf?alt=media&token=54c1db3e-13c6-4392-93f6-d7be98c035d7"
 					>
 						Resume
 					</ButtonHoverLarge>
