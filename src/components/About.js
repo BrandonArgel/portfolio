@@ -14,7 +14,7 @@ export default function About() {
 				<div className="about--info">
 					<Title>About me</Title>
 					<p>
-						Hi there! I'm Brandon Argel, I am 19 years old and I enjoy learning and creating new things every
+						Hi there! I'm Brandon Argel, I am 19 years old, and I enjoy learning and creating new things every
 						day.
 					</p>
 					<p>
