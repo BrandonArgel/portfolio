@@ -32,7 +32,7 @@ export default function Footer() {
 				</a>
 			</Social>
 			<p>
-				<span>©</span> Sitio construido por Brandon Argel 2021
+				<span>©</span> Site built by Brandon Argel 2021
 			</p>
 		</FooterContainer>
 	);
