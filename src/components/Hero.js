@@ -80,7 +80,7 @@ export default function Hero() {
 				<div className="hero--buttons">
 					<ButtonHoverLarge
 						external={true}
-						href="https://firebasestorage.googleapis.com/v0/b/personal-project-brandon.appspot.com/o/pdf%2Fresume.pdf?alt=media&token=a5d58207-6baa-4854-aadb-dc206b4966ee"
+						href="https://firebasestorage.googleapis.com/v0/b/personal-project-brandon.appspot.com/o/pdf%2Fresume.pdf?alt=media&token=72c5c4e8-c3e1-44b4-8d21-768fa70eea70"
 					>
 						Resume
 					</ButtonHoverLarge>
