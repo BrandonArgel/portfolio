@@ -27,7 +27,7 @@ export default function Experience() {
 							<h3>
 								<span>Front-End</span> in <strong>Axo Systems</strong>
 							</h3>
-							<p>July 2021 - Present</p>
+							<p>April - September 2021</p>
 							<ul>
 								<li>
 									Developed and maintained code for in-house and client websites using HTML, CSS, Sass,
