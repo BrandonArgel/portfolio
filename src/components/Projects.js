@@ -55,7 +55,7 @@ export default function Projects() {
 					</CardDescription>
 					<CardImage src={IMAGES.flowskip} alt="RickAndMorty" />
 					<CardButtons>
-						<ButtonProject href="https://flowskip.com/">Project</ButtonProject>
+						<ButtonProject href="https://flowskip.com">Project</ButtonProject>
 						<ButtonProject href="https://github.com/flowskip/flowskip" github={true}>
 							Github
 						</ButtonProject>
@@ -110,8 +110,8 @@ export default function Projects() {
 					</CardDescription>
 					<CardImage src={IMAGES.simonSays} alt="Simon Says" />
 					<CardButtons>
-						<ButtonProject href="https://brandonargel.me/SimonDice">Project</ButtonProject>
-						<ButtonProject href="https://github.com/BrandonArgel/SimonDice" github={true}>
+						<ButtonProject href="https://brandonargel.me/simon-says">Project</ButtonProject>
+						<ButtonProject href="https://github.com/BrandonArgel/simon-says" github={true}>
 							Github
 						</ButtonProject>
 					</CardButtons>
@@ -129,8 +129,8 @@ export default function Projects() {
 					</CardDescription>
 					<CardImage src={IMAGES.rockPaperAndScissors} alt="Rock, Paper or Scissors Game" />
 					<CardButtons>
-						<ButtonProject href="https://brandonargel.me/SimonDice">Project</ButtonProject>
-						<ButtonProject href="https://github.com/BrandonArgel/SimonDice" github={true}>
+						<ButtonProject href="https://brandonargel.me/rock-paper-and-scissors">Project</ButtonProject>
+						<ButtonProject href="https://github.com/BrandonArgel/rock-paper-and-scissors" github={true}>
 							Github
 						</ButtonProject>
 					</CardButtons>
@@ -146,8 +146,8 @@ export default function Projects() {
 					<CardDescription>One of my very first projects learning the basics of HTML & CSS.</CardDescription>
 					<CardImage src={IMAGES.platziVideo} alt="Platzi Video" />
 					<CardButtons>
-						<ButtonProject href="https://brandonargel.me/Frontend-Developer">Project</ButtonProject>
-						<ButtonProject href="https://github.com/BrandonArgel/Frontend-Developer" github={true}>
+						<ButtonProject href="https://brandonargel.me/platzi-video">Project</ButtonProject>
+						<ButtonProject href="https://github.com/BrandonArgel/platzi-video" github={true}>
 							Github
 						</ButtonProject>
 					</CardButtons>
@@ -163,9 +163,9 @@ export default function Projects() {
 					<CardDescription>
 						Professional Form improved with HTML, CSS and JavaScript by FalconMasters.
 					</CardDescription>
-					<CardImage src={IMAGES.form} alt="Platzi Video" />
+					<CardImage src={IMAGES.form} alt="Professional Form" />
 					<CardButtons>
-						<ButtonProject href="https://github.com/BrandonArgel/formulario">Project</ButtonProject>
+						<ButtonProject href="https://brandonargel.me/formulario/">Project</ButtonProject>
 						<ButtonProject href="https://github.com/BrandonArgel/formulario" github={true}>
 							Github
 						</ButtonProject>
@@ -184,8 +184,8 @@ export default function Projects() {
 					</CardDescription>
 					<CardImage src={IMAGES.batatabit} alt="Batatabit" />
 					<CardButtons>
-						<ButtonProject href="https://brandonargel.me/ResponsiveDesign">Project</ButtonProject>
-						<ButtonProject href="https://github.com/BrandonArgel/ResponsiveDesign" github={true}>
+						<ButtonProject href="https://brandonargel.me/batatabit">Project</ButtonProject>
+						<ButtonProject href="https://github.com/BrandonArgel/batatabit" github={true}>
 							Github
 						</ButtonProject>
 					</CardButtons>
@@ -210,8 +210,8 @@ export default function Projects() {
 					</CardDescription>
 					<CardImage src={IMAGES.pumpkin} alt="Batatabit" />
 					<CardButtons>
-						<ButtonProject href="https://brandonargel.me/Animated-Pumpkin">Project</ButtonProject>
-						<ButtonProject href="https://github.com/BrandonArgel/Animated-Pumpkin" github={true}>
+						<ButtonProject href="https://brandonargel.me/animated-pumpkin">Project</ButtonProject>
+						<ButtonProject href="https://github.com/BrandonArgel/animated-pumpkin" github={true}>
 							Github
 						</ButtonProject>
 					</CardButtons>
