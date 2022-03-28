@@ -1,0 +1,12 @@
+export { default as About } from './sections/About';
+export { default as Button } from './Button';
+export { default as Contact } from './sections/Contact';
+export { default as Footer } from './Footer';
+export { default as Header } from './Header';
+export { default as Hero } from './sections/Hero';
+export { default as Jobs } from './sections/Jobs';
+export { default as Layout } from './Layout';
+export { default as Loader } from './Loader';
+export { default as Particles } from './Particles';
+export { default as Projects } from './sections/Projects';
+export { default as SEO } from './SEO';

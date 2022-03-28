@@ -1,4 +1,4 @@
-import Spinner from "assets/icons/spinner";
+import { Spinner } from "assets/icons";
 
 import styles from "./index.module.scss";
 

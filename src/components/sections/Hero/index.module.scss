@@ -1,0 +1,75 @@
+@use "styles/variables.scss";
+
+.hero {
+	margin-bottom: 5rem;
+	width: fit-content;
+
+	&__container:hover {
+		.hero__presentation_info,
+		.hero__presentation_do {
+			color: variables.$light-text-color;
+		}
+	}
+
+	&__title {
+		color: variables.$main-color;
+		font-size: 1.6rem;
+		font-weight: normal;
+		line-height: 2rem;
+	}
+
+	&__presentation {
+		color: variables.$text-color;
+		font: bold clamp(3rem, 5vw, 8rem) / 110% variables.$font;
+		padding-bottom: 2rem;
+		text-decoration: none;
+		width: fit-content;
+	}
+
+	&__presentation_do {
+		color: variables.$text-color;
+		width: fit-content;
+	}
+
+	&__presentation_animated {
+		color: variables.$light-text-color;
+		display: flex;
+		overflow: hidden;
+		text-decoration: none;
+
+		div {
+			display: flex;
+			flex-direction: column;
+			position: relative;
+			transition: 0.3s ease all;
+
+			&.animated {
+				transform: translateY(-8rem);
+			}
+		}
+
+		.secondLine {
+			position: absolute;
+			top: 8rem;
+			color: variables.$main-text-color;
+		}
+	}
+
+	&__presentation_info {
+		color: variables.$text-color;
+		font: variables.$fz-lg variables.$font;
+		line-height: 1.2;
+		margin-bottom: 5rem;
+		transition: all 0.2s cubic-bezier(0.7, 0.05, 0.46, 1);
+		max-width: 50rem;
+
+		span {
+			color: variables.$main-color;
+		}
+	}
+
+	&__buttons {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+	}
+}

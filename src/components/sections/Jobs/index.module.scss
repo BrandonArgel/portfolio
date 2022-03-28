@@ -1,0 +1,152 @@
+@use "styles/variables.scss";
+
+.tabs {
+	padding: 10px;
+
+	&__list {
+		display: flex;
+		margin: 0 0 10px;
+		overflow-x: scroll;
+		max-width: 100%;
+		scroll-snap-type: x proximity;
+		overscroll-behavior-x: contain;
+
+		&::-webkit-scrollbar {
+			height: 12px;
+		}
+
+		&::-webkit-scrollbar-track {
+			background-color: transparent;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: none;
+			background-color: #495670;
+			border: 3px solid variables.$bg-color;
+			border-radius: 10px;
+		}
+
+		&::-webkit-scrollbar-thumb:hover {
+			background-color: #495670;
+		}
+
+		&_item {
+			background: none;
+			border: none;
+			color: variables.$text-color;
+			cursor: pointer;
+			font: bold variables.$fz-md variables.$font;
+			min-width: 120px;
+			scroll-snap-align: start;
+			padding: 5px 10px 7px;
+			position: relative;
+			transition: all 0.5s ease;
+			width: fit-content;
+			will-change: color;
+
+			&::before {
+				content: "";
+				position: absolute;
+				bottom: 0px;
+				left: 0px;
+				right: 0px;
+				height: 2px;
+				background-color: variables.$main-color;
+				transform: scaleX(0);
+				transform-origin: center bottom;
+				transition: transform 0.5s ease;
+			}
+
+			&_active {
+				color: variables.$main-color;
+
+				&::before {
+					transform: scaleX(0.9);
+				}
+			}
+
+			&:hover,
+			&:active,
+			&:focus {
+				color: variables.$main-color;
+				outline: none;
+			}
+		}
+	}
+
+	&__pannel {
+		position: relative;
+
+		&_item {
+			display: none;
+
+			&_active {
+				animation: show-in 0.5s ease-in-out forwards;
+				display: block;
+				opacity: 0;
+			}
+
+			h3 {
+				color: variables.$text-color;
+				font: variables.$fz-lg variables.$font;
+
+				span {
+					color: variables.$light-text-color;
+					font-weight: bold;
+				}
+
+				a {
+					color: variables.$main-color;
+					text-decoration: none;
+					font-weight: bold;
+				}
+			}
+
+			p {
+				color: variables.$text-color;
+				font: variables.$fz-md variables.$font;
+				margin: 10px 0;
+			}
+
+			ul {
+				list-style: none;
+				margin: 0;
+				padding: 10px 20px;
+
+				li {
+					font: normal variables.$fz-md variables.$font;
+					line-height: 1.2;
+					margin-bottom: 1rem;
+					position: relative;
+					z-index: -1;
+
+					&::before {
+						content: "▹";
+						color: variables.$main-color;
+						font-size: 2rem;
+						left: -2rem;
+						position: absolute;
+						top: -3px;
+					}
+				}
+			}
+		}
+	}
+}
+
+@media (min-width: 768px) {
+	.tabs__pannel {
+		padding: 0 20px;
+	}
+}
+
+@keyframes show-in {
+	0% {
+		opacity: 0;
+		transform: scale(0.9);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
