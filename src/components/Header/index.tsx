@@ -78,14 +78,14 @@ const Header = () => {
 
 	return (
 		<header className={styles.header}>
-			<Link className={styles.header__logo} to="/" title="Home">
+			<Link className={styles.header__logo} to="/" aria-label="Home">
 				<Logo />
 			</Link>
 			<nav className={styles.header__nav}>
 				<ul className={styles.header__nav_list}>
-					{NavItems.map((item) => (
-						<li key={item.name}>
-							<a href={item.url}>{item.name}</a>
+					{NavItems.map(({name, url}) => (
+						<li key={name}>
+							<a href={`#${url}`}>{name}</a>
 						</li>
 					))}
 				</ul>
@@ -110,10 +110,10 @@ const Header = () => {
 			>
 				<nav>
 					<ul className={styles.header__menu_list}>
-						{NavItems.map((item) => (
-							<li key={item.name}>
-								<a onClick={() => setIsOpen(!isOpen)} href={item.url}>
-									{item.name}
+						{NavItems.map(({name, url}) => (
+							<li key={name}>
+								<a onClick={() => setIsOpen(!isOpen)} href={`#${url}`}>
+									{name}
 								</a>
 							</li>
 						))}

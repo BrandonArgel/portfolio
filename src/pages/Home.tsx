@@ -1,20 +1,29 @@
 import * as React from "react";
-import { Loader, Hero, Particles } from "components";
-const About = React.lazy(() => import("components/sections/About"));
-const Contact = React.lazy(() => import("components/sections/Contact"));
-const Jobs = React.lazy(() => import("components/sections/Jobs"));
-const Projects = React.lazy(() => import("components/sections/Projects"));
+import { About, Contact, Hero, Jobs, Particles, Projects } from "components";
 
 const Home = () => {
+	React.useEffect(() => {
+		if (window.location.hash) {
+      const id = window.location.hash.substring(1);
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView();
+          el.focus();
+        }
+      }, 0);
+    }
+	});
+
 	return (
-		<React.Suspense fallback={<Loader />}>
+		<>
 			<Hero />
 			<About />
 			<Jobs />
 			<Projects />
 			<Contact />
 			<Particles />
-		</React.Suspense>
+		</>
 	);
 };
 

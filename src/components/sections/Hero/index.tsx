@@ -79,9 +79,11 @@ const Hero = () => {
 			</div>
 			<div className={styles.hero__buttons}>
 				<Button
-					size="medium"
 					href="https://firebasestorage.googleapis.com/v0/b/personal-project-brandon.appspot.com/o/pdf%2FResume%20Brandon%20Argel.pdf?alt=media&token=3134ac94-3f73-408e-b838-38786aa44fac"
 					link
+					rel="noopener noreferrer"
+					size="medium"
+					target="_blank"
 				>
 					Resume
 				</Button>

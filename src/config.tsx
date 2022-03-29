@@ -3,19 +3,19 @@ import { GitHub, Instagram, Linkedin, Platzi, Twitter } from "assets/icons";
 export const NavItems = [
 	{
 		name: "About Me",
-		url: "#about",
+		url: "about",
 	},
 	{
 		name: "Experience",
-		url: "#experience",
+		url: "experience",
 	},
 	{
 		name: "Projects",
-		url: "#projects",
+		url: "projects",
 	},
 	{
 		name: "Contact",
-		url: "#contact",
+		url: "contact",
 	},
 ];
 
