@@ -78,7 +78,7 @@ const Header = () => {
 
 	return (
 		<header className={styles.header}>
-			<Link className={styles.header__logo} to="/">
+			<Link className={styles.header__logo} to="/" title="Home">
 				<Logo />
 			</Link>
 			<nav className={styles.header__nav}>
