@@ -2,7 +2,7 @@ import { Spinner } from "assets/icons";
 
 import styles from "./index.module.scss";
 
-const Loader = () => {
+const InlineLoader = () => {
 	return (
 		<div className={styles.loader}>
 			<Spinner />
@@ -10,4 +10,4 @@ const Loader = () => {
 	);
 };
 
-export default Loader;
+export default InlineLoader;
