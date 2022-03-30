@@ -97,7 +97,7 @@ export const CardProjects = [
 				modify, and delete the badges, you can also register your own badge!
 			</p>
 		),
-		link: "https://brandonargel.me/platzi-badges",
+		link: "https://brandonargel.github.io/platzi-badges/",
 		github: "https://github.com/BrandonArgel/platzi-badges",
 		images: {
 			sm: require(`assets/images/${images.badges}.jpg`),
@@ -112,7 +112,7 @@ export const CardProjects = [
 				Vanilla JavaScript music player, this is one of my very first projects using JavaScript.
 			</p>
 		),
-		link: "https://brandonargel.me/music-player",
+		link: "https://brandonargel.github.io/music-player/",
 		github: "https://github.com/BrandonArgel/music-player",
 		images: {
 			sm: require(`assets/images/${images.music}.jpg`),
@@ -127,7 +127,7 @@ export const CardProjects = [
 				Game Simon Says, with Vanilla JavaScript. Can you pass all 15 levels? Challenge your memory!
 			</p>
 		),
-		link: "https://brandonargel.me/simon-says/",
+		link: "https://brandonargel.github.io/simon-says/",
 		github: "https://github.com/BrandonArgel/simon-says",
 		images: {
 			sm: require(`assets/images/${images.simon}.jpg`),
