@@ -81,7 +81,7 @@ export const CardProjects = [
 				, with react and an typescript, using the best practices and optimization techniques.
 			</p>
 		),
-		link: "https://brandonargel.me/rick-and-morty/",
+		link: "https://rickandmorty.brandonargel.me/",
 		github: "https://github.com/BrandonArgel/rick-and-morty",
 		images: {
 			sm: require(`assets/images/${images.rick}.jpg`),
