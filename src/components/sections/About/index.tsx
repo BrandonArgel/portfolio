@@ -15,7 +15,7 @@ const About = () => {
 				<blockquote>Never stop learning</blockquote>
 				<p>
 					Since then I've focused on learning everything about web development, and I've had the
-					privilege of working at incredible people and companies.
+					privilege of working with amazing people and companies.
 				</p>
 				<p>
 					My main focus is building accessible, performant and beautiful websites. I'm always
