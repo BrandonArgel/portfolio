@@ -112,18 +112,18 @@ section {
 	outline-offset: 3px;
 }
 
-.project:nth-child(even) {
+.project {
 	opacity: 0;
-	transform: translateX(10rem);
-	transition: all 0.5s ease-in-out;
 	will-change: opacity, transform;
+	transition: all 0.5s ease-in-out;
+}
+
+.project:nth-child(even) {
+	transform: translateX(10rem);
 }
 
 .project:nth-child(odd) {
-	opacity: 0;
 	transform: translateX(-10rem);
-	transition: all 0.5s ease-in-out;
-	will-change: opacity, transform;
 }
 
 .visible, .project.visible {

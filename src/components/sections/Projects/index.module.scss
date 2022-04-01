@@ -29,7 +29,7 @@
 			padding: 2rem 1rem;
 			position: relative;
 			transition: all 0.3s ease-in-out;
-			will-change: transform;
+			will-change: transform, transition;
 
 			&::before {
 				border-radius: 1rem;
@@ -43,19 +43,6 @@
 				top: 0;
 				transition: all 0.3s ease-in-out;
 				will-change: opacity;
-			}
-
-			&:hover {
-				background-color: variables.$hover-bg;
-				transform: translateY(-0.5rem);
-
-				&::before {
-					opacity: 1;
-				}
-
-				h3 {
-					color: variables.$main-color;
-				}
 			}
 
 			h3 {
@@ -85,6 +72,20 @@
 				height: auto;
 				margin-bottom: 1rem;
 				width: 100%;
+			}
+		}
+
+		.projects__container_card:hover {
+			background-color: variables.$hover-bg;
+			transform: translateY(-0.5rem);
+			transition: transform 0.3s ease-in-out;
+
+			&::before {
+				opacity: 1;
+			}
+
+			h3 {
+				color: variables.$main-color;
 			}
 		}
 
