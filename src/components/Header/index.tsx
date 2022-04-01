@@ -83,8 +83,8 @@ const Header = () => {
 			</Link>
 			<nav className={styles.header__nav}>
 				<ul className={styles.header__nav_list}>
-					{NavItems.map(({name, url}) => (
-						<li key={name}>
+					{NavItems.map(({ name, url }, i) => (
+						<li key={name} style={{ animationDelay: `${i * 0.1 + 0.1}s` }}>
 							<a href={`#${url}`}>{name}</a>
 						</li>
 					))}
@@ -110,7 +110,7 @@ const Header = () => {
 			>
 				<nav>
 					<ul className={styles.header__menu_list}>
-						{NavItems.map(({name, url}) => (
+						{NavItems.map(({ name, url }) => (
 							<li key={name}>
 								<a onClick={() => setIsOpen(!isOpen)} href={`#${url}`}>
 									{name}

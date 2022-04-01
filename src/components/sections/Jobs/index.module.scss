@@ -1,7 +1,10 @@
 @use "styles/variables.scss";
 
 .tabs {
-	padding: 10px;
+	opacity: 0;
+	transform: translateY(10rem) scale(0.9);
+	transition: all 0.5s ease-in-out;
+	will-change: opacity, transform;
 
 	&__list {
 		display: flex;

@@ -112,6 +112,25 @@ section {
 	outline-offset: 3px;
 }
 
+.project:nth-child(even) {
+	opacity: 0;
+	transform: translateX(10rem);
+	transition: all 0.5s ease-in-out;
+	will-change: opacity, transform;
+}
+
+.project:nth-child(odd) {
+	opacity: 0;
+	transform: translateX(-10rem);
+	transition: all 0.5s ease-in-out;
+	will-change: opacity, transform;
+}
+
+.visible, .project.visible {
+	opacity: 1;
+	transform: translate(0, 0) scale(1);
+}
+
 @media (min-width: 768px) {
 	main > div {
 		padding: 3rem 10rem;

@@ -12,7 +12,7 @@ const Projects = () => {
 			</p>
 			<div className={styles.projects__container}>
 				{CardProjects.map(({ name, description, link, github, images: { sm, md, lg } }) => (
-					<div className={styles.projects__container_card} key={name}>
+					<div className={`${styles.projects__container_card} project`} key={name}>
 						<h3>{name}</h3>
 						{description}
 						<picture>
