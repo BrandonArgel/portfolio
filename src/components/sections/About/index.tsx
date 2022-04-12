@@ -18,7 +18,7 @@ const About = () => {
 					privilege of working with amazing people and companies.
 				</p>
 				<p>
-					My main focus is building accessible, performant and beautiful websites. I'm always
+					My main focus is building accessible, performant and awesome websites. I'm always
 					looking for new challenges.
 				</p>
 				<p>Here are some technologies and tools that I have been working with:</p>
