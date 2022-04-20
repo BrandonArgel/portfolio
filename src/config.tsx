@@ -51,6 +51,7 @@ const images = {
 	badges: "platzi_badges",
 	music: "music_player",
 	simon: "simon_says",
+	todo: "todo_app",
 };
 
 export const CardProjects = [
@@ -87,6 +88,23 @@ export const CardProjects = [
 			sm: require(`assets/images/${images.rick}.jpg`),
 			md: require(`assets/images/${images.rick}-x2.jpg`),
 			lg: require(`assets/images/${images.rick}-x3.jpg`),
+		},
+	},
+	{
+		name: "ToDo App",
+		description: (
+			<p>
+				This is a project that looks pretty simple, but it has a lot of features, such as: dark /
+				light mode, use of local storage, a search bar, drag and drop, and it was developed with react sass
+				and typescript.
+			</p>
+		),
+		link: "https://brandonargel.github.io/todo-app/",
+		github: "https://github.com/BrandonArgel/todo-app/",
+		images: {
+			sm: require(`assets/images/${images.todo}.jpg`),
+			md: require(`assets/images/${images.todo}-x2.jpg`),
+			lg: require(`assets/images/${images.todo}-x3.jpg`),
 		},
 	},
 	{
