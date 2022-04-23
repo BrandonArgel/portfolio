@@ -79,7 +79,7 @@ const Hero = () => {
 			</div>
 			<div className={styles.hero__buttons}>
 				<Button
-					href="https://firebasestorage.googleapis.com/v0/b/personal-project-brandon.appspot.com/o/pdf%2FFrontend_Brandon_Argel_Verdeja_Dom%C3%ADnguez_CV.pdf?alt=media&token=d0590afb-d956-467d-9344-e1778ec73573"
+					href="https://firebasestorage.googleapis.com/v0/b/personal-project-brandon.appspot.com/o/pdf%2FFrontend_Brandon_Argel_Verdeja_Dom%C3%ADnguez_CV.pdf?alt=media&token=f5b9d82c-6d1b-4bd7-964a-164276ee0625"
 					link
 					rel="noopener noreferrer"
 					size="medium"
