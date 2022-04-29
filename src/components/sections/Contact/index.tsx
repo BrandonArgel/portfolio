@@ -31,7 +31,7 @@ const Contact = () => {
 	const [error, setError] = React.useState(false);
 
 	const validateName = (value: string) => {
-		if (!value) return setName({ ...name, error: "El nombre no puede estar vacío" });
+		if (!value) return setName({ ...name, error: "You need to enter a name" });
 		if (!REGEX.name.test(value)) {
 			return setName({ ...name, error: "El nombre sólo puede tener hasta 50 letras y espacios" });
 		}
@@ -39,13 +39,13 @@ const Contact = () => {
 	};
 
 	const validateEmail = (value: string) => {
-		if (!value) return setEmail({ ...email, error: "El correo no puede estar vacío" });
+		if (!value) return setEmail({ ...email, error: "You need to enter an email" });
 		if (!REGEX.correo.test(value)) return setEmail({ ...email, error: "El correo no es válido" });
 		return true;
 	};
 
 	const validateMessage = (value: string) => {
-		if (!value) return setMessage({ ...message, error: "El mensaje no puede estar vacío" });
+		if (!value) return setMessage({ ...message, error: "You need to write a message" });
 		if (value.length > 500)
 			return setMessage({
 				...message,
