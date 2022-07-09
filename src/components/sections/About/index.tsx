@@ -3,11 +3,22 @@ import Me2x from "assets/images/me2x.jpg";
 import styles from "./index.module.scss";
 
 const About = () => {
+	const getAge = (birthday: string) => {
+		const today = new Date();
+		const birthDate = new Date(birthday);
+		let age = today.getFullYear() - birthDate.getFullYear();
+		const m = today.getMonth() - birthDate.getMonth();
+		if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+			age--;
+		}
+		return age;
+	};
+
 	return (
 		<section className={styles.about} id="about">
 			<div className={styles.about__content}>
 				<h2>About me</h2>
-				<p>Hi there! I'm Brandon Argel and I'm 19 years old.</p>
+				<p>Hi there! I'm Brandon Argel and I'm {getAge("2002-06-27")} years old.</p>
 				<p>
 					Shortly before graduating from Jorge Matute Remus Polytechnic Computer Engineering, I
 					began my studies at Platzi and I decided to adopt their motto:
@@ -18,8 +29,8 @@ const About = () => {
 					privilege of working with amazing people and companies.
 				</p>
 				<p>
-					My main focus is building accessible, performant and awesome websites. I'm always
-					looking for new challenges.
+					My main focus is building accessible, performant and awesome websites. I'm always looking
+					for new challenges.
 				</p>
 				<p>Here are some technologies and tools that I have been working with:</p>
 				<ul>
