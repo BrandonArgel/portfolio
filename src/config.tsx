@@ -21,26 +21,72 @@ export const NavItems = [
 
 export const Works = [
 	{
+		company: "PLatzi",
+		company_url: "https://platzi.com",
+		positions: [
+			{
+				title: "Associate Learning",
+				start_date: "July 2022",
+				end_date: "Present",
+				description: [
+					"Quality Assurance for the new courses",
+					"Supporting students of Platzi",
+					"Resolving bugs and issues on the platform",
+					"Testing new features",
+				],
+				skills: [
+					"Quality Assurance",
+					"Assertive Communication",
+					"Give/Receive Feedback",
+					"Attention to Detail",
+				],
+			},
+			{
+				title: "Associate SEO",
+				start_date: "May 2022",
+				end_date: "July 2022",
+				description: [
+					"Content creation in classes",
+					"Continuous improvement of content",
+					"Keyword research",
+					"Position monitoring",
+				],
+				skills: ["Content writing", "Writing review", "Constructive feedback", "Notion"],
+			},
+		],
+	},
+	{
 		company: "Consultora Blockchain",
 		company_url: "https://blockchainconsultora.com/es",
-		position: "Web Developer",
-		start_date: "September 2021",
-		end_date: "February 2022",
-		description: [
-			"Developing a web application for the mayor's office in La Paz, Bolivia. Using technologies such as JavaScript, SCSS, storybook, and some JS libraries, such as React, Next.js, in addition to using Redux-Saga, among others.",
+		positions: [
+			{
+				title: "Web Developer",
+				start_date: "September 2021",
+				end_date: "February 2022",
+				description: [
+					"Developing a web application for the mayor's office in La Paz, Bolivia.",
+					"Using technologies such as JavaScript, SCSS, storybook, and some JS libraries, such as React, Next.js, in addition to using Redux-Saga, among others.",
+				],
+				skills: ["JavaScript", "SCSS", "React", "Next.js", "Redux-Saga"],
+			},
 		],
 	},
 	{
 		company: "Axo Systems",
 		company_url:
 			"https://mx.linkedin.com/company/axosystems?trk=public_profile_topcard-current-company",
-		position: "Front-End",
-		start_date: "January 2021",
-		end_date: "September 2021",
-		description: [
-			"Developed and maintained code for in-house and client websites using HTML, CSS, Sass, JavaScript, React, Firebase, Wordpress, and more.",
-			"Manually tested sites in various browsers and mobile devices to ensure cross-browser compatibility and responsiveness.",
-			"Clients included CNI Consultores, Solar Center, and more.",
+		positions: [
+			{
+				title: "Front-End",
+				start_date: "January 2021",
+				end_date: "September 2021",
+				description: [
+					"Developed and maintained code for in-house and client websites using HTML, CSS, Sass, JavaScript, React, Firebase, Wordpress, and more.",
+					"Manually tested sites in various browsers and mobile devices to ensure cross-browser compatibility and responsiveness.",
+					"Clients included CNI Consultores, Solar Center, and more.",
+				],
+				skills: ["HTML", "CSS", "Sass", "JavaScript", "React", "Firebase", "Wordpress"],
+			},
 		],
 	},
 ];
@@ -49,26 +95,41 @@ const images = {
 	blog: "blog",
 	rick: "rick_and_morty",
 	badges: "platzi_badges",
+	movies: "movies_app",
 	music: "music_player",
 	simon: "simon_says",
 	todo: "todo_app",
 };
 
 export const CardProjects = [
+	// {
+	// 	name: "Personal Blog",
+	// 	description: (
+	// 		<p>
+	// 			If you want to learn about topics like personal development, technology and health. Check
+	// 			out my blog! <span>Developing...</span>
+	// 		</p>
+	// 	),
+	// 	link: "https://blog.brandonargel.me",
+	// 	github: "https://github.com/BrandonArgel/blog",
+	// 	images: {
+	// 		sm: require(`assets/images/${images.blog}.jpg`),
+	// 		md: require(`assets/images/${images.blog}-x2.jpg`),
+	// 		lg: require(`assets/images/${images.blog}-x3.jpg`),
+	// 	},
+	// },
 	{
-		name: "Personal Blog",
+		name: "Movies App",
 		description: (
 			<p>
-				If you want to learn about topics like personal development, technology and health. Check
-				out my blog! <span>Developing...</span>
+				I developed this project while taking the API Rest consumption course trilogy at Platzi.
 			</p>
 		),
-		link: "https://blog.brandonargel.me",
-		github: "https://github.com/BrandonArgel/blog",
+		link: "https://movies-platzi-app.netlify.app/",
+		github: "https://github.com/BrandonArgel/movie-app",
 		images: {
-			sm: require(`assets/images/${images.blog}.jpg`),
-			md: require(`assets/images/${images.blog}-x2.jpg`),
-			lg: require(`assets/images/${images.blog}-x3.jpg`),
+			sm: require(`assets/images/${images.movies}.jpg`),
+			md: require(`assets/images/${images.movies}-x2.jpg`),
 		},
 	},
 	{
@@ -87,7 +148,6 @@ export const CardProjects = [
 		images: {
 			sm: require(`assets/images/${images.rick}.jpg`),
 			md: require(`assets/images/${images.rick}-x2.jpg`),
-			lg: require(`assets/images/${images.rick}-x3.jpg`),
 		},
 	},
 	{
@@ -95,8 +155,8 @@ export const CardProjects = [
 		description: (
 			<p>
 				This is a project that looks pretty simple, but it has a lot of features, such as: dark /
-				light mode, use of local storage, a search bar, drag and drop, and it was developed with react sass
-				and typescript.
+				light mode, use of local storage, a search bar, drag and drop, and it was developed with
+				react sass and typescript.
 			</p>
 		),
 		link: "https://brandonargel.github.io/todo-app/",
@@ -104,7 +164,6 @@ export const CardProjects = [
 		images: {
 			sm: require(`assets/images/${images.todo}.jpg`),
 			md: require(`assets/images/${images.todo}-x2.jpg`),
-			lg: require(`assets/images/${images.todo}-x3.jpg`),
 		},
 	},
 	{
@@ -120,7 +179,6 @@ export const CardProjects = [
 		images: {
 			sm: require(`assets/images/${images.badges}.jpg`),
 			md: require(`assets/images/${images.badges}-x2.jpg`),
-			lg: require(`assets/images/${images.badges}-x3.jpg`),
 		},
 	},
 	{
@@ -135,7 +193,6 @@ export const CardProjects = [
 		images: {
 			sm: require(`assets/images/${images.music}.jpg`),
 			md: require(`assets/images/${images.music}-x2.jpg`),
-			lg: require(`assets/images/${images.music}-x3.jpg`),
 		},
 	},
 	{
@@ -150,7 +207,6 @@ export const CardProjects = [
 		images: {
 			sm: require(`assets/images/${images.simon}.jpg`),
 			md: require(`assets/images/${images.simon}-x2.jpg`),
-			lg: require(`assets/images/${images.simon}-x3.jpg`),
 		},
 	},
 	// {

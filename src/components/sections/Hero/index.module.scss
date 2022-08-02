@@ -1,111 +1,114 @@
 @use "styles/variables.scss";
 
 .hero {
-	margin-bottom: 5rem;
-	width: fit-content;
+  margin-bottom: 5rem;
+  width: fit-content;
 
-	&__container:hover {
-		.hero__presentation_info,
-		.hero__presentation_do {
-			color: variables.$light-text-color;
-		}
-	}
+  &__container:hover {
 
-	&__title {
-		animation: show-in 0.5s ease-in-out 0.5s forwards;
-		color: variables.$main-color;
-		font-size: 1.6rem;
-		font-weight: normal;
-		line-height: 2rem;
-		opacity: 0;
-		will-change: opacity, transform;
-	}
+    .hero__presentation_info,
+    .hero__presentation_do {
+      color: variables.$light-text-color;
+    }
+  }
 
-	&__presentation {
-		animation: show-in 0.5s ease-in-out 0.6s forwards;
-		color: variables.$text-color;
-		font: bold clamp(3rem, 5vw, 8rem) / 110% variables.$font;
-		opacity: 0;
-		padding-bottom: 2rem;
-		text-decoration: none;
-		width: fit-content;
-		will-change: opacity, transform;
-	}
+  &__title {
+    animation: show-in 0.5s ease-in-out 0.5s forwards;
+    color: variables.$main-color;
+    font-size: 1.6rem;
+    font-weight: normal;
+    line-height: 2rem;
+    opacity: 0;
+    will-change: opacity, transform;
+  }
 
-	&__presentation_do {
-		animation: show-in 0.5s ease-in-out 0.7s forwards;
-		color: variables.$text-color;
-		opacity: 0;
-		width: fit-content;
-		will-change: opacity, transform;
-	}
+  &__presentation {
+    animation: show-in 0.5s ease-in-out 0.6s forwards;
+    color: variables.$text-color;
+    font-size: clamp(3rem, 5vw, 8rem);
+    font-weight: bold;
+    line-height: 110%;
+    opacity: 0;
+    padding-bottom: 2rem;
+    text-decoration: none;
+    width: fit-content;
+    will-change: opacity, transform;
+  }
 
-	&__presentation_animated {
-		color: variables.$light-text-color;
-		display: flex;
-		overflow: hidden;
-		text-decoration: none;
+  &__presentation_do {
+    animation: show-in 0.5s ease-in-out 0.7s forwards;
+    color: variables.$text-color;
+    opacity: 0;
+    width: fit-content;
+    will-change: opacity, transform;
+  }
 
-		div {
-			display: flex;
-			flex-direction: column;
-			position: relative;
-			transition: 0.3s ease all;
+  &__presentation_animated {
+    color: variables.$light-text-color;
+    display: flex;
+    overflow: hidden;
+    text-decoration: none;
 
-			&.animated {
-				transform: translateY(-8rem);
-			}
-		}
+    div {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: 0.3s ease all;
 
-		.secondLine {
-			position: absolute;
-			top: 8rem;
-			color: variables.$main-text-color;
-		}
-	}
+      &.animated {
+        transform: translateY(-8rem);
+      }
+    }
 
-	&__presentation_info {
-		animation: show-in 0.5s ease-in-out 0.8s forwards;
-		color: variables.$text-color;
-		font: variables.$fz-lg variables.$font;
-		line-height: 1.2;
-		margin-bottom: 5rem;
-		opacity: 0;
-		transition: all 0.2s cubic-bezier(0.7, 0.05, 0.46, 1);
-		max-width: 50rem;
-		will-change: opacity, transform;
+    .secondLine {
+      position: absolute;
+      top: 8rem;
+      color: variables.$main-text-color;
+    }
+  }
 
-		span {
-			color: variables.$main-color;
-		}
-	}
+  &__presentation_info {
+    animation: show-in 0.5s ease-in-out 0.8s forwards;
+    color: variables.$text-color;
+    font-size: variables.$fz-lg;
+    line-height: 1.2;
+    margin-bottom: 5rem;
+    opacity: 0;
+    transition: all 0.2s cubic-bezier(0.7, 0.05, 0.46, 1);
+    max-width: 50rem;
+    will-change: opacity, transform;
 
-	&__buttons {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+    span {
+      color: variables.$main-color;
+    }
+  }
 
-		&:first-child {
-			animation: show-in 0.5s ease-in-out 0.9s forwards;
-			opacity: 0;
-			will-change: opacity, transform;
-		}
+  &__buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 
-		&:last-child {
-			animation: show-in 0.5s ease-in-out 1s forwards;
-			opacity: 0;
-			will-change: opacity, transform;
-		}
-	}
+    &:first-child {
+      animation: show-in 0.5s ease-in-out 0.9s forwards;
+      opacity: 0;
+      will-change: opacity, transform;
+    }
 
-	@keyframes show-in {
-		from {
-			opacity: 0;
-			transform: translateY(-2rem);
-		}
+    &:last-child {
+      animation: show-in 0.5s ease-in-out 1s forwards;
+      opacity: 0;
+      will-change: opacity, transform;
+    }
+  }
 
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
+  @keyframes show-in {
+    from {
+      opacity: 0;
+      transform: translateY(-2rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }

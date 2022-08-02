@@ -11,14 +11,14 @@ const Projects = () => {
 				challenging projects. Here are some projects that I would like to share.
 			</p>
 			<div className={styles.projects__container}>
-				{CardProjects.map(({ name, description, link, github, images: { sm, md, lg } }) => (
+				{CardProjects.map(({ name, description, link, github, images: { sm, md } }) => (
 					<div className={`${styles.projects__container_card} project`} key={name}>
 						<h3>{name}</h3>
 						{description}
 						<picture>
-							<source media="(min-width: 867px)" srcSet={`${md}, ${lg} 2x`} />
+							<source media="(min-width: 867px)" srcSet={`${sm}, ${md} 2x`} />
 							<source media="(min-width: 607px)" srcSet={`${sm}, ${md} 2x`} />
-							<source media="(min-width: 372px)" srcSet={`${md}, ${lg} 2x`} />
+							<source media="(min-width: 372px)" srcSet={`${sm}, ${md} 2x`} />
 							<img src={sm} alt={`Project ${name}`} width={300} height={188} loading="lazy" />
 						</picture>
 						<div className={styles.projects__container_links}>

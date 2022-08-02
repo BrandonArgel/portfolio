@@ -24,25 +24,35 @@ const Jobs = () => {
 			</div>
 			<div className={styles.tabs__pannel}>
 				{Works &&
-					Works.map(({ company, company_url, position, start_date, end_date, description }, i) => (
+					Works.map(({ positions }, i) => (
 						<div
 							key={i}
 							className={`${styles.tabs__pannel_item} ${
 								activeTab === i ? styles.tabs__pannel_item_active : ""
 							}`}
 						>
-							<h3>
-								<span>{position}</span> in{" "}
-								<a href={company_url} target="_blank" rel="noopener noreferrer">
-									{company}
-								</a>
-							</h3>
-							<p>
-								{start_date} - {end_date}
-							</p>
-							<ul>
-								{description.map((item, i) => (
-									<li key={i}>{item}</li>
+							<ul className={`${styles.tab} ${positions.length > 1 ? styles.tab__line : ""}`}>
+								{positions.map(({ title, description, start_date, end_date, skills }, j) => (
+									<li key={j} className={styles.tab__item}>
+										<h3 className={styles.tab__title}>{title}</h3>
+										<p className={styles.tab__date}>
+											{start_date} - {end_date}
+										</p>
+										<ul className={styles.tab__description}>
+											{description.map((item, k) => (
+												<li key={k} className={styles.tab__description_item}>
+													{item}
+												</li>
+											))}
+										</ul>
+										<ul className={styles.tab__skills}>
+											{skills.map((item, k) => (
+												<li key={k} className={styles.tab__skills_item}>
+													{item}
+												</li>
+											))}
+										</ul>
+									</li>
 								))}
 							</ul>
 						</div>

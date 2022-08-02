@@ -1,5 +1,5 @@
 import Me from "assets/images/me.jpg";
-import Me2x from "assets/images/me2x.jpg";
+import Me2x from "assets/images/me-x2.jpg";
 import styles from "./index.module.scss";
 
 const About = () => {
@@ -8,7 +8,8 @@ const About = () => {
 		const birthDate = new Date(birthday);
 		let age = today.getFullYear() - birthDate.getFullYear();
 		const m = today.getMonth() - birthDate.getMonth();
-		if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+		console.log({ today, birthDate });
+		if (m < 0 || (m === 0 && today.getDay() < birthDate.getDay())) {
 			age--;
 		}
 		return age;

@@ -1,143 +1,145 @@
 @use "styles/variables.scss";
 
 .contact {
-	opacity: 0;
-	transform: translateY(10rem) scale(0.9);
-	transition: all 0.5s ease-in-out;
-	will-change: opacity, transform;
+  opacity: 0;
+  transform: translateY(10rem) scale(0.9);
+  transition: all 0.5s ease-in-out;
+  will-change: opacity, transform;
 
-	&__title {
-		margin: 0 auto 2rem;
-		text-align: center;
-	}
+  &__title {
+    margin: 0 auto 2rem;
+    text-align: center;
+  }
 
-	&__description {
-		font: normal variables.$fz-md variables.$font;
-		text-align: center;
-		margin-bottom: 1rem;
-	}
+  &__description {
+    font-size: variables.$fz-md;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
 
-	&__fieldset {
-		border: 5px solid rgba(variables.$main-color, 0.8);
-		border-radius: 2rem;
-		margin: 5rem auto 0;
-		width: 100%;
-		max-width: 50rem;
+  &__fieldset {
+    border: 5px solid rgba(variables.$main-color, 0.8);
+    border-radius: 2rem;
+    margin: 5rem auto 0;
+    width: 100%;
+    max-width: 50rem;
 
-		&:hover,
-		&:focus-within {
-			border-color: variables.$main-color;
+    &:hover,
+    &:focus-within {
+      border-color: variables.$main-color;
 
-			legend {
-				color: variables.$main-color;
-			}
-		}
+      legend {
+        color: variables.$main-color;
+      }
+    }
 
-		legend {
-			font: bold variables.$fz-lg variables.$font;
-			color: rgba(variables.$main-color, 0.8);
-			margin: 0 auto;
-			padding: 0 1rem;
-		}
-	}
+    legend {
+      font-size: variables.$fz-lg;
+      font-weight: bold;
+      color: rgba(variables.$main-color, 0.8);
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+  }
 
-	&__form {
-		align-items: baseline;
-		display: flex;
-		flex-flow: column nowrap;
-		padding: 2rem;
-		width: 100%;
+  &__form {
+    align-items: baseline;
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 2rem;
+    width: 100%;
 
-		&_input,
-		&_textarea {
-			background-color: transparent;
-			border: 1px solid rgba(variables.$main-color, 0.8);
-			border-radius: 0.5rem;
-			caret-color: variables.$main-color;
-			color: variables.$main-color;
-			font: bold variables.$fz-md variables.$font;
-			margin-bottom: 1rem;
-			outline: none;
-			padding: 1rem;
-			width: 100%;
+    &_input,
+    &_textarea {
+      background-color: transparent;
+      border: 1px solid rgba(variables.$main-color, 0.8);
+      border-radius: 0.5rem;
+      caret-color: variables.$main-color;
+      color: variables.$main-color;
+      font-size: variables.$fz-md;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      outline: none;
+      padding: 1rem;
+      width: 100%;
 
-			&:hover:not(:disabled),
-			&:focus:not(:disabled) {
-				border-color: variables.$main-color;
-				outline: none;
+      &:hover:not(:disabled),
+      &:focus:not(:disabled) {
+        border-color: variables.$main-color;
+        outline: none;
 
-				&::placeholder {
-					color: variables.$main-color;
-				}
-			}
+        &::placeholder {
+          color: variables.$main-color;
+        }
+      }
 
-			&::placeholder {
-				color: rgba(variables.$main-color, 0.8);
-				font: normal variables.$fz-md variables.$font;
-			}
+      &::placeholder {
+        color: rgba(variables.$main-color, 0.8);
+        font-size: variables.$fz-md;
+      }
 
-			&:-webkit-autofill,
-			&:-webkit-autofill:hover,
-			&:-webkit-autofill:focus,
-			&:-webkit-autofill:active {
-				-webkit-box-shadow: 0 0 0 30px variables.$main-color inset;
-				box-shadow: 0 0 0 30px variables.$main-color inset;
-				font: normal variables.$fz-md variables.$font;
-			}
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus,
+      &:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px variables.$main-color inset;
+        box-shadow: 0 0 0 30px variables.$main-color inset;
+        font-size: variables.$fz-md;
+      }
 
-			&:disabled {
-				cursor: not-allowed;
-			}
-		}
+      &:disabled {
+        cursor: not-allowed;
+      }
+    }
 
-		&_textarea {
-			min-height: 10rem;
-			resize: vertical;
-		}
+    &_textarea {
+      min-height: 10rem;
+      resize: vertical;
+    }
 
-		&_submit {
-			margin-top: 1rem;
-		}
+    &_submit {
+      margin-top: 1rem;
+    }
 
-		&_error {
-			align-items: center;
-			color: variables.$red-color;
-			display: flex;
-			font: normal variables.$fz-sm variables.$font;
-			margin-bottom: 1rem;
+    &_error {
+      align-items: center;
+      color: variables.$red-color;
+      display: flex;
+      font-size: variables.$fz-sm;
+      margin-bottom: 1rem;
 
-			svg {
-				fill: variables.$red-color;
-				height: 2rem;
-			}
-		}
+      svg {
+        fill: variables.$red-color;
+        height: 2rem;
+      }
+    }
 
-		&_info {
-			align-items: center;
-			color: variables.$main-color;
-			display: flex;
-			font: normal variables.$fz-sm variables.$font;
-			margin-bottom: 1rem;
+    &_info {
+      align-items: center;
+      color: variables.$main-color;
+      display: flex;
+      font-size: variables.$fz-sm;
+      margin-bottom: 1rem;
 
-			svg {
-				fill: variables.$main-color;
-				height: 2rem;
-			}
-		}
+      svg {
+        fill: variables.$main-color;
+        height: 2rem;
+      }
+    }
 
-		&_success {
-			align-items: center;
-			color: variables.$green-color;
-			display: flex;
-			font: normal variables.$fz-sm variables.$font;
-			justify-content: center;
-			margin-top: 1rem;
-			width: 100%;
+    &_success {
+      align-items: center;
+      color: variables.$green-color;
+      display: flex;
+      font-size: variables.$fz-sm;
+      justify-content: center;
+      margin-top: 1rem;
+      width: 100%;
 
-			svg {
-				fill: variables.$green-color;
-				height: 2rem;
-			}
-		}
-	}
+      svg {
+        fill: variables.$green-color;
+        height: 2rem;
+      }
+    }
+  }
 }
