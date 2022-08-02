@@ -173,7 +173,9 @@
 
   &__skills {
     display: flex;
-		margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
 
     &_item {
       background-color: variables.$secondary-color;
@@ -182,8 +184,10 @@
       font-size: variables.$fz-xxs;
       font-weight: 700;
       list-style: none;
-      margin-right: 1rem;
       padding: 0.2rem 0.8rem;
+      text-align: center;
+      width: fit-content;
+      white-space: nowrap;
     }
   }
 }
