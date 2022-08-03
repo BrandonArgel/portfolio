@@ -122,7 +122,8 @@ export const CardProjects = [
 		name: "Movies App",
 		description: (
 			<p>
-				I developed this project while taking the API Rest consumption course trilogy at Platzi.
+				I developed this project with the API Rest consumption course trilogy at Platzi, and using
+				TMDB api.
 			</p>
 		),
 		link: "https://movies-platzi-app.netlify.app/",
