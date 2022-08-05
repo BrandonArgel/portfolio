@@ -61,7 +61,7 @@ const Hero = () => {
 		texts: { hero },
 	} = React.useContext(LanguageContext);
 	React.useEffect(() => {
-		// new TextoAnimado("name", "hero");
+		new TextoAnimado("name", "hero");
 	}, []);
 
 	return (
