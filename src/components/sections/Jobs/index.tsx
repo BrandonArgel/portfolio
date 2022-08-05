@@ -17,7 +17,7 @@ const Jobs = () => {
 	}, []);
 
 	return (
-		<section className={styles.tabs} id="experience" ref={sectionRef}>
+		<section className={styles.tabs} id={experience.id} ref={sectionRef}>
 			<h2>{experience.title}</h2>
 			<div className={styles.tabs__list}>
 				{experience.jobs.map(({ company }: { company: string }, i: number) => (

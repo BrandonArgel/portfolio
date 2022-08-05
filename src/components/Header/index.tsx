@@ -8,7 +8,7 @@ import styles from "./Header.module.scss";
 
 interface NavItemProps {
 	name: string;
-	url: string;
+	hash: string;
 }
 
 const Header = () => {
@@ -91,9 +91,9 @@ const Header = () => {
 			</Link>
 			<nav className={styles.header__nav}>
 				<ul className={styles.header__nav_list}>
-					{header.nav.map(({ name, url }: NavItemProps, i: number) => (
+					{header.nav.map(({ name, hash }: NavItemProps, i: number) => (
 						<li key={name} style={{ animationDelay: `${i * 0.1 + 0.1}s` }}>
-							<a href={`#${url}`}>{name}</a>
+							<a href={`#${hash}`}>{name}</a>
 						</li>
 					))}
 					<li style={{ animationDelay: `${header.nav.length * 0.1 + 0.1}s` }}>
@@ -126,11 +126,11 @@ const Header = () => {
 			>
 				<nav>
 					<ul className={styles.header__menu_list}>
-						{header.nav.map(({ name, url }: NavItemProps, i: number) => (
+						{header.nav.map(({ name, hash }: NavItemProps, i: number) => (
 							<li key={name}>
 								<a
 									onClick={() => setIsOpen(!isOpen)}
-									href={`#${url}`}
+									href={`#${hash}`}
 									aria-hidden={!isOpen}
 									tabIndex={isOpen ? 1 : -1}
 								>

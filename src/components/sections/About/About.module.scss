@@ -4,10 +4,12 @@
   display: grid;
   grid-template-columns: minmax(200px, 1fr);
   opacity: 0;
-  transform: translateY(1rem) scale(0.9);
+  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1);
   transition: all 0.5s ease-in-out;
+  visibility: visible;
   will-change: opacity, transform;
   width: 100%;
+
 
   &__content {
     p {

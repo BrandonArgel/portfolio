@@ -74,7 +74,8 @@
     line-height: 1.2;
     margin-bottom: 5rem;
     opacity: 0;
-    transition: all 0.2s cubic-bezier(0.7, 0.05, 0.46, 1);
+    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1);
+    visibility: visible;
     max-width: 50rem;
     will-change: opacity, transform;
 
@@ -90,12 +91,16 @@
     &:first-child {
       animation: show-in 0.5s ease-in-out 0.9s forwards;
       opacity: 0;
+      transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1);
+      visibility: visible;
       will-change: opacity, transform;
     }
 
     &:last-child {
       animation: show-in 0.5s ease-in-out 1s forwards;
       opacity: 0;
+      transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1);
+      visibility: visible;
       will-change: opacity, transform;
     }
   }
@@ -103,12 +108,15 @@
   @keyframes show-in {
     from {
       opacity: 0;
-      transform: translateY(-2rem);
+      transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1);
+      visibility: visible;
     }
 
     to {
+      visibility: visible;
       opacity: 1;
-      transform: translateY(0);
+      transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+      transition: opacity 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s, transform 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s;
     }
   }
 }

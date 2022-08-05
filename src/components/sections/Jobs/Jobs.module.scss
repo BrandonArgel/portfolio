@@ -2,8 +2,8 @@
 
 .tabs {
   opacity: 0;
-  transform: translateY(1rem) scale(0.9);
-  transition: all 0.5s ease-in-out;
+  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1);
+  visibility: visible;
   will-change: opacity, transform;
 
   &__list {

@@ -104,7 +104,7 @@ const Contact = () => {
 	}, []);
 
 	return (
-		<section className={styles.contact} id="contact" ref={sectionRef}>
+		<section className={styles.contact} id={contact.id} ref={sectionRef}>
 			<h2 className={styles.contact__title}>{contact.title}</h2>
 			<p className={styles.contact__description}>{contact.description.current}</p>
 			<p className={styles.contact__description}>{contact.description.invite}</p>

@@ -16,7 +16,7 @@ const Projects = () => {
 		}
 	}, []);
 	return (
-		<section className={styles.projects} id="projects" ref={sectionRef}>
+		<section className={styles.projects} id={projects.id} ref={sectionRef}>
 			<h2>{projects.title}</h2>
 			<p>
 				Throughout my career as a Front-End, I have had the opportunity of working on incredible and
