@@ -711,10 +711,10 @@
   "resolved" "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz"
   "version" "5.1.2"
 
-"sass@*":
-  "integrity" "sha512-zb/oMirbKhUgRQ0/GFz8TSAwRq2IlR29vOUJZOx0l8sV+CkHUfHa4u5nqrG+1VceZp7Jfj59SVW9ogdhTvJDcQ=="
-  "resolved" "https://registry.npmjs.org/sass/-/sass-1.53.0.tgz"
-  "version" "1.53.0"
+"sass@*", "sass@^1.54.3":
+  "integrity" "sha512-fLodey5Qd41Pxp/Tk7Al97sViYwF/TazRc5t6E65O7JOk4XF8pzwIW7CvCxYVOfJFFI/1x5+elDyBIixrp+zrw=="
+  "resolved" "https://registry.npmjs.org/sass/-/sass-1.54.3.tgz"
+  "version" "1.54.3"
   dependencies:
     "chokidar" ">=3.0.0 <4.0.0"
     "immutable" "^4.0.0"
