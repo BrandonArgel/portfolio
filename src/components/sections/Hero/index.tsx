@@ -1,8 +1,7 @@
 import * as React from "react";
-
-import { Button } from "components";
-
-import styles from "./index.module.scss";
+import { LanguageContext } from "@context";
+import { Button } from "@components";
+import styles from "./Hero.module.scss";
 
 class TextoAnimado {
 	text: HTMLElement | null;
@@ -58,23 +57,26 @@ class TextoAnimado {
 }
 
 const Hero = () => {
+	const {
+		texts: { hero },
+	} = React.useContext(LanguageContext);
 	React.useEffect(() => {
-		new TextoAnimado("name", "hero");
-	});
+		// new TextoAnimado("name", "hero");
+	}, []);
 
 	return (
 		<section className={styles.hero} id="hero">
 			<div className={styles.hero__container}>
-				<h1 className={styles.hero__title}>Hi! My name is</h1>
+				<h1 className={styles.hero__title}>{hero.title}</h1>
 				<div className={styles.hero__presentation}>
 					<p id="name" className={styles.hero__presentation_animated}>
-						Brandon Argel
+						{hero.presentation.animated}
 					</p>
-					<p className={styles.hero__presentation_do}>And I build websites</p>
+					<p className={styles.hero__presentation_do}>{hero.presentation.do}</p>
 				</div>
 				<p className={styles.hero__presentation_info}>
-					I am a <span> Front-End Developer </span>, student of Platzi and part of Platzi Master, I
-					really enjoy learning new things every day and creating for the web.
+					{hero.info.firstPart} <span> {hero.info.profession}</span>
+					{hero.info.secondPart}
 				</p>
 			</div>
 			<div className={styles.hero__buttons}>
@@ -85,14 +87,14 @@ const Hero = () => {
 					size="medium"
 					target="_blank"
 				>
-					Resume
+					{hero.buttons.resume}
 				</Button>
 				<Button size="medium" href="#contact" link>
-					Contact
+					{hero.buttons.contact}
 				</Button>
 			</div>
 		</section>
 	);
 };
 
-export default Hero;
+export { Hero };

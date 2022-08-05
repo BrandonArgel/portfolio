@@ -69,4 +69,4 @@ const ParticlesBg = () => {
 	);
 };
 
-export default ParticlesBg;
+export { ParticlesBg };

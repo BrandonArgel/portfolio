@@ -1,4 +1,4 @@
-@use "styles/variables.scss";
+@use "@styles/variables.scss";
 
 .header {
   align-items: center;
@@ -211,6 +211,11 @@
       li {
         margin: 1rem 0;
 
+        &:last-child {
+          margin-top: 2rem;
+          width: fit-content;
+        }
+
         a {
           color: variables.$light-text-color;
           font-size: variables.$fz-lg;
@@ -268,7 +273,9 @@
       margin: 2rem 0;
 
       li {
+        align-items: center;
         animation: show-in 0.5s ease-in-out forwards;
+        display: flex;
         margin: 1rem 0;
         opacity: 0;
         will-change: opacity, transform;
@@ -342,6 +349,10 @@
           margin: 0 1rem;
         }
       }
+    }
+
+    &__backdrop {
+      display: none;
     }
   }
 }

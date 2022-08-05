@@ -1,6 +1,12 @@
 import * as React from "react";
 import { Outlet } from "react-router-dom";
-import { Header, Footer } from "components";
+import { Header, Footer } from "@components";
+
+const Particles = React.lazy(() =>
+	import("@components").then(({ Particles }) => ({
+		default: Particles,
+	}))
+);
 
 const Layout = () => {
 	return (
@@ -12,8 +18,9 @@ const Layout = () => {
 				</div>
 				<Footer />
 			</main>
+			<Particles />
 		</>
 	);
 };
 
-export default Layout;
+export { Layout };

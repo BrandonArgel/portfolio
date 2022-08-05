@@ -1,17 +1,23 @@
 import * as React from "react";
+import { LanguageContext } from "@context";
+import { useShowIn } from "@hooks";
 import emailjs from "@emailjs/browser";
-import { Button } from "components";
-import { Alert, Info, Success } from "assets/icons";
-import styles from "./index.module.scss";
+import { Button } from "@components";
+import { Alert, Info, Success } from "@assets/icons";
+import styles from "./Contact.module.scss";
 
 const REGEX = {
 	name: /^[a-zA-ZÀ-ÿ\s]{1,50}$/,
 	correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
 };
 
-const { REACT_APP_SERVICE_ID, REACT_APP_TEMPLATE_ID, REACT_APP_USER_ID } = process.env;
+const { VITE_SERVICE_ID, VITE_TEMPLATE_ID, VITE_USER_ID } = import.meta.env;
 
 const Contact = () => {
+	const {
+		texts: { contact },
+	} = React.useContext(LanguageContext);
+	const sectionRef = React.useRef<HTMLDivElement>(null);
 	const form = React.useRef<HTMLFormElement>(null);
 	const [name, setName] = React.useState({
 		value: "",
@@ -31,25 +37,26 @@ const Contact = () => {
 	const [error, setError] = React.useState(false);
 
 	const validateName = (value: string) => {
-		if (!value) return setName({ ...name, error: "You need to enter a name" });
+		if (!value) return setName({ ...name, error: contact.errors.name.required });
 		if (!REGEX.name.test(value)) {
-			return setName({ ...name, error: "El nombre sólo puede tener hasta 50 letras y espacios" });
+			return setName({ ...name, error: contact.errors.name.invalid });
 		}
 		return true;
 	};
 
 	const validateEmail = (value: string) => {
-		if (!value) return setEmail({ ...email, error: "You need to enter an email" });
-		if (!REGEX.correo.test(value)) return setEmail({ ...email, error: "El correo no es válido" });
+		if (!value) return setEmail({ ...email, error: contact.errors.email.required });
+		if (!REGEX.correo.test(value))
+			return setEmail({ ...email, error: contact.errors.email.invalid });
 		return true;
 	};
 
 	const validateMessage = (value: string) => {
-		if (!value) return setMessage({ ...message, error: "You need to write a message" });
+		if (!value) return setMessage({ ...message, error: contact.errors.message.required });
 		if (value.length > 500)
 			return setMessage({
 				...message,
-				error: "El mensaje puede tener hasta 500 caracteres",
+				error: contact.errors.message.validation,
 			});
 		return true;
 	};
@@ -65,12 +72,7 @@ const Contact = () => {
 			setSending(true);
 			try {
 				emailjs
-					.sendForm(
-						`${REACT_APP_SERVICE_ID}`,
-						`${REACT_APP_TEMPLATE_ID}`,
-						form.current!,
-						`${REACT_APP_USER_ID}`
-					)
+					.sendForm(`${VITE_SERVICE_ID}`, `${VITE_TEMPLATE_ID}`, form.current!, `${VITE_USER_ID}`)
 					.then(
 						(result) => {
 							setHasSent(true);
@@ -95,22 +97,23 @@ const Contact = () => {
 		}
 	};
 
+	React.useEffect(() => {
+		if (sectionRef.current) {
+			useShowIn(sectionRef);
+		}
+	}, []);
+
 	return (
-		<section className={styles.contact} id="contact">
-			<h2 className={styles.contact__title}>Contact</h2>
-			<p className={styles.contact__description}>
-				I am currently looking for new opportunities, my inbox is always open.
-			</p>
-			<p className={styles.contact__description}>
-				If you have any questions about my services, or just want to say hello, feel free to contact
-				me.
-			</p>
+		<section className={styles.contact} id="contact" ref={sectionRef}>
+			<h2 className={styles.contact__title}>{contact.title}</h2>
+			<p className={styles.contact__description}>{contact.description.current}</p>
+			<p className={styles.contact__description}>{contact.description.invite}</p>
 			<fieldset className={styles.contact__fieldset}>
-				<legend>Lets talk!</legend>
+				<legend>{contact.form.legend}</legend>
 				<form ref={form} className={styles.contact__form} onSubmit={handleSubmit}>
 					<input
 						className={styles.contact__form_input}
-						placeholder="Name"
+						placeholder={contact.form.name}
 						type="text"
 						autoComplete="on"
 						value={name.value}
@@ -126,7 +129,7 @@ const Contact = () => {
 					)}
 					<input
 						className={styles.contact__form_input}
-						placeholder="Mail"
+						placeholder={contact.form.email}
 						type="email"
 						autoComplete="on"
 						value={email.value}
@@ -142,7 +145,7 @@ const Contact = () => {
 					)}
 					<textarea
 						className={styles.contact__form_textarea}
-						placeholder="Message"
+						placeholder={contact.form.message}
 						rows={10}
 						value={message.value}
 						onBlur={(e) => validateMessage(e.target.value)}
@@ -157,25 +160,20 @@ const Contact = () => {
 					)}
 					{alreadySent && (
 						<div aria-live="assertive" className={styles.contact__form_info}>
-							<Info /> You have already sent a message
-						</div>
-					)}
-					{sending && (
-						<div aria-live="assertive" className={styles.contact__form_info}>
-							<Info /> Sending message...
+							<Info /> {contact.messages.alreadySent}
 						</div>
 					)}
 					<Button active className={styles.contact__form_submit} disabled={hasSent} size="small">
-						Send
+						{sending ? contact.form.button.sending : contact.form.button.send}
 					</Button>
 					{error && (
 						<div aria-live="assertive" className={styles.contact__form_error}>
-							<Alert /> Something went wrong, please try again
+							<Alert /> {contact.form.error}
 						</div>
 					)}
 					{hasSent && (
 						<p className={styles.contact__form_success}>
-							<Success /> I'll check your message as soon as possible.
+							<Success /> {contact.messages.success}
 						</p>
 					)}
 				</form>
@@ -184,4 +182,4 @@ const Contact = () => {
 	);
 };
 
-export default Contact;
+export { Contact };

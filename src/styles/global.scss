@@ -67,10 +67,14 @@ section {
     color: $main-color;
     font-size: clamp(2rem, 3.3vw, 3rem);
     font-weight: bold;
-		line-height: 110%;
+    line-height: 110%;
     margin-bottom: 2rem;
     width: fit-content;
   }
+}
+
+[id] {
+  scroll-margin-top: 7rem;
 }
 
 .skip-to-content {
@@ -78,7 +82,7 @@ section {
   border-radius: 0.5rem;
   color: $dark-text-color;
   cursor: pointer;
-	font-family: $font;
+  font-family: $font;
   font-size: $fz-md;
   height: auto;
   left: 0;

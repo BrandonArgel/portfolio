@@ -1,4 +1,4 @@
-const KEY_CODES = {
+export const KEY_CODES = {
   ARROW_LEFT: 'ArrowLeft',
   ARROW_LEFT_IE11: 'Left',
   ARROW_RIGHT: 'ArrowRight',
@@ -14,5 +14,3 @@ const KEY_CODES = {
   SPACE_IE11: 'Spacebar',
   ENTER: 'Enter',
 };
-
-export default KEY_CODES;

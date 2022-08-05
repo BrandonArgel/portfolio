@@ -1,14 +1,22 @@
-import * as React from "react";
-import KEY_CODES from "utils/keycodes";
 import { Link } from "react-router-dom";
+import * as React from "react";
+import { LanguageContext } from "@context";
+import { Select } from "@components/Select";
+import { KEY_CODES } from "@utils";
+import { Logo } from "@assets/icons";
+import styles from "./Header.module.scss";
 
-import { NavItems } from "config";
-
-import { Logo } from "assets/icons";
-
-import styles from "./index.module.scss";
+interface NavItemProps {
+	name: string;
+	url: string;
+}
 
 const Header = () => {
+	const {
+		texts: { header },
+		language,
+		setLanguage,
+	} = React.useContext(LanguageContext);
 	const [isOpen, setIsOpen] = React.useState(false);
 	const buttonRef = React.useRef<HTMLButtonElement>(
 		null
@@ -78,20 +86,28 @@ const Header = () => {
 
 	return (
 		<header className={styles.header}>
-			<Link className={styles.header__logo} to="/" aria-label="Home">
+			<Link className={styles.header__logo} to="/" aria-label={header.logo} title={header.logo}>
 				<Logo />
 			</Link>
 			<nav className={styles.header__nav}>
 				<ul className={styles.header__nav_list}>
-					{NavItems.map(({ name, url }, i) => (
+					{header.nav.map(({ name, url }: NavItemProps, i: number) => (
 						<li key={name} style={{ animationDelay: `${i * 0.1 + 0.1}s` }}>
 							<a href={`#${url}`}>{name}</a>
 						</li>
 					))}
+					<li style={{ animationDelay: `${header.nav.length * 0.1 + 0.1}s` }}>
+						<Select
+							title={header.select.title}
+							options={header.select.options}
+							setValue={setLanguage}
+							value={language}
+						/>
+					</li>
 				</ul>
 			</nav>
 			<button
-				aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
+				aria-label={isOpen ? header.menu.close : header.menu.open}
 				className={`${styles.header__hamburger} ${isOpen ? styles.header__hamburger_active : ""}`}
 				onClick={() => setIsOpen(!isOpen)}
 				ref={buttonRef}
@@ -110,13 +126,26 @@ const Header = () => {
 			>
 				<nav>
 					<ul className={styles.header__menu_list}>
-						{NavItems.map(({ name, url }) => (
+						{header.nav.map(({ name, url }: NavItemProps, i: number) => (
 							<li key={name}>
-								<a onClick={() => setIsOpen(!isOpen)} href={`#${url}`}>
+								<a
+									onClick={() => setIsOpen(!isOpen)}
+									href={`#${url}`}
+									aria-hidden={!isOpen}
+									tabIndex={isOpen ? 1 : -1}
+								>
 									{name}
 								</a>
 							</li>
 						))}
+						<li>
+							<Select
+								title={header.select.title}
+								options={header.select.options}
+								setValue={setLanguage}
+								value={language}
+							/>
+						</li>
 					</ul>
 				</nav>
 			</aside>
@@ -127,4 +156,4 @@ const Header = () => {
 	);
 };
 
-export default Header;
+export { Header };

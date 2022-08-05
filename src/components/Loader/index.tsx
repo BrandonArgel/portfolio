@@ -1,6 +1,6 @@
-import { Spinner } from "assets/icons";
+import { Spinner } from "@assets/icons";
 
-import styles from "./index.module.scss";
+import styles from "./Loader.module.scss";
 
 const Loader = () => {
 	return (
@@ -10,4 +10,4 @@ const Loader = () => {
 	);
 };
 
-export default Loader;
+export { Loader };

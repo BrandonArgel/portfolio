@@ -1,0 +1,281 @@
+@use "@styles/variables.scss";
+
+.button {
+  align-items: center;
+  background: none;
+  border: none;
+  color: variables.$main-text-color;
+  cursor: pointer;
+  display: flex;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  transition: all cubic-bezier(0.215, 0.61, 0.355, 1) 0.5s;
+  width: fit-content;
+  width: -moz-fit-content;
+  will-change: transform;
+
+  &:hover:not(:disabled) {
+    transform: scale(1.1);
+  }
+
+  &:focus:not(:disabled) {
+    transform: scale(1.1);
+    outline: none;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(1);
+    transition: all 0.1s;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  span {
+    position: absolute;
+    will-change: animation, transform;
+  }
+
+  $button-sizes: ("large": ("font": variables.$fz-lg,
+      "height": 5rem,
+      "padding-inline": 3rem,
+    ),
+    "medium": ("font": variables.$fz-md,
+      "height": 4.5rem,
+      "padding-inline": 2.5rem,
+    ),
+    "small": ("font": variables.$fz-sm,
+      "height": 4rem,
+      "padding-inline": 2rem,
+    ),
+  );
+
+  @each $button-size,
+  $size in $button-sizes {
+    &.#{$button-size} {
+      font-size: map-get($size, "font");
+      height: map-get($size, "height");
+      padding-inline: map-get($size, "padding-inline");
+    }
+  }
+
+  span:nth-child(1) {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, transparent, variables.$secondary-color);
+  }
+
+  span:nth-child(2) {
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    transform: translateY(-100%);
+    background: linear-gradient(to bottom, transparent, variables.$secondary-color);
+  }
+
+  span:nth-child(3) {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to left, transparent, variables.$secondary-color);
+  }
+
+  span:nth-child(4) {
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    transform: translateY(100%);
+    background: linear-gradient(to top, transparent, variables.$secondary-color);
+  }
+
+  span:nth-child(5) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    transform: translateX(-100%);
+    background: linear-gradient(to right, transparent, variables.$secondary-color);
+  }
+
+  span:nth-child(6) {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, variables.$secondary-color);
+  }
+
+  span:nth-child(7) {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    transform: translateX(100%);
+    background: linear-gradient(to left, transparent, variables.$secondary-color);
+  }
+
+  span:nth-child(8) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to top, transparent, variables.$secondary-color);
+  }
+
+  &:hover,
+  &:active,
+  &:focus,
+  &.active {
+    span:nth-child(1) {
+      animation: animate1 2s linear infinite;
+    }
+
+    span:nth-child(2) {
+      animation: animate2 2s linear infinite;
+    }
+
+    span:nth-child(3) {
+      animation: animate3 2s linear infinite;
+    }
+
+    span:nth-child(4) {
+      animation: animate4 2s linear infinite;
+    }
+
+    span:nth-child(5) {
+      animation: animate5 2s linear infinite;
+    }
+
+    span:nth-child(6) {
+      animation: animate6 2s linear infinite;
+    }
+
+    span:nth-child(7) {
+      animation: animate7 2s linear infinite;
+    }
+
+    span:nth-child(8) {
+      animation: animate8 2s linear infinite;
+    }
+  }
+
+  @keyframes animate1 {
+
+    0%,
+    100% {
+      transform: translateX(0%);
+      transition: transform 0;
+    }
+
+    50% {
+      transform: translateX(100%);
+    }
+
+    50.01% {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes animate2 {
+
+    0%,
+    100% {
+      transform: translateY(0%);
+      transition: transform 0;
+    }
+
+    50% {
+      transform: translateY(100%);
+    }
+
+    50.01% {
+      transform: translateY(-100%);
+    }
+  }
+
+  @keyframes animate3 {
+
+    0%,
+    100% {
+      transform: translateX(0%);
+      transition: transform 0;
+    }
+
+    50% {
+      transform: translateX(-100%);
+    }
+
+    50.01% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes animate4 {
+
+    0%,
+    100% {
+      transform: translateY(0%);
+      transition: transform 0;
+    }
+
+    50% {
+      transform: translateY(-100%);
+    }
+
+    50.01% {
+      transform: translateY(100%);
+    }
+  }
+
+  @keyframes animate5 {
+    0% {
+      transform: translateX(-100%);
+    }
+
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes animate6 {
+    0% {
+      transform: translateY(-100%);
+    }
+
+    100% {
+      transform: translateY(100%);
+    }
+  }
+
+  @keyframes animate7 {
+    0% {
+      transform: translateX(100%);
+    }
+
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes animate8 {
+    0% {
+      transform: translateY(100%);
+    }
+
+    100% {
+      transform: translateY(-100%);
+    }
+  }
+}
