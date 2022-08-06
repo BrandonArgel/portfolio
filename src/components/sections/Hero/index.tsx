@@ -58,6 +58,7 @@ class TextoAnimado {
 
 const Hero = () => {
 	const {
+		language,
 		texts: { hero },
 	} = React.useContext(LanguageContext);
 	React.useEffect(() => {
@@ -81,13 +82,13 @@ const Hero = () => {
 			</div>
 			<div className={styles.hero__buttons}>
 				<Button
-					href="https://firebasestorage.googleapis.com/v0/b/personal-project-brandon.appspot.com/o/pdf%2FFrontend_Brandon_Argel_Verdeja_Dom%C3%ADnguez_CV.pdf?alt=media&token=f5b9d82c-6d1b-4bd7-964a-164276ee0625"
+					href={`/${hero.buttons.resume.link}-${language}.pdf`}
 					link
 					rel="noopener noreferrer"
 					size="medium"
 					target="_blank"
 				>
-					{hero.buttons.resume}
+					{hero.buttons.resume.text}
 				</Button>
 				<Button size="medium" href="#contact" link>
 					{hero.buttons.contact}

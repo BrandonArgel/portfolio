@@ -54,7 +54,10 @@
 				"secondPart": ", student of Platzi and part of Platzi Master, I really enjoy learning new things every day and creating for the web."
 			},
 			"buttons": {
-				"resume": "Resume",
+				"resume": {
+					"text": "Resume",
+					"link": "resume"
+				},
 				"contact": "Contact"
 			}
 		},
@@ -327,7 +330,10 @@
 				"secondPart": ", estudiante de Platzi y parte de Platzi Master, me gusta aprender cosas nuevas cada día y crear para la web."
 			},
 			"buttons": {
-				"resume": "Currículum",
+				"resume": {
+					"text": "Currículum",
+					"link": "curriculum"
+				},
 				"contact": "Contacto"
 			}
 		},
@@ -605,7 +611,10 @@
 				"secondPart": ", étudiant de Platzi et part de Platzi Master, j'aime apprendre de nouvelles choses chaque jour et créer pour le web."
 			},
 			"buttons": {
-				"resume": "Résumé",
+				"resume": {
+					"text": "Résumé",
+					"link": "resume"
+				},
 				"contact": "Contact"
 			}
 		},
