@@ -68,11 +68,11 @@ const Hero = () => {
 	return (
 		<section className={styles.hero} id="hero">
 			<div className={styles.hero__container}>
-				<h1 className={styles.hero__title}>{hero.title}</h1>
+				<span className={styles.hero__title}>{hero.title}</span>
 				<div className={styles.hero__presentation}>
-					<p id="name" className={styles.hero__presentation_animated}>
+					<h1 id="name" className={styles.hero__presentation_animated}>
 						{hero.presentation.animated}
-					</p>
+					</h1>
 					<p className={styles.hero__presentation_do}>{hero.presentation.do}</p>
 				</div>
 				<p className={styles.hero__presentation_info}>

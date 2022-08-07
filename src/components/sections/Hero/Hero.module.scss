@@ -1,8 +1,8 @@
 @use "@styles/variables.scss";
 
 .hero {
+  align-content: flex-start;
   margin-bottom: 5rem;
-  width: fit-content;
 
   &__container:hover {
 
@@ -25,45 +25,48 @@
   &__presentation {
     animation: show-in 0.5s ease-in-out 0.6s forwards;
     color: variables.$text-color;
-    font-size: clamp(3rem, 5vw, 8rem);
-    font-weight: bold;
-    line-height: 110%;
     opacity: 0;
     padding-bottom: 2rem;
     text-decoration: none;
     width: fit-content;
     will-change: opacity, transform;
-  }
 
-  &__presentation_do {
-    animation: show-in 0.5s ease-in-out 0.7s forwards;
-    color: variables.$text-color;
-    opacity: 0;
-    width: fit-content;
-    will-change: opacity, transform;
-  }
-
-  &__presentation_animated {
-    color: variables.$light-text-color;
-    display: flex;
-    overflow: hidden;
-    text-decoration: none;
-
-    div {
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      transition: 0.3s ease all;
-
-      &.animated {
-        transform: translateY(-8rem);
-      }
+    &_do {
+      animation: show-in 0.5s ease-in-out 0.7s forwards;
+      color: variables.$text-color;
+      font-size: clamp(3rem, 5vw, 8rem);
+      font-weight: bold;
+      line-height: 110%;
+      opacity: 0;
+      width: fit-content;
+      will-change: opacity, transform;
     }
 
-    .secondLine {
-      position: absolute;
-      top: 8rem;
-      color: variables.$main-text-color;
+    &_animated {
+      color: variables.$light-text-color;
+      display: flex;
+      font-size: clamp(3rem, 5vw, 8rem);
+      font-weight: bold;
+      line-height: 110%;
+      overflow: hidden;
+      text-decoration: none;
+
+      div {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        transition: 0.3s ease all;
+
+        &.animated {
+          transform: translateY(-10rem);
+        }
+      }
+
+      .secondLine {
+        position: absolute;
+        top: 10rem;
+        color: variables.$main-text-color;
+      }
     }
   }
 
@@ -87,6 +90,7 @@
   &__buttons {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    max-width: 50rem;
 
     &:first-child {
       animation: show-in 0.5s ease-in-out 0.9s forwards;

@@ -1,4 +1,3 @@
-// @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500&display=swap");
 @import "./fonts.scss";
 @import "./variables.scss";
 
@@ -26,21 +25,16 @@ a {
 }
 
 main {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 5rem;
   margin-top: 6rem;
   max-height: calc(100vh - 6rem);
   min-height: calc(100vh - 6rem);
+  padding: 3rem 2rem 2rem;
   scroll-behavior: smooth;
   overflow-x: hidden;
   overflow-y: auto;
-
-  &>div {
-    display: flex;
-    flex-flow: column nowrap;
-    gap: 5rem;
-    margin: 0 auto;
-    max-width: 120rem;
-    padding: 3rem 2rem 2rem;
-  }
 
   &::-webkit-scrollbar {
     background-color: transparent;
@@ -61,6 +55,9 @@ main {
 }
 
 section {
+  margin: 0 auto;
+  max-width: 120rem;
+  width: 100%;
   padding: 2rem 0;
 
   h2 {

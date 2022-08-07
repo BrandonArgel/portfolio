@@ -13,9 +13,7 @@ const Layout = () => {
 		<>
 			<Header />
 			<main id="content">
-				<div>
-					<Outlet />
-				</div>
+				<Outlet />
 				<Footer />
 			</main>
 			<Particles />
