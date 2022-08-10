@@ -21,6 +21,7 @@ const App = () => {
 						<Route path="/" element={<Layout />}>
 							<Route index element={<Home />} />
 						</Route>
+						{/* Create not found page */}
 						<Route path="*" element={<Navigate replace to="/" />} />
 					</Routes>
 				</React.Suspense>
