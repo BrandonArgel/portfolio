@@ -47,13 +47,14 @@ const About = () => {
 				</ul>
 			</div>
 			<img
+				alt={about.photo}
 				className={styles.about__image}
 				src={Me}
-				alt={about.name}
-				width={400}
 				height={400}
-				srcSet={`${Me2x} 2x`}
 				loading="lazy"
+				srcSet={`${Me2x} 2x`}
+				title={about.photo}
+				width={400}
 			/>
 		</section>
 	);
