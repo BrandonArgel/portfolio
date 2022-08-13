@@ -163,7 +163,13 @@ const Contact = () => {
 							<Info /> {contact.messages.alreadySent}
 						</div>
 					)}
-					<Button active className={styles.contact__form_submit} disabled={hasSent} size="small">
+					<Button
+						active
+						className={styles.contact__form_submit}
+						disabled={hasSent}
+						size="small"
+						type="submit"
+					>
 						{sending ? contact.form.button.sending : contact.form.button.send}
 					</Button>
 					{error && (

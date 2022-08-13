@@ -2,7 +2,6 @@
 
 .projects {
   margin: 0 auto;
-  max-width: 100rem;
   opacity: 0;
   transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1);
   visibility: visible;
@@ -17,20 +16,15 @@
   &__container {
     display: grid;
     gap: 15px;
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    grid-template-columns: 1fr;
     margin: 2rem 0;
     width: 100%;
   }
 }
 
-@media (min-width: 450px) {
-  .projects__container {
-    grid-template-columns: repeat(auto-fill, minmax(27rem, 1fr));
-  }
-}
 
-@media (min-width: 1000px) {
+@media (min-width: 600px) {
   .projects__container {
-    grid-template-columns: repeat(auto-fill, minmax(35rem, 1fr));
+    grid-template-columns: 1fr 1fr;
   }
 }

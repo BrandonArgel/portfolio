@@ -31,6 +31,7 @@ const Button = ({
 			...rest,
 			className: `${styles.button} ${styles[size]} ${active ? styles.active : ""} ${className}`,
 			disabled,
+			type,
 		},
 		children,
 		<>
