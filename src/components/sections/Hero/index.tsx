@@ -59,7 +59,7 @@ class TextoAnimado {
 const Hero = () => {
 	const {
 		language,
-		texts: { hero },
+		texts: { hero, contact },
 	} = React.useContext(LanguageContext);
 	React.useEffect(() => {
 		new TextoAnimado("name", "hero");
@@ -90,7 +90,7 @@ const Hero = () => {
 				>
 					{hero.buttons.resume.text}
 				</Button>
-				<Button size="medium" href="#contact" link>
+				<Button size="medium" href={`#${contact.id}`} link>
 					{hero.buttons.contact}
 				</Button>
 			</div>
