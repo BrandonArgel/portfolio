@@ -68,10 +68,10 @@
 				"firstPart": "Hi there! I'm Brandon Argel Verdeja Domínguez, and I'm",
 				"secondPart": "years old."
 			},
-			"studies": "Shortly before graduating from Jorge Matute Remus Polytechnic Computer Engineering, I\tbegan my studies at Platzi and I decided to adopt their motto:",
+			"studies": "Shortly before graduating from Jorge Matute Remus Polytechnic Computer Engineering, I began my studies at Platzi and I decided to adopt their motto:",
 			"motto": "Never stop learning",
 			"focus": {
-				"past": "Since then I've focused on learning everything about web development, and I've had the privilege of working with amazing people and companies.",
+				"past": "Since then, I've focused on learning everything about web development, and I've had the privilege of working with amazing people and companies.",
 				"main": "My main focus is building accessible, performant and awesome websites. I'm always looking for new challenges."
 			},
 			"technologies": {
@@ -93,7 +93,7 @@
 			"title": "Where I've worked",
 			"jobs": [
 				{
-					"company": "PLatzi",
+					"company": "Platzi",
 					"company_url": "https://platzi.com",
 					"positions": [
 						{
@@ -184,7 +184,7 @@
 				},
 				{
 					"name": "ToDo App",
-					"description": "This is a project that looks pretty simple, but it has a lot of features, such as: dark/light mode, use of local storage, a search bar, drag and drop, and it was developed with\treact sass and typescript.",
+					"description": "This is a project that looks pretty simple, but it has a lot of features, such as: dark/light mode, use of local storage, a search bar, drag and drop, and it was developed with react sass and typescript.",
 					"link": "https://brandonargel.github.io/todo-app/",
 					"github": "https://github.com/BrandonArgel/todo-app/",
 					"image": "todoApp"
@@ -371,7 +371,7 @@
 			"title": "En dónde he tradajado",
 			"jobs": [
 				{
-					"company": "PLatzi",
+					"company": "Platzi",
 					"company_url": "https://platzi.com",
 					"positions": [
 						{
@@ -380,11 +380,11 @@
 							"end_date": "Actualidad",
 							"description": [
 								"Contribuyo al aseguramiento de la calidad, trabajando en conjunto con diferentes equipos, ofreciendo un producto de alta calidad en educación usado por más de 3 millones de estudiantes en LATAM.",
-								"Proveer fedback continuo al equipo para iterar en mejores resultados.",
+								"Proveer feedback continuo al equipo para iterar en mejores resultados.",
 								"Identificación, seguimiento y resolución de bugs de educación.",
 								"Apoyo en la documentación del knowledge base.",
 								"Resolución de dudas técnicas de estudiantes de la plataforma.",
-								"Testear las nuevas features de la plataforma."
+								"Testear las nuevas características de la plataforma."
 							],
 							"skills": [
 								"Control de calidad",
@@ -399,9 +399,9 @@
 							"start_date": "Mayo 2022",
 							"end_date": "Julio 2022",
 							"description": [
-								"Contribuí con la creación, revisión y mejora de los contenidos en las clases de la plataforma, principalmente en los cursos de tecnología, enfocándonos generar contenido de calidad para los estudiantes de Platzi y en mejorar el SEO de la plataforma.",
-								"Content creation for the classes in the platform.",
-								"Continuous improvement of content"
+								"Contribuí con la creación, revisión y mejora de los contenidos en las clases de la plataforma, principalmente en los cursos de tecnología, enfocándonos en generar contenido de calidad para los estudiantes de Platzi y en mejorar el SEO de la plataforma.",
+								"Creación de contenido para las clases en la plataforma.",
+								"Mejora continua del contenido."
 							],
 							"skills": [
 								"Creación de contenido",
@@ -654,7 +654,7 @@
 			"title": "Où j'ai travaillé",
 			"jobs": [
 				{
-					"company": "PLatzi",
+					"company": "Platzi",
 					"company_url": "https://platzi.com",
 					"positions": [
 						{
