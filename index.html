@@ -3,7 +3,6 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!-- Canonic meta tag -->
 		<link rel="canonical" href="https://brandonargel.me/" />
 		<meta
 			name="description"
@@ -32,7 +31,7 @@
 			content="Brandon Argel is a Front-End Developer, Student of Platzi and Platzi Master, and Associate in the Learning Team at Platzi, who enjoys learning new things every day and creating for the web."
 		/>
 		<meta name="twitter:image" content="https://brandonargel.me/og.png" />
-		
+
 		<link rel="icon" href="/favicon.ico" />
 		<link rel="apple-touch-icon" href="/logo192.png" />
 		<link rel="manifest" href="/site.webmanifest" />
@@ -42,5 +41,17 @@
 	<body>
 		<div id="app"></div>
 		<script type="module" src="/src/main.tsx"></script>
+
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-GMTG4MS3BP"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag("js", new Date());
+
+			gtag("config", "G-GMTG4MS3BP");
+		</script>
 	</body>
 </html>
