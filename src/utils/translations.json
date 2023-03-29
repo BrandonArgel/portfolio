@@ -185,7 +185,7 @@
 				{
 					"name": "ToDo App",
 					"description": "This is a project that looks pretty simple, but it has a lot of features, such as: dark/light mode, use of local storage, a search bar, drag and drop, and it was developed with react sass and typescript.",
-					"link": "https://brandonargel.github.io/todo-app/",
+					"link": "http://todoapp.brandonargel.me/",
 					"github": "https://github.com/BrandonArgel/todo-app/",
 					"image": "todoApp"
 				},
@@ -468,7 +468,7 @@
 				{
 					"name": "ToDo App",
 					"description": "Este es un proyecto que parece bastante simple, pero tiene muchas características, como: modo oscuro/claro, uso de almacenamiento local, una barra de búsqueda, arrastrar y soltar, y fue desarrollado con React Sass y TypeScript.",
-					"link": "https://brandonargel.github.io/todo-app/",
+					"link": "http://todoapp.brandonargel.me/",
 					"github": "https://github.com/BrandonArgel/todo-app/",
 					"image": "todoApp"
 				},
@@ -751,7 +751,7 @@
 				{
 					"name": "ToDo App",
 					"description": "C'est un projet qui semble assez simple, mais il a beaucoup de fonctionnalités, comme : le mode sombre/clair, l'utilisation du stockage local, une barre de recherche, le glisser-déposer, et il a été développé avec React Sass et TypeScript.",
-					"link": "https://brandonargel.github.io/todo-app/",
+					"link": "http://todoapp.brandonargel.me/",
 					"github": "https://github.com/BrandonArgel/todo-app/",
 					"image": "todoApp"
 				},
