@@ -1,6 +1,7 @@
 @use "@styles/variables.scss";
 
 .dropdown {
+  background: variables.$gradient;
   border: 1px solid variables.$main-color;
   border-radius: 1rem;
   display: inline-block;
