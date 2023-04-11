@@ -16,19 +16,21 @@ interface Props {
 
 const Select = ({ title = "", options = [], setValue, value, tabIndex }: Props) => {
 	return (
-		<select
-			title={title}
-			className={styles.select}
-			onChange={(e) => setValue(e.target.value as Languages)}
-			value={value}
-			tabIndex={tabIndex}
-		>
-			{options.map(({ name, language }) => (
-				<option key={name} value={language} title={name}>
-					{name}
-				</option>
-			))}
-		</select>
+		<label htmlFor={title} className={styles.dropdown}>
+			<select
+				title={title}
+				className={styles.dropdown__select}
+				onChange={(e) => setValue(e.target.value as Languages)}
+				value={value}
+				tabIndex={tabIndex}
+			>
+				{options.map(({ name, language }) => (
+					<option key={name} value={language} title={name}>
+						{name}
+					</option>
+				))}
+			</select>
+		</label>
 	);
 };
 

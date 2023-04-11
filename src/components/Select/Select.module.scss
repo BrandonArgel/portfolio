@@ -1,20 +1,32 @@
 @use "@styles/variables.scss";
 
-.select {
-  background: variables.$gradient;
+.dropdown {
   border: 1px solid variables.$main-color;
   border-radius: 1rem;
-  color: variables.$main-color;
-  cursor: pointer;
   display: inline-block;
-  font-size: variables.$fz-md;
-  overflow-x: hidden;
-  padding: 0.5rem;
-  text-overflow: ellipsis;
-  width: 100%;
-  white-space: nowrap;
+  padding-right: 0.5rem;
 
-  &:active {
-    outline: none;
+  &:focus-within {
+    outline: 2px dashed variables.$main-color;
+    outline-offset: 3px;
+  }
+
+  &__select {
+    background: variables.$gradient;
+    border: none;
+    border-radius: 1rem;
+    color: variables.$main-color;
+    cursor: pointer;
+    font: variables.$fz-md variables.$font;
+    overflow-x: hidden;
+    padding: 0.5rem;
+    text-overflow: ellipsis;
+    width: 100%;
+    white-space: nowrap;
+
+    &:active,
+    &:focus {
+      outline: none;
+    }
   }
 }
