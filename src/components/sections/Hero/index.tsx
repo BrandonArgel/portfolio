@@ -79,6 +79,8 @@ const Hero = () => {
 					{hero.info.firstPart} <span> {hero.info.profession}</span>
 					{hero.info.secondPart}
 				</p>
+				<p className={styles.hero__presentation_info}>{hero.info.secondParagraph}</p>
+				<p className={styles.hero__presentation_info}>{hero.info.thirdParagraph}</p>
 			</div>
 			<div className={styles.hero__buttons}>
 				<Button

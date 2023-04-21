@@ -4,12 +4,16 @@
   align-content: flex-start;
   margin-bottom: 5rem;
 
-  &__container:hover {
-
-    .hero__presentation_info,
-    .hero__presentation_do {
-      color: variables.$light-text-color;
+  &__container {
+    &:hover {
+      .hero__presentation_info,
+      .hero__presentation_do {
+        color: variables.$light-text-color;
+      }
     }
+
+
+    margin-bottom: 5rem;
   }
 
   &__title {
@@ -75,11 +79,10 @@
     color: variables.$text-color;
     font-size: variables.$fz-lg;
     line-height: 1.2;
-    margin-bottom: 5rem;
+    margin-bottom: 2rem;
     opacity: 0;
     transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1);
     visibility: visible;
-    max-width: 50rem;
     will-change: opacity, transform;
 
     span {

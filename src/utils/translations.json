@@ -8,6 +8,10 @@
 					"hash": "about"
 				},
 				{
+					"name": "Studies",
+					"hash": "studies"
+				},
+				{
 					"name": "Experience",
 					"hash": "experience"
 				},
@@ -49,9 +53,9 @@
 				"do": "And I build websites"
 			},
 			"info": {
-				"firstPart": "I am a",
-				"profession": "Front-End Developer",
-				"secondPart": ", student of Platzi and part of Platzi Master, I really enjoy learning new things every day and creating for the web."
+				"firstPart": "I'm a",
+				"profession": "Software Developer",
+				"secondPart": " with experience in frontend technologies such as HTML, CSS, preprocessors such as SCSS, JavaScript, TypeScript, Git, and GitHub, with solid knowledge in designing and creating pages with React and libraries such as Next, Redux, Styled-Components, among others."
 			},
 			"buttons": {
 				"resume": {
@@ -66,7 +70,9 @@
 			"title": "About me",
 			"description": {
 				"firstPart": "Hi there! I'm Brandon Argel Verdeja Domínguez, and I'm",
-				"secondPart": "years old."
+				"secondPart": "years old.",
+				"secondParagraph": "I'm interested in high-impact projects that allow me to combine different frameworks and technologies, culminating in delivering added value to its users.",
+				"thirdParagraph": "I am an education enthusiast, so I am constantly learning foreign languages like English, and French, programming languages, and public speaking, as they are tools that will help me share with more people and grow together."
 			},
 			"studies": "Shortly before graduating from Jorge Matute Remus Polytechnic Computer Engineering, I began my studies at Platzi and I decided to adopt their motto:",
 			"motto": "Never stop learning",
@@ -88,13 +94,46 @@
 			},
 			"photo": "Photo of Brandon Argel"
 		},
+		"education": {
+			"id": "studies",
+			"title": "Where I've studied",
+			"schools": [
+				{
+					"name": "Platzi & Platzi Master",
+					"career": [
+						{
+							"title": "Front-End Developer",
+							"start_date": "September 2018",
+							"end_date": "Present",
+							"description": [
+								"Platzi Master is an intensive and elite program, where only 0.01% of the best students on the platform are accepted, to turn them into the next generation of the best professionals in the technology industry, with 1:1 support from specialized and recognized technical trainers in the industry. 💻",
+								"Platzi is one of the largest online education platforms in Latin America. Where you can learn development, other languages, soft skills, even Web3 technologists and much more. 💚"
+							]
+						}
+					]
+				},
+				{
+					"name": "Escuela Poltécnica Ing. Jorge Matute Remus",
+					"career": [
+						{
+							"title": "Professional Computer Technologist",
+							"start_date": "July 2017",
+							"end_date": "June 2021",
+							"description": [
+								"I studied the career of computer science, where I learned the basics of various programming languages and web development.",
+								"I also did internships and professional projects in which I was able to develop my skills and practice my knowledge of web development."
+							]
+						}
+					]
+				}
+			]
+		},
 		"experience": {
 			"id": "experience",
 			"title": "Where I've worked",
 			"jobs": [
 				{
 					"company": "Platzi",
-					"company_url": "https://platzi.com",
 					"positions": [
 						{
 							"title": "Associate Learning",
@@ -131,7 +170,6 @@
 				},
 				{
 					"company": "Consultora Blockchain",
-					"company_url": "https://blockchainconsultora.com/es",
 					"positions": [
 						{
 							"title": "Web Developer",
@@ -147,7 +185,6 @@
 				},
 				{
 					"company": "Axo Systems",
-					"company_url": "https://mx.linkedin.com/company/axosystems?trk=public_profile_topcard-current-company",
 					"positions": [
 						{
 							"title": "Front-End Developer",
@@ -286,6 +323,10 @@
 					"hash": "sobre-mi"
 				},
 				{
+					"name": "Estudios",
+					"hash": "estudios"
+				},
+				{
 					"name": "Experiencia",
 					"hash": "experiencia"
 				},
@@ -329,7 +370,7 @@
 			"info": {
 				"firstPart": "Soy un",
 				"profession": "Desarrollador Front-End",
-				"secondPart": ", estudiante de Platzi y parte de Platzi Master, me gusta aprender cosas nuevas cada día y crear para la web."
+				"secondPart": " con experiencia en tecnologías frontend como HTML, CSS, preprocesadores como SCSS, JavaScript, TypeScript, Git y GitHub, con sólidos conocimientos en diseño y creación de páginas con React y librerías como Next, Redux, Styled-Components, entre otras."
 			},
 			"buttons": {
 				"resume": {
@@ -344,7 +385,9 @@
 			"title": "Sobre mí",
 			"description": {
 				"firstPart": "¡Hola! Mi nombre es Brandon Argel Verdeja Domínguez, y tengo",
-				"secondPart": "años."
+				"secondPart": "años.",
+				"secondParagraph": "Interesado en proyectos de alto impacto que me permitan combinar diferentes frameworks y tecnologías, culminando en entregar valor agregado a sus usuarios.",
+				"thirdParagraph": "Soy un entusiasta de la educación, por lo que sigo aprendiendo constantemente idiomas extranjeros como inglés, francés, lenguajes de programación y hablar en público, ya que son herramientas que me ayudarán a compartir con más personas y crecer juntos."
 			},
 			"studies": "Poco antes de graduarme de la Escuela Politécnica Ing. Jorge Matute Remus, comencé mis estudios en Platzi y decidí adoptar su lema:",
 			"motto": "Nunca pares de aprender",
@@ -366,13 +409,46 @@
 			},
 			"photo": "Foto de Brandon Argel"
 		},
+		"education": {
+			"id": "estudios",
+			"title": "En dónde he estudiado",
+			"schools": [
+				{
+					"name": "Platzi & Platzi Master",
+					"career": [
+						{
+							"title": "Desarrollador Front-End",
+							"start_date": "Septiembre 2018",
+							"end_date": "Actualidad",
+							"description": [
+								"Platzi Master es un programa intensivo y de élite, donde solo se acepta el 0.01% de los mejores estudiantes de la plataforma, para convertirlos en la próxima generación de los mejores profesionales de la industria tecnológica, con apoyo 1:1 de técnicos especializados y reconocidos entrenadores en la industria. 💻",
+								"Platzi es una de las plataformas de educación en línea más grandes de América Latina. Donde puedes aprender desarrollo, otros idiomas, habilidades blandas, incluso tecnólogos Web3 y mucho más. 💚"
+							]
+						}
+					]
+				},
+				{
+					"name": "Escuela Poltécnica Ing. Jorge Matute Remus",
+					"career": [
+						{
+							"title": "Tecnólogo Profesional en Informática",
+							"start_date": "Julio 2017",
+							"end_date": "Junio 2021",
+							"description": [
+								"Estudié la carrera de informática, donde aprendí las bases de varios lenguajes de programación y desarrollo web.",
+								"También realicé pasantías y proyectos profesionales en los que pude desarrollar mis habilidades y practicar mis conocimientos de desarrollo web"
+							]
+						}
+					]
+				}
+			]
+		},
 		"experience": {
 			"id": "experiencia",
 			"title": "En dónde he tradajado",
 			"jobs": [
 				{
 					"company": "Platzi",
-					"company_url": "https://platzi.com",
 					"positions": [
 						{
 							"title": "Asociado en el equipo de aprendizaje",
@@ -414,7 +490,6 @@
 				},
 				{
 					"company": "Consultora Blockchain",
-					"company_url": "https://blockchainconsultora.com/es",
 					"positions": [
 						{
 							"title": "Desarrollador web",
@@ -430,7 +505,6 @@
 				},
 				{
 					"company": "Axo Systems",
-					"company_url": "https://mx.linkedin.com/company/axosystems?trk=public_profile_topcard-current-company",
 					"positions": [
 						{
 							"title": "Desarrollador Front-End",
@@ -569,6 +643,10 @@
 					"hash": "a-propos-de-moi"
 				},
 				{
+					"name": "Études",
+					"hash": "etudes"
+				},
+				{
 					"name": "Expérience",
 					"hash": "experience"
 				},
@@ -612,7 +690,7 @@
 			"info": {
 				"firstPart": "Je suis un",
 				"profession": "Développeur Front-End",
-				"secondPart": ", étudiant de Platzi et part de Platzi Master, j'aime apprendre de nouvelles choses chaque jour et créer pour le web."
+				"secondPart": " Avec une expérience dans les technologies frontales telles que HTML, CSS, les préprocesseurs tels que SCSS, JavaScript, TypeScript, Git et GitHub, avec de solides connaissances en conception et création de pages avec React et des bibliothèques telles que Next, Redux, Styled-Components, entre autres."
 			},
 			"buttons": {
 				"resume": {
@@ -627,7 +705,9 @@
 			"title": "À propos de moi",
 			"description": {
 				"firstPart": "Salut! Je m'appelle Brandon Argel Verdeja Domínguez, et j'ai",
-				"secondPart": "ans."
+				"secondPart": "ans.",
+				"secondParagraph": "Intéressé par les projets à fort impact qui me permettent de combiner différents frameworks et technologies, aboutissant à apporter une valeur ajoutée à ses utilisateurs.",
+				"thirdParagraph": "Je suis un passionné d'éducation, donc j'apprends constamment des langues étrangères comme l'anglais, le français, les langages de programmation et la prise de parole en public, car ce sont des outils qui m'aideront à partager avec plus de gens et à grandir ensemble."
 			},
 			"studies": "Peu de temps avant d'être diplômé de l'école polytechnique Ing. Jorge Matute Remus, j'ai commencé mes études à Platzi et j'ai décidé d'adopter sa devise:",
 			"motto": "N'arrête jamais d'apprendre",
@@ -649,13 +729,46 @@
 			},
 			"photo": "Photo de Brandon Argel"
 		},
+		"education": {
+			"id": "etudes",
+			"title": "Où ai-je étudié ?",
+			"schools": [
+				{
+					"name": "Platzi & Platzi Master",
+					"career": [
+						{
+							"title": "Développeur Front-End",
+							"start_date": "Septembre 2018",
+							"end_date": "Aujourd'hui",
+							"description": [
+								"Platzi Master est un programme intensif et élitiste, où seuls 0,01% des meilleurs étudiants de la plateforme sont acceptés, pour en faire la prochaine génération des meilleurs professionnels de l'industrie technologique, avec un soutien 1: 1 de techniciens spécialisés et renommés formateurs dans l'industrie. 💻",
+								"Platzi est l'une des plus grandes plateformes d'éducation en ligne d'Amérique latine. Où vous pouvez apprendre le développement, d'autres langues, des compétences non techniques, même des technologues Web3 et bien plus encore. 💚"
+							]
+						}
+					]
+				},
+				{
+					"name": "Escuela Poltécnica Ing. Jorge Matute Remus",
+					"career": [
+						{
+							"title": "Technologue en informatique professionnel",
+							"start_date": "Juillet 2017",
+							"end_date": "Juin 2021",
+							"description": [
+								"J'ai étudié l'informatique, où j'ai appris les bases de divers langages de programmation et du développement web.",
+								"J'ai également effectué des stages et des projets professionnels où j'ai pu développer mes compétences et mettre en pratique mes connaissances en développement web."
+							]
+						}
+					]
+				}
+			]
+		},
 		"experience": {
 			"id": "experience",
 			"title": "Où j'ai travaillé",
 			"jobs": [
 				{
 					"company": "Platzi",
-					"company_url": "https://platzi.com",
 					"positions": [
 						{
 							"title": "Associé dans l'équipe d'apprentissage",
@@ -697,7 +810,6 @@
 				},
 				{
 					"company": "Consultora Blockchain",
-					"company_url": "https://blockchainconsultora.com/es",
 					"positions": [
 						{
 							"title": "Développeur web",
@@ -713,7 +825,6 @@
 				},
 				{
 					"company": "Axo Systems",
-					"company_url": "https://mx.linkedin.com/company/axosystems?trk=public_profile_topcard-current-company",
 					"positions": [
 						{
 							"title": "Développeur Front-End",

@@ -5,9 +5,9 @@ const About = React.lazy(() =>
 		default: About,
 	}))
 );
-const Contact = React.lazy(() =>
-	import("@components").then(({ Contact }) => ({
-		default: Contact,
+const Education = React.lazy(() =>
+	import("@components").then(({ Education }) => ({
+		default: Education,
 	}))
 );
 const Jobs = React.lazy(() =>
@@ -18,6 +18,11 @@ const Jobs = React.lazy(() =>
 const Projects = React.lazy(() =>
 	import("@components").then(({ Projects }) => ({
 		default: Projects,
+	}))
+);
+const Contact = React.lazy(() =>
+	import("@components").then(({ Contact }) => ({
+		default: Contact,
 	}))
 );
 
@@ -41,6 +46,7 @@ const Home = () => {
 			<Hero />
 			<React.Suspense fallback={<Loader />}>
 				<About />
+				<Education />
 				<Jobs />
 				<Projects />
 				<Contact />

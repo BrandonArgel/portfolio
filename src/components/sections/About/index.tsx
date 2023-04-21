@@ -35,6 +35,8 @@ const About = () => {
 				<p>
 					{about.description.firstPart} {getAge("2002-06-27")} {about.description.secondPart}
 				</p>
+				<p>{about.description.secondParagraph}</p>
+				<p>{about.description.thirdParagraph}</p>
 				<p>{about.studies}</p>
 				<blockquote>{about.motto}</blockquote>
 				<p>{about.focus.past}</p>
