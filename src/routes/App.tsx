@@ -1,7 +1,7 @@
 import * as React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Layout, Loader } from "@components";
-import { LanguageProvider } from "@context";
+import { LanguageProvider, LanguageContext } from "@context";
 
 const Home = React.lazy(() =>
 	import("@pages").then(({ Home }) => ({
@@ -10,23 +10,26 @@ const Home = React.lazy(() =>
 );
 
 const App = () => {
+	const {
+		texts: { skipToContent },
+	} = React.useContext(LanguageContext);
+	console.log(skipToContent);
+
 	return (
-		<LanguageProvider>
-			<BrowserRouter>
-				<React.Suspense fallback={<Loader />}>
-					<a className="skip-to-content" href="#content">
-						Saltar al contenido
-					</a>
-					<Routes>
-						<Route path="/" element={<Layout />}>
-							<Route index element={<Home />} />
-						</Route>
-						{/* Create not found page */}
-						<Route path="*" element={<Navigate replace to="/" />} />
-					</Routes>
-				</React.Suspense>
-			</BrowserRouter>
-		</LanguageProvider>
+		<BrowserRouter>
+			<React.Suspense fallback={<Loader />}>
+				<a className="skip-to-content" href="#content">
+					{skipToContent}
+				</a>
+				<Routes>
+					<Route path="/" element={<Layout />}>
+						<Route index element={<Home />} />
+					</Route>
+					{/* Create not found page */}
+					<Route path="*" element={<Navigate replace to="/" />} />
+				</Routes>
+			</React.Suspense>
+		</BrowserRouter>
 	);
 };
 

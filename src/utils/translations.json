@@ -1,5 +1,6 @@
 {
 	"en": {
+		"skipToContent": "Skip to content",
 		"header": {
 			"logo": "Home",
 			"nav": [
@@ -315,6 +316,7 @@
 		]
 	},
 	"es": {
+		"skipToContent": "Saltar al contenido",
 		"header": {
 			"logo": "Inicio",
 			"nav": [
@@ -635,6 +637,7 @@
 		]
 	},
 	"fr": {
+		"skipToContent": "Aller au contenu",
 		"header": {
 			"logo": "Accueil",
 			"nav": [
