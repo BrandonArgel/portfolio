@@ -19,8 +19,7 @@ const Projects = () => {
 		<section className={styles.projects} id={projects.id} ref={sectionRef}>
 			<h2>{projects.title}</h2>
 			<p>
-				Throughout my career as a Front-End, I have had the opportunity of working on incredible and
-				challenging projects. Here are some projects that I would like to share.
+				{projects.description}
 			</p>
 			<div className={styles.projects__container}>
 				{projects.list.map(

@@ -51,7 +51,7 @@
 			"title": "Hi! My name is",
 			"presentation": {
 				"animated": "Brandon Argel",
-				"do": "And I build websites"
+				"do": "And I build web applications"
 			},
 			"info": {
 				"firstPart": "I'm a",
@@ -103,7 +103,7 @@
 					"name": "Platzi & Platzi Master",
 					"career": [
 						{
-							"title": "Front-End Developer",
+							"title": "Frontend Developer",
 							"start_date": "September 2018",
 							"end_date": "Present",
 							"description": [
@@ -188,7 +188,7 @@
 					"company": "Axo Systems",
 					"positions": [
 						{
-							"title": "Front-End Developer",
+							"title": "Frontend Developer",
 							"start_date": "January 2021",
 							"end_date": "September 2021",
 							"description": [
@@ -205,6 +205,7 @@
 		"projects": {
 			"id": "projects",
 			"title": "Projects",
+			"description": "Throughout my career as a Frontend, I have had the opportunity of working on incredible and challenging projects. Here are some projects that I would like to share.",
 			"list": [
 				{
 					"name": "Movies App",
@@ -367,11 +368,11 @@
 			"title": "¡Hola! Mi nombre es",
 			"presentation": {
 				"animated": "Brandon Argel",
-				"do": "Yo construyo sitios web"
+				"do": "Yo construyo aplicaciones web"
 			},
 			"info": {
 				"firstPart": "Soy un",
-				"profession": "Desarrollador Front-End",
+				"profession": "Desarrollador de Software",
 				"secondPart": " con experiencia en tecnologías frontend como HTML, CSS, preprocesadores como SCSS, JavaScript, TypeScript, Git y GitHub, con sólidos conocimientos en diseño y creación de páginas con React y librerías como Next, Redux, Styled-Components, entre otras."
 			},
 			"buttons": {
@@ -388,7 +389,7 @@
 			"description": {
 				"firstPart": "¡Hola! Mi nombre es Brandon Argel Verdeja Domínguez, y tengo",
 				"secondPart": "años.",
-				"secondParagraph": "Interesado en proyectos de alto impacto que me permitan combinar diferentes frameworks y tecnologías, culminando en entregar valor agregado a sus usuarios.",
+				"secondParagraph": "Estoy interesado en proyectos de alto impacto que me permitan combinar diferentes frameworks y tecnologías, culminando en entregar valor agregado a sus usuarios.",
 				"thirdParagraph": "Soy un entusiasta de la educación, por lo que sigo aprendiendo constantemente idiomas extranjeros como inglés, francés, lenguajes de programación y hablar en público, ya que son herramientas que me ayudarán a compartir con más personas y crecer juntos."
 			},
 			"studies": "Poco antes de graduarme de la Escuela Politécnica Ing. Jorge Matute Remus, comencé mis estudios en Platzi y decidí adoptar su lema:",
@@ -419,7 +420,7 @@
 					"name": "Platzi & Platzi Master",
 					"career": [
 						{
-							"title": "Desarrollador Front-End",
+							"title": "Desarrollador Frontend",
 							"start_date": "Septiembre 2018",
 							"end_date": "Actualidad",
 							"description": [
@@ -447,7 +448,7 @@
 		},
 		"experience": {
 			"id": "experiencia",
-			"title": "En dónde he tradajado",
+			"title": "En dónde he trabajado",
 			"jobs": [
 				{
 					"company": "Platzi",
@@ -509,7 +510,7 @@
 					"company": "Axo Systems",
 					"positions": [
 						{
-							"title": "Desarrollador Front-End",
+							"title": "Desarrollador Frontend",
 							"start_date": "Enero 2021",
 							"end_date": "Septiembre 2021",
 							"description": [
@@ -526,6 +527,7 @@
 		"projects": {
 			"id": "proyectos",
 			"title": "Proyectos",
+			"description": "A lo largo de mi carrera como Frontend, he tenido la oportunidad de trabajar en increíbles y proyectos desafiantes. Aquí hay algunos proyectos que me gustaría compartir.",
 			"list": [
 				{
 					"name": "Movies App",
@@ -688,12 +690,12 @@
 			"title": "Salut! Je m'appelle",
 			"presentation": {
 				"animated": "Brandon Argel",
-				"do": "Et je construis des sites web"
+				"do": "Je construis des applications web"
 			},
 			"info": {
 				"firstPart": "Je suis un",
-				"profession": "Développeur Front-End",
-				"secondPart": " Avec une expérience dans les technologies frontales telles que HTML, CSS, les préprocesseurs tels que SCSS, JavaScript, TypeScript, Git et GitHub, avec de solides connaissances en conception et création de pages avec React et des bibliothèques telles que Next, Redux, Styled-Components, entre autres."
+				"profession": "Développeur de logiciels",
+				"secondPart": " avec une expérience dans les technologies Frontend telles que HTML, CSS, les préprocesseurs tels que SCSS, JavaScript, TypeScript, Git et GitHub, avec de solides connaissances en conception et création de pages avec React et des bibliothèques telles que Next, Redux, Styled-Components, entre autres."
 			},
 			"buttons": {
 				"resume": {
@@ -709,7 +711,7 @@
 			"description": {
 				"firstPart": "Salut! Je m'appelle Brandon Argel Verdeja Domínguez, et j'ai",
 				"secondPart": "ans.",
-				"secondParagraph": "Intéressé par les projets à fort impact qui me permettent de combiner différents frameworks et technologies, aboutissant à apporter une valeur ajoutée à ses utilisateurs.",
+				"secondParagraph": "Je suis intéressé par les projets à fort impact qui me permettent de combiner différents frameworks et technologies, aboutissant à apporter une valeur ajoutée à ses utilisateurs.",
 				"thirdParagraph": "Je suis un passionné d'éducation, donc j'apprends constamment des langues étrangères comme l'anglais, le français, les langages de programmation et la prise de parole en public, car ce sont des outils qui m'aideront à partager avec plus de gens et à grandir ensemble."
 			},
 			"studies": "Peu de temps avant d'être diplômé de l'école polytechnique Ing. Jorge Matute Remus, j'ai commencé mes études à Platzi et j'ai décidé d'adopter sa devise:",
@@ -740,7 +742,7 @@
 					"name": "Platzi & Platzi Master",
 					"career": [
 						{
-							"title": "Développeur Front-End",
+							"title": "Développeur Frontend",
 							"start_date": "Septembre 2018",
 							"end_date": "Aujourd'hui",
 							"description": [
@@ -830,7 +832,7 @@
 					"company": "Axo Systems",
 					"positions": [
 						{
-							"title": "Développeur Front-End",
+							"title": "Développeur Frontend",
 							"start_date": "Janvier 2021",
 							"end_date": "Septembre 2021",
 							"description": [
@@ -847,6 +849,7 @@
 		"projects": {
 			"id": "projets",
 			"title": "Projets",
+			"description": "Tout au long de ma carrière en tant que Frontend, j'ai eu l'opportunité de travailler sur des projets incroyables et des projets exigeants. Voici quelques projets que j'aimerais partager.",
 			"list": [
 				{
 					"name": "Movies App",
