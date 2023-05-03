@@ -42,15 +42,16 @@ const Jobs = () => {
 					>
 						<ul className={`${styles.tab} ${positions.length > 1 ? styles.tab__line : ""}`}>
 							{positions.map(
-								({ title, description, start_date, end_date, skills }: any, j: number) => (
+								({ title, description, bullets, start_date, end_date, skills }: any, j: number) => (
 									<li key={j} className={styles.tab__item}>
 										<h3 className={styles.tab__title}>{title}</h3>
 										<p className={styles.tab__date}>
 											{start_date} - {end_date}
 										</p>
-										<ul className={styles.tab__description}>
-											{description.map((item: string, k: number) => (
-												<li key={k} className={styles.tab__description_item}>
+										<p className={styles.tab__description}>{description}</p>
+										<ul className={styles.tab__bullets}>
+											{bullets.map((item: string, k: number) => (
+												<li key={k} className={styles.tab__bullets_item}>
 													{item}
 												</li>
 											))}

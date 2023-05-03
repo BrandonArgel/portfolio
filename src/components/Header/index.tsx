@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import * as React from "react";
 import { LanguageContext } from "@context";
+import { useScrollDirection } from "@hooks";
 import { Select } from "@components/Select";
 import { KEY_CODES } from "@utils";
 import { Logo } from "@assets/icons";
@@ -22,6 +23,10 @@ const Header = () => {
 		null
 	) as React.MutableRefObject<HTMLButtonElement>;
 	const asideRef = React.useRef<HTMLDivElement>(null) as React.MutableRefObject<HTMLDivElement>;
+	const scrollDirection = useScrollDirection({
+		initialDirection: "down",
+	});
+	const [scrolledToTop, setScrolledToTop] = React.useState(true);
 
 	type Focusables = HTMLButtonElement | HTMLAnchorElement;
 
@@ -75,17 +80,27 @@ const Header = () => {
 		}
 	};
 
+	const handleScroll = () => {
+		setScrolledToTop(window.pageYOffset < 50);
+	};
+
 	React.useEffect(() => {
+		window.addEventListener("scroll", handleScroll);
 		document.addEventListener("keydown", onKeyDown);
 		setFocusables();
 
 		return () => {
+			window.removeEventListener("scroll", handleScroll);
 			document.removeEventListener("keydown", onKeyDown);
 		};
 	});
 
 	return (
-		<header className={styles.header}>
+		<header
+			className={`${styles.header} ${
+				scrollDirection === "down" && !scrolledToTop ? styles.hide : ""
+			}`}
+		>
 			<div className={styles.container}>
 				<Link className={styles.header__logo} to="/" aria-label={header.logo} title={header.logo}>
 					<Logo />

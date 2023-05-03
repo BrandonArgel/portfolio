@@ -108,7 +108,7 @@
 							"end_date": "Present",
 							"description": [
 								"Platzi Master is an intensive and elite program, where only 0.01% of the best students on the platform are accepted, to turn them into the next generation of the best professionals in the technology industry, with 1:1 support from specialized and recognized technical trainers in the industry. 💻",
-								"Platzi is one of the largest online education platforms in Latin America. Where you can learn development, other languages, soft skills, even Web3 technologists and much more. 💚"
+								"I am an education enthusiast, so I am constantly learning foreign languages like English, and French, programming languages, and public speaking, as they are tools that will help me share with more people and grow together. 💚"
 							]
 						}
 					]
@@ -137,16 +137,14 @@
 					"company": "Platzi",
 					"positions": [
 						{
-							"title": "Associate Learning",
+							"title": "Quality Check",
 							"start_date": "July 2022",
 							"end_date": "Present",
-							"description": [
-								"I contribute to quality assurance, working together with different teams, offering a high quality product in education used by more than 3 million students in LATAM.",
-								"Provide continuous feedback to the team to iterate on better results.",
-								"Identification, monitoring and resolution of education bugs.",
-								"Knowledge base documentation support.",
-								"Resolution of technical doubts of students of the platform.",
-								"Test the new features of the platform."
+							"description": "Contributed to the quality assurance of the content, working together with different teams to deliver a high quality product used by more than 3 million students in Latin America.",
+							"bullets": [
+								"Providing continuous feedback to the team to iterate on better results.",
+								"Reducing the rate of student-reported content errors by 66%.",
+								"Reducing the rate of students affected by content errors by 68%."
 							],
 							"skills": [
 								"Quality Assurance",
@@ -157,13 +155,14 @@
 							]
 						},
 						{
-							"title": "Associate SEO",
+							"title": "Content Creator SEO",
 							"start_date": "May 2022",
 							"end_date": "July 2022",
-							"description": [
-								"I contributed, creating, reviewing and improving content for the classes in the platform, mainly in the technology courses, focused in generate quality content for the students of Platzi and improve the SEO of the platform.",
-								"Content creation for the classes in the platform.",
-								"Continuous improvement of content"
+							"description": "Contributed to the creation, revision, and improvement of the content in the platform classes, mainly in technology courses. Creation and continuous improvement of the content for the platform classes.",
+							"bullets": [
+								"Generate quality content for Platzi students.",
+								"Improved the SEO of the platform.",
+								"Creating and improving content."
 							],
 							"skills": ["Content writing", "Writing review", "Constructive feedback", "Notion"]
 						}
@@ -176,9 +175,11 @@
 							"title": "Web Developer",
 							"start_date": "September 2021",
 							"end_date": "February 2022",
-							"description": [
-								"Developing a web application for the mayor's office in La Paz, Bolivia.",
-								"Using technologies such as JavaScript, SCSS, storybook, and some JS libraries, such as React, Next.js, in addition to using Redux-Saga, among others."
+							"description": "Developing a web application for the La Paz, Bolivia mayor's office. Using technologies like JavaScript, SCSS, storybook, and some JavaScript libraries like React, Next.js, besides using Redux-Saga, and other libraries.",
+							"bullets": [
+								"Working on the creation and implementation of the logic of the modules for the users.",
+								"Creating flows of citizen participation: voting, creation of proposals, etc.",
+								"Connecting views with REST APIs."
 							],
 							"skills": ["JavaScript", "SCSS", "React", "Next.js", "Redux-Saga"]
 						}
@@ -191,10 +192,10 @@
 							"title": "Frontend Developer",
 							"start_date": "January 2021",
 							"end_date": "September 2021",
-							"description": [
-								"Developed and maintained code for in-house and client websites using HTML, CSS, Sass, JavaScript, React, Firebase, Wordpress, and more.",
-								"Manually tested sites in various browsers and mobile devices to ensure cross-browser compatibility and responsiveness.",
-								"Clients included CNI Consultores, Solar Center, and more."
+							"description": "Development and maintenance of code for internal and external client websites using HTML, CSS, Sass, JavaScript, React, Firebase, WordPress, and more.",
+							"bullets": [
+								"Sites manually tested across multiple browsers and mobile devices to ensure cross-browser compatibility and responsiveness.",
+								"Developing high quality websites for internal and external clients."
 							],
 							"skills": ["HTML", "CSS", "Sass", "JavaScript", "React", "Firebase", "Wordpress"]
 						}
@@ -425,7 +426,7 @@
 							"end_date": "Actualidad",
 							"description": [
 								"Platzi Master es un programa intensivo y de élite, donde solo se acepta el 0.01% de los mejores estudiantes de la plataforma, para convertirlos en la próxima generación de los mejores profesionales de la industria tecnológica, con apoyo 1:1 de técnicos especializados y reconocidos entrenadores en la industria. 💻",
-								"Platzi es una de las plataformas de educación en línea más grandes de América Latina. Donde puedes aprender desarrollo, otros idiomas, habilidades blandas, incluso tecnólogos Web3 y mucho más. 💚"
+								"Soy un entusiasta de la educación, por lo que estoy constantemente aprendiendo idiomas extranjeros como inglés y francés, lenguajes de programación y hablar en público, ya que son herramientas que me ayudarán a compartir con más personas y crecer juntos. 💚"
 							]
 						}
 					]
@@ -439,7 +440,7 @@
 							"end_date": "Junio 2021",
 							"description": [
 								"Estudié la carrera de informática, donde aprendí las bases de varios lenguajes de programación y desarrollo web.",
-								"También realicé pasantías y proyectos profesionales en los que pude desarrollar mis habilidades y practicar mis conocimientos de desarrollo web"
+								"También realicé pasantías y proyectos profesionales en los que pude desarrollar mis habilidades y practicar mis conocimientos de desarrollo web."
 							]
 						}
 					]
@@ -454,16 +455,14 @@
 					"company": "Platzi",
 					"positions": [
 						{
-							"title": "Asociado en el equipo de aprendizaje",
+							"title": "Control de calidad de contenido",
 							"start_date": "Julio 2022",
 							"end_date": "Actualidad",
-							"description": [
-								"Contribuyo al aseguramiento de la calidad, trabajando en conjunto con diferentes equipos, ofreciendo un producto de alta calidad en educación usado por más de 3 millones de estudiantes en LATAM.",
+							"description": "Contribuí al aseguramiento de la calidad del contenido, trabajando en conjunto con diferentes equipos para entregar un producto de alta calidad utilizado por más de 3 millones de estudiantes en América Latina.",
+							"bullets": [
 								"Proveer feedback continuo al equipo para iterar en mejores resultados.",
-								"Identificación, seguimiento y resolución de bugs de educación.",
-								"Apoyo en la documentación del knowledge base.",
-								"Resolución de dudas técnicas de estudiantes de la plataforma.",
-								"Testear las nuevas características de la plataforma."
+								"Redujimos la tasa de errores de contenido informados por los estudiantes en un 66 %.",
+								"Redujimos la tasa de estudiantes afectados por errores de contenido en un 68 %."
 							],
 							"skills": [
 								"Control de calidad",
@@ -474,13 +473,14 @@
 							]
 						},
 						{
-							"title": "Asociado en el equipo de SEO",
+							"title": "Creador de contenido SEO",
 							"start_date": "Mayo 2022",
 							"end_date": "Julio 2022",
-							"description": [
-								"Contribuí con la creación, revisión y mejora de los contenidos en las clases de la plataforma, principalmente en los cursos de tecnología, enfocándonos en generar contenido de calidad para los estudiantes de Platzi y en mejorar el SEO de la plataforma.",
-								"Creación de contenido para las clases en la plataforma.",
-								"Mejora continua del contenido."
+							"description": "Contribuí con la creación, revisión y mejora de los contenidos en las clases de la plataforma, principalmente en los cursos de tecnología. Creación y mejora continua del contenido para las clases en la plataforma.",
+							"bullets": [
+								"Generamos contenido de calidad para los estudiantes de Platzi.",
+								"Mejoramos el SEO de la plataforma.",
+								"Creamos y mejoramos el contenido."
 							],
 							"skills": [
 								"Creación de contenido",
@@ -498,9 +498,11 @@
 							"title": "Desarrollador web",
 							"start_date": "Septiembre 2021",
 							"end_date": "Febrero 2022",
-							"description": [
-								"Desarrollo de una aplicación web para la alcaldía de La Paz, Bolivia.",
-								"Utilizando tecnologías como JavaScript, SCSS, storybook y algunas bibliotecas JS, como React, Next.js, además de utilizar Redux-Saga, entre otras."
+							"description": "Desarrollando una aplicación web para la alcaldía La Paz, Bolivia. Usando tecnologías como JavaScript, SCSS, storybook, y algunas librerías de JavaScript como React, Next.js, además de usar Redux-Saga, y otras librerías.",
+							"bullets": [
+								"Trabajamos en la creación e implementación de la lógica de los módulos para los usuarios.",
+								"Creamos flujos de participación ciudadana: votaciones, creación de propuestas, etc.",
+								"Conectamos vistas con REST APIs."
 							],
 							"skills": ["JavaScript", "SCSS", "React", "Next.js", "Redux-Saga"]
 						}
@@ -513,10 +515,10 @@
 							"title": "Desarrollador Frontend",
 							"start_date": "Enero 2021",
 							"end_date": "Septiembre 2021",
-							"description": [
-								"Desarrollo y mantenimiento de código para sitios web internos y de clientes, usando HTML, CSS, Sass, JavaScript, React, Firebase, Wordpress y más.",
+							"description": "Desarrollo y mantenimiento de código para sitios web de clientes internos y externos utilizando HTML, CSS, Sass, JavaScript, React, Firebase, Wordpress y más.",
+							"bullets": [
 								"Sitios probados manualmente en varios navegadores y dispositivos móviles para garantizar la compatibilidad y capacidad de respuesta entre navegadores.",
-								"Clientes incluidos: CNI Consultores, Solar Center, entre otros."
+								"Desarrollamos sitios web de alta calidad para clientes internos y externos."
 							],
 							"skills": ["HTML", "CSS", "Sass", "JavaScript", "React", "Firebase", "Wordpress"]
 						}
@@ -746,8 +748,8 @@
 							"start_date": "Septembre 2018",
 							"end_date": "Aujourd'hui",
 							"description": [
-								"Platzi Master est un programme intensif et élitiste, où seuls 0,01% des meilleurs étudiants de la plateforme sont acceptés, pour en faire la prochaine génération des meilleurs professionnels de l'industrie technologique, avec un soutien 1: 1 de techniciens spécialisés et renommés formateurs dans l'industrie. 💻",
-								"Platzi est l'une des plus grandes plateformes d'éducation en ligne d'Amérique latine. Où vous pouvez apprendre le développement, d'autres langues, des compétences non techniques, même des technologues Web3 et bien plus encore. 💚"
+								"Platzi Master est un programme intensif et élitiste, où seuls 0,01 % des meilleurs étudiants de la plateforme sont acceptés, pour en faire la prochaine génération des meilleurs professionnels de l'industrie technologique, avec un soutien 1: 1 de techniciens spécialisés et reconnus formateurs de l'industrie. 💻",
+								"Je suis un passionné d'éducation, donc j'apprends constamment des langues étrangères comme l'anglais et le français, les langages de programmation et la prise de parole en public, car ce sont des outils qui m'aideront à partager avec plus de gens et à grandir ensemble. 💚"
 							]
 						}
 					]
@@ -776,16 +778,14 @@
 					"company": "Platzi",
 					"positions": [
 						{
-							"title": "Associé dans l'équipe d'apprentissage",
+							"title": "Contrôle de Qualité",
 							"start_date": "Juillet 2022",
 							"end_date": "Cadeau",
-							"description": [
-								"Je contribue à l'assurance qualité, en travaillant avec différentes équipes, offrant un produit de haute qualité dans l'éducation utilisé par plus de 3 millions d'étudiants en LATAM.",
+							"description": "J'ai contribué à l'assurance qualité du contenu, en travaillant avec différentes équipes pour fournir un produit de haute qualité utilisé par plus de 3 millions d'étudiants en Amérique latine.",
+							"bullets": [
 								"Fournir des commentaires continus à l'équipe pour itérer sur de meilleurs résultats.",
-								"Identification, suivi et résolution des bugs éducatifs.",
-								"Soutien à la documentation de la base de connaissances.",
-								"Résolution des doutes techniques des étudiants de la plateforme.",
-								"Testez les nouvelles fonctionnalités de la plateforme."
+								"Nous avons réduit le taux d'erreurs de contenu signalées par les étudiants de 66 %.",
+								"Réduction de 68 % du taux d'étudiants affectés par des erreurs de contenu."
 							],
 							"skills": [
 								"Assurance qualité",
@@ -796,13 +796,14 @@
 							]
 						},
 						{
-							"title": "Collaborateur dans l'équipe SEO",
+							"title": "Créateur de contenu SEO",
 							"start_date": "Peut 2022",
 							"end_date": "Juillet 2022",
-							"description": [
-								"J'ai contribué à la création, à la révision et à l'amélioration du contenu des cours de la plateforme, principalement dans les cours de technologie, en me concentrant sur la génération de contenu de qualité pour les étudiants de Platzi et l'amélioration du référencement de la plateforme.",
-								"Création de contenu pour les classes de la plateforme.",
-								"Amélioration continue du contenu"
+							"description": "J'ai contribué à la création, à la révision et à l'amélioration du contenu des cours de la plateforme, principalement dans les cours de technologie. Création et amélioration continue du contenu des cours de la plateforme.",
+							"bullets": [
+								"Nous générons du contenu de qualité pour les étudiants de Platzi.",
+								"Nous avons amélioré le référencement de la plateforme.",
+								"Nous créons et améliorons le contenu."
 							],
 							"skills": [
 								"Rédaction de contenu",
@@ -820,9 +821,11 @@
 							"title": "Développeur web",
 							"start_date": "Septembre 2021",
 							"end_date": "Février 2022",
-							"description": [
-								"Développement d'une application web pour la mairie de La Paz, Bolivie.",
-								"Utilisation de technologies telles que JavaScript, SCSS, storybook et certaines bibliothèques JS, telles que React, Next.js, en plus d'utiliser Redux-Saga, entre autres."
+							"description": "Développement d'une application Web pour le bureau du maire de La Paz, en Bolivie. Utilisation de technologies telles que JavaScript, SCSS, storybook et certaines bibliothèques JavaScript telles que React, Next.js, en plus d'utiliser Redux-Saga et d'autres bibliothèques.",
+							"bullets": [
+								"Nous travaillons sur la création et la mise en place de la logique des modules pour les utilisateurs.",
+								"Nous créons des flux de participation citoyenne : vote, création de propositions, etc.",
+								"Nous connectons les vues avec les API REST."
 							],
 							"skills": ["JavaScript", "SCSS", "React", "Next.js", "Redux-Saga"]
 						}
@@ -835,10 +838,10 @@
 							"title": "Développeur Frontend",
 							"start_date": "Janvier 2021",
 							"end_date": "Septembre 2021",
-							"description": [
-								"Développé et maintenu du code pour les sites Web internes et clients en utilisant HTML, CSS, Sass, JavaScript, React, Firebase, Wordpress, etc.",
-								"Sites testés manuellement dans divers navigateurs et appareils mobiles pour garantir la compatibilité et la réactivité entre navigateurs.",
-								"Les clients comprenaient CNI Consultores, Solar Center, etc."
+							"description": "Développement et maintenance de code pour les sites Web de clients internes et externes utilisant HTML, CSS, Sass, JavaScript, React, Firebase, Wordpress et plus.",
+							"bullets": [
+								"Sites testés manuellement sur plusieurs navigateurs et appareils mobiles pour garantir la compatibilité et la réactivité entre navigateurs.",
+								"Nous développons des sites Web de haute qualité pour des clients internes et externes."
 							],
 							"skills": ["HTML", "CSS", "Sass", "JavaScript", "React", "Firebase", "Wordpress"]
 						}

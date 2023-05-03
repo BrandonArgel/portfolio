@@ -13,7 +13,6 @@ const App = () => {
 	const {
 		texts: { skipToContent },
 	} = React.useContext(LanguageContext);
-	console.log(skipToContent);
 
 	return (
 		<BrowserRouter>

@@ -150,6 +150,13 @@
 
   &__description {
     color: variables.$text-color;
+    font-size: variables.$fz-md;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  &__bullets {
+    color: variables.$text-color;
     font-size: variables.$fz-sm;
     margin: 1rem 0 1rem 2rem;
 

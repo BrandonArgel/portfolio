@@ -11,6 +11,24 @@
   width: 100%;
   z-index: 1;
 
+  &.hide {
+    animation: hide-out 0.5s ease-in-out forwards;
+    opacity: 1;
+    will-change: opacity, transform;
+
+    &__logo {
+      animation: hide-out 0.5s ease-in-out 0.2s forwards;
+      opacity: 1;
+      will-change: opacity, transform;
+    }
+
+    &__hamburger {
+      animation: hide-out 0.5s ease-in-out 0.4s forwards;
+      opacity: 1;
+      will-change: opacity, transform;
+    }
+  }
+
   &__logo {
     animation: show-in 0.5s ease-in-out forwards;
     border-radius: 50%;

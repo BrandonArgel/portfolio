@@ -33,6 +33,14 @@ const LanguageProvider = ({ children }: LanguageContextProps) => {
 	const handleLanguage = (lang: Languages) => {
 		setLanguage(lang);
 		setTexts(translations[lang as keyof typeof translations]);
+		// Remove hash from url and the #
+		const hash = window.location.hash;
+		console.log(hash);
+		if (hash) {
+			const url = window.location.href;
+			const newUrl = url.replace(hash, "");
+			window.history.replaceState({}, "", newUrl);
+		}
 	};
 
 	/**
