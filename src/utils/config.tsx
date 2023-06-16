@@ -13,6 +13,10 @@ import simonSays from "@assets/images/simon_says.jpg";
 import simonSays2x from "@assets/images/simon_says-x2.jpg";
 import todoApp from "@assets/images/todo_app.jpg";
 import todoApp2x from "@assets/images/todo_app-x2.jpg";
+import githubProfile from "@assets/images/github_profile.jpg";
+import githubProfile2x from "@assets/images/github_profile-x2.jpg";
+import portfolio from "@assets/images/portfolio.jpg";
+import portfolio2x from "@assets/images/portfolio-x2.jpg";
 
 export const CardImages = {
 	moviesApp: {
@@ -38,6 +42,14 @@ export const CardImages = {
 	todoApp: {
 		sm: todoApp,
 		md: todoApp2x,
+	},
+	githubProfile: {
+		sm: githubProfile,
+		md: githubProfile2x,
+	},
+	portfolio: {
+		sm: portfolio,
+		md: portfolio2x,
 	},
 };
 

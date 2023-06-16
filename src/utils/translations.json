@@ -223,6 +223,20 @@
 					"image": "rickAndMorty"
 				},
 				{
+					"name": "GitHub Profile",
+					"description": "I developed this project while learning Material UI, fetching GitHub's API to get the user's information and repositories.",
+					"link": "https://githubprofile.brandonargel.me/",
+					"github": "https://github.com/BrandonArgel/github-profile",
+					"image": "githubProfile"
+				},
+				{
+					"name": "Portfolio",
+					"description": "This is the portfolio that you are seeing right now, I made it with react and typescript, and I used sass for the styles.",
+					"link": "https://brandonargel.me/",
+					"github": "https://github.com/BrandonArgel/brandonargel.github.io",
+					"image": "portfolio"
+				},
+				{
 					"name": "ToDo App",
 					"description": "This is a project that looks pretty simple, but it has a lot of features, such as: dark/light mode, use of local storage, a search bar, drag and drop, and it was developed with react sass and typescript.",
 					"link": "http://todoapp.brandonargel.me/",
@@ -546,6 +560,20 @@
 					"image": "rickAndMorty"
 				},
 				{
+					"name": "Perfil de GitHub",
+					"description": "Desarrollé este proyecto mientras estaba aprendiendo Material UI, consumiendo la API de GitHub para obtener la información de los usuarios y los repositorios.",
+					"link": "https://githubprofile.brandonargel.me/",
+					"github": "https://github.com/BrandonArgel/github-profile",
+					"image": "githubProfile"
+				},
+				{
+					"name": "Portfolio",
+					"description": "Este es el portafolio que estás viendo ahora, lo hice con react y typescript, y usé sass para los estilos.",
+					"link": "https://brandonargel.me/",
+					"github": "https://github.com/BrandonArgel/brandonargel.github.io",
+					"image": "portfolio"
+				},
+				{
 					"name": "ToDo App",
 					"description": "Este es un proyecto que parece bastante simple, pero tiene muchas características, como: modo oscuro/claro, uso de almacenamiento local, una barra de búsqueda, arrastrar y soltar, y fue desarrollado con React Sass y TypeScript.",
 					"link": "http://todoapp.brandonargel.me/",
@@ -867,6 +895,20 @@
 					"link": "https://rickandmorty.brandonargel.me/",
 					"github": "https://github.com/BrandonArgel/rick-and-morty",
 					"image": "rickAndMorty"
+				},
+				{
+					"name": "Profil GitHub",
+					"description": "J'ai développé ce projet pendant que j'apprenais Material UI, en utilisant l'API GitHub pour obtenir des informations sur l'utilisateur et le référentiel.",
+					"link": "https://githubprofile.brandonargel.me/",
+					"github": "https://github.com/BrandonArgel/github-profile",
+					"image": "githubProfile"
+				},
+				{
+					"name": "Portefeuille",
+					"description": "C'est le portfolio que vous regardez maintenant, je l'ai fait avec React et Tapuscrit, et j'ai utilisé du sass pour les styles.",
+					"link": "https://brandonargel.me/",
+					"github": "https://github.com/BrandonArgel/brandonargel.github.io",
+					"image": "portfolio"
 				},
 				{
 					"name": "ToDo App",
