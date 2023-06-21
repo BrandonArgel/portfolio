@@ -37,28 +37,29 @@ const Contact = () => {
 	const [error, setError] = React.useState(false);
 
 	const validateName = (value: string) => {
-		if (!value) return setName({ ...name, error: contact.errors.name.required });
-		if (!REGEX.name.test(value)) {
-			return setName({ ...name, error: contact.errors.name.invalid });
+		if (!value) {
+			setName({ ...name, error: contact.errors.name.required });
+		} else if (!REGEX.name.test(value)) {
+			setName({ ...name, error: contact.errors.name.invalid });
+		} else {
+			return true;
 		}
-		return true;
 	};
 
 	const validateEmail = (value: string) => {
-		if (!value) return setEmail({ ...email, error: contact.errors.email.required });
-		if (!REGEX.correo.test(value))
-			return setEmail({ ...email, error: contact.errors.email.invalid });
-		return true;
+		if (!value) setEmail({ ...email, error: contact.errors.email.required });
+		else if (!REGEX.correo.test(value)) setEmail({ ...email, error: contact.errors.email.invalid });
+		else return true;
 	};
 
 	const validateMessage = (value: string) => {
-		if (!value) return setMessage({ ...message, error: contact.errors.message.required });
-		if (value.length > 500)
-			return setMessage({
+		if (!value) setMessage({ ...message, error: contact.errors.message.required });
+		else if (value.length > 500)
+			setMessage({
 				...message,
 				error: contact.errors.message.validation,
 			});
-		return true;
+		else return true;
 	};
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -68,7 +69,10 @@ const Contact = () => {
 			setTimeout(() => setAlreadySent(false), 3000);
 			return;
 		}
-		if (validateName(name.value) && validateEmail(email.value) && validateMessage(message.value)) {
+		const valName = validateName(name.value);
+		const valEmail = validateEmail(email.value);
+		const valMessage = validateMessage(message.value);
+		if (valName && valEmail && valMessage) {
 			setSending(true);
 			try {
 				emailjs

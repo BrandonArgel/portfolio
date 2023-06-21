@@ -232,7 +232,6 @@
 				{
 					"name": "Portfolio",
 					"description": "This is the portfolio that you are seeing right now, I made it with react and typescript, and I used sass for the styles.",
-					"link": "https://brandonargel.me/",
 					"github": "https://github.com/BrandonArgel/brandonargel.github.io",
 					"image": "portfolio"
 				},
@@ -569,7 +568,6 @@
 				{
 					"name": "Portfolio",
 					"description": "Este es el portafolio que estás viendo ahora, lo hice con react y typescript, y usé sass para los estilos.",
-					"link": "https://brandonargel.me/",
 					"github": "https://github.com/BrandonArgel/brandonargel.github.io",
 					"image": "portfolio"
 				},
@@ -906,7 +904,6 @@
 				{
 					"name": "Portefeuille",
 					"description": "C'est le portfolio que vous regardez maintenant, je l'ai fait avec React et Tapuscrit, et j'ai utilisé du sass pour les styles.",
-					"link": "https://brandonargel.me/",
 					"github": "https://github.com/BrandonArgel/brandonargel.github.io",
 					"image": "portfolio"
 				},
