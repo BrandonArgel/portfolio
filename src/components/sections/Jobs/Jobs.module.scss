@@ -99,7 +99,7 @@
   &__line {
     margin-left: 3rem;
 
-    &>li {
+    & > li {
       position: relative;
 
       // Bullet point
@@ -181,6 +181,7 @@
   &__skills {
     display: flex;
     flex-wrap: wrap;
+    font: variables.$fz-xs;
     gap: 1rem;
     margin-bottom: 2rem;
 
