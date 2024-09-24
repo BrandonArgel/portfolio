@@ -143,3 +143,8 @@ section {
     padding: 3rem 10rem;
   }
 }
+
+// Bug: zIndex not working
+#tsparticles canvas {
+  z-index: -1;
+}
