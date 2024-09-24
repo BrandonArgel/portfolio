@@ -16,6 +16,7 @@ body {
   background-color: $body-bg;
   color: $text-color;
   font-family: $font;
+  user-select: none;
 }
 
 a {
