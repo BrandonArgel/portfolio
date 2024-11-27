@@ -16,8 +16,8 @@ const observerOptions = {
 
 const observer = new IntersectionObserver(showIn, observerOptions);
 
-const useShowIn = (ref: React.RefObject<HTMLDivElement>) => {
-  observer.observe(ref.current as HTMLDivElement);
+const useShowIn = (ref: React.RefObject<HTMLElement>) => {
+  observer.observe(ref.current as HTMLElement);
 };
 
 export { useShowIn };

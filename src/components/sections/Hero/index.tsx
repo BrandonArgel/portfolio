@@ -61,7 +61,8 @@ const Hero = () => {
 		language,
 		texts: { hero, contact },
 	} = React.useContext(LanguageContext);
-	React.useEffect(() => {
+
+	React.useLayoutEffect(() => {
 		new TextoAnimado("name", "hero");
 	}, []);
 
