@@ -1,4 +1,4 @@
-@use "@styles/variables.scss";
+@use '@styles/variables.scss' as *;
 
 .contact {
   opacity: 0;
@@ -12,13 +12,13 @@
   }
 
   &__description {
-    font-size: variables.$fz-md;
+    font-size: $fz-md;
     text-align: center;
     margin-bottom: 1rem;
   }
 
   &__fieldset {
-    border: 5px solid rgba(variables.$main-color, 0.8);
+    border: 5px solid rgba($main-color, 0.8);
     border-radius: 2rem;
     margin: 5rem auto 0;
     width: 100%;
@@ -26,17 +26,17 @@
 
     &:hover,
     &:focus-within {
-      border-color: variables.$main-color;
+      border-color: $main-color;
 
       legend {
-        color: variables.$main-color;
+        color: $main-color;
       }
     }
 
     legend {
-      font-size: variables.$fz-lg;
+      font-size: $fz-lg;
       font-weight: bold;
-      color: rgba(variables.$main-color, 0.8);
+      color: rgba($main-color, 0.8);
       margin: 0 auto;
       padding: 0 1rem;
     }
@@ -52,11 +52,11 @@
     &_input,
     &_textarea {
       background-color: transparent;
-      border: 1px solid rgba(variables.$main-color, 0.8);
+      border: 1px solid rgba($main-color, 0.8);
       border-radius: 0.5rem;
-      caret-color: variables.$main-color;
-      color: variables.$main-color;
-      font-size: variables.$fz-md;
+      caret-color: $main-color;
+      color: $main-color;
+      font-size: $fz-md;
       font-weight: bold;
       margin-bottom: 1rem;
       outline: none;
@@ -65,27 +65,27 @@
 
       &:hover:not(:disabled),
       &:focus:not(:disabled) {
-        border-color: variables.$main-color;
+        border-color: $main-color;
         outline: none;
 
         &::placeholder {
-          color: variables.$main-color;
+          color: $main-color;
         }
       }
 
       &::placeholder {
-        color: rgba(variables.$main-color, 0.8);
-        font-size: variables.$fz-md;
-        font-family: variables.$font;
+        color: rgba($main-color, 0.8);
+        font-size: $fz-md;
+        font-family: $font;
       }
 
       &:-webkit-autofill,
       &:-webkit-autofill:hover,
       &:-webkit-autofill:focus,
       &:-webkit-autofill:active {
-        -webkit-box-shadow: 0 0 0 30px variables.$main-color inset;
-        box-shadow: 0 0 0 30px variables.$main-color inset;
-        font-size: variables.$fz-md;
+        -webkit-box-shadow: 0 0 0 30px $main-color inset;
+        box-shadow: 0 0 0 30px $main-color inset;
+        font-size: $fz-md;
       }
 
       &:disabled {
@@ -104,41 +104,41 @@
 
     &_error {
       align-items: center;
-      color: variables.$red-color;
+      color: $red-color;
       display: flex;
-      font-size: variables.$fz-sm;
+      font-size: $fz-sm;
       margin-bottom: 1rem;
 
       svg {
-        fill: variables.$red-color;
+        fill: $red-color;
         height: 2rem;
       }
     }
 
     &_info {
       align-items: center;
-      color: variables.$main-color;
+      color: $main-color;
       display: flex;
-      font-size: variables.$fz-sm;
+      font-size: $fz-sm;
       margin-bottom: 1rem;
 
       svg {
-        fill: variables.$main-color;
+        fill: $main-color;
         height: 2rem;
       }
     }
 
     &_success {
       align-items: center;
-      color: variables.$green-color;
+      color: $green-color;
       display: flex;
-      font-size: variables.$fz-sm;
+      font-size: $fz-sm;
       justify-content: center;
       margin-top: 1rem;
       width: 100%;
 
       svg {
-        fill: variables.$green-color;
+        fill: $green-color;
         height: 2rem;
       }
     }

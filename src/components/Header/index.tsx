@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
-import * as React from "react";
-import { LanguageContext } from "@context";
-import { useScrollDirection } from "@hooks";
-import { Select } from "@components/Select";
-import { KEY_CODES } from "@utils";
-import { Logo } from "@components";
-import styles from "./Header.module.scss";
+import { Link } from 'react-router-dom';
+import * as React from 'react';
+import { LanguageContext } from '@context';
+import { useScrollDirection } from '@hooks';
+import { Select } from '@components/Select';
+import { KEY_CODES } from '@utils';
+import { Logo } from '@components';
+import styles from './Header.module.scss';
 
 interface NavItemProps {
   name: string;
@@ -20,13 +20,13 @@ const Header = () => {
   } = React.useContext(LanguageContext);
   const [isOpen, setIsOpen] = React.useState(false);
   const buttonRef = React.useRef<HTMLButtonElement>(
-    null
+    null,
   ) as React.MutableRefObject<HTMLButtonElement>;
   const asideRef = React.useRef<HTMLDivElement>(
-    null
+    null,
   ) as React.MutableRefObject<HTMLDivElement>;
   const scrollDirection = useScrollDirection({
-    initialDirection: "down",
+    initialDirection: 'down',
   });
   const [scrolledToTop, setScrolledToTop] = React.useState(true);
 
@@ -39,7 +39,7 @@ const Header = () => {
   const setFocusables = () => {
     menuFocusables = [
       buttonRef.current,
-      ...Array.from(asideRef.current.querySelectorAll("a")),
+      ...Array.from(asideRef.current.querySelectorAll('a')),
     ];
     firstFocusableEl = menuFocusables[0];
     lastFocusableEl = menuFocusables[menuFocusables.length - 1];
@@ -90,20 +90,20 @@ const Header = () => {
   };
 
   React.useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    document.addEventListener("keydown", onKeyDown);
+    window.addEventListener('scroll', handleScroll);
+    document.addEventListener('keydown', onKeyDown);
     setFocusables();
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      document.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('keydown', onKeyDown);
     };
   });
 
   return (
     <header
       className={`${styles.header} ${
-        scrollDirection === "down" && !scrolledToTop ? styles.hide : ""
+        scrollDirection === 'down' && !scrolledToTop ? styles.hide : ''
       }`}
     >
       <div className={styles.container}>
@@ -135,7 +135,7 @@ const Header = () => {
         <button
           aria-label={isOpen ? header.menu.close : header.menu.open}
           className={`${styles.header__hamburger} ${
-            isOpen ? styles.header__hamburger_active : ""
+            isOpen ? styles.header__hamburger_active : ''
           }`}
           onClick={() => setIsOpen(!isOpen)}
           ref={buttonRef}
@@ -168,7 +168,7 @@ const Header = () => {
         <aside
           ref={asideRef}
           className={`${styles.header__menu} ${
-            isOpen ? styles.header__menu_open : ""
+            isOpen ? styles.header__menu_open : ''
           }`}
           aria-hidden={!isOpen}
           tabIndex={isOpen ? 1 : -1}

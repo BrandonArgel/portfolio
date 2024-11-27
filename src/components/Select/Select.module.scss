@@ -1,16 +1,16 @@
-@use "@styles/variables.scss";
+@use '@styles/variables.scss' as *;
 
 .dropdown {
   align-items: center;
-  background: variables.$gradient;
-  border: 1px solid variables.$main-color;
+  background: $gradient;
+  border: 1px solid $main-color;
   border-radius: 1rem;
   display: flex;
   position: relative;
 
   &::after {
-    color: variables.$main-color;
-    content: "\25BC";
+    color: $main-color;
+    content: '\25BC';
     font-weight: bold;
     pointer-events: none;
     position: absolute;
@@ -19,7 +19,7 @@
   }
 
   &:focus-within {
-    outline: 2px dashed variables.$main-color;
+    outline: 2px dashed $main-color;
     outline-offset: 3px;
 
     &::after {
@@ -29,12 +29,12 @@
 
   &__select {
     appearance: none;
-    background: variables.$gradient;
+    background: $gradient;
     border: none;
     border-radius: 1rem;
-    color: variables.$main-color;
+    color: $main-color;
     cursor: pointer;
-    font: variables.$fz-md variables.$font;
+    font: $fz-md $font;
     overflow-x: hidden;
     padding: 0.5rem 2rem 0.5rem 0.5rem;
     text-overflow: ellipsis;

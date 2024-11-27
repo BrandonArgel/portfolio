@@ -1,8 +1,8 @@
-@use "@styles/variables.scss";
+@use '@styles/variables.scss' as *;
 
 .header {
-  background: variables.$bg-color;
-  box-shadow: 0px 0px 10px variables.$shadow-color;
+  background: $bg-color;
+  box-shadow: 0px 0px 10px $shadow-color;
   left: 0;
   height: 6rem;
   padding: 0 2rem;
@@ -67,12 +67,12 @@
 
     &:hover {
       line {
-        stroke: variables.$main-color;
+        stroke: $main-color;
       }
     }
 
     line {
-      stroke: variables.$main-color;
+      stroke: $main-color;
       stroke-width: 10%;
       stroke-linecap: round;
       transition: stroke 0.3s ease-in-out;
@@ -196,8 +196,8 @@
   }
 
   &__menu {
-    background: variables.$aside-gradient;
-    box-shadow: 0px 0px 10px variables.$shadow-color;
+    background: $aside-gradient;
+    box-shadow: 0px 0px 10px $shadow-color;
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -231,21 +231,21 @@
         }
 
         a {
-          color: variables.$light-text-color;
-          font-size: variables.$fz-lg;
+          color: $light-text-color;
+          font-size: $fz-lg;
           font-weight: bold;
           text-decoration: none;
           position: relative;
           width: fit-content;
 
           &:before {
-            content: "";
+            content: '';
             position: absolute;
             bottom: -2px;
             left: 0px;
             right: 0px;
             height: 2px;
-            background-color: variables.$main-text-color;
+            background-color: $main-text-color;
             transform-origin: right bottom;
             transform: scaleX(0);
             transition: transform 0.5s ease 0s;
@@ -254,7 +254,7 @@
           &:hover,
           &:active,
           &:focus {
-            color: variables.$main-text-color;
+            color: $main-text-color;
             outline: none;
 
             &:before {
@@ -295,21 +295,21 @@
         will-change: opacity, transform;
 
         a {
-          color: variables.$light-text-color;
-          font-size: variables.$fz-lg;
+          color: $light-text-color;
+          font-size: $fz-lg;
           font-weight: bold;
           text-decoration: none;
           position: relative;
           width: fit-content;
 
           &:before {
-            content: "";
+            content: '';
             position: absolute;
             bottom: -2px;
             left: 0px;
             right: 0px;
             height: 2px;
-            background-color: variables.$main-text-color;
+            background-color: $main-text-color;
             transform-origin: right bottom;
             transform: scaleX(0);
             transition: transform 0.5s ease 0s;
@@ -318,7 +318,7 @@
           &:hover,
           &:active,
           &:focus {
-            color: variables.$main-text-color;
+            color: $main-text-color;
             outline: none;
 
             &:before {
@@ -355,7 +355,6 @@
 
 @media (min-width: 768px) {
   .header {
-
     &__hamburger,
     &__menu {
       display: none;

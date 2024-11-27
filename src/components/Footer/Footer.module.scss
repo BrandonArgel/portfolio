@@ -1,35 +1,35 @@
-@use "@styles/variables.scss";
+@use '@styles/variables.scss' as *;
 
 .footer {
-	height: 7rem;
-	padding: 2rem;
-	margin-top: auto;
+  height: 7rem;
+  padding: 2rem;
+  margin-top: auto;
 
-	&__social {
-		display: flex;
-		flex-flow: row wrap;
-		justify-content: space-evenly;
-		margin: 0 auto;
-		max-width: 30rem;
+  &__social {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    margin: 0 auto;
+    max-width: 30rem;
 
-		a {
-			svg {
-				border-radius: 50%;
-				height: 3rem;
-				fill: variables.$main-color;
-				transition: all 0.2s ease-in-out;
-				width: 3rem;
-				will-change: filter, transform;
-			}
+    a {
+      svg {
+        border-radius: 50%;
+        height: 3rem;
+        fill: $main-color;
+        transition: all 0.2s ease-in-out;
+        width: 3rem;
+        will-change: filter, transform;
+      }
 
-			&:hover,
-			&:active,
-			&:focus {
-				outline: none;
-				svg {
-					transform: scale(1.15) translateY(-0.6rem);
-				}
-			}
-		}
-	}
+      &:hover,
+      &:active,
+      &:focus {
+        outline: none;
+        svg {
+          transform: scale(1.15) translateY(-0.6rem);
+        }
+      }
+    }
+  }
 }

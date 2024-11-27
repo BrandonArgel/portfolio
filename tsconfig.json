@@ -3,11 +3,7 @@
     // "baseUrl": "src",
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": false,
@@ -20,40 +16,21 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": [
-      "node",
-      "vite/client"
-    ],
+    "types": ["node", "vite/client"],
     "paths": {
-      "@*": [
-        "./src/*"
-      ],
-      "assets/*": [
-        "./src/assets/*"
-      ],
-      "components/*": [
-        "./src/components/*"
-      ],
-      "hooks/*": [
-        "./src/hooks/*"
-      ],
-      "pages/*": [
-        "./src/pages/*"
-      ],
-      "styles/*": [
-        "./src/styles/*"
-      ],
-      "utils/*": [
-        "./src/utils/*"
-      ]
+      "@*": ["./src/*"],
+      "assets/*": ["./src/assets/*"],
+      "components/*": ["./src/components/*"],
+      "hooks/*": ["./src/hooks/*"],
+      "pages/*": ["./src/pages/*"],
+      "styles/*": ["./src/styles/*"],
+      "utils/*": ["./src/utils/*"]
     }
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "references": [
     {
       "path": "./tsconfig.node.json"
     }
-  ],
+  ]
 }

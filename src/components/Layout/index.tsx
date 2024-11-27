@@ -1,12 +1,12 @@
-import * as React from "react";
-import { Outlet } from "react-router-dom";
-import { Header, Footer } from "@components";
-import { LanguageContext } from "@context";
+import * as React from 'react';
+import { Outlet } from 'react-router-dom';
+import { Header, Footer } from '@components';
+import { LanguageContext } from '@context';
 
 const Particles = React.lazy(() =>
-  import("@components").then(({ Particles }) => ({
+  import('@components').then(({ Particles }) => ({
     default: Particles,
-  }))
+  })),
 );
 
 const Layout = () => {

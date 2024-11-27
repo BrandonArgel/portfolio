@@ -1,67 +1,67 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="canonical" href="https://brandonargel.me/" />
-		<meta
-			name="description"
-			content="Brandon Argel is a software developer who specializes in building exceptional digital experiences with React.js."
-		/>
-		<meta name="author" content="@BrandonArgel" />
-		<meta name="keywords" content="Brandon Argel, Front-End Developer" />
-		<meta name="image" content="https://brandonargel.me/og.png" />
-		<meta property="og:title" content="Brandon Argel" />
-		<meta
-			property="og:description"
-			content="Brandon Argel is a software developer who specializes in building exceptional digital experiences with React.js."
-		/>
-		<meta property="og:image" content="https://brandonargel.me/og.png" />
-		<meta property="og:url" content="https://brandonargel.me/" />
-		<meta property="og:type" content="website" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="canonical" href="https://brandonargel.me/" />
+    <meta
+      name="description"
+      content="Brandon Argel is a software developer who specializes in building exceptional digital experiences with React.js."
+    />
+    <meta name="author" content="@BrandonArgel" />
+    <meta name="keywords" content="Brandon Argel, Front-End Developer" />
+    <meta name="image" content="https://brandonargel.me/og.png" />
+    <meta property="og:title" content="Brandon Argel" />
+    <meta
+      property="og:description"
+      content="Brandon Argel is a software developer who specializes in building exceptional digital experiences with React.js."
+    />
+    <meta property="og:image" content="https://brandonargel.me/og.png" />
+    <meta property="og:url" content="https://brandonargel.me/" />
+    <meta property="og:type" content="website" />
 
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:creator" content="@BrandArgel" />
-		<meta name="twitter:title" content="Brandon Argel" />
-		<meta
-			name="twitter:description"
-			content="Brandon Argel is a software developer who specializes in building exceptional digital experiences with React.js."
-		/>
-		<meta name="twitter:image" content="https://brandonargel.me/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@BrandArgel" />
+    <meta name="twitter:title" content="Brandon Argel" />
+    <meta
+      name="twitter:description"
+      content="Brandon Argel is a software developer who specializes in building exceptional digital experiences with React.js."
+    />
+    <meta name="twitter:image" content="https://brandonargel.me/og.png" />
 
-		<meta name="theme-color" content="#16ffe2" />
-		<link rel="icon" href="/favicon.ico" />
-		<link rel="apple-touch-icon" href="/logo192.png" />
-		<link rel="manifest" href="/site.webmanifest" />
-		<title>Brandon Argel</title>
-	</head>
+    <meta name="theme-color" content="#16ffe2" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <title>Brandon Argel</title>
+  </head>
 
-	<body>
-		<div id="app"></div>
-		<script type="module" src="/src/main.tsx"></script>
-		<script>
-			if ("serviceWorker" in navigator) {
-				window.addEventListener("load", function () {
-					navigator.serviceWorker
-						.register("service-worker.js")
-						.then(
-							function (registration) {
-								console.log(
-									"ServiceWorker registration successful with scope: ",
-									registration.scope
-								);
-							},
-							function (err) {
-								console.log("ServiceWorker registration failed: ", err);
-							}
-						)
-						.catch(function (err) {
-							console.log(err);
-						});
-				});
-			} else {
-				console.log("service worker is not supported");
-			}
-		</script>
-	</body>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker
+            .register('service-worker.js')
+            .then(
+              function (registration) {
+                console.log(
+                  'ServiceWorker registration successful with scope: ',
+                  registration.scope,
+                );
+              },
+              function (err) {
+                console.log('ServiceWorker registration failed: ', err);
+              },
+            )
+            .catch(function (err) {
+              console.log(err);
+            });
+        });
+      } else {
+        console.log('service worker is not supported');
+      }
+    </script>
+  </body>
 </html>

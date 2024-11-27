@@ -1,18 +1,18 @@
-import * as path from "path";
-import { defineConfig, loadEnv } from "vite";
-import react from "@vitejs/plugin-react";
+import * as path from 'path';
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react';
 
 // Add the paths required for the aliases
 const paths = [
-  "assets",
-  "components",
-  "context",
-  "fonts",
-  "hooks",
-  "pages",
-  "routes",
-  "styles",
-  "utils",
+  'assets',
+  'components',
+  'context',
+  'fonts',
+  'hooks',
+  'pages',
+  'routes',
+  'styles',
+  'utils',
 ];
 
 /**
@@ -45,13 +45,13 @@ export default defineConfig(({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          api: "modern-compiler",
+          api: 'modern-compiler',
         },
       },
     },
   };
 
-  if (mode === "development") {
+  if (mode === 'development') {
     const env = loadEnv(mode, process.cwd());
 
     config.server = {

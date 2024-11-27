@@ -1,5 +1,5 @@
-@import "./fonts.scss";
-@import "./variables.scss";
+@use './fonts.scss';
+@use './variables' as *;
 
 * {
   box-sizing: border-box;
@@ -135,12 +135,31 @@ section {
 .project.visible {
   visibility: visible !important;
   opacity: 1 !important;
-  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1) !important;
-  transition: opacity 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s, transform 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s !important;
+  transform: matrix3d(
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1
+  ) !important;
+  transition:
+    opacity 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s,
+    transform 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s !important;
 }
 
 @media (min-width: 768px) {
-  main>div {
+  main > div {
     padding: 3rem 10rem;
   }
 }

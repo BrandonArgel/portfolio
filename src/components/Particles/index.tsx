@@ -1,12 +1,12 @@
-import * as React from "react";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
+import * as React from 'react';
+import Particles, { initParticlesEngine } from '@tsparticles/react';
 import {
   type Container,
   type ISourceOptions,
   MoveDirection,
   OutMode,
-} from "@tsparticles/engine";
-import { loadSlim } from "@tsparticles/slim";
+} from '@tsparticles/engine';
+import { loadSlim } from '@tsparticles/slim';
 
 const ParticlesBg = () => {
   const [init, setInit] = React.useState(false);
@@ -30,17 +30,17 @@ const ParticlesBg = () => {
         events: {
           onHover: {
             enable: true,
-            mode: "connect",
+            mode: 'connect',
           },
         },
         resize: true,
       },
       particles: {
         color: {
-          value: "#10eed2",
+          value: '#10eed2',
         },
         links: {
-          color: "#10eed2",
+          color: '#10eed2',
           distance: 150,
           enable: true,
           opacity: 0.2,
@@ -50,9 +50,9 @@ const ParticlesBg = () => {
           enable: true,
         },
         move: {
-          direction: "none",
+          direction: 'none',
           enable: true,
-          outMode: "bounce",
+          outMode: 'bounce',
           random: false,
           speed: 2,
         },
@@ -68,7 +68,7 @@ const ParticlesBg = () => {
           value: 0.5,
         },
         shape: {
-          type: "circle",
+          type: 'circle',
         },
         size: {
           random: true,
@@ -81,7 +81,7 @@ const ParticlesBg = () => {
       },
       detectRetina: true,
     }),
-    []
+    [],
   );
 
   if (init) {

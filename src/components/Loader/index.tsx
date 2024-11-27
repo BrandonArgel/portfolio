@@ -1,13 +1,13 @@
-import { Spinner } from "@assets/icons";
+import { Spinner } from '@assets/icons';
 
-import styles from "./Loader.module.scss";
+import styles from './Loader.module.scss';
 
 const Loader = () => {
-	return (
-		<div className={styles.loader}>
-			<Spinner />
-		</div>
-	);
+  return (
+    <div className={styles.loader}>
+      <Spinner />
+    </div>
+  );
 };
 
 export { Loader };

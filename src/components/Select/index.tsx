@@ -1,5 +1,5 @@
-import styles from "./Select.module.scss";
-import { Languages } from "@context";
+import styles from './Select.module.scss';
+import { Languages } from '@context';
 interface SelectOption {
   name: string;
   language: string;
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const Select = ({
-  title = "",
+  title = '',
   options = [],
   setValue,
   value,

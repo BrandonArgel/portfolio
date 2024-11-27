@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 const useLocalStorage = (itemName: string, initialValue: any) => {
   const localStorageItem = localStorage.getItem(itemName);
@@ -19,10 +19,7 @@ const useLocalStorage = (itemName: string, initialValue: any) => {
     setItem(newItem);
   };
 
-  return [
-    item,
-    saveItem,
-  ];
-}
+  return [item, saveItem];
+};
 
 export { useLocalStorage };

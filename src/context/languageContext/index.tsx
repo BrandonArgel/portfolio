@@ -1,16 +1,15 @@
-import { createContext, useEffect, useState } from "react";
-import { useLocalStorage } from "@hooks";
-import { translations } from "@utils/translations";
+import { createContext, useEffect, useState } from 'react';
+import { useLocalStorage } from '@hooks';
+import { translations } from '@utils/translations';
 
-export type Languages = "en" | "es" | "fr";
+export type Languages = 'en' | 'es' | 'fr';
 
 const userLanguage = () => {
-  const language = navigator.language.split("-")[0];
-  return language in translations ? language : "en";
+  const language = navigator.language.split('-')[0];
+  return language in translations ? language : 'en';
 };
 
 const initialLanguage = userLanguage();
-
 
 type wildcardProps = {
   [key: string]: any;
@@ -22,14 +21,14 @@ interface LanguageContextProps {
 
 const LanguageContext = createContext({
   texts: {} as wildcardProps,
-  language: "",
+  language: '',
   setLanguage: (_lang: Languages) => {},
 });
 
 const LanguageProvider = ({ children }: LanguageContextProps) => {
-  const [language, setLanguage] = useLocalStorage("language", initialLanguage);
+  const [language, setLanguage] = useLocalStorage('language', initialLanguage);
   const [texts, setTexts] = useState(
-    translations[language as keyof typeof translations]
+    translations[language as keyof typeof translations],
   );
 
   const handleLanguage = (lang: Languages) => {
@@ -40,8 +39,8 @@ const LanguageProvider = ({ children }: LanguageContextProps) => {
 
     if (hash) {
       const url = window.location.href;
-      const newUrl = url.replace(hash, "");
-      window.history.replaceState({}, "", newUrl);
+      const newUrl = url.replace(hash, '');
+      window.history.replaceState({}, '', newUrl);
     }
   };
 
@@ -50,12 +49,12 @@ const LanguageProvider = ({ children }: LanguageContextProps) => {
    */
   const handleChangeInitialLanguage = (hash: string) => {
     const otherLanguages = Object.keys(translations).filter(
-      (l) => l !== language
+      (l) => l !== language,
     );
 
     otherLanguages.forEach((l) => {
       const navItems = Object.values(
-        translations[l as keyof typeof translations].header.nav
+        translations[l as keyof typeof translations].header.nav,
       );
       const lang = navItems.some((item: any) => `#${item.hash}` === hash);
       if (lang) {

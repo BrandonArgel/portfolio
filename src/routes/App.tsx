@@ -1,12 +1,12 @@
-import * as React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Layout, Loader } from "@components";
-import { LanguageProvider } from "@context";
+import * as React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Layout, Loader } from '@components';
+import { LanguageProvider } from '@context';
 
 const Home = React.lazy(() =>
-  import("@pages").then(({ Home }) => ({
+  import('@pages').then(({ Home }) => ({
     default: Home,
-  }))
+  })),
 );
 
 const App = () => {
