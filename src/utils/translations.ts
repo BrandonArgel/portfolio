@@ -148,9 +148,9 @@ export const translations = {
               description:
                 'I worked on several projects from scratch, also adding new features and fixing bugs in existing projects.',
               bullets: [
-                "Actively fixing critical bugs in the client's platform.",
-                "Added new features to the client's platform.",
-                'Worked on the base configuration and development of new projects.',
+                'Built, maintained, and shipped production-ready code for client projects using primarily React, SCSS, JavaScript, and TypeScript.',
+                'Delivered new features and resolved bugs to enhance project functionality.',
+                'Collaborated with cross-functional teams including designers, QA, and backend developers to ensure seamless integration and high-quality user experiences.',
               ],
               skills: [
                 'Effective communication',
@@ -538,9 +538,9 @@ export const translations = {
               description:
                 'Trabajé en varios proyectos desde cero, también agregando nuevas funcionalidades y arreglando errores de proyectos existentes.',
               bullets: [
-                'Arreglando activamente errores críticos en la plataforma del cliente.',
-                'Agregamos nuevas funcionalidades a la plataforma del cliente.',
-                'Trabajamos en la configuración base y el desarrollo de nuevos proyectos.',
+                'Construcción, mantenimiento y envío de código listo para producción para proyectos de clientes utilizando principalmente React, SCSS, JavaScript y TypeScript.',
+                'Entregamos nuevas funcionalidades y resolvimos errores para mejorar la funcionalidad del proyecto.',
+                'Colaboramos con equipos multifuncionales, incluidos diseñadores, QA y desarrolladores backend, para garantizar una integración perfecta y experiencias de usuario de alta calidad.',
               ],
               skills: [
                 'Comunicación efectiva',
@@ -929,9 +929,9 @@ export const translations = {
               description:
                 "J'ai travaillé sur plusieurs projets en partant de zéro, en ajoutant de nouvelles fonctionnalités et en corrigeant des bogues dans des projets existants.",
               bullets: [
-                'Correction active des erreurs critiques sur la plateforme du client.',
-                'Nous avons ajouté de nouvelles fonctionnalités à la plateforme du client.',
-                'Nous avons travaillé sur la configuration de base et le développement de nouveaux projets.',
+                'Construction, maintenance et envoi de code prêt pour la production pour les projets des clients utilisant principalement React, SCSS, JavaScript et TypeScript.',
+                'Nous avons livré de nouvelles fonctionnalités et résolu des bogues pour améliorer la fonctionnalité du projet.',
+                'Nous avons collaboré avec des équipes multifonctionnelles, y compris des designers, QA et développeurs backend, pour garantir une intégration transparente et des expériences utilisateur de haute qualité.',
               ],
               skills: [
                 'Communication efficace',
