@@ -511,7 +511,7 @@ export const translations = {
           name: 'Universidad TecMilenio',
           career: [
             {
-              title: 'Desarrollador Asociado en Software',
+              title: 'Asociado en Desarrollo de Software',
               start_date: 'Mayo 2025',
               end_date: 'Actualidad',
               description: [
@@ -915,7 +915,7 @@ export const translations = {
           name: 'Universidad TecMilenio',
           career: [
             {
-              title: 'Développeur Associé en Logiciel',
+              title: 'Associé en Développement de Logiciels',
               start_date: 'Mai 2025',
               end_date: "Aujourd'hui",
               description: [
