@@ -24,7 +24,9 @@ const Layout = () => {
         <Outlet />
         <Footer />
       </main>
-      <Particles />
+      <React.Suspense fallback={null}>
+        <Particles />
+      </React.Suspense>
     </>
   );
 };

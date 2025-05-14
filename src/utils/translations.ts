@@ -105,7 +105,20 @@ export const translations = {
       title: "Where I've studied",
       schools: [
         {
-          name: 'Platzi & Platzi Master',
+          name: 'TecMilenio University',
+          career: [
+            {
+              title: 'Software Development Associate',
+              start_date: 'May 2025',
+              end_date: 'Present',
+              description: [
+                'Currently pursuing a university degree in which I’m learning from web development, methodologies, software engineering, data science, internet networks, mobile development, DevOps, cybersecurity, and entrepreneurship. 🎓',
+              ],
+            },
+          ],
+        },
+        {
+          name: 'Platzi and Platzi Master',
           career: [
             {
               title: 'Frontend Developer',
@@ -119,7 +132,7 @@ export const translations = {
           ],
         },
         {
-          name: 'Escuela Poltécnica Ing. Jorge Matute Remus',
+          name: 'Polytechnic school Ing. Jorge Matute Remus',
           career: [
             {
               title: 'Professional Computer Technologist',
@@ -495,7 +508,20 @@ export const translations = {
       title: 'En dónde he estudiado',
       schools: [
         {
-          name: 'Platzi & Platzi Master',
+          name: 'Universidad TecMilenio',
+          career: [
+            {
+              title: 'Desarrollador Asociado en Software',
+              start_date: 'Mayo 2025',
+              end_date: 'Actualidad',
+              description: [
+                'Actualmente cursando una carrera universitaria en la que estoy aprendiendo sobre desarrollo web, metodologías, ingeniería de software, ciencia de datos, redes de internet, desarrollo móvil, DevOps, ciberseguridad y emprendimiento. 🎓',
+              ],
+            },
+          ],
+        },
+        {
+          name: 'Platzi y Platzi Master',
           career: [
             {
               title: 'Desarrollador Frontend',
@@ -885,6 +911,19 @@ export const translations = {
       id: 'etudes',
       title: 'Où ai-je étudié ?',
       schools: [
+        {
+          name: 'Universidad TecMilenio',
+          career: [
+            {
+              title: 'Développeur Associé en Logiciel',
+              start_date: 'Mai 2025',
+              end_date: "Aujourd'hui",
+              description: [
+                "Actuellement étudiant dans une université où j'apprends le développement web, les méthodologies, l'ingénierie logicielle, la science des données, les réseaux Internet, le développement mobile, DevOps, la cybersécurité et l'entrepreneuriat. 🎓",
+              ],
+            },
+          ],
+        },
         {
           name: 'Platzi & Platzi Master',
           career: [
