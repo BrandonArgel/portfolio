@@ -14,7 +14,7 @@ interface Props {
   tabIndex?: number;
 }
 
-const Select = ({
+export const Select = ({
   title = '',
   options = [],
   setValue,
@@ -40,5 +40,3 @@ const Select = ({
     </label>
   );
 };
-
-export { Select };

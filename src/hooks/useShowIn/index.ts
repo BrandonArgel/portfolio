@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { RefObject } from 'react';
 const showIn = (entries: IntersectionObserverEntry[]) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
@@ -16,7 +16,7 @@ const observerOptions = {
 
 const observer = new IntersectionObserver(showIn, observerOptions);
 
-const useShowIn = (ref: React.RefObject<HTMLElement>) => {
+const useShowIn = (ref: RefObject<HTMLElement>) => {
   observer.observe(ref.current as HTMLElement);
 };
 

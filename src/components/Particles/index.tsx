@@ -1,12 +1,12 @@
-import * as React from 'react';
+import { memo, useState, useEffect, useMemo } from 'react';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import { type ISourceOptions } from '@tsparticles/engine';
 import { loadSlim } from '@tsparticles/slim';
 
-const ParticlesBg = React.memo(() => {
-  const [init, setInit] = React.useState(false);
+export const ParticlesBg = memo(() => {
+  const [init, setInit] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     initParticlesEngine(async (engine) => {
       await loadSlim(engine);
     }).then(() => {
@@ -14,7 +14,7 @@ const ParticlesBg = React.memo(() => {
     });
   }, []);
 
-  const options: ISourceOptions = React.useMemo(
+  const options: ISourceOptions = useMemo(
     () => ({
       fpsLimit: 60,
       fullScreen: {
@@ -83,5 +83,3 @@ const ParticlesBg = React.memo(() => {
     return <Particles id="tsparticles" options={options} />;
   }
 });
-
-export { ParticlesBg };

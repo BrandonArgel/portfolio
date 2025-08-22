@@ -21,8 +21,12 @@
       "@*": ["./src/*"],
       "assets/*": ["./src/assets/*"],
       "components/*": ["./src/components/*"],
+      "context/*": ["./src/context/*"],
+      "fonts": ["./src/fonts/*"],
       "hooks/*": ["./src/hooks/*"],
       "pages/*": ["./src/pages/*"],
+      "routes/*": ["./src/routes/*"],
+      "stores/*": ["./src/stores/*"],
       "styles/*": ["./src/styles/*"],
       "utils/*": ["./src/utils/*"]
     }

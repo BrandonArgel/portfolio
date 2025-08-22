@@ -1,4 +1,4 @@
-import * as path from 'path';
+import { resolve } from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -11,6 +11,7 @@ const paths = [
   'hooks',
   'pages',
   'routes',
+  'stores',
   'styles',
   'utils',
 ];
@@ -22,7 +23,7 @@ const paths = [
 const getAliases = () =>
   paths.map((p) => ({
     find: `@${p}`,
-    replacement: path.resolve(__dirname, `src/${p}`),
+    replacement: resolve(__dirname, `src/${p}`),
   }));
 
 interface config {

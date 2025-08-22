@@ -1,5 +1,11 @@
 import { Link } from 'react-router-dom';
-import * as React from 'react';
+import {
+  MutableRefObject,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { LanguageContext } from '@context';
 import { useScrollDirection } from '@hooks';
 import { Select } from '@components/Select';
@@ -12,23 +18,23 @@ interface NavItemProps {
   hash: string;
 }
 
-const Header = () => {
+export const Header = () => {
   const {
     texts: { header },
     language,
     setLanguage,
-  } = React.useContext(LanguageContext);
-  const [isOpen, setIsOpen] = React.useState(false);
-  const buttonRef = React.useRef<HTMLButtonElement>(
+  } = useContext(LanguageContext);
+  const [isOpen, setIsOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(
     null,
-  ) as React.MutableRefObject<HTMLButtonElement>;
-  const asideRef = React.useRef<HTMLDivElement>(
+  ) as MutableRefObject<HTMLButtonElement>;
+  const asideRef = useRef<HTMLDivElement>(
     null,
-  ) as React.MutableRefObject<HTMLDivElement>;
+  ) as MutableRefObject<HTMLDivElement>;
   const scrollDirection = useScrollDirection({
     initialDirection: 'down',
   });
-  const [scrolledToTop, setScrolledToTop] = React.useState(true);
+  const [scrolledToTop, setScrolledToTop] = useState(true);
 
   type Focusables = HTMLButtonElement | HTMLAnchorElement;
 
@@ -89,7 +95,7 @@ const Header = () => {
     setScrolledToTop(window.pageYOffset < 50);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     document.addEventListener('keydown', onKeyDown);
     setFocusables();
@@ -175,7 +181,7 @@ const Header = () => {
         >
           <nav>
             <ul className={styles.header__menu_list}>
-              {header.nav.map(({ name, hash }: NavItemProps, i: number) => (
+              {header.nav.map(({ name, hash }: NavItemProps, _: number) => (
                 <li key={name}>
                   <a
                     onClick={() => setIsOpen(!isOpen)}
@@ -209,5 +215,3 @@ const Header = () => {
     </header>
   );
 };
-
-export { Header };

@@ -1,18 +1,18 @@
-import * as React from 'react';
+import { lazy, Suspense, useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Header, Footer } from '@components';
 import { LanguageContext } from '@context';
 
-const Particles = React.lazy(() =>
+const Particles = lazy(() =>
   import('@components').then(({ Particles }) => ({
     default: Particles,
   })),
 );
 
-const Layout = () => {
+export const Layout = () => {
   const {
     texts: { skipToContent },
-  } = React.useContext(LanguageContext);
+  } = useContext(LanguageContext);
 
   return (
     <>
@@ -24,11 +24,9 @@ const Layout = () => {
         <Outlet />
         <Footer />
       </main>
-      <React.Suspense fallback={null}>
+      <Suspense fallback={null}>
         <Particles />
-      </React.Suspense>
+      </Suspense>
     </>
   );
 };
-
-export { Layout };

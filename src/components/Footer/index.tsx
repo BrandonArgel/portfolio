@@ -1,12 +1,12 @@
-import * as React from 'react';
+import { useContext } from 'react';
 import { LanguageContext } from '@context';
 import { SocialIcons } from '@utils';
 import styles from './Footer.module.scss';
 
-const Footer = () => {
+export const Footer = () => {
   const {
     texts: { footer },
-  } = React.useContext(LanguageContext);
+  } = useContext(LanguageContext);
   return (
     <footer className={styles.footer}>
       <div className={styles.footer__social}>
@@ -35,5 +35,3 @@ const Footer = () => {
     </footer>
   );
 };
-
-export { Footer };

@@ -51,13 +51,19 @@ export const translations = {
       title: 'Hi! My name is',
       presentation: {
         animated: 'Brandon Argel',
-        do: 'And I build web applications',
+        connector: 'and I ',
+        do: [
+          'build scalable applications',
+          'create intuitive interfaces',
+          'develop high-performance software',
+          '',
+        ],
       },
       info: {
         firstPart: "I'm a",
-        profession: 'Software Developer',
+        profession: 'Frontend Engineer',
         secondPart:
-          ' with experience in frontend technologies such as HTML, CSS, preprocessors such as SCSS, JavaScript, TypeScript, Git, and GitHub, with solid knowledge in designing and creating pages with React and libraries such as Next, Redux, Styled-Components, among others.',
+          ' with 5+ years of experience building scalable web and mobile applications with React, Next.js, Node.js, NestJS, Express and React Native. Proven track record optimizing performance and streamlining worflows through CI/CD and architectural improvements. Passionate about performance optimization, scalable solutions, and end-to-end system efficiency.',
       },
       buttons: {
         resume: {
@@ -85,38 +91,45 @@ export const translations = {
         past: "Since then, I've focused on learning everything about web development, and I've had the privilege of working with amazing people and companies.",
         main: "My main focus is building accessible, performant and awesome websites. I'm always looking for new challenges.",
       },
-      technologies: {
-        title:
-          'Here are some technologies and tools that I have been working with:',
-        list: [
-          'HTML',
-          'CSS & (SCSS)',
-          'JavaScript',
-          'Typescript',
-          'React',
-          'Git & Github',
-          'Figma',
-        ],
-      },
       photo: 'Photo of Brandon Argel',
+    },
+    softSkills: {
+      id: 'soft-skills',
+      title: 'My soft skills',
+      list: [
+        'I look for new points of view and an inclusive work space through effective communication and active listening.',
+        'I give feedback with honesty and kindness, looking the best way to reach team objectives.',
+        'I am relentlessly curious in many topics and that makes me look creative and innovative solutions to problems.',
+        'I am a very organized person and try to reach my objectives fast and effectively.',
+        'I am in C1 level of English proficiency and I am a Spanish native speaker.',
+      ],
+    },
+    values: {
+      id: 'values',
+      title: 'My values',
+      list: [
+        "Don't be afraid to create, jump and you'll figure it out in the fell.",
+        'Never stop learning and share what you learn.',
+        "It's forbidden to exclude, life is diverse and there's the key to grow.",
+        "Accept what you can't control and spend time and effort in what you can.",
+        "Look after those who you love and care about, people and experience are what life's about.",
+      ],
+    },
+    skills: {
+      id: 'skills',
+      title: 'My Skills',
+      list: [
+        'Develop responsive web pages or web apps with a high level of detail in design and user experience.',
+        'Use APIs to show and change information in features according the business logic using storytelling.',
+        'Optimize performance to reduce load time and improve user experience.',
+        'Ensure great accessibility in features for screen-readers and keyboard navigation.',
+        'Develop reusable and quality code and its technical documentation.',
+      ],
     },
     education: {
       id: 'studies',
       title: "Where I've studied",
       schools: [
-        {
-          name: 'TecMilenio University',
-          career: [
-            {
-              title: 'Software Development Associate',
-              start_date: 'May 2025',
-              end_date: 'Present',
-              description: [
-                'Currently pursuing a university degree in which I’m learning from web development, methodologies, software engineering, data science, internet networks, mobile development, DevOps, cybersecurity, and entrepreneurship. 🎓',
-              ],
-            },
-          ],
-        },
         {
           name: 'Platzi and Platzi Master',
           career: [
@@ -281,7 +294,7 @@ export const translations = {
           name: 'Rick and Morty',
           description:
             'I made this project fetching data from the Rick and Morty API, with react and an typescript, using the best practices and optimization techniques.',
-          link: 'https://rickandmorty.brandonargel.me/',
+          link: 'https://rickandmorty.brandonargel.com/',
           github: 'https://github.com/BrandonArgel/rick-and-morty',
           image: 'rickAndMorty',
         },
@@ -289,7 +302,7 @@ export const translations = {
           name: 'GitHub Profile',
           description:
             "I developed this project while learning Material UI, fetching GitHub's API to get the user's information and repositories.",
-          link: 'https://githubprofile.brandonargel.me/',
+          link: 'https://githubprofile.brandonargel.com/',
           github: 'https://github.com/BrandonArgel/github-profile',
           image: 'githubProfile',
         },
@@ -304,7 +317,7 @@ export const translations = {
           name: 'ToDo App',
           description:
             'This is a project that looks pretty simple, but it has a lot of features, such as: dark/light mode, use of local storage, a search bar, drag and drop, and it was developed with react sass and typescript.',
-          link: 'http://todoapp.brandonargel.me/',
+          link: 'http://todoapp.brandonargel.com/',
           github: 'https://github.com/BrandonArgel/todo-app/',
           image: 'todoApp',
         },
@@ -453,13 +466,19 @@ export const translations = {
       title: '¡Hola! Mi nombre es',
       presentation: {
         animated: 'Brandon Argel',
-        do: 'Yo construyo aplicaciones web',
+        connector: 'y yo ',
+        do: [
+          'construyo aplicaciones escalables',
+          'creo interfaces intuitivas',
+          'desarrollo software de alto rendimiento',
+          '',
+        ],
       },
       info: {
         firstPart: 'Soy un',
-        profession: 'Desarrollador de Software',
+        profession: 'Ingeniero Frontend',
         secondPart:
-          ' con experiencia en tecnologías frontend como HTML, CSS, preprocesadores como SCSS, JavaScript, TypeScript, Git y GitHub, con sólidos conocimientos en diseño y creación de páginas con React y librerías como Next, Redux, Styled-Components, entre otras.',
+          ' con 5+ años de experiencia construyendo aplicaciones web y móviles escalables con React, Next.js, Node.js, NestJS, Express y React Native. Historial comprobado optimizando el rendimiento y agilizando flujos de trabajo a través de CI/CD y mejoras arquitectónicas. Apasionado por la optimización del rendimiento, soluciones escalables y la eficiencia del sistema de extremo a extremo.',
       },
       buttons: {
         resume: {
@@ -488,38 +507,45 @@ export const translations = {
         past: 'Desde entonces me he centrado en aprender todo sobre desarrollo web, y he tenido el privilegio de trabajar con gente increíble y empresas increíbles.',
         main: 'Ahora, mi enfoque principal es construir sitios web accesibles, rápidos y geniales. Siempre estoy buscando nuevos desafíos.',
       },
-      technologies: {
-        title:
-          'Aquí están algunas tecnologías y herramientas con las que he estado trabajando:',
-        list: [
-          'HTML',
-          'CSS & (SCSS)',
-          'JavaScript',
-          'Typescript',
-          'React',
-          'Git & Github',
-          'Figma',
-        ],
-      },
       photo: 'Foto de Brandon Argel',
+    },
+    softSkills: {
+      id: 'habilidades-blandas',
+      title: 'Mis habilidades blandas',
+      list: [
+        'Busco nuevos puntos de vista y un espacio de trabajo inclusivo a través de una comunicación efectiva y la escucha activa.',
+        'Doy retroalimentación con honestidad y amabilidad, buscando la mejor manera de alcanzar los objetivos del equipo.',
+        'Soy implacablemente curioso en muchos temas y eso me hace buscar soluciones creativas e innovadoras a los problemas.',
+        'Soy una persona muy organizada y trato de alcanzar mis objetivos de forma rápida y efectiva.',
+        'Estoy en nivel C1 de inglés y soy hablante nativo de español.',
+      ],
+    },
+    values: {
+      id: 'valores',
+      title: 'Mis valores',
+      list: [
+        'No tengas miedo de crear, salta y lo descubrirás en la caída.',
+        'Nunca pares de aprender y comparte lo que aprendes.',
+        'Está prohibido excluir, la vida es diversa y ahí está la clave para crecer.',
+        'Acepta lo que no puedes controlar y dedica tiempo y esfuerzo a lo que sí puedes.',
+        'Cuida a quienes amas y te importan, las personas y las experiencias son de lo que trata la vida.',
+      ],
+    },
+    skills: {
+      id: 'habilidades',
+      title: 'Mis Habilidades',
+      list: [
+        'Desarrollar páginas web o aplicaciones web responsivas con un alto nivel de detalle en diseño y experiencia de usuario.',
+        'Usar APIs para mostrar y cambiar información en funciones de acuerdo con la lógica del negocio utilizando el storytelling.',
+        'Optimizar el rendimiento para reducir el tiempo de carga y mejorar la experiencia del usuario.',
+        'Garantizar una gran accesibilidad en las funciones para lectores de pantalla y navegación por teclado.',
+        'Desarrollar código reutilizable y de calidad y su documentación técnica.',
+      ],
     },
     education: {
       id: 'estudios',
       title: 'En dónde he estudiado',
       schools: [
-        {
-          name: 'Universidad TecMilenio',
-          career: [
-            {
-              title: 'Asociado en Desarrollo de Software',
-              start_date: 'Mayo 2025',
-              end_date: 'Actualidad',
-              description: [
-                'Actualmente cursando una carrera universitaria en la que estoy aprendiendo sobre desarrollo web, metodologías, ingeniería de software, ciencia de datos, redes de internet, desarrollo móvil, DevOps, ciberseguridad y emprendimiento. 🎓',
-              ],
-            },
-          ],
-        },
         {
           name: 'Platzi y Platzi Master',
           career: [
@@ -685,7 +711,7 @@ export const translations = {
           name: 'Rick and Morty',
           description:
             'Este proyecto lo realicé solicitando datos de la API de Rick and Morty, con react, typescript, y usando las mejores prácticas y técnicas de optimización.',
-          link: 'https://rickandmorty.brandonargel.me/',
+          link: 'https://rickandmorty.brandonargel.com/',
           github: 'https://github.com/BrandonArgel/rick-and-morty',
           image: 'rickAndMorty',
         },
@@ -693,7 +719,7 @@ export const translations = {
           name: 'Perfil de GitHub',
           description:
             'Desarrollé este proyecto mientras estaba aprendiendo Material UI, consumiendo la API de GitHub para obtener la información de los usuarios y los repositorios.',
-          link: 'https://githubprofile.brandonargel.me/',
+          link: 'https://githubprofile.brandonargel.com/',
           github: 'https://github.com/BrandonArgel/github-profile',
           image: 'githubProfile',
         },
@@ -708,7 +734,7 @@ export const translations = {
           name: 'ToDo App',
           description:
             'Este es un proyecto que parece bastante simple, pero tiene muchas características, como: modo oscuro/claro, uso de almacenamiento local, una barra de búsqueda, arrastrar y soltar, y fue desarrollado con React Sass y TypeScript.',
-          link: 'http://todoapp.brandonargel.me/',
+          link: 'http://todoapp.brandonargel.com/',
           github: 'https://github.com/BrandonArgel/todo-app/',
           image: 'todoApp',
         },
@@ -857,13 +883,18 @@ export const translations = {
       title: "Salut! Je m'appelle",
       presentation: {
         animated: 'Brandon Argel',
-        do: 'Je construis des applications web',
+        connector: 'et je ',
+        do: [
+          'construis des applications évolutives',
+          'crée des interfaces intuitives',
+          'développe des logiciels haute performance',
+        ],
       },
       info: {
         firstPart: 'Je suis un',
-        profession: 'Développeur de logiciels',
+        profession: 'Ingénieur Frontend',
         secondPart:
-          ' avec une expérience dans les technologies Frontend telles que HTML, CSS, les préprocesseurs tels que SCSS, JavaScript, TypeScript, Git et GitHub, avec de solides connaissances en conception et création de pages avec React et des bibliothèques telles que Next, Redux, Styled-Components, entre autres.',
+          " avec plus de 5 ans d'expérience dans la construction d'applications web et mobiles évolutives avec React, Next.js, Node.js, NestJS, Express et React Native. Un historique éprouvé d'optimisation des performances et d'accélération des flux de travail grâce à CI/CD et à des améliorations architecturales. Passionné par l'optimisation des performances, les solutions évolutives et l'efficacité des systèmes de bout en bout.",
       },
       buttons: {
         resume: {
@@ -892,38 +923,45 @@ export const translations = {
         past: "Depuis lors, je me suis concentré sur l'apprentissage du développement Web et j'ai eu le privilège de travailler avec des gens incroyables et des entreprises incroyables.",
         main: 'Maintenant, mon enfoque principal est de créer des sites web accessibles, rapides et géniales. Je cherche toujours de nouveaux défis.',
       },
-      technologies: {
-        title:
-          "Voici quelques technologies et outils avec lesquels j'ai travaillé :",
-        list: [
-          'HTML',
-          'CSS & (SCSS)',
-          'JavaScript',
-          'Typescript',
-          'React',
-          'Git & Github',
-          'Figma',
-        ],
-      },
       photo: 'Photo de Brandon Argel',
+    },
+    softSkills: {
+      id: 'soft-skills',
+      title: 'Mes compétences interpersonnelles',
+      list: [
+        'Je recherche de nouveaux points de vue et un espace de travail inclusif grâce à une communication efficace et une écoute active.',
+        "Je donne des retours d'information avec honnêteté et bienveillance, cherchant la meilleure façon d'atteindre les objectifs de l'équipe.",
+        'Je suis implacablement curieux sur de nombreux sujets et cela me pousse à rechercher des solutions créatives et innovantes aux problèmes.',
+        "Je suis une personne très organisée et j'essaie d'atteindre mes objectifs rapidement et efficacement.",
+        'Je suis au niveau C1 en anglais et je suis locuteur natif espagnol.',
+      ],
+    },
+    values: {
+      id: 'valeurs',
+      title: 'Mes valeurs',
+      list: [
+        "N'ayez pas peur de créer, sautez et vous le découvrirez en tombant.",
+        "N'arrête jamais d'apprendre et partage ce que tu apprends.",
+        "Il est interdit d'exclure, la vie est diversifiée et c'est la clé pour grandir.",
+        'Acceptez ce que vous ne pouvez pas contrôler et consacrez du temps et des efforts à ce que vous pouvez.',
+        'Prenez soin de ceux que vous aimez et qui vous importent, les gens et les expériences sont ce dont la vie est faite.',
+      ],
+    },
+    skills: {
+      id: 'habilites',
+      title: 'Mes compétences',
+      list: [
+        "Développer des sites web ou des applications web responsives avec un haut niveau de détail dans la conception et l'expérience utilisateur.",
+        'Utiliser des API pour afficher et modifier des informations dans des fonctionnalités en fonction de la logique métier en utilisant le storytelling.',
+        "Optimiser les performances pour réduire le temps de chargement et améliorer l'expérience utilisateur.",
+        "Garantir une grande accessibilité dans les fonctionnalités pour les lecteurs d'écran et la navigation au clavier.",
+        'Développer un code réutilisable et de qualité ainsi que sa documentation technique.',
+      ],
     },
     education: {
       id: 'etudes',
       title: 'Où ai-je étudié ?',
       schools: [
-        {
-          name: 'Universidad TecMilenio',
-          career: [
-            {
-              title: 'Associé en Développement de Logiciels',
-              start_date: 'Mai 2025',
-              end_date: "Aujourd'hui",
-              description: [
-                "Actuellement étudiant dans une université où j'apprends le développement web, les méthodologies, l'ingénierie logicielle, la science des données, les réseaux Internet, le développement mobile, DevOps, la cybersécurité et l'entrepreneuriat. 🎓",
-              ],
-            },
-          ],
-        },
         {
           name: 'Platzi & Platzi Master',
           career: [
@@ -1089,7 +1127,7 @@ export const translations = {
           name: 'Rick and Morty',
           description:
             "J'ai réalisé ce projet en demandant des données à l'API Rick et Morty, avec réaction, tapuscrit et en utilisant les meilleures pratiques et techniques d'optimisation.",
-          link: 'https://rickandmorty.brandonargel.me/',
+          link: 'https://rickandmorty.brandonargel.com/',
           github: 'https://github.com/BrandonArgel/rick-and-morty',
           image: 'rickAndMorty',
         },
@@ -1097,7 +1135,7 @@ export const translations = {
           name: 'Profil GitHub',
           description:
             "J'ai développé ce projet pendant que j'apprenais Material UI, en utilisant l'API GitHub pour obtenir des informations sur l'utilisateur et le référentiel.",
-          link: 'https://githubprofile.brandonargel.me/',
+          link: 'https://githubprofile.brandonargel.com/',
           github: 'https://github.com/BrandonArgel/github-profile',
           image: 'githubProfile',
         },
@@ -1112,7 +1150,7 @@ export const translations = {
           name: 'ToDo App',
           description:
             "C'est un projet qui semble assez simple, mais il a beaucoup de fonctionnalités, comme : le mode sombre/clair, l'utilisation du stockage local, une barre de recherche, le glisser-déposer, et il a été développé avec React Sass et TypeScript.",
-          link: 'http://todoapp.brandonargel.me/',
+          link: 'http://todoapp.brandonargel.com/',
           github: 'https://github.com/BrandonArgel/todo-app/',
           image: 'todoApp',
         },

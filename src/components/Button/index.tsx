@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { createElement } from 'react';
 import styles from './Button.module.scss';
 
 type size = 'small' | 'medium' | 'large';
@@ -15,7 +15,7 @@ interface ButtonProps {
   [key: string]: any;
 }
 
-const Button = ({
+export const Button = ({
   active,
   children,
   className = '',
@@ -25,7 +25,7 @@ const Button = ({
   type,
   ...rest
 }: ButtonProps) => {
-  return React.createElement(
+  return createElement(
     link ? 'a' : 'button',
     {
       ...rest,
@@ -46,5 +46,3 @@ const Button = ({
     </>,
   );
 };
-
-export { Button };

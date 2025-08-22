@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useRef } from 'react';
 import { useShowIn } from '@hooks';
 import { Button } from '@components';
 import { CardImages } from '@utils';
@@ -12,10 +12,10 @@ interface CardProps {
   image: string;
 }
 
-const Card = ({ name, description, link, github, image }: CardProps) => {
-  const cardRef = React.useRef<HTMLDivElement>(null);
+export const Card = ({ name, description, link, github, image }: CardProps) => {
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (cardRef.current) {
       useShowIn(cardRef);
     }
@@ -76,5 +76,3 @@ const Card = ({ name, description, link, github, image }: CardProps) => {
     </div>
   );
 };
-
-export { Card };

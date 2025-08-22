@@ -1,0 +1,130 @@
+@use '@styles/variables.scss' as *;
+
+.hero {
+  align-content: flex-start;
+  margin-bottom: 5rem;
+
+  &__container {
+    &:hover {
+      .hero__presentation_info,
+      .hero__presentation_do {
+        color: $light-text-color;
+      }
+    }
+
+    margin-bottom: 5rem;
+  }
+
+  &__title {
+    animation: show-in 0.5s ease-in-out 0.5s forwards;
+    color: $main-color;
+    font-size: 1.6rem;
+    font-weight: normal;
+    line-height: 2rem;
+    opacity: 0;
+    will-change: opacity, transform;
+  }
+
+  &__presentation {
+    animation: show-in 0.5s ease-in-out 0.6s forwards;
+    color: $text-color;
+    opacity: 0;
+    padding-bottom: 2rem;
+    text-decoration: none;
+    width: fit-content;
+    will-change: opacity, transform;
+
+    &_do {
+      animation: show-in 0.5s ease-in-out 0.7s forwards;
+      color: $text-color;
+      font-size: clamp(2.5rem, 4vw, 5rem);
+      font-weight: bold;
+      line-height: 110%;
+      opacity: 0;
+      width: fit-content;
+      will-change: opacity, transform;
+    }
+
+    &_animated {
+      color: $light-text-color;
+      display: flex;
+      font-size: clamp(2.5rem, 4vw, 5rem);
+      font-weight: bold;
+      line-height: 110%;
+      overflow: hidden;
+      text-decoration: none;
+
+      div {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        transition: 0.3s ease all;
+
+        &.animated {
+          transform: translateY(-10rem);
+        }
+      }
+
+      .secondLine {
+        position: absolute;
+        top: 10rem;
+        color: $main-text-color;
+      }
+    }
+  }
+
+  &__presentation_info {
+    animation: show-in 0.5s ease-in-out 0.8s forwards;
+    color: $text-color;
+    font-size: $fz-lg;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1);
+    visibility: visible;
+    will-change: opacity, transform;
+
+    span {
+      color: $main-color;
+    }
+  }
+
+  &__buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 50rem;
+
+    &:first-child {
+      animation: show-in 0.5s ease-in-out 0.9s forwards;
+      opacity: 0;
+      transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1);
+      visibility: visible;
+      will-change: opacity, transform;
+    }
+
+    &:last-child {
+      animation: show-in 0.5s ease-in-out 1s forwards;
+      opacity: 0;
+      transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1);
+      visibility: visible;
+      will-change: opacity, transform;
+    }
+  }
+
+  @keyframes show-in {
+    from {
+      opacity: 0;
+      transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1);
+      visibility: visible;
+    }
+
+    to {
+      visibility: visible;
+      opacity: 1;
+      transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+      transition:
+        opacity 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s,
+        transform 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s;
+    }
+  }
+}
