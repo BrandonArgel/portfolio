@@ -53,10 +53,9 @@ export const translations = {
         animated: 'Brandon Argel',
         connector: 'and I ',
         do: [
+          'develop high performance software',
+          'create pixel perfect experiences',
           'build scalable applications',
-          'create intuitive interfaces',
-          'develop high-performance software',
-          '',
         ],
       },
       info: {
@@ -468,10 +467,9 @@ export const translations = {
         animated: 'Brandon Argel',
         connector: 'y yo ',
         do: [
-          'construyo aplicaciones escalables',
-          'creo interfaces intuitivas',
           'desarrollo software de alto rendimiento',
-          '',
+          'creo experiencias precisas',
+          'construyo aplicaciones escalables',
         ],
       },
       info: {
@@ -885,9 +883,9 @@ export const translations = {
         animated: 'Brandon Argel',
         connector: 'et je ',
         do: [
-          'construis des applications évolutives',
-          'crée des interfaces intuitives',
           'développe des logiciels haute performance',
+          'crée des expériences précises',
+          'construit des applications évolutives',
         ],
       },
       info: {
