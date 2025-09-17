@@ -16,8 +16,11 @@ const observerOptions = {
 
 const observer = new IntersectionObserver(showIn, observerOptions);
 
-const useShowIn = (ref: RefObject<HTMLElement>) => {
-  observer.observe(ref.current as HTMLElement);
+const useShowIn = (ref: RefObject<HTMLDivElement | null>) => {
+  if (ref.current) {
+    observer.observe(ref.current);
+  }
 };
+
 
 export { useShowIn };
