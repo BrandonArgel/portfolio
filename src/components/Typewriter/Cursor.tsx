@@ -1,4 +1,4 @@
-import { ReactNode, memo } from 'react';
+import { JSX, ReactNode, memo } from 'react';
 import styles from './Cursor.module.scss';
 
 export type CursorProps = {

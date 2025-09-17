@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import { TypewriterProps, useTypewriter } from '@hooks/useTypewriter';
 import { Cursor, CursorProps } from './Cursor';
 
