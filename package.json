@@ -28,7 +28,7 @@
     "prettier": "3.4.1",
     "sass": "^1.81.0",
     "typescript": "^5.7.2",
-    "vite": "^7.0.7"
+    "vite": "^7.1.5"
   },
   "engines": {
     "node": ">=20.0.0"
