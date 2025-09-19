@@ -13,6 +13,11 @@ import { KEY_CODES } from '@utils';
 import { Logo } from '@components';
 import styles from './Header.module.scss';
 
+interface LanguageOption {
+  name: string;
+  language: string;
+}
+
 interface NavItemProps {
   name: string;
   hash: string;
@@ -31,9 +36,7 @@ export const Header = () => {
   const asideRef = useRef<HTMLDivElement>(
     null,
   ) as MutableRefObject<HTMLDivElement>;
-  const scrollDirection = useScrollDirection({
-    initialDirection: 'down',
-  });
+  const scrollDirection = useScrollDirection({ initialDirection: 'down' });
   const [scrolledToTop, setScrolledToTop] = useState(true);
 
   type Focusables = HTMLButtonElement | HTMLAnchorElement;
@@ -129,11 +132,13 @@ export const Header = () => {
               </li>
             ))}
             <li style={{ animationDelay: `${header.nav.length * 0.1 + 0.1}s` }}>
-              <Select
+              <Select<LanguageOption>
                 title={header.select.title}
                 options={header.select.options}
-                setValue={setLanguage}
                 value={language}
+                setValue={setLanguage}
+                getLabel={(option: LanguageOption) => option.name}
+                getValue={(option: LanguageOption) => option.language}
               />
             </li>
           </ul>
@@ -194,11 +199,14 @@ export const Header = () => {
                 </li>
               ))}
               <li>
-                <Select
+                <Select<LanguageOption>
                   title={header.select.title}
                   options={header.select.options}
-                  setValue={setLanguage}
                   value={language}
+                  setValue={setLanguage}
+                  getLabel={(option: LanguageOption) => option.name}
+                  getValue={(option: LanguageOption) => option.language}
+                  aria-hidden={!isOpen}
                   tabIndex={isOpen ? 1 : -1}
                 />
               </li>
