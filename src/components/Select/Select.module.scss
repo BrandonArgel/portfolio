@@ -10,7 +10,7 @@
 
   &::after {
     color: $main-color;
-    content: '\25BC';
+    content: '\25BC'; /* Flecha hacia abajo */
     font-weight: bold;
     pointer-events: none;
     position: absolute;
@@ -18,13 +18,13 @@
     transition: transform 0.2s;
   }
 
+  &.open::after {
+    transform: rotate(180deg); /* Flecha hacia arriba */
+  }
+
   &:focus-within {
     outline: 2px dashed $main-color;
     outline-offset: 3px;
-
-    &::after {
-      transform: rotate(180deg);
-    }
   }
 
   &__select {
