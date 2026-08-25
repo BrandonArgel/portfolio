@@ -1,0 +1,31 @@
+'use client'
+
+import { ActionButton } from '@/components/ui/action-button'
+import {
+  SUPPORTED_OAUTH_PROVIDER_DETAILS,
+  SUPPORTED_OAUTH_PROVIDERS,
+} from '@/config/o-auth-providers'
+import { signIn } from '@/lib/auth/auth-client'
+
+export function SocialAuthButtons() {
+  return SUPPORTED_OAUTH_PROVIDERS.map((provider) => {
+    const Icon = SUPPORTED_OAUTH_PROVIDER_DETAILS[provider].Icon
+
+    return (
+      <ActionButton
+        key={provider}
+        action={() => {
+          return signIn.social({
+            provider,
+            callbackURL: '/',
+          })
+        }}
+        variant="outline"
+        className="w-full"
+      >
+        <Icon />
+        {SUPPORTED_OAUTH_PROVIDER_DETAILS[provider].name}
+      </ActionButton>
+    )
+  })
+}
