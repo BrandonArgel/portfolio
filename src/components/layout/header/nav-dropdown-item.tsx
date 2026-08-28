@@ -1,10 +1,9 @@
 'use client'
 
 import { cva, type VariantProps } from 'class-variance-authority'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { NavigationMenuLink } from '@/components/ui/navigation-menu'
 import type { NavSectionColor } from '@/config/nav'
+import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
 const containerVariants = cva(

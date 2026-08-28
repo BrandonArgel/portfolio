@@ -1,24 +1,27 @@
 import { headers } from 'next/headers'
-import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 import { Logo } from '@/components/shared/logo'
+import { Link } from '@/i18n/navigation'
 import { auth } from '@/lib/auth/auth'
 import { CommandPalette } from '../command-palette'
-import { AuthActions } from './auth-actions'
 import { DesktopNav } from './desktop-nav'
 import { MobileNav } from './mobile-nav'
+import { UserPreferencesMenu } from './user-menu'
 
 export async function Header() {
   const session = await auth.api.getSession({
     headers: await headers(),
   })
 
+  const t = await getTranslations('components.header')
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-md transition-colors supports-backdrop-filter:bg-background/60">
-      <div className="section-container max-w-7xl h-16 flex items-center justify-between gap-4">
+      <div className="section-container h-16 flex items-center justify-between gap-4">
         <Link
           href="/"
           className="shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg transition-transform active:scale-95"
-          aria-label="Go to home page"
+          aria-label={t('go_to_home')}
         >
           <Logo />
         </Link>
@@ -27,7 +30,7 @@ export async function Header() {
 
         <div className="flex items-center gap-2 sm:gap-3">
           <CommandPalette />
-          <AuthActions className="hidden xl:flex" initialSession={session} />
+          <UserPreferencesMenu initialSession={session} className="hidden xl:inline-flex" />
           <MobileNav className="inline-flex xl:hidden" />
         </div>
       </div>

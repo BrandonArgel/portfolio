@@ -4,7 +4,7 @@ import { auth } from '@/lib/auth/auth' // Tu configuración de Better Auth
 
 // 1. Cliente base (sin protección extra, útil para validación de Zod)
 export const actionClient = createSafeActionClient({
-  handleReturnedServerError(e) {
+  handleServerError(e: Error) {
     // Manejo de errores amigable
     if (e instanceof Error) return e.message
     return DEFAULT_SERVER_ERROR_MESSAGE

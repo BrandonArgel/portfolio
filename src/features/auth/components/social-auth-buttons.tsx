@@ -14,11 +14,14 @@ export function SocialAuthButtons() {
     return (
       <ActionButton
         key={provider}
-        action={() => {
-          return signIn.social({
+        action={async () => {
+          const res = await signIn.social({
             provider,
             callbackURL: '/',
           })
+          if (res.error) {
+            return { error: true, message: res.error.message || 'Authentication failed' }
+          }
         }}
         variant="outline"
         className="w-full"

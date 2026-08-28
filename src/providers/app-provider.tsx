@@ -1,5 +1,7 @@
 'use client'
 
+import type { Locale, Messages } from 'next-intl'
+import { NextIntlClientProvider } from 'next-intl'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { NetworkNotifier } from './network-notifier'
 import { ThemeProvider } from './theme-provider'
@@ -7,14 +9,18 @@ import { ToasterProvider } from './toast-provider'
 
 interface AppProviderProps {
   children: React.ReactNode
+  locale: Locale
+  messages: Messages
 }
 
-export function AppProvider({ children }: AppProviderProps) {
+export function AppProvider({ children, locale, messages }: AppProviderProps) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableSystem>
-      <ToasterProvider />
-      <NetworkNotifier />
-      <TooltipProvider delay={0}>{children}</TooltipProvider>
-    </ThemeProvider>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ToasterProvider />
+        <NetworkNotifier />
+        <TooltipProvider delay={0}>{children}</TooltipProvider>
+      </ThemeProvider>
+    </NextIntlClientProvider>
   )
 }

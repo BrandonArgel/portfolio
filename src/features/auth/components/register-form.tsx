@@ -1,8 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { sileo } from 'sileo'
 import { ActionButton } from '@/components/ui/action-button'
@@ -12,6 +11,7 @@ import { FieldGroup } from '@/components/ui/field'
 import { Marker, MarkerContent } from '@/components/ui/marker'
 import { PasswordInputStrengthChecker } from '@/features/auth/components/password-input'
 import { registerUserService } from '@/features/auth/services/auth.service'
+import { Link, useRouter } from '@/i18n/navigation'
 import { type SignUpForm, signUpSchema } from '../schemas/auth.schema'
 import { ControlledCheckbox } from './controlled-checkbox'
 import { ControlledInput } from './controlled-input'
@@ -19,6 +19,8 @@ import { SocialAuthButtons } from './social-auth-buttons'
 
 export function RegisterForm() {
   const router = useRouter()
+  const t = useTranslations('auth.register')
+  const tGlobal = useTranslations('common')
   const {
     control,
     handleSubmit,
@@ -41,8 +43,8 @@ export function RegisterForm() {
 
     if (err === null) {
       sileo.success({
-        title: 'Account created!',
-        description: `Welcome to the platform${user.name ? `, ${user.name}` : ''}.`,
+        title: t('account_created_title'),
+        description: t('account_created_description', { name: user.name || 'empty' }),
       })
       router.push('/')
       router.refresh()
@@ -52,34 +54,34 @@ export function RegisterForm() {
     switch (err.reason) {
       case 'USER_ALREADY_EXISTS':
         sileo.error({
-          title: 'Email in use',
-          description: 'This email is already registered. Please log in.',
+          title: t('email_in_use_title'),
+          description: t('email_in_use_description'),
         })
         break
       case 'WEAK_PASSWORD':
         sileo.error({
-          title: 'Invalid Password',
-          description: 'Please ensure your password meets all requirements.',
+          title: t('invalid_password_title'),
+          description: t('invalid_password_description'),
         })
         break
       case 'AUTO_LOGIN_FAILED':
         sileo.warning({
-          title: 'Partial Success',
-          description: 'Account created successfully, but please log in manually.',
+          title: t('partial_success_title'),
+          description: t('partial_success_description'),
         })
         router.push('/login')
         break
       case 'UNKNOWN_ERROR':
         sileo.error({
-          title: 'Registration Failed',
+          title: t('registration_failed_title'),
           description: err.details,
         })
         break
       default:
         err satisfies never
         sileo.error({
-          title: 'Unexpected Error',
-          description: 'An unexpected error occurred. Please try again.',
+          title: tGlobal('errors.unexpected_title'),
+          description: tGlobal('errors.unexpected_description'),
         })
     }
   }
@@ -87,7 +89,7 @@ export function RegisterForm() {
   return (
     <Card className="w-full max-w-xl m-6">
       <CardHeader className="text-2xl font-bold">
-        <CardTitle>Sign In</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
       </CardHeader>
       <CardContent>
         <form id="sign-up" onSubmit={handleSubmit(handleSignUp)}>
@@ -95,31 +97,31 @@ export function RegisterForm() {
             <ControlledInput
               control={control}
               name="name"
-              label="Name"
-              placeholder="Name"
+              label={tGlobal('labels.name')}
+              placeholder={tGlobal('placeholders.name')}
               autoComplete="name"
             />
             <ControlledInput
               control={control}
               name="email"
-              label="Email"
+              label={tGlobal('labels.email')}
               type="email"
-              placeholder="user@domain.com"
+              placeholder={tGlobal('placeholders.email')}
               autoComplete="email"
             />
             <ControlledInput
               control={control}
               name="password"
-              label="Password"
-              placeholder="****************"
+              label={tGlobal('labels.password')}
+              placeholder={tGlobal('placeholders.password')}
               autoComplete="new-password"
               isPassword
             />
             <ControlledInput
               control={control}
               name="confirmPassword"
-              label="Confirm Password"
-              placeholder="****************"
+              label={tGlobal('labels.confirm_password')}
+              placeholder={tGlobal('placeholders.password')}
               autoComplete="new-password"
               isPassword
             >
@@ -127,21 +129,21 @@ export function RegisterForm() {
             </ControlledInput>
             <ControlledCheckbox control={control} name="acceptTerms">
               <span className="text-sm text-muted-foreground">
-                I agree to the{' '}
+                {t('accept_terms')}{' '}
                 <Link
                   href="/legal/terms"
                   className="text-primary underline-offset-4 hover:underline"
                   target="_blank"
                 >
-                  Terms of Service
+                  {t('terms_of_service')}
                 </Link>{' '}
-                and{' '}
+                {t('and')}{' '}
                 <Link
                   href="/legal/privacy-policy"
                   className="text-primary underline-offset-4 hover:underline"
                   target="_blank"
                 >
-                  Privacy Policy
+                  {t('privacy_policy')}
                 </Link>
                 .
               </span>
@@ -150,21 +152,21 @@ export function RegisterForm() {
             <ActionButton
               type="submit"
               className="mt-4"
-              loadingText="Signing up"
+              loadingText={tGlobal('states.signing_up')}
               isLoading={isSubmitting}
               disabled={isSubmitting}
             >
-              Sign Up
+              {tGlobal('actions.sign_up')}
             </ActionButton>
           </FieldGroup>
         </form>
         <LinkButton className="mt-12 w-full" href="/login" variant="outline">
-          I already have an account
+          {t('already_have_account')}
         </LinkButton>
       </CardContent>
 
       <Marker variant="separator">
-        <MarkerContent>Or</MarkerContent>
+        <MarkerContent>{tGlobal('labels.or')}</MarkerContent>
       </Marker>
 
       <CardFooter className="grid grid-cols-1 gap-3 border-t-0 bg-inherit sm:grid-cols-2">

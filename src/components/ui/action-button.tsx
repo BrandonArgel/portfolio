@@ -25,7 +25,7 @@ export function ActionButton({
   children,
   ...props
 }: ComponentProps<typeof Button> & {
-  action?: () => Promise<{ error: boolean; message?: string } | void | any>
+  action?: () => Promise<{ error: boolean; message?: string } | Error | undefined>
   isLoading?: boolean
   loadingText?: string
   requireAreYouSure?: boolean
@@ -41,9 +41,15 @@ export function ActionButton({
     setInternalIsLoading(true)
     try {
       const data = await action()
-      if (data?.error) sileo.error({ title: data.message ?? 'Error' })
+
+      if (data instanceof Error) {
+        sileo.error({ title: 'An unexpected error occurred.', description: data.message })
+      } else if (data?.error) {
+        sileo.error({ title: data.message ?? 'Error' })
+      }
     } catch (error) {
-      sileo.error({ title: 'An unexpected error occurred.' })
+      const message = error instanceof Error ? error.message : 'Unknown error'
+      sileo.error({ title: 'An unexpected error occurred.', description: message })
     } finally {
       setInternalIsLoading(false)
     }

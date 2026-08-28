@@ -1,5 +1,6 @@
 @utility section-container {
   width: 100%;
+  max-width: var(--container-7xl, 80rem);
   margin-inline: auto;
   padding-inline: clamp(1rem, 0.4545rem + 2.7273vw, 2.5rem);
 }

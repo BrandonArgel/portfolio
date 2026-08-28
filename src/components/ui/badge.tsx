@@ -23,8 +23,10 @@ const badgeVariants = cva(
         softPurple:
           'border-transparent bg-purple-50 text-purple-700 dark:bg-purple-950 dark:text-purple-300',
         softRed: 'border-transparent bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300',
-        softOrange: 'border-transparent bg-orange-50 text-orange-700 dark:bg-orange-950 dark:text-orange-300',
-        softYellow: 'border-transparent bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300',
+        softOrange:
+          'border-transparent bg-orange-50 text-orange-700 dark:bg-orange-950 dark:text-orange-300',
+        softYellow:
+          'border-transparent bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300',
 
         ghost: 'hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50',
         link: 'text-primary underline-offset-4 hover:underline',

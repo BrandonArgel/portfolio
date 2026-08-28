@@ -1,0 +1,335 @@
+{
+  "common": {
+    "actions": {
+      "accept": "Aceptar",
+      "search": "Buscar",
+      "sign_in": "Iniciar Sesión",
+      "sign_up": "Registrarse",
+      "sign_out": "Cerrar Sesión",
+      "learn_more": "Más información"
+    },
+    "placeholders": {
+      "email": "usuario@dominio.com",
+      "password": "************",
+      "name": "Nombre"
+    },
+    "errors": {
+      "unexpected_title": "Error Inesperado",
+      "unexpected_description": "Ocurrió un error inesperado. Por favor, intenta de nuevo más tarde.",
+      "system_title": "Error del Sistema"
+    },
+    "labels": {
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "confirm_password": "Confirmar Contraseña",
+      "name": "Nombre",
+      "remember_me": "Recordarme",
+      "or": "O",
+      "admin": "Admin",
+      "user": "Usuario",
+      "dashboard": "Panel",
+      "navigation": "Navegación",
+      "active": "Activo",
+      "theme": "Tema",
+      "interface_theme": "Tema de Interfaz",
+      "language": "Idioma"
+    },
+    "states": {
+      "signing_in": "Iniciando sesión",
+      "signing_up": "Registrando",
+      "signing_out": "Cerrando sesión...",
+      "no_results": "No se encontraron resultados."
+    }
+  },
+  "components": {
+    "header": {
+      "go_to_home": "Ir a la página principal",
+      "open_nav_menu": "Abrir menú de navegación",
+      "open_user_menu": "Abrir menú de usuario",
+      "open_search": "Abrir paleta de búsqueda"
+    },
+    "nav": {
+      "home": "Inicio",
+      "about_section": "Sobre mí",
+      "about": "Acerca de mí",
+      "about_description": "Conoce más sobre mi trayectoria y experiencia",
+      "resume": "Currículum",
+      "resume_description": "Consulta mi experiencia profesional y habilidades",
+      "contact": "Contacto",
+      "contact_description": "Ponte en contacto conmigo para colaboraciones",
+      "content_section": "Contenido",
+      "blog": "Blog",
+      "blog_description": "Lee artículos sobre programación y tecnología",
+      "courses": "Cursos",
+      "courses_description": "Explora mis cursos educativos",
+      "resources_section": "Recursos",
+      "snippets": "Fragmentos de código",
+      "snippets_description": "Fragmentos de código útiles y plantillas iniciales",
+      "tools": "Herramientas",
+      "tools_description": "Herramientas y software seleccionados para desarrolladores",
+      "services_section": "Servicios",
+      "services": "Servicios",
+      "web_development": "Desarrollo Web",
+      "web_development_description": "Componentes UI modernos y responsivos y aplicaciones web",
+      "full_stack_development": "Arquitectura Full Stack",
+      "full_stack_development_description": "Arquitectura full stack de extremo a extremo y APIs"
+    },
+    "theme_selector": {
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Sistema"
+    },
+    "cookie_banner": {
+      "message": "Usamos cookies para personalizar el contenido y mejorar tu experiencia. Lee nuestra",
+      "privacy_policy": "Política de Privacidad",
+      "close_banner": "Cerrar banner"
+    },
+    "command_palette": {
+      "title": "Buscar documentación y navegación",
+      "description": "Escribe un comando o busca páginas",
+      "placeholder": "Buscar documentación y páginas...",
+      "quick_actions": "Acciones rápidas",
+      "toggle_theme": "Cambiar tema",
+      "go_to_page": "Ir a la Página",
+      "menu": "Menú",
+      "toggle_theme_shortcut": "Cambiar Tema",
+      "close": "Cerrar"
+    },
+    "locale_switcher": {
+      "en": "English",
+      "es": "Español"
+    },
+    "footer": {
+      "bio": "Desarrollador Full Stack especializado en React, Next.js y TypeScript, dedicado a crear aplicaciones web de alto rendimiento y experiencias de usuario excepcionales.",
+      "columns": {
+        "platform": "Plataforma",
+        "resources": "Recursos",
+        "content": "Contenido"
+      },
+      "spotify": {
+        "now_playing": "Reproduciendo",
+        "on_spotify": "en Spotify",
+        "not_playing": "Sin reproducción",
+        "idle": "Spotify en pausa"
+      },
+      "newsletter": {
+        "title": "Boletín",
+        "description": "Recibe actualizaciones de nuevo contenido y consejos.",
+        "placeholder": "Tu correo electrónico",
+        "button": "Suscribirse",
+        "disclaimer": "Respeto tu privacidad. Cancela tu suscripción en cualquier momento."
+      },
+      "legal": {
+        "copyright": "© 2026 Brandon Argel. Todos los derechos reservados. Hecho con 💙",
+        "privacy": "Política de Privacidad",
+        "terms": "Términos de Servicio",
+        "cookies": "Política de Cookies"
+      }
+    }
+  },
+  "hero": {
+    "badge": "Hola, soy Brandon Argel",
+    "title_line1": "Empoderando",
+    "title_line2": "Mentes e Inspirando el Cambio",
+    "description": "Desarrollador Full Stack especializado en React, Next.js y TypeScript, dedicado a crear aplicaciones web de alto rendimiento, arquitecturas backend escalables y experiencias de usuario excepcionales.",
+    "skills": [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Node.js",
+      "Tailwind CSS",
+      "PostgreSQL",
+      "Drizzle ORM"
+    ],
+    "read_blog": "Leer Blog",
+    "view_resume": "Ver Currículum",
+    "features": {
+      "frontend_development": {
+        "title": "Especialista en React y Next.js",
+        "description": "Construyendo interfaces de usuario modernas, accesibles y de alto rendimiento con el ecosistema de React."
+      },
+      "backend_architecture": {
+        "title": "Arquitectura Backend y APIs",
+        "description": "Desarrollando APIs tipadas REST y GraphQL, Server Actions y flujos de trabajo robustos en el servidor."
+      },
+      "full_stack_solutions": {
+        "title": "Ingeniería Full Stack",
+        "description": "Diseñando aplicaciones web integrales con integración de bases de datos fluida y sincronización de estado."
+      }
+    },
+    "social": {
+      "linkedin": {
+        "label": "Visita mi perfil de LinkedIn"
+      },
+      "github": {
+        "label": "Visita mis repositorios de GitHub"
+      },
+      "facebook": {
+        "label": "Visita mi perfil de Facebook"
+      },
+      "instagram": {
+        "label": "Visita mi perfil de Instagram"
+      },
+      "youtube": {
+        "label": "Visita mi canal de YouTube"
+      },
+      "email": {
+        "label": "Envíame un correo electrónico"
+      },
+      "whatsapp": {
+        "label": "Envíame un mensaje de WhatsApp"
+      }
+    }
+  },
+  "services": {
+    "badge": "Experiencia",
+    "title_line1": "Habilidades y",
+    "title_line2": "Servicios Ofrecidos",
+    "description": "Experiencia especializada en el ecosistema moderno de desarrollo web full stack para crear productos digitales escalables, responsivos y robustos.",
+    "categories": {
+      "all": "Todos los Servicios",
+      "frontend": "Frontend y UI",
+      "backend": "Backend y APIs",
+      "cloud": "Full Stack y Cloud"
+    },
+    "items": {
+      "frontend_development": {
+        "title": "Desarrollo Frontend",
+        "description": "Interfaces de usuario modernas, responsivas y accesibles construidas con React, Next.js, TypeScript y Tailwind CSS.",
+        "tags": ["React", "Next.js", "TypeScript", "Tailwind CSS", "Gestión de Estado"]
+      },
+      "backend_development": {
+        "title": "Desarrollo Backend y APIs",
+        "description": "Arquitectura robusta del lado del servidor, APIs RESTful, Server Actions y servicios construidos con Node.js y TypeScript.",
+        "tags": ["Node.js", "Server Actions", "APIs REST", "GraphQL", "Type Safety"]
+      },
+      "database_architecture": {
+        "title": "Arquitectura de Bases de Datos y ORM",
+        "description": "Modelado de esquemas relacionales, optimización de consultas, migraciones e integración segura con ORMs.",
+        "tags": ["PostgreSQL", "SQLite / LibSQL", "Drizzle ORM", "Prisma", "Diseño de Esquemas"]
+      },
+      "full_stack_apps": {
+        "title": "Aplicaciones Full Stack",
+        "description": "Aplicaciones web completas con integración cliente-servidor fluida, autenticación y sincronización de estado.",
+        "tags": ["Next.js App Router", "Better Auth", "React 19", "Type Safety", "Zod"]
+      },
+      "cloud_deployment": {
+        "title": "Despliegue Cloud y CI/CD",
+        "description": "Pipelines de construcción automatizados, entornos en contenedores, funciones edge serverless y alojamiento escalable.",
+        "tags": ["Vercel", "Docker", "AWS", "GitHub Actions", "Edge Compute"]
+      },
+      "performance_seo": {
+        "title": "Optimización de Rendimiento y SEO",
+        "description": "Auditorías de Core Web Vitals, renderizado del lado del servidor (SSR), SEO técnico y caché para máxima velocidad.",
+        "tags": ["Core Web Vitals", "SSR / SSG", "SEO Técnico", "Caché", "Ajuste de Bundle"]
+      }
+    },
+    "cta": {
+      "question": "¿Necesitas una solución personalizada para tus requerimientos específicos?",
+      "action": "Ponte en Contacto"
+    }
+  },
+  "testimonials": {
+    "badge": "Testimonios",
+    "title_line1": "Lo que la Gente",
+    "title_line2": "Dice Sobre Mí",
+    "description": "Opiniones de compañeros de equipo, líderes y clientes que han colaborado conmigo en ingeniería de software y productos digitales.",
+    "items": {
+      "sura_cedeno": {
+        "name": "Sura Cedeño",
+        "role": "Coordinadora y Project Manager",
+        "quote": "Recomiendo ampliamente a Brandon. Es un profesional con una excelente atención al detalle, capaz de perfeccionar cada aspecto de su trabajo. Su habilidad para detectar hasta los errores más pequeños y corregirlos demuestra su compromiso con la calidad y la excelencia. Además, es un verdadero jugador de equipo, colaborando eficazmente con sus compañeros y aportando ideas valiosas a los proyectos. Sus habilidades de trabajo en equipo y su dedicación al refinamiento lo convierten en un activo invaluable para cualquier equipo de desarrollo frontend."
+      },
+      "carlos_cespedes": {
+        "name": "Carlos Céspedes",
+        "role": "Director de Contenido, Marketing y Branding",
+        "quote": "Brandon es un excelente profesional, atento a los detalles, responsable, puntual. Él es una persona dispuesta a aprender, transparente, con la que puedes contar consecuentemente dentro de tu equipo."
+      },
+      "aaron_garibay": {
+        "name": "Aaron Garibay",
+        "role": "Ingeniero de Software",
+        "quote": "Recomiendo ampliamente a Brandon a cualquier equipo que busque un desarrollador altamente calificado, autodidacta y sobresaliente. Se enfoca en entregar resultados y en crear entornos donde todos se sientan libres de participar. Muestra liderazgo, compromiso y un claro entendimiento de cada producto en el que se involucra. Ha sido un placer trabajar con él y estoy seguro de que será un activo increíblemente valioso para cualquier equipo."
+      },
+      "joel_campos": {
+        "name": "Joel Campos",
+        "role": "Product Manager",
+        "quote": "Contratamos a Brandon para construir un panel de administración personalizado para nuestras herramientas internas. Entregó antes de lo previsto, implementó las mejores prácticas y la experiencia de usuario (UI/UX) fue mucho mejor de lo que esperábamos. ¡Altamente recomendado!"
+      }
+    }
+  },
+  "about": {
+    "badge": "Sobre Mí",
+    "title_prefix": "Hola, soy",
+    "name": "Brandon Argel",
+    "bio_paragraph_1": "Soy un desarrollador full stack apasionado y dedicado a crear aplicaciones web de alto rendimiento, arquitecturas backend escalables y experiencias de usuario excepcionales.",
+    "bio_paragraph_2": "Con más de 6 años en la industria tecnológica, colaboro con clientes y equipos a nivel mundial para construir sistemas seguros, tipados y soluciones backend robustas que escalan.",
+    "get_in_touch": "Ponte en Contacto",
+    "download_resume": "Descargar Currículum",
+    "skills_title": "Habilidades y Experiencia",
+    "cards": {
+      "frontend": {
+        "title": "Ingeniería Frontend",
+        "description": "Construyendo interfaces modernas, accesibles y de alto rendimiento con el ecosistema de React.",
+        "skills": [
+          "React y React 19",
+          "Next.js App Router",
+          "TypeScript",
+          "Tailwind CSS",
+          "Gestión de Estado",
+          "Diseño Responsivo y Accesible"
+        ]
+      },
+      "backend": {
+        "title": "Backend y APIs",
+        "description": "Desarrollando aplicaciones y APIs seguras, escalables y resilientes del lado del servidor.",
+        "skills": [
+          "Node.js y Bun",
+          "APIs REST y GraphQL",
+          "Diseño de Bases de Datos (PostgreSQL)",
+          "Drizzle ORM y Prisma",
+          "Server Actions",
+          "Type Safety de Extremo a Extremo"
+        ]
+      },
+      "fullstack": {
+        "title": "Dominio Full Stack",
+        "description": "Diseñando flujos de aplicaciones tipados y arquitectura integral de extremo a extremo.",
+        "skills": [
+          "Arquitectura y Diseño de Sistemas",
+          "Autenticación (Better Auth)",
+          "Manejo de Errores y Resiliencia",
+          "CI/CD y Despliegue Cloud",
+          "Rendimiento y SEO",
+          "Pruebas y Calidad de Código"
+        ]
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar Sesión",
+      "forgot_password": "¿Olvidaste tu contraseña?",
+      "create_account": "Crear nueva cuenta",
+      "welcome_back": "¡Bienvenido de nuevo{name, select, empty {} other {, {name}}}!",
+      "invalid_credentials_title": "Error al Iniciar Sesión",
+      "invalid_credentials_description": "Correo o contraseña inválidos. Por favor, verifica tus credenciales."
+    },
+    "register": {
+      "title": "Registrarse",
+      "accept_terms": "Acepto los",
+      "terms_of_service": "Términos de Servicio",
+      "and": "y",
+      "privacy_policy": "Política de Privacidad",
+      "already_have_account": "Ya tengo una cuenta",
+      "account_created_title": "¡Cuenta creada!",
+      "account_created_description": "Bienvenido a la plataforma{name, select, empty {} other {, {name}}}.",
+      "email_in_use_title": "Correo en uso",
+      "email_in_use_description": "Este correo ya está registrado. Por favor, inicia sesión.",
+      "invalid_password_title": "Contraseña Inválida",
+      "invalid_password_description": "Asegúrate de que tu contraseña cumpla con todos los requisitos.",
+      "partial_success_title": "Éxito Parcial",
+      "partial_success_description": "Cuenta creada exitosamente, pero por favor inicia sesión manualmente.",
+      "registration_failed_title": "Error al Registrarse"
+    }
+  }
+}

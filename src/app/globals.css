@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "tailwind-animations";
 @import "shadcn/tailwind.css";
 @import "../styles/typeset.css";
 @import "../styles/utilities.css";
@@ -48,12 +49,13 @@
   --radius-4xl: calc(var(--radius) * 2.6);
   --font-heading: var(--font-sans);
   --text-fluid-title: clamp(var(--text-3xl), 1.19rem + 3.41vw, var(--text-6xl));
+  --text-fluid-subtitle: clamp(var(--text-2xl), 0.95rem + 2.73vw, var(--text-5xl));
 }
 
 :root {
   --primary: oklch(0.488 0.243 264.376);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: oklch(0.7425 0.1975 295.1302);
   --secondary-foreground: oklch(0.205 0 0);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -88,11 +90,11 @@
 .dark {
   --primary: oklch(0.588 0.243 264.376);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.269 0 0);
+  --secondary: oklch(0.5425 0.1752 296.251);
   --secondary-foreground: oklch(0.985 0 0);
   --background: oklch(0.1298 0.0425 265.13);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  --card: #0f172b;
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
@@ -132,9 +134,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }

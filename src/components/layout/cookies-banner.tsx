@@ -1,13 +1,16 @@
 'use client'
 
 import { Cookie, X } from 'lucide-react'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import { setCookieConsent } from '@/actions/cookies'
 import { Button } from '@/components/ui/button'
+import { Link } from '@/i18n/navigation'
 
 export function CookieBanner() {
   const [isVisible, setIsVisible] = useState(true)
+  const t = useTranslations('components.cookie_banner')
+  const tGlobal = useTranslations('common.actions')
 
   const handleAccept = async () => {
     setIsVisible(false)
@@ -28,9 +31,9 @@ export function CookieBanner() {
       <div className="flex items-start gap-3">
         <Cookie className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
         <p className="text-sm text-muted-foreground">
-          We use cookies to personalize content and improve your experience. Read our{' '}
+          {t('message')}{' '}
           <Link href="/legal/privacy-policy" className="underline hover:text-primary">
-            Privacy Policy
+            {t('privacy_policy')}
           </Link>
           .
         </p>
@@ -38,14 +41,14 @@ export function CookieBanner() {
 
       <div className="flex shrink-0 items-center gap-2">
         <Button size="sm" onClick={handleAccept}>
-          Accept
+          {tGlobal('accept')}
         </Button>
         <Button
           variant="ghost"
           size="icon"
           className="h-8 w-8"
           onClick={handleDismiss}
-          aria-label="Close banner"
+          aria-label={t('close_banner')}
         >
           <X className="h-4 w-4" />
         </Button>

@@ -1,8 +1,7 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { NavigationMenuLink, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu'
+import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
 interface NavLinkProps {

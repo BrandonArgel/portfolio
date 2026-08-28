@@ -1,0 +1,5 @@
+export { TestimonialCard } from './components/testimonial-card'
+export { TestimonialCarousel } from './components/testimonial-carousel'
+export { TestimonialsSection } from './components/testimonials-section'
+export * from './constants/testimonials-data'
+export * from './types'

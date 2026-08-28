@@ -1,10 +1,8 @@
 'use client'
 
 import { LayoutDashboard, LogOut, Menu, ShieldCheck, User as UserIcon } from 'lucide-react'
-import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useCallback, useEffect, useState } from 'react'
-
 import {
   Accordion,
   AccordionContent,
@@ -26,14 +24,18 @@ import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/ui/spinner'
 import { navConfig } from '@/config/nav'
+import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { signOut, useSession } from '@/lib/auth/auth-client'
 import { cn } from '@/lib/utils'
 import { getInitials } from '@/utils/get-initials'
-import { AuthButtons } from './auth-buttons'
+import { AuthButtons } from '../../../features/auth/components/auth-buttons'
+import { LocaleSwitcherButtons } from './locale-switcher'
 import { ThemeToggleButtons } from './theme-selector'
 
 function MobileNavLinks({ onNavigate }: { onNavigate: () => void }) {
   const pathname = usePathname()
+  const tNav = useTranslations('components.nav')
+  const tGlobal = useTranslations('common.labels')
 
   return (
     <nav aria-label="Mobile navigation" className="w-full">
@@ -41,9 +43,9 @@ function MobileNavLinks({ onNavigate }: { onNavigate: () => void }) {
         {navConfig.map((item) => {
           if (item.items && item.items.length > 0) {
             return (
-              <AccordionItem value={item.title} key={item.title} className="border-none">
+              <AccordionItem value={item.titleKey} key={item.titleKey} className="border-none">
                 <AccordionTrigger className="hover:no-underline py-2 px-2.5 text-sm font-semibold text-foreground hover:bg-muted/50 rounded-lg transition-colors">
-                  {item.title}
+                  {tNav(item.titleKey)}
                 </AccordionTrigger>
                 <AccordionContent className="group ml-3 mt-1 space-y-1 [&_a]:no-underline">
                   {item.items.map((subItem) => {
@@ -52,7 +54,7 @@ function MobileNavLinks({ onNavigate }: { onNavigate: () => void }) {
 
                     return (
                       <Link
-                        key={subItem.title}
+                        key={subItem.titleKey}
                         href={subItem.href}
                         onClick={onNavigate}
                         className={cn(
@@ -73,9 +75,11 @@ function MobileNavLinks({ onNavigate }: { onNavigate: () => void }) {
                           />
                         )}
                         <div>
-                          <p className="text-sm leading-tight text-left">{subItem.title}</p>
+                          <p className="text-sm leading-tight text-left">
+                            {tNav(subItem.titleKey)}
+                          </p>
                           <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5 font-normal">
-                            {subItem.description}
+                            {tNav(subItem.descriptionKey)}
                           </p>
                         </div>
                       </Link>
@@ -90,7 +94,7 @@ function MobileNavLinks({ onNavigate }: { onNavigate: () => void }) {
 
           return (
             <Link
-              key={item.title}
+              key={item.titleKey}
               href={item.href || '#'}
               onClick={onNavigate}
               className={cn(
@@ -100,10 +104,10 @@ function MobileNavLinks({ onNavigate }: { onNavigate: () => void }) {
                   : 'bg-muted/30 text-foreground hover:bg-muted hover:text-primary',
               )}
             >
-              <span>{item.title}</span>
+              <span>{tNav(item.titleKey)}</span>
               {isActive && (
                 <Badge className="bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
-                  Active
+                  {tGlobal('active')}
                 </Badge>
               )}
             </Link>
@@ -119,6 +123,7 @@ function MobileNavUser({ onNavigate }: { onNavigate: () => void }) {
   const [mounted, setMounted] = useState(false)
   const [isSigningOut, setIsSigningOut] = useState(false)
   const { data: session, isPending } = useSession()
+  const tGlobal = useTranslations('common')
 
   useEffect(() => {
     setMounted(true)
@@ -170,11 +175,13 @@ function MobileNavUser({ onNavigate }: { onNavigate: () => void }) {
         </Avatar>
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-center gap-2">
-            <p className="text-sm font-semibold truncate text-foreground">{user.name || 'User'}</p>
+            <p className="text-sm font-semibold truncate text-foreground">
+              {user.name || tGlobal('labels.user')}
+            </p>
             {isAdmin && (
-              <Badge variant="secondary" className="text-[10px] p-1 h-3.5">
+              <Badge variant="softPrimary" className="w-fit text-[10px] h-4 px-1.5 py-0">
                 <ShieldCheck className="size-2.5 mr-0.5 text-primary" />
-                Admin
+                {tGlobal('labels.admin')}
               </Badge>
             )}
           </div>
@@ -189,7 +196,7 @@ function MobileNavUser({ onNavigate }: { onNavigate: () => void }) {
           className="flex items-center justify-center gap-2 w-full h-9 rounded-lg border border-border bg-background text-sm font-medium hover:bg-muted transition-colors"
         >
           <LayoutDashboard className="size-4 text-muted-foreground" />
-          <span>Dashboard</span>
+          <span>{tGlobal('labels.dashboard')}</span>
         </Link>
       )}
 
@@ -200,7 +207,7 @@ function MobileNavUser({ onNavigate }: { onNavigate: () => void }) {
         className="w-full gap-2 font-medium"
       >
         {isSigningOut ? <Spinner className="size-4 animate-spin" /> : <LogOut className="size-4" />}
-        <span>{isSigningOut ? 'Signing out...' : 'Sign Out'}</span>
+        <span>{isSigningOut ? tGlobal('states.signing_out') : tGlobal('actions.sign_out')}</span>
       </Button>
     </div>
   )
@@ -213,6 +220,8 @@ interface MobileNavProps {
 export function MobileNav({ className }: MobileNavProps) {
   const [open, setOpen] = useState(false)
   const closeDrawer = useCallback(() => setOpen(false), [])
+  const tGlobal = useTranslations('common.labels')
+  const tHeader = useTranslations('components.header')
 
   return (
     <Drawer open={open} onOpenChange={setOpen} showSwipeHandle>
@@ -226,12 +235,12 @@ export function MobileNav({ className }: MobileNavProps) {
           'size-8 items-center justify-center rounded-lg text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring',
           className,
         )}
-        aria-label="Open navigation menu"
+        aria-label={tHeader('open_nav_menu')}
       />
 
       <DrawerContent className="bg-background border-border text-foreground">
         <DrawerHeader className="text-left px-4 pt-4 pb-2 border-b border-border/40">
-          <DrawerTitle className="text-base font-semibold">Navigation</DrawerTitle>
+          <DrawerTitle className="text-base font-semibold">{tGlobal('navigation')}</DrawerTitle>
         </DrawerHeader>
 
         <div className="mx-auto w-full max-w-md px-4 pt-4 pb-6 max-h-[75vh] overflow-y-auto flex flex-col gap-5">
@@ -240,7 +249,18 @@ export function MobileNav({ className }: MobileNavProps) {
           <Separator />
 
           <div className="flex flex-col gap-y-1">
-            <span className="text-xs font-medium text-muted-foreground p-2">Interface Theme</span>
+            <span className="text-xs font-medium text-muted-foreground p-2">
+              {tGlobal('language')}
+            </span>
+            <LocaleSwitcherButtons className="w-full" />
+          </div>
+
+          <Separator />
+
+          <div className="flex flex-col gap-y-1">
+            <span className="text-xs font-medium text-muted-foreground p-2">
+              {tGlobal('interface_theme')}
+            </span>
             <ThemeToggleButtons />
           </div>
 

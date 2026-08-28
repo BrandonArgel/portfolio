@@ -7,23 +7,27 @@ import {
   Layers,
   Mail,
   Moon,
-  ShieldCheck,
   Sparkles,
   Sun,
   User,
 } from 'lucide-react'
 
+import type messages from '@/messages/en.json'
+
 export type NavSectionColor = 'emerald' | 'purple' | 'blue' | 'cyan' | 'default'
 
+type NavMessages = typeof messages.components.nav
+export type NavMessageKey = keyof NavMessages
+
 export type SubItem = {
-  title: string
+  titleKey: NavMessageKey
   href: string
-  description: string
+  descriptionKey: NavMessageKey
   icon?: React.ElementType
 }
 
 export type NavItem = {
-  title: string
+  titleKey: NavMessageKey
   color?: NavSectionColor
   href?: string
   icon?: React.ElementType
@@ -32,85 +36,85 @@ export type NavItem = {
 
 export const navConfig: NavItem[] = [
   {
-    title: 'Home',
+    titleKey: 'home',
     href: '/',
     icon: Home,
   },
   {
-    title: 'About',
+    titleKey: 'about_section',
     color: 'blue',
     items: [
       {
-        title: 'About',
+        titleKey: 'about',
         href: '/about',
-        description: 'Learn more about my journey and expertise',
+        descriptionKey: 'about_description',
         icon: User,
       },
       {
-        title: 'Resume',
+        titleKey: 'resume',
         href: '/resume',
-        description: 'View my professional experience and skills',
+        descriptionKey: 'resume_description',
         icon: FileText,
       },
       {
-        title: 'Contact',
+        titleKey: 'contact',
         href: '/contact',
-        description: 'Get in touch with me for collaborations',
+        descriptionKey: 'contact_description',
         icon: Mail,
       },
     ],
   },
   {
-    title: 'Content',
+    titleKey: 'content_section',
     color: 'cyan',
     items: [
       {
-        title: 'Blog',
+        titleKey: 'blog',
         href: '/blog',
-        description: 'Read articles on programming and tech',
+        descriptionKey: 'blog_description',
         icon: BookOpen,
       },
       {
-        title: 'Courses',
+        titleKey: 'courses',
         href: '/courses',
-        description: 'Explore my educational courses',
+        descriptionKey: 'courses_description',
         icon: GraduationCap,
       },
     ],
   },
   {
-    title: 'Resources',
+    titleKey: 'resources_section',
     color: 'emerald',
     items: [
       {
-        title: 'Snippets',
+        titleKey: 'snippets',
         href: '/resources/snippets',
-        description: 'Useful code snippets and starter templates',
+        descriptionKey: 'snippets_description',
         icon: Code2,
       },
       {
-        title: 'Tools',
+        titleKey: 'tools',
         href: '/resources/tools',
-        description: 'Curated developer tools and software',
+        descriptionKey: 'tools_description',
         icon: Layers,
       },
     ],
   },
   {
-    title: 'Services',
+    titleKey: 'services_section',
     color: 'purple',
     items: [
       {
-        title: 'Web Development',
+        titleKey: 'web_development',
         href: '/services/web-development',
-        description: 'Modern, responsive UI components & web applications',
+        descriptionKey: 'web_development_description',
         icon: Sparkles,
       },
       {
-        title: 'Security & Auditing',
-        href: '/services/security',
-        description: 'Application security reviews and consulting',
-        icon: ShieldCheck,
+        titleKey: 'full_stack_development',
+        href: '/services/full-stack',
+        descriptionKey: 'full_stack_development_description',
+        icon: Layers,
       },
     ],
   },
@@ -118,9 +122,12 @@ export const navConfig: NavItem[] = [
 
 export type CommandActionId = 'toggle-theme'
 
+type CommandPaletteMessages = typeof messages.components.command_palette
+export type CommandPaletteMessageKey = keyof CommandPaletteMessages
+
 export type CommandPaletteQuickAction = {
   id: CommandActionId
-  title: string
+  titleKey: CommandPaletteMessageKey
   icon?: React.ElementType
   dynamicIcon?: {
     dark: React.ElementType
@@ -131,9 +138,9 @@ export type CommandPaletteQuickAction = {
 export type CommandPaletteGroup = {
   heading: string
   items: Array<{
-    title: string
+    titleKey: NavMessageKey
     href?: string
-    description?: string
+    descriptionKey?: NavMessageKey
     icon?: React.ElementType
     actionId?: CommandActionId
     keywords?: string[]
@@ -142,27 +149,27 @@ export type CommandPaletteGroup = {
 
 export type CommandPaletteShortcut = {
   key: string
-  label: string
+  labelKey: CommandPaletteMessageKey
   modifier?: boolean
 }
 
 export type CommandPaletteConfig = {
-  title: string
-  description: string
-  placeholder: string
+  titleKey: CommandPaletteMessageKey
+  descriptionKey: CommandPaletteMessageKey
+  placeholderKey: CommandPaletteMessageKey
   quickActions: CommandPaletteQuickAction[]
   extraGroups: CommandPaletteGroup[]
   shortcuts: CommandPaletteShortcut[]
 }
 
 export const commandPaletteConfig: CommandPaletteConfig = {
-  title: 'Search documentation and navigation',
-  description: 'Type a command or search for pages',
-  placeholder: 'Search documentation and pages...',
+  titleKey: 'title',
+  descriptionKey: 'description',
+  placeholderKey: 'placeholder',
   quickActions: [
     {
       id: 'toggle-theme',
-      title: 'Toggle theme',
+      titleKey: 'toggle_theme',
       dynamicIcon: {
         dark: Sun,
         light: Moon,
@@ -171,9 +178,9 @@ export const commandPaletteConfig: CommandPaletteConfig = {
   ],
   extraGroups: [],
   shortcuts: [
-    { key: '↵', label: 'Go to Page' },
-    { key: 'K', label: 'Menu', modifier: true },
-    { key: 'T', label: 'Toggle Theme' },
-    { key: 'Esc', label: 'Close' },
+    { key: '↵', labelKey: 'go_to_page' },
+    { key: 'K', labelKey: 'menu', modifier: true },
+    { key: 'T', labelKey: 'toggle_theme_shortcut' },
+    { key: 'Esc', labelKey: 'close' },
   ],
 }

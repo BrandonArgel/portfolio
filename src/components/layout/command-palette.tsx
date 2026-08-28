@@ -1,9 +1,10 @@
 'use client'
 
+import { useTheme } from '@teispace/next-themes'
 import { Search } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useTheme } from 'next-themes'
+import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
+import { Button } from '@/components/ui/button'
 import {
   CommandDialog,
   CommandEmpty,
@@ -15,21 +16,30 @@ import {
 } from '@/components/ui/command'
 import { InputGroup, InputGroupAddon } from '@/components/ui/input-group'
 import { Kbd, KbdGroup } from '@/components/ui/kbd'
-import { type CommandActionId, commandPaletteConfig, navConfig } from '@/config/nav'
+import { Separator } from '@/components/ui/separator'
+import {
+  type CommandActionId,
+  commandPaletteConfig,
+  type NavMessageKey,
+  navConfig,
+} from '@/config/nav'
 import { useIsMac } from '@/hooks/use-is-mac'
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcut'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
+import { useRouter } from '@/i18n/navigation'
 
 export function CommandPalette() {
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const { setTheme, resolvedTheme } = useTheme()
   const isMac = useIsMac()
+  const tCmd = useTranslations('components.command_palette')
+  const tNav = useTranslations('components.nav')
+  const tGlobal = useTranslations('common')
+  const tHeader = useTranslations('components.header')
 
   // Global toggle shortcuts
-  useKeyboardShortcut('k', () => setOpen((prev) => !prev), true)
-  useKeyboardShortcut('t', () => toggleTheme(), false)
+  useKeyboardShortcut('t', () => toggleTheme())
+  useKeyboardShortcut('ctrl+k', () => setOpen((prev) => !prev))
 
   const toggleTheme = () => {
     const nextTheme = resolvedTheme === 'dark' ? 'light' : 'dark'
@@ -52,9 +62,9 @@ export function CommandPalette() {
     const groups: Array<{
       heading: string
       items: Array<{
-        title: string
+        titleKey: NavMessageKey
         href: string
-        description?: string
+        descriptionKey?: NavMessageKey
         icon?: React.ElementType
       }>
     }> = []
@@ -62,29 +72,30 @@ export function CommandPalette() {
     for (const item of navConfig) {
       if (item.items && item.items.length > 0) {
         groups.push({
-          heading: item.title,
+          heading: tNav(item.titleKey),
           items: item.items.map((sub) => ({
-            title: sub.title,
+            titleKey: sub.titleKey,
             href: sub.href,
-            description: sub.description,
+            descriptionKey: sub.descriptionKey,
             icon: sub.icon,
           })),
         })
       } else if (item.href) {
         // Group standalone top-level items under "Navigation"
-        const navGroup = groups.find((g) => g.heading === 'Navigation')
+        const navLabel = tGlobal('labels.navigation')
+        const navGroup = groups.find((g) => g.heading === navLabel)
         if (navGroup) {
           navGroup.items.push({
-            title: item.title,
+            titleKey: item.titleKey,
             href: item.href,
             icon: item.icon,
           })
         } else {
           groups.unshift({
-            heading: 'Navigation',
+            heading: navLabel,
             items: [
               {
-                title: item.title,
+                titleKey: item.titleKey,
                 href: item.href,
                 icon: item.icon,
               },
@@ -95,14 +106,14 @@ export function CommandPalette() {
     }
 
     return groups
-  }, [])
+  }, [tNav, tGlobal])
 
   return (
     <>
       {/* Header Search Trigger Button */}
       <Button
         type="button"
-        aria-label="Open search command palette"
+        aria-label={tHeader('open_search')}
         onClick={() => setOpen(true)}
         className="flex xl:hidden items-center cursor-pointer bg-transparent border-none outline-none text-left"
         variant="ghost"
@@ -111,7 +122,7 @@ export function CommandPalette() {
       </Button>
       <button
         type="button"
-        aria-label="Open search command palette"
+        aria-label={tHeader('open_search')}
         onClick={() => setOpen(true)}
         className="hidden xl:flex items-center cursor-pointer bg-transparent p-0 border-none outline-none text-left"
       >
@@ -119,7 +130,9 @@ export function CommandPalette() {
           <InputGroupAddon align="inline-start" className="p-0 mr-2">
             <Search className="size-3.5 shrink-0 text-muted-foreground" />
           </InputGroupAddon>
-          <span className="flex-1 text-xs text-muted-foreground text-left">Search...</span>
+          <span className="flex-1 text-xs text-muted-foreground text-left">
+            {tGlobal('actions.search')}...
+          </span>
           <InputGroupAddon align="inline-end" className="p-0 ml-auto">
             <KbdGroup className="gap-0.5">
               <Kbd className="h-4.5 min-w-4 text-[10px] px-1 bg-muted/60 text-muted-foreground">
@@ -137,18 +150,18 @@ export function CommandPalette() {
       <CommandDialog
         open={open}
         onOpenChange={setOpen}
-        title={commandPaletteConfig.title}
-        description={commandPaletteConfig.description}
+        title={tCmd('title')}
+        description={tCmd('description')}
         className="w-full max-w-125!"
       >
-        <CommandInput placeholder={commandPaletteConfig.placeholder} />
+        <CommandInput placeholder={tCmd('placeholder')} />
 
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandEmpty>{tGlobal('states.no_results')}</CommandEmpty>
 
           {/* Quick Actions (Config Driven) */}
           {commandPaletteConfig.quickActions.length > 0 && (
-            <CommandGroup heading="Quick actions">
+            <CommandGroup heading={tCmd('quick_actions')}>
               {commandPaletteConfig.quickActions.map((action) => {
                 let ActionIcon = action.icon
 
@@ -160,7 +173,7 @@ export function CommandPalette() {
                 return (
                   <CommandItem key={action.id} onSelect={() => handleAction(action.id)}>
                     {ActionIcon && <ActionIcon className="size-4 text-primary" />}
-                    <span>{action.title}</span>
+                    <span>{tCmd(action.titleKey)}</span>
                   </CommandItem>
                 )
               })}
@@ -176,18 +189,20 @@ export function CommandPalette() {
               <CommandGroup heading={group.heading}>
                 {group.items.map((item) => {
                   const ItemIcon = item.icon
+                  const title = tNav(item.titleKey)
+                  const description = item.descriptionKey ? tNav(item.descriptionKey) : ''
                   return (
                     <CommandItem
                       key={item.href}
-                      value={`${group.heading} ${item.title} ${item.description || ''}`}
+                      value={`${group.heading} ${title} ${description}`}
                       onSelect={() => handleSelect(() => router.push(item.href))}
                     >
                       {ItemIcon && <ItemIcon className="size-4 text-muted-foreground" />}
                       <div className="flex flex-col">
-                        <span>{item.title}</span>
-                        {item.description && (
+                        <span>{title}</span>
+                        {description && (
                           <span className="text-[11px] text-muted-foreground line-clamp-1">
-                            {item.description}
+                            {description}
                           </span>
                         )}
                       </div>
@@ -205,10 +220,12 @@ export function CommandPalette() {
               <CommandGroup heading={extraGroup.heading}>
                 {extraGroup.items.map((item) => {
                   const ExtraIcon = item.icon
+                  const title = tNav(item.titleKey)
+                  const description = item.descriptionKey ? tNav(item.descriptionKey) : ''
                   return (
                     <CommandItem
-                      key={item.title}
-                      value={`${extraGroup.heading} ${item.title} ${item.description || ''} ${item.keywords?.join(' ') || ''}`}
+                      key={item.titleKey}
+                      value={`${extraGroup.heading} ${title} ${description} ${item.keywords?.join(' ') || ''}`}
                       onSelect={() => {
                         if (item.actionId) {
                           handleAction(item.actionId)
@@ -220,10 +237,10 @@ export function CommandPalette() {
                     >
                       {ExtraIcon && <ExtraIcon className="size-4 text-muted-foreground" />}
                       <div className="flex flex-col">
-                        <span>{item.title}</span>
-                        {item.description && (
+                        <span>{title}</span>
+                        {description && (
                           <span className="text-xs text-muted-foreground line-clamp-1">
-                            {item.description}
+                            {description}
                           </span>
                         )}
                       </div>
@@ -239,8 +256,7 @@ export function CommandPalette() {
         {commandPaletteConfig.shortcuts.length > 0 && (
           <div className="flex flex-wrap items-center justify-start gap-4 border-t border-border px-3 py-2 text-xs text-muted-foreground bg-muted/30 select-none">
             {commandPaletteConfig.shortcuts.map((shortcut, i) => (
-              // 2. Aquí puedes ajustar el gap-1.5 interno (distancia entre la tecla y el texto)
-              <div key={shortcut.label} className="flex items-center gap-1.5">
+              <div key={shortcut.labelKey} className="flex items-center gap-1.5">
                 {shortcut.modifier ? (
                   <KbdGroup className="gap-0.5">
                     <Kbd className="h-4 min-w-4 text-[10px] px-1 bg-background border border-border/80">
@@ -255,7 +271,7 @@ export function CommandPalette() {
                     {shortcut.key}
                   </Kbd>
                 )}
-                <span>{shortcut.label}</span>
+                <span>{tCmd(shortcut.labelKey)}</span>
 
                 {i !== commandPaletteConfig.shortcuts.length - 1 && (
                   <Separator orientation="vertical" className="h-4 mx-2" />
