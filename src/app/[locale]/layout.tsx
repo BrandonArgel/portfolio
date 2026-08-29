@@ -1,3 +1,5 @@
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import { cookies } from 'next/headers'
@@ -42,6 +44,8 @@ export default async function RootLayout({ children }: LayoutProps<'/[locale]'>)
           {!hasConsentCookie && <CookieBanner />}
           {children}
         </AppProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

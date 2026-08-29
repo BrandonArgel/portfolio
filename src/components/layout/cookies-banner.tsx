@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { setCookieConsent } from '@/actions/cookies'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
+import { track } from '@/lib/analytics/events'
 
 export function CookieBanner() {
   const [isVisible, setIsVisible] = useState(true)
@@ -15,13 +16,13 @@ export function CookieBanner() {
   const handleAccept = async () => {
     setIsVisible(false)
     await setCookieConsent(true)
-
-    // Tracking and analytics scripts
+    track('Cookie_Accepted')
   }
 
   const handleDismiss = async () => {
     setIsVisible(false)
     await setCookieConsent(false)
+    track('Cookie_Rejected')
   }
 
   if (!isVisible) return null

@@ -12,6 +12,7 @@ import { Marker, MarkerContent } from '@/components/ui/marker'
 import { PasswordInputStrengthChecker } from '@/features/auth/components/password-input'
 import { registerUserService } from '@/features/auth/services/auth.service'
 import { Link, useRouter } from '@/i18n/navigation'
+import { track } from '@/lib/analytics/events'
 import { type SignUpForm, signUpSchema } from '../schemas/auth.schema'
 import { ControlledCheckbox } from './controlled-checkbox'
 import { ControlledInput } from './controlled-input'
@@ -42,6 +43,7 @@ export function RegisterForm() {
     const [err, user] = await registerUserService(signUpData)
 
     if (err === null) {
+      track('Signup', { provider: 'credentials' })
       sileo.success({
         title: t('account_created_title'),
         description: t('account_created_description', { name: user.name || 'empty' }),
@@ -131,7 +133,7 @@ export function RegisterForm() {
               <span className="text-sm text-muted-foreground">
                 {t('accept_terms')}{' '}
                 <Link
-                  href="/legal/terms"
+                  href="/legal/terms-of-service"
                   className="text-primary underline-offset-4 hover:underline"
                   target="_blank"
                 >

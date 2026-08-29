@@ -2,9 +2,9 @@ import { ChevronRight } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { Logo } from '@/components/shared/logo'
 import { SocialLinks } from '@/components/shared/social-icons'
+import { SpotifyWidget } from '@/features/spotify'
 import { Link } from '@/i18n/navigation'
 import { FooterNewsletter } from './footer-newsletter'
-import { SpotifyWidget } from './spotify-widget'
 
 function FooterLink({ href, label }: { href: string; label: string }) {
   return (

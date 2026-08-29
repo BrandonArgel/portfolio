@@ -17,7 +17,7 @@ export function SocialAuthButtons() {
         action={async () => {
           const res = await signIn.social({
             provider,
-            callbackURL: '/',
+            callbackURL: `/?loggedIn=social&provider=${provider}`,
           })
           if (res.error) {
             return { error: true, message: res.error.message || 'Authentication failed' }

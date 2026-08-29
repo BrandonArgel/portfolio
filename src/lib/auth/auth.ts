@@ -28,6 +28,10 @@ export const auth = betterAuth({
       clientId: serverEnv.GOOGLE_CLIENT_ID as string,
       clientSecret: serverEnv.GOOGLE_CLIENT_SECRET as string,
     },
+    // spotify: {
+    //   clientId: serverEnv.SPOTIFY_CLIENT_ID as string,
+    //   clientSecret: serverEnv.SPOTIFY_CLIENT_SECRET as string,
+    // },
   },
   account: {
     accountLinking: {

@@ -24,6 +24,11 @@ export const serverEnv = createEnv({
     FACEBOOK_CLIENT_ID: z.string().optional(),
     FACEBOOK_CLIENT_SECRET: z.string().optional(),
 
+    // Spotify
+    SPOTIFY_CLIENT_ID: z.string().min(1),
+    SPOTIFY_CLIENT_SECRET: z.string().min(1),
+    SPOTIFY_REFRESH_TOKEN: z.string().min(1),
+
     // Injected env variables
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   },

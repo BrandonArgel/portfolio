@@ -11,6 +11,7 @@ import { FieldGroup } from '@/components/ui/field'
 import { Marker, MarkerContent } from '@/components/ui/marker'
 import { loginUserService } from '@/features/auth/services/auth.service'
 import { useRouter } from '@/i18n/navigation'
+import { track } from '@/lib/analytics/events'
 import { type SignInForm, signInSchema } from '../schemas/auth.schema'
 import { ControlledCheckbox } from './controlled-checkbox'
 import { ControlledInput } from './controlled-input'
@@ -34,6 +35,7 @@ export function LoginForm() {
     const [err, user] = await loginUserService(data)
 
     if (err === null) {
+      track('Login', { provider: 'credentials' })
       sileo.success({
         title: t('welcome_back', { name: user.name || 'empty' }),
       })

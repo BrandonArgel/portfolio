@@ -19,6 +19,6 @@ export default getRequestConfig(async ({ locale }) => {
     locale,
     messages: (await import(`../messages/${locale}.json`)).default,
     formats,
-    timeZone: 'UTC',
+    timeZone: 'America/Mexico_City',
   }
 })

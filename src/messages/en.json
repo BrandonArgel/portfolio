@@ -106,12 +106,6 @@
         "resources": "Resources",
         "content": "Content"
       },
-      "spotify": {
-        "now_playing": "Now Playing",
-        "on_spotify": "on Spotify",
-        "not_playing": "Not Playing",
-        "idle": "Spotify is idle"
-      },
       "newsletter": {
         "title": "Newsletter",
         "description": "Get updates on new content and tips.",
@@ -125,6 +119,13 @@
         "terms": "Terms of Service",
         "cookies": "Cookies Policy"
       }
+    },
+    "spotify": {
+      "now_playing": "Now Playing",
+      "on_spotify": "on Spotify",
+      "not_playing": "Not Playing",
+      "idle": "Spotify is idle",
+      "by": "by"
     }
   },
   "hero": {
