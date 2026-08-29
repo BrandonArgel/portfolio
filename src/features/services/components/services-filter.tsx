@@ -1,6 +1,5 @@
 'use client'
 
-import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -11,8 +10,6 @@ import { ServiceCard } from './service-card'
 export function ServicesFilter() {
   const t = useTranslations('services.categories')
   const { activeCategory, setActiveCategory, filteredServices } = useServicesFilter()
-
-  const [parent] = useAutoAnimate({ duration: 250, easing: 'ease-out' })
 
   const isFewItems = filteredServices.length <= 3
 
@@ -46,7 +43,6 @@ export function ServicesFilter() {
       </div>
 
       <div
-        ref={parent}
         className={cn(
           'mt-10 w-full gap-6',
           isFewItems
