@@ -503,5 +503,40 @@
       "frontmatter_required": "Le Frontmatter doit inclure 'title', 'slug' et 'locale'",
       "frontmatter_invalid": "Erreur de syntaxe dans le Frontmatter (YAML invalide)"
     }
+  },
+  "metadata": {
+    "root": {
+      "title": "Brandon Argel | Développeur Full Stack & Spécialiste UI/UX",
+      "description": "Développeur Full Stack spécialisé en React, Next.js et TypeScript. Création d'applications web haute performance et d'architectures évolutives.",
+      "keywords": "Développeur Full Stack, React, Next.js, TypeScript, Node.js, Développement Web, Portfolio, Brandon Argel"
+    },
+    "home": {
+      "title": "Brandon Argel | Développeur Full Stack & Spécialiste UI/UX",
+      "description": "Développeur Full Stack spécialisé en React, Next.js et TypeScript. Création d'applications web haute performance, d'architectures backend évolutives et d'expériences utilisateur exceptionnelles."
+    },
+    "about": {
+      "title": "À Propos de Brandon Argel | Développeur Full Stack",
+      "description": "Découvrez le parcours de Brandon Argel, ses principes directeurs et son expertise dans la création d'applications web modernes et accessibles."
+    },
+    "blog": {
+      "title": "Blog d'Ingénierie | Brandon Argel",
+      "description": "Articles, analyses approfondies et réflexions sur le développement web moderne, TypeScript, l'architecture Next.js et l'ingénierie full stack."
+    },
+    "contact": {
+      "title": "Contact | Brandon Argel",
+      "description": "Contactez Brandon Argel pour des projets freelance, du conseil technique et des collaborations en développement logiciel."
+    },
+    "resume": {
+      "title": "CV & Parcours Professionnel | Brandon Argel",
+      "description": "Découvrez l'expérience professionnelle, les compétences techniques et les réalisations de Brandon Argel."
+    },
+    "privacy_policy": {
+      "title": "Politique de Confidentialité | Brandon Argel",
+      "description": "Politique de confidentialité et pratiques de protection des données pour le portfolio et les services de Brandon Argel."
+    },
+    "terms_of_service": {
+      "title": "Conditions d'Utilisation | Brandon Argel",
+      "description": "Conditions d'utilisation et règles d'usage pour le portfolio et les applications web de Brandon Argel."
+    }
   }
 }

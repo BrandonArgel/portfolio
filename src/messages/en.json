@@ -497,5 +497,40 @@
       "frontmatter_required": "Frontmatter must include 'title', 'slug' and 'locale'",
       "frontmatter_invalid": "Syntax error in Frontmatter (invalid YAML)"
     }
+  },
+  "metadata": {
+    "root": {
+      "title": "Brandon Argel | Full Stack Developer & UI/UX Specialist",
+      "description": "Full Stack Developer specialized in React, Next.js, and TypeScript. Crafting high-performance web applications and scalable architectures.",
+      "keywords": "Full Stack Developer, React, Next.js, TypeScript, Node.js, Web Development, Portfolio, Brandon Argel"
+    },
+    "home": {
+      "title": "Brandon Argel | Full Stack Developer & UI/UX Specialist",
+      "description": "Full Stack Developer specialized in React, Next.js, and TypeScript. Crafting high-performance web applications, scalable backend architectures, and exceptional user experiences."
+    },
+    "about": {
+      "title": "About Brandon Argel | Full Stack Developer",
+      "description": "Discover Brandon Argel's background, guiding principles, and expertise in crafting modern, accessible web applications."
+    },
+    "blog": {
+      "title": "Engineering Blog | Brandon Argel",
+      "description": "Articles, deep-dives, and insights on modern web development, TypeScript, Next.js architecture, and full stack engineering."
+    },
+    "contact": {
+      "title": "Contact | Brandon Argel",
+      "description": "Get in touch with Brandon Argel for freelance projects, technical consulting, and software development collaborations."
+    },
+    "resume": {
+      "title": "Resume & Career Experience | Brandon Argel",
+      "description": "Explore the professional journey, technical competencies, and career achievements of Brandon Argel."
+    },
+    "privacy_policy": {
+      "title": "Privacy Policy | Brandon Argel",
+      "description": "Privacy policy and data protection practices for Brandon Argel's portfolio and services."
+    },
+    "terms_of_service": {
+      "title": "Terms of Service | Brandon Argel",
+      "description": "Terms of service and usage guidelines for Brandon Argel's portfolio and web applications."
+    }
   }
 }

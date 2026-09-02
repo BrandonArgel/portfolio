@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { Section, SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/section'
 import { BlogCard } from '@/features/blog/components/blog-card'
 import { BlogFilter } from '@/features/blog/components/blog-filter'
+import { constructPageMetadata } from '@/lib/seo'
 import { getAllCategories, getPublishedPosts } from '@/services/posts.service'
 
 interface BlogPageProps {
@@ -16,12 +17,14 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>
 }): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'blog' })
+  const t = await getTranslations({ locale, namespace: 'metadata.blog' })
 
-  return {
-    title: `${t('title')} | Brandon Argel`,
-    description: t('subtitle'),
-  }
+  return constructPageMetadata({
+    locale,
+    title: t('title'),
+    description: t('description'),
+    pathname: '/blog',
+  })
 }
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {

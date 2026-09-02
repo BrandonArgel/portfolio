@@ -168,3 +168,50 @@ function mapDbPostToBlogPost(dbPost: DbPostWithRelations): BlogPost {
     updatedAt: dbPost.updatedAt,
   }
 }
+
+export type SitemapPost = {
+  slug: string
+  locale: string
+  createdAt: Date
+  updatedAt: Date
+  translationGroupId: string | null
+}
+
+export async function getAllPublishedPostsForSitemap(): Promise<SitemapPost[]> {
+  try {
+    const dbPosts = await db
+      .select({
+        slug: posts.slug,
+        locale: posts.locale,
+        createdAt: posts.createdAt,
+        updatedAt: posts.updatedAt,
+        translationGroupId: posts.translationGroupId,
+      })
+      .from(posts)
+      .where(eq(posts.published, true))
+
+    return dbPosts
+  } catch (err) {
+    console.error('Error fetching published posts for sitemap:', err)
+    return []
+  }
+}
+
+export async function getPostTranslationsByGroupId(
+  translationGroupId: string,
+): Promise<{ locale: string; slug: string }[]> {
+  try {
+    const siblings = await db
+      .select({
+        locale: posts.locale,
+        slug: posts.slug,
+      })
+      .from(posts)
+      .where(and(eq(posts.translationGroupId, translationGroupId), eq(posts.published, true)))
+
+    return siblings
+  } catch (err) {
+    console.error('Error fetching post translations by group id:', err)
+    return []
+  }
+}
