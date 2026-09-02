@@ -1,10 +1,13 @@
-import { getTranslations } from 'next-intl/server'
-import { Section, SectionHeader, SectionTitle } from '@/components/ui/section'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { AnimatedText } from '@/components/ui/animated-text'
+import { Badge } from '@/components/ui/badge'
+import { Section, SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/section'
 import { ABOUT_SKILL_CATEGORIES } from '../constants/about-data'
 import { AboutSkillCard } from './about-skill-card'
 
 export async function AboutSkills() {
-  const t = await getTranslations('about')
+  const t = await getTranslations('about.skills')
+  const locale = ((await getLocale()) || 'en') as 'en' | 'es'
 
   return (
     <Section
@@ -13,17 +16,20 @@ export async function AboutSkills() {
       bottomGlowColor="bg-blue-50/50 dark:bg-blue-950/20"
       containerClassName="flex flex-col items-center group/anim"
     >
-      {/* Section Title */}
       <SectionHeader align="center" className="mb-12">
-        <SectionTitle as="h2">{t('skills_title')}</SectionTitle>
+        <Badge variant="softPrimary" size="lg">
+          {t('badge')}
+        </Badge>
+        <SectionTitle as="h2">
+          <AnimatedText text={t('title')} className="text-primary" />
+        </SectionTitle>
+        <SectionDescription>{t('description')}</SectionDescription>
       </SectionHeader>
 
-      {/* 3-Card Skills Grid */}
       <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-3">
         {ABOUT_SKILL_CATEGORIES.map((category) => {
-          const title = t(`cards.${category.key}.title`)
-          const description = t(`cards.${category.key}.description`)
-          const skills: string[] = t.raw(`cards.${category.key}.skills`)
+          const title = category.title[locale] || category.title.en
+          const description = t(`cards.${category.key}`)
 
           return (
             <AboutSkillCard
@@ -31,7 +37,7 @@ export async function AboutSkills() {
               icon={category.icon}
               title={title}
               description={description}
-              skills={skills}
+              skills={category.skills}
             />
           )
         })}

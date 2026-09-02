@@ -21,9 +21,7 @@ export async function ServicesSection() {
         </Badge>
 
         <SectionTitle as="h2">
-          {t('title_line1')}
-          <br />
-          <AnimatedText text={t('title_line2')} className="text-primary" />
+          {t('title_line1')} <AnimatedText text={t('title_line2')} className="text-primary" />
         </SectionTitle>
 
         <SectionDescription className="max-w-xl">{t('description')}</SectionDescription>

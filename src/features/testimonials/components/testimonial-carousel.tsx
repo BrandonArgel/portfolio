@@ -1,18 +1,19 @@
 'use client'
 
 import Autoplay from 'embla-carousel-autoplay'
-import * as React from 'react'
+import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Carousel, type CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import { TESTIMONIAL_ROTATION_INTERVAL_MS, TESTIMONIALS_LIST } from '../constants/testimonials-data'
 import { TestimonialCard } from './testimonial-card'
 import { TestimonialControls } from './testimonial-controls'
 
 export function TestimonialCarousel() {
-  const [api, setApi] = React.useState<CarouselApi>()
-  const [current, setCurrent] = React.useState(0)
-  const [count, setCount] = React.useState(0)
+  const [api, setApi] = useState<CarouselApi>()
+  const [current, setCurrent] = useState(0)
+  const [count, setCount] = useState(0)
 
-  const plugin = React.useRef(
+  const pluginAutoplay = useRef(
     Autoplay({
       delay: TESTIMONIAL_ROTATION_INTERVAL_MS,
       stopOnMouseEnter: true,
@@ -20,7 +21,14 @@ export function TestimonialCarousel() {
     }),
   )
 
-  React.useEffect(() => {
+  const pluginWheel = useRef(
+    WheelGesturesPlugin({
+      forceWheelAxis: 'x',
+      wheelDraggingClass: 'is-wheel-dragging',
+    }),
+  )
+
+  useEffect(() => {
     if (!api) return
 
     setCount(api.scrollSnapList().length)
@@ -39,33 +47,58 @@ export function TestimonialCarousel() {
     }
   }, [api])
 
-  const handlePrev = React.useCallback(() => {
-    api?.scrollPrev()
+  useEffect(() => {
+    if (!api) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const autoplayPlugin = api.plugins().autoplay
+
+          if (!autoplayPlugin) return
+
+          try {
+            if (entry.isIntersecting) {
+              autoplayPlugin.play()
+            } else {
+              autoplayPlugin.stop()
+            }
+          } catch (error) {
+            console.debug("The Embla Autoplay plugin wasn't ready:", error)
+          }
+        })
+      },
+      { threshold: 0.5 },
+    )
+
+    const rootNode = api.rootNode()
+    if (rootNode) {
+      observer.observe(rootNode)
+    }
+
+    return () => {
+      if (rootNode) observer.unobserve(rootNode)
+      observer.disconnect()
+    }
   }, [api])
 
-  const handleNext = React.useCallback(() => {
-    api?.scrollNext()
-  }, [api])
-
-  const handleSelect = React.useCallback(
-    (index: number) => {
-      api?.scrollTo(index)
-    },
-    [api],
-  )
+  const handlePrev = useCallback(() => api?.scrollPrev(), [api])
+  const handleNext = useCallback(() => api?.scrollNext(), [api])
+  const handleSelect = useCallback((index: number) => api?.scrollTo(index), [api])
 
   return (
     <div className="flex w-full flex-col items-center">
       <Carousel
         setApi={setApi}
-        plugins={[plugin.current]}
+        plugins={[pluginAutoplay.current, pluginWheel.current]}
         opts={{
           loop: true,
           align: 'center',
+          skipSnaps: false,
         }}
         className="w-full max-w-3xl"
       >
-        <CarouselContent>
+        <CarouselContent className="p-1">
           {TESTIMONIALS_LIST.map((testimonial) => (
             <CarouselItem key={testimonial.key} className="flex justify-center">
               <TestimonialCard testimonial={testimonial} />

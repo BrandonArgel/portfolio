@@ -1,6 +1,6 @@
 'use client'
 
-import { UserPreferencesMenu } from '@/components/layout/header/user-menu'
+import { UserPreferencesMenu } from '@/components/layout/header/ui/user-menu'
 import type { Session } from '@/lib/auth/auth-client'
 
 interface AuthActionsProps {

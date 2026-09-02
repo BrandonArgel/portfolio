@@ -116,8 +116,12 @@ function Carousel({
     >
       <section
         onKeyDownCapture={handleKeyDown}
-        className={cn('relative', className)}
+        className={cn(
+          'relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+          className,
+        )}
         data-slot="carousel"
+        {...props}
         {...props}
       >
         {children}

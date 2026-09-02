@@ -8,7 +8,7 @@ import { Section, SectionDescription, SectionHeader, SectionTitle } from '@/comp
 import { AboutProfileFrame } from './about-profile-frame'
 
 export async function AboutHero() {
-  const t = await getTranslations('about')
+  const t = await getTranslations('about.hero')
 
   return (
     <Section
@@ -25,9 +25,11 @@ export async function AboutHero() {
             {t('title_prefix')} <AnimatedText text={t('name')} className="text-primary" />
           </SectionTitle>
 
-          <SectionDescription className="max-w-xl">{t('bio_paragraph_1')}</SectionDescription>
+          <p className="max-w-xl text-base sm:text-lg font-medium leading-relaxed text-foreground/90">
+            {t('purpose')}
+          </p>
 
-          <SectionDescription className="max-w-xl">{t('bio_paragraph_2')}</SectionDescription>
+          <SectionDescription className="max-w-xl">{t('bio_secondary')}</SectionDescription>
         </SectionHeader>
 
         <div className="flex flex-wrap items-center gap-4">

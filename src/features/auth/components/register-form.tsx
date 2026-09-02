@@ -9,7 +9,6 @@ import { LinkButton } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { FieldGroup } from '@/components/ui/field'
 import { Marker, MarkerContent } from '@/components/ui/marker'
-import { PasswordInputStrengthChecker } from '@/features/auth/components/password-input'
 import { registerUserService } from '@/features/auth/services/auth.service'
 import { Link, useRouter } from '@/i18n/navigation'
 import { track } from '@/lib/analytics/events'
@@ -91,7 +90,7 @@ export function RegisterForm() {
   return (
     <Card className="w-full max-w-xl m-6">
       <CardHeader className="text-2xl font-bold">
-        <CardTitle>{t('title')}</CardTitle>
+        <CardTitle className="text-center">{t('title')}</CardTitle>
       </CardHeader>
       <CardContent>
         <form id="sign-up" onSubmit={handleSubmit(handleSignUp)}>
@@ -126,9 +125,7 @@ export function RegisterForm() {
               placeholder={tGlobal('placeholders.password')}
               autoComplete="new-password"
               isPassword
-            >
-              <PasswordInputStrengthChecker />
-            </ControlledInput>
+            />
             <ControlledCheckbox control={control} name="acceptTerms">
               <span className="text-sm text-muted-foreground">
                 {t('accept_terms')}{' '}
@@ -160,6 +157,13 @@ export function RegisterForm() {
             >
               {tGlobal('actions.sign_up')}
             </ActionButton>
+            <LinkButton
+              className="w-full"
+              href="https://securitytool.brandonargel.com"
+              variant="ghost"
+            >
+              {t('create_password')}
+            </LinkButton>
           </FieldGroup>
         </form>
         <LinkButton className="mt-12 w-full" href="/login" variant="outline">

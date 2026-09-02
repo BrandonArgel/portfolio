@@ -29,6 +29,9 @@ export const serverEnv = createEnv({
     SPOTIFY_CLIENT_SECRET: z.string().min(1),
     SPOTIFY_REFRESH_TOKEN: z.string().min(1),
 
+    // AI
+    GOOGLE_GENERATIVE_AI_API_KEY: z.string().min(1),
+
     // Injected env variables
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   },

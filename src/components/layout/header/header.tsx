@@ -4,9 +4,9 @@ import { Logo } from '@/components/shared/logo'
 import { Link } from '@/i18n/navigation'
 import { auth } from '@/lib/auth/auth'
 import { CommandPalette } from '../command-palette'
-import { DesktopNav } from './desktop-nav'
-import { MobileNav } from './mobile-nav'
-import { UserPreferencesMenu } from './user-menu'
+import { DesktopNav } from './ui/desktop-nav'
+import { MobileNav } from './ui/mobile-nav'
+import { UserPreferencesMenu } from './ui/user-menu'
 
 export async function Header() {
   const session = await auth.api.getSession({

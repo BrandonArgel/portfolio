@@ -1,69 +1,146 @@
 import { desc, eq } from 'drizzle-orm'
+import { Edit3, PlusCircle } from 'lucide-react'
+import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { db } from '@/db' // Tu instancia de Turso
+import { getTranslations } from 'next-intl/server'
+import { Badge } from '@/components/ui/badge'
+import { LinkButton } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { db } from '@/db'
 import { posts } from '@/db/schema'
-import { auth } from '@/lib/auth/auth' // Tu instancia de Better Auth
-import { DeletePostButton } from './_components/delete-button' // El Client Component que creamos antes
+import { auth } from '@/lib/auth/auth'
+import { DeletePostButton } from './_components/delete-button'
 
-export default async function DashboardPostsPage() {
-  // 1. Obtener la sesión en el servidor de forma síncrona
-  // Nota: Como ya protegiste la ruta en el middleware.ts, técnicamente
-  // sabemos que hay sesión, pero volver a pedirla aquí es barato y
-  // nos da el objeto `user` tipado para usar su ID en la consulta SQL.
+interface DashboardPostsPageProps {
+  params: Promise<{ locale: string }>
+}
+
+export async function generateMetadata({ params }: DashboardPostsPageProps): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({
+    locale,
+    namespace: 'dashboard.posts_management',
+  })
+
+  return {
+    title: `${t('title')} | Brandon Argel`,
+  }
+}
+
+export default async function DashboardPostsPage({ params }: DashboardPostsPageProps) {
+  const { locale } = await params
+
+  // 1. Retrieve session on the server
   const session = await auth.api.getSession({
     headers: await headers(),
   })
 
-  if (!session) {
-    redirect('/login')
+  if (!session || !session.user) {
+    redirect(`/${locale}/login`)
   }
 
-  // 2. Consulta a Turso usando Drizzle
-  // Aquí filtramos para que solo traiga los posts que le pertenecen al usuario actual.
-  // También los ordenamos por fecha de creación descendente.
-  const userPosts = await db.query.posts.findMany({
-    where: eq(posts.authorId, session.user.id),
-    orderBy: [desc(posts.createdAt)],
-    // Con Drizzle puedes traer solo los campos que necesitas para la tabla,
-    // esto hace que la respuesta de Turso sea aún más rápida.
-    columns: {
-      id: true,
-      title: true,
-      published: true,
-      createdAt: true,
-    },
+  const t = await getTranslations({
+    locale,
+    namespace: 'dashboard.posts_management',
   })
 
-  // 3. Renderizado en el servidor
+  // 2. Query posts belonging to user or all posts if admin
+  const userPosts =
+    session.user.role === 'admin'
+      ? await db.query.posts.findMany({
+          orderBy: [desc(posts.createdAt)],
+        })
+      : await db.query.posts.findMany({
+          where: eq(posts.authorId, session.user.id),
+          orderBy: [desc(posts.createdAt)],
+        })
+
   return (
     <div className="space-y-6">
-      <header className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Mis Artículos</h1>
-        <p className="text-sm text-muted-foreground">
-          Sesión iniciada como: {session.user.name} ({session.user.role})
-        </p>
+      <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+            {t('title')}
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            {t('session_as', {
+              name: session.user.name || 'User',
+              role: session.user.role || 'user',
+            })}
+          </p>
+        </div>
+
+        <LinkButton
+          href={`/dashboard/blog/new`}
+          size="sm"
+          className="gap-2 cursor-pointer shadow-xs w-fit"
+        >
+          <PlusCircle className="size-4" />
+          <span>New Article</span>
+        </LinkButton>
       </header>
 
       {userPosts.length === 0 ? (
-        <p className="text-muted-foreground">No tienes artículos todavía.</p>
+        <Card className="border-border/70 p-12 text-center">
+          <p className="text-muted-foreground text-sm">{t('no_posts')}</p>
+        </Card>
       ) : (
-        <div className="grid gap-4">
-          {userPosts.map((post) => (
-            <div key={post.id} className="flex items-center justify-between p-4 border rounded-lg">
-              <div>
-                <h2 className="font-semibold">{post.title}</h2>
-                <span
-                  className={`text-xs ${post.published ? 'text-green-500' : 'text-yellow-500'}`}
-                >
-                  {post.published ? 'Publicado' : 'Borrador'}
-                </span>
-              </div>
+        <div className="grid gap-3">
+          {userPosts.map((post) => {
+            const formattedDate = new Intl.DateTimeFormat(locale, {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            }).format(new Date(post.createdAt))
 
-              {/* Inyectamos el Client Component para la interactividad de borrado */}
-              <DeletePostButton postId={post.id} />
-            </div>
-          ))}
+            return (
+              <Card
+                key={post.id}
+                className="border-border/70 hover:border-border transition-all shadow-xs"
+              >
+                <CardContent className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="space-y-1.5 min-w-0">
+                    <div className="flex items-center gap-2.5 flex-wrap">
+                      <h2 className="font-semibold text-base text-foreground truncate">
+                        {post.title}
+                      </h2>
+                      {post.published ? (
+                        <Badge variant="softGreen" className="text-xs">
+                          {t('published')}
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline" className="text-xs">
+                          {t('draft')}
+                        </Badge>
+                      )}
+                      <Badge variant="secondary" className="text-[10px] uppercase font-mono">
+                        {post.locale}
+                      </Badge>
+                    </div>
+
+                    <p className="text-xs text-muted-foreground font-mono">
+                      /{post.slug} • {formattedDate}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                    <LinkButton
+                      variant="outline"
+                      size="sm"
+                      className="gap-1.5 cursor-pointer text-xs h-8"
+                      href={`/dashboard/blog/${post.slug}/edit`}
+                    >
+                      <Edit3 className="size-3.5" />
+                      <span>Edit</span>
+                    </LinkButton>
+
+                    <DeletePostButton postId={post.id} />
+                  </div>
+                </CardContent>
+              </Card>
+            )
+          })}
         </div>
       )}
     </div>

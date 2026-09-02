@@ -50,7 +50,7 @@
     },
     "nav": {
       "home": "Inicio",
-      "about_section": "Sobre mí",
+      "about_section": "Acerca de mí",
       "about": "Acerca de mí",
       "about_description": "Conoce más sobre mi trayectoria y experiencia",
       "resume": "Currículum",
@@ -97,7 +97,8 @@
     },
     "locale_switcher": {
       "en": "English",
-      "es": "Español"
+      "es": "Español",
+      "fr": "Français"
     },
     "footer": {
       "bio": "Desarrollador Full Stack especializado en React, Next.js y TypeScript, dedicado a crear aplicaciones web de alto rendimiento y experiencias de usuario excepcionales.",
@@ -259,51 +260,115 @@
     }
   },
   "about": {
-    "badge": "Sobre Mí",
-    "title_prefix": "Hola, soy",
-    "name": "Brandon Argel",
-    "bio_paragraph_1": "Soy un desarrollador full stack apasionado y dedicado a crear aplicaciones web de alto rendimiento, arquitecturas backend escalables y experiencias de usuario excepcionales.",
-    "bio_paragraph_2": "Con más de 6 años en la industria tecnológica, colaboro con clientes y equipos a nivel mundial para construir sistemas seguros, tipados y soluciones backend robustas que escalan.",
-    "get_in_touch": "Ponte en Contacto",
-    "download_resume": "Descargar Currículum",
-    "skills_title": "Habilidades y Experiencia",
-    "cards": {
-      "frontend": {
-        "title": "Ingeniería Frontend",
-        "description": "Construyendo interfaces modernas, accesibles y de alto rendimiento con el ecosistema de React.",
-        "skills": [
-          "React y React 19",
-          "Next.js App Router",
-          "TypeScript",
-          "Tailwind CSS",
-          "Gestión de Estado",
-          "Diseño Responsivo y Accesible"
-        ]
-      },
-      "backend": {
-        "title": "Backend y APIs",
-        "description": "Desarrollando aplicaciones y APIs seguras, escalables y resilientes del lado del servidor.",
-        "skills": [
-          "Node.js y Bun",
-          "APIs REST y GraphQL",
-          "Diseño de Bases de Datos (PostgreSQL)",
-          "Drizzle ORM y Prisma",
-          "Server Actions",
-          "Type Safety de Extremo a Extremo"
-        ]
-      },
-      "fullstack": {
-        "title": "Dominio Full Stack",
-        "description": "Diseñando flujos de aplicaciones tipados y arquitectura integral de extremo a extremo.",
-        "skills": [
-          "Arquitectura y Diseño de Sistemas",
-          "Autenticación (Better Auth)",
-          "Manejo de Errores y Resiliencia",
-          "CI/CD y Despliegue Cloud",
-          "Rendimiento y SEO",
-          "Pruebas y Calidad de Código"
-        ]
+    "hero": {
+      "badge": "Acerca de mí",
+      "title_prefix": "Hola, soy",
+      "name": "Brandon Argel",
+      "purpose": "Creo firmemente en el poder del software para generar un impacto positivo y real en la vida de las personas. Mi propósito es construir herramientas y experiencias digitales donde la empatía, la accesibilidad y el diseño inclusivo permitan que cualquier usuario se beneficie de la tecnología.",
+      "bio_secondary": "Soy un desarrollador full stack apasionado, dedicado a crear aplicaciones web de alto rendimiento, arquitecturas backend escalables y experiencias de usuario excepcionales. Con más de 6 años en la industria tecnológica, colaboro con clientes y equipos de todo el mundo para construir sistemas seguros, con tipado estricto y soluciones backend robustas.",
+      "get_in_touch": "Contáctame",
+      "download_resume": "Descargar CV"
+    },
+    "philosophy": {
+      "badge": "La Disciplina del Cómo",
+      "title_prefix": "Mis",
+      "title": "Principios Rectores",
+      "description": "Las acciones y valores diarios que dan forma a mi trabajo y colaboración.",
+      "items": {
+        "learn_document_share": {
+          "title": "Aprende, documenta y comparte",
+          "description": "Convierte la curiosidad en conocimiento. Domina los conceptos para explicarlos de forma sencilla y deja siempre el camino documentado."
+        },
+        "build_parachute": {
+          "title": "Salta y construye el paracaídas",
+          "description": "Atrévete a innovar. Usa la curiosidad implacable para mirar los problemas desde ángulos distintos y encontrar soluciones."
+        },
+        "design_for_diversity": {
+          "title": "Diseña y programa para la diversidad",
+          "description": "Mantén el código y el producto abiertos. La exclusión está prohibida; buscar diferentes perspectivas es la clave para crecer."
+        },
+        "communicate_kindness": {
+          "title": "Comunica con amabilidad",
+          "description": "Entrega y recibe feedback honesto para alcanzar los objetivos del equipo, fomentando un espacio seguro e inclusivo."
+        },
+        "focus_controllable": {
+          "title": "Enfoca tu energía en lo controlable",
+          "description": "Acepta lo que escapa de tus manos para ejecutar rápido y bien. Sé organizado y prioriza tus esfuerzos."
+        },
+        "care_human_factor": {
+          "title": "Cuida el factor humano",
+          "description": "Protege a quienes te rodean. Las personas y las experiencias que creamos juntos son el núcleo de cualquier proyecto."
+        }
       }
+    },
+    "skills": {
+      "badge": "La Coherencia del Qué",
+      "title": "Habilidades y Experiencia",
+      "description": "Los resultados tangibles y el nivel técnico que entrego en el día a día.",
+      "cards": {
+        "frontend": "Construcción de interfaces 100% accesibles, responsivas y de alto rendimiento, optimizadas para reducir tiempos de carga.",
+        "backend": "Transformación de datos y lógica de negocio en historias coherentes mediante APIs que guían al usuario de principio a fin.",
+        "fullstack": "Entrega de código escalable y reutilizable, siempre respaldado por documentación técnica clara y precisa de extremo a extremo."
+      }
+    }
+  },
+  "blog": {
+    "badge": "Últimos Artículos",
+    "title_prefix": "Publicaciones",
+    "title_highlight": "Recientes del Blog",
+    "view_all": "Ver Todos los Artículos",
+    "title": "Blog de Ingeniería",
+    "subtitle": "Reflexiones, Artículos y Arquitectura.",
+    "search_placeholder": "Buscar artículos...",
+    "all_topics": "Todos los temas",
+    "clear_filters": "Limpiar filtros",
+    "back_to_blog": "Regresar al Blog",
+    "read_time_suffix": "min de lectura",
+    "no_results": "No se encontraron artículos con esos filtros.",
+    "empty_posts": "No hay artículos publicados aún.",
+    "error_loading_posts": "No se pudieron cargar los artículos en este momento.",
+    "error_loading_article": "Error cargando el artículo",
+    "error_loading_article_description": "Hubo un problema de conexión. Intenta nuevamente más tarde.",
+    "post_not_found": "Artículo no encontrado"
+  },
+  "contact": {
+    "badge": "Conectemos",
+    "title_prefix": "¿Tienes un Proyecto en",
+    "title_highlight": "Mente?",
+    "description": "Ya sea que tengas una duda, quieras colaborar en un proyecto de software o simplemente saludar, ¡no dudes en escribirme!",
+    "status": "Disponible para nuevas oportunidades",
+    "info_title": "Construyamos algo excepcional juntos",
+    "info_description": "Siempre estoy entusiasmado por discutir nuevos retos de ingeniería, diseños UI/UX o arquitecturas de API. Escríbeme cuando gustes.",
+    "labels": {
+      "name": "Tu Nombre",
+      "email": "Correo Electrónico",
+      "subject": "Asunto",
+      "message": "Tu Mensaje"
+    },
+    "placeholders": {
+      "name": "ej. Alex Morgan",
+      "email": "alex@ejemplo.com",
+      "subject": "ej. Proyecto de Desarrollo Web",
+      "message": "Cuéntame sobre tu proyecto, tiempos o idea..."
+    },
+    "actions": {
+      "send": "Enviar Mensaje",
+      "sending": "Enviando Mensaje...",
+      "copy_email": "Copiar Correo",
+      "copied": "¡Correo Copiado!"
+    },
+    "details": {
+      "email": "Correo",
+      "location": "Ubicación",
+      "location_value": "Guadalajara, México",
+      "whatsapp": "WhatsApp / Teléfono",
+      "socials": "Perfiles Sociales"
+    },
+    "notifications": {
+      "success_title": "¡Mensaje Enviado!",
+      "success_description": "¡Gracias por contactarme! Te responderé lo antes posible.",
+      "error_title": "Error al Enviar Mensaje",
+      "error_description": "Ocurrió un error al enviar tu mensaje. Por favor intenta de nuevo o envíame un correo directo."
     }
   },
   "auth": {
@@ -321,6 +386,7 @@
       "terms_of_service": "Términos de Servicio",
       "and": "y",
       "privacy_policy": "Política de Privacidad",
+      "create_password": "Crea una contraseña segura",
       "already_have_account": "Ya tengo una cuenta",
       "account_created_title": "¡Cuenta creada!",
       "account_created_description": "Bienvenido a la plataforma{name, select, empty {} other {, {name}}}.",
@@ -331,6 +397,105 @@
       "partial_success_title": "Éxito Parcial",
       "partial_success_description": "Cuenta creada exitosamente, pero por favor inicia sesión manualmente.",
       "registration_failed_title": "Error al Registrarse"
+    }
+  },
+  "dashboard": {
+    "title": "Panel de Control",
+    "overview": "Resumen",
+    "posts": "Artículos",
+    "new_post": "Nuevo Artículo",
+    "users": "Gestión de Usuarios",
+    "back_to_site": "Volver al sitio",
+    "you": "Tú",
+    "roles": {
+      "admin": "Admin",
+      "editor": "Editor",
+      "user": "Usuario"
+    },
+    "overview_stats": {
+      "welcome_back": "Bienvenido de nuevo, {name}",
+      "total_articles": "Total de Artículos",
+      "total_articles_desc": "{published} publicados, {drafts} borradores",
+      "published_title": "Publicados",
+      "published_badge": "En Vivo",
+      "published_desc": "Visibles públicamente en el blog",
+      "drafts_title": "Borradores",
+      "drafts_badge": "Borrador",
+      "drafts_desc": "Artículos no publicados en revisión",
+      "users_title": "Usuarios Registrados",
+      "users_desc": "Gestionados vía Gestión de Usuarios",
+      "content_title": "Gestión de Contenido",
+      "content_desc": "Crea y administra tus artículos en múltiples idiomas.",
+      "access_title": "Acceso y Seguridad",
+      "access_desc": "Administra roles (Admin, Editor, Usuario) y permisos de cuenta."
+    },
+    "posts_management": {
+      "title": "Mis Artículos",
+      "session_as": "Sesión iniciada como: {name} ({role})",
+      "no_posts": "No tienes artículos todavía.",
+      "published": "Publicado",
+      "draft": "Borrador",
+      "delete": "Eliminar",
+      "deleting": "Eliminando...",
+      "delete_confirm": "¿Estás seguro de que deseas eliminar este artículo? Esta acción no se puede deshacer.",
+      "delete_success": "Artículo eliminado exitosamente",
+      "delete_error": "Error al eliminar el artículo"
+    },
+    "users_management": {
+      "title": "Gestión de Usuarios",
+      "description": "Administra los roles de usuario y permisos del sistema.",
+      "user_col": "Usuario",
+      "email_col": "Correo",
+      "role_col": "Rol",
+      "created_at_col": "Registrado",
+      "status_col": "Estado",
+      "actions_col": "Acciones",
+      "banned": "Bloqueado",
+      "active": "Activo",
+      "role_updated_title": "Rol actualizado",
+      "role_updated_desc": "El rol de {name} ha sido actualizado a {role}",
+      "role_update_error": "Error al actualizar el rol",
+      "no_users": "No hay usuarios registrados aún."
+    }
+  },
+  "validation": {
+    "required": "Este campo es requerido",
+    "invalid_email": "Por favor ingresa un correo electrónico válido",
+    "too_short": "El valor es demasiado corto",
+    "too_long": "El valor es demasiado largo",
+    "password_min": "La contraseña debe tener al menos 8 caracteres",
+    "password_max": "La contraseña no debe exceder los 128 caracteres",
+    "passwords_dont_match": "Las contraseñas no coinciden",
+    "terms_required": "Debes aceptar los términos de servicio y la política de privacidad",
+    "title_required": "El título es requerido",
+    "slug_required": "El slug es requerido",
+    "content_min": "El contenido debe tener al menos 10 caracteres",
+    "locale_required": "El idioma es requerido",
+    "role_invalid": "Rol especificado inválido"
+  },
+  "blog_editor": {
+    "new_post": "Nuevo Artículo",
+    "editing_post": "Editando Artículo",
+    "save_button": "Guardar Artículo",
+    "saving_button": "Guardando...",
+    "translate_button": "Traducir con IA",
+    "translating_button": "Traduciendo con IA...",
+    "translate_all_button": "Traducir a todos los idiomas faltantes",
+    "translate_to": "Traduciendo a {locale}...",
+    "translating_all": "Traduciendo a todos los idiomas faltantes...",
+    "frontmatter_detected": "Frontmatter detectado:",
+    "preview_empty": "Aún no hay contenido para previsualizar. Comienza a escribir Markdown a la izquierda.",
+    "post_not_found": "Artículo no encontrado",
+    "default_content": "---\ntitle: \"Mi Nuevo Artículo\"\nslug: \"mi-nuevo-articulo\"\nlocale: es\npublished: false\ntags: [\"Next.js\", \"Arquitectura\"]\n---\n\n# Escribe tu artículo aquí...\n",
+    "notifications": {
+      "post_updated": "Artículo actualizado",
+      "post_created": "Artículo creado",
+      "post_translated": "Artículo traducido con éxito",
+      "posts_translated_all": "Traducido a: {locales}",
+      "validation_error": "Error de validación al guardar",
+      "translate_error": "Error al traducir el artículo",
+      "frontmatter_required": "El Frontmatter debe incluir 'title', 'slug' y 'locale'",
+      "frontmatter_invalid": "Error de sintaxis en el Frontmatter (YAML inválido)"
     }
   }
 }

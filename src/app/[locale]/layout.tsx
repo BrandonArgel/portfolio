@@ -3,7 +3,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import { cookies } from 'next/headers'
-import { getLocale, getMessages } from 'next-intl/server'
+import { getLocale, getMessages, getTimeZone } from 'next-intl/server'
 import NextTopLoader from 'nextjs-toploader'
 import { CookieBanner } from '@/components/layout/cookies-banner'
 import { routing } from '@/i18n/routing'
@@ -30,7 +30,7 @@ export default async function RootLayout({ children }: LayoutProps<'/[locale]'>)
   const cookieStore = await cookies()
   const hasConsentCookie = cookieStore.has('cookie-consent')
   const messages = await getMessages()
-
+  const timeZone = await getTimeZone()
   return (
     <html
       lang={currentLocale}
@@ -40,7 +40,7 @@ export default async function RootLayout({ children }: LayoutProps<'/[locale]'>)
       <head />
       <body className="min-h-full flex flex-col">
         <NextTopLoader showSpinner={false} color="#1447e6" height={3} />
-        <AppProvider locale={currentLocale} messages={messages}>
+        <AppProvider locale={currentLocale} messages={messages} timeZone={timeZone}>
           {!hasConsentCookie && <CookieBanner />}
           {children}
         </AppProvider>

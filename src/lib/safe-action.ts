@@ -1,39 +1,96 @@
 import { headers } from 'next/headers'
 import { createSafeActionClient, DEFAULT_SERVER_ERROR_MESSAGE } from 'next-safe-action'
-import { auth } from '@/lib/auth/auth' // Tu configuración de Better Auth
+import { auth } from '@/lib/auth/auth'
 
-// 1. Cliente base (sin protección extra, útil para validación de Zod)
+export class ActionError extends Error {
+  description?: string
+
+  constructor(title: string, description?: string) {
+    super(title)
+    this.name = 'ActionError'
+    this.description = description
+  }
+}
+
+export type ActionServerError = {
+  title: string
+  description?: string
+}
+
+// 1. Base client with structured server error handling
 export const actionClient = createSafeActionClient({
-  handleServerError(e: Error) {
-    // Manejo de errores amigable
-    if (e instanceof Error) return e.message
-    return DEFAULT_SERVER_ERROR_MESSAGE
+  handleServerError(e: Error): ActionServerError {
+    if (e instanceof ActionError) {
+      return {
+        title: e.message,
+        description: e.description,
+      }
+    }
+
+    if (e instanceof Error) {
+      return {
+        title: e.message || DEFAULT_SERVER_ERROR_MESSAGE,
+        description: undefined,
+      }
+    }
+
+    return {
+      title: DEFAULT_SERVER_ERROR_MESSAGE,
+      description: undefined,
+    }
   },
 })
 
-// 2. Middleware de Autenticación Básica
+// 2. Authentication Middleware: verifies active session
 export const authActionClient = actionClient.use(async ({ next }) => {
-  // Obtenemos la sesión actual
   const session = await auth.api.getSession({
     headers: await headers(),
   })
 
   if (!session || !session.user) {
-    throw new Error('No estás autorizado. Por favor inicia sesión.')
+    throw new ActionError('Unauthorized', 'You are not authorized. Please sign in to continue.')
   }
 
-  // Le pasamos los datos del usuario a la función final
-  return next({ ctx: { user: session.user } })
+  return next({
+    ctx: {
+      session,
+      user: session.user,
+    },
+  })
 })
 
-// 3. Middleware de Autorización por Roles (RBAC)
-export const adminActionClient = authActionClient.use(async ({ ctx, next }) => {
-  // 'ctx' contiene el usuario que inyectó el authActionClient
+// 3. Editor Authorization Middleware: role === 'admin' || role === 'editor'
+export const editorActionClient = authActionClient.use(async ({ ctx, next }) => {
+  const role = ctx.user.role
 
-  if (ctx.user.role !== 'admin') {
-    throw new Error('Permisos insuficientes. Se requiere rol de administrador.')
+  if (role !== 'admin' && role !== 'editor') {
+    throw new ActionError(
+      'Insufficient Permissions',
+      'Editor or Administrator role is required to perform this action.',
+    )
   }
 
-  // Si es admin, continúa la ejecución
-  return next({ ctx: { user: ctx.user } })
+  return next({
+    ctx: {
+      session: ctx.session,
+      user: ctx.user,
+    },
+  })
+})
+
+// 4. Admin Authorization Middleware: role === 'admin'
+export const adminActionClient = authActionClient.use(async ({ ctx, next }) => {
+  if (ctx.user.role !== 'admin') {
+    throw new ActionError(
+      'Insufficient Permissions',
+      'Administrator role is required to perform this action.',
+    )
+  }
+
+  return next({
+    ctx: {
+      session: ctx.session,
+      user: ctx.user,
+    },
+  })
 })

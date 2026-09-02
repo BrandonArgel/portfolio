@@ -3,6 +3,7 @@
 import { ExternalLink, Quote } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import type { TestimonialItem } from '../types'
 
@@ -15,28 +16,26 @@ export function TestimonialCard({ testimonial, className }: TestimonialCardProps
   const t = useTranslations('testimonials.items')
 
   return (
-    <article
+    <Card
       className={cn(
-        'group/testimonial relative flex w-full max-w-3xl flex-col justify-between overflow-hidden rounded-2xl border border-border/70 bg-card/60 p-8 shadow-xl backdrop-blur-sm transition-all duration-300 sm:p-10',
+        'select-none group/testimonial relative flex h-full w-full max-w-3xl flex-col justify-between rounded-2xl border-border/70 bg-card/60 backdrop-blur-sm transition-all duration-300',
+        '[--card-spacing:--spacing(8)] sm:[--card-spacing:--spacing(10)]',
         className,
       )}
     >
-      {/* Decorative background quote watermark */}
       <Quote
-        className="pointer-events-none absolute top-6 right-6 size-14 select-none text-primary/10 transition-colors duration-300 group-hover/testimonial:text-primary/15 sm:top-8 sm:right-8 sm:size-16"
+        className="pointer-events-none absolute top-4 right-4 z-0 size-14 select-none text-primary/10 transition-colors duration-300 group-hover/testimonial:text-primary/15 sm:top-5 sm:right-5 sm:size-12"
         aria-hidden="true"
       />
 
-      {/* Quote body */}
-      <div className="relative z-10">
-        <blockquote className="text-base font-normal leading-relaxed text-foreground/90 italic sm:text-lg">
+      <CardContent className="relative z-10">
+        <blockquote className="text-base font-normal italic leading-relaxed text-foreground/90 sm:text-lg">
           &ldquo;{t(`${testimonial.key}.quote`)}&rdquo;
         </blockquote>
-      </div>
+      </CardContent>
 
-      {/* Author information */}
-      <footer className="relative z-10 mt-8 flex items-center gap-3.5 border-t border-border/40 pt-6">
-        <Avatar size="lg" className="border border-border/60">
+      <CardFooter className="relative z-10 mt-auto border-t border-border/40 bg-transparent pt-6">
+        <Avatar size="lg" className="mr-3 border border-border/60">
           {testimonial.avatarUrl && (
             <AvatarImage src={testimonial.avatarUrl} alt={t(`${testimonial.key}.name`)} />
           )}
@@ -45,14 +44,14 @@ export function TestimonialCard({ testimonial, className }: TestimonialCardProps
           </AvatarFallback>
         </Avatar>
 
-        <div className="flex flex-col min-w-0">
-          <div className="flex items-center gap-1.5 font-bold text-base text-foreground tracking-tight">
+        <div className="flex min-w-0 flex-col">
+          <div className="flex items-center gap-1.5 text-base font-bold tracking-tight text-foreground">
             {testimonial.linkedInUrl ? (
               <a
                 href={testimonial.linkedInUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group/author inline-flex items-center gap-1 hover:text-primary transition-colors"
+                className="group/author inline-flex items-center gap-1 transition-colors hover:text-primary"
                 title={`${t(`${testimonial.key}.name`)} LinkedIn profile`}
               >
                 <span>{t(`${testimonial.key}.name`)}</span>
@@ -62,12 +61,12 @@ export function TestimonialCard({ testimonial, className }: TestimonialCardProps
               <span>{t(`${testimonial.key}.name`)}</span>
             )}
           </div>
-          <p className="text-sm text-muted-foreground truncate">
+          <p className="truncate text-sm text-muted-foreground">
             {t(`${testimonial.key}.role`)}
             {testimonial.company ? ` • ${testimonial.company}` : ''}
           </p>
         </div>
-      </footer>
-    </article>
+      </CardFooter>
+    </Card>
   )
 }

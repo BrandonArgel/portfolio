@@ -3,7 +3,7 @@
 import { Cookie, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
-import { setCookieConsent } from '@/actions/cookies'
+import { setCookieConsent } from '@/actions/cookies.action'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { track } from '@/lib/analytics/events'

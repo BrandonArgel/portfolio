@@ -38,7 +38,7 @@ export const AnimatedText = ({ text, className = '' }: AnimatedTextProps) => {
   }, [])
 
   return (
-    <span ref={containerRef} className={cn('flex flex-wrap gap-x-[0.25em]', className)}>
+    <span ref={containerRef} className={cn('inline-flex flex-wrap gap-x-[0.25em]', className)}>
       {words.map((word, wordIndex) => (
         <span key={wordIndex} className="inline-flex overflow-hidden">
           {word.split('').map((letter) => {

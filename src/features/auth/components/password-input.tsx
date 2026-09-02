@@ -160,7 +160,7 @@ export function PasswordInputStrengthChecker() {
               key={`strength-indicator-${level}`}
               className={cn(
                 'h-1 flex-1 rounded-full transition-colors duration-200',
-                strengthResult.score >= level ? color : 'bg-secondary',
+                strengthResult.score >= level ? color : 'bg-border',
               )}
             />
           )

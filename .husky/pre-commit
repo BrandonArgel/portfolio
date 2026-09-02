@@ -1,0 +1,4 @@
+#!/bin/sh
+bunx lint-staged
+bun run i18n:check
+bunx tsc --noEmit

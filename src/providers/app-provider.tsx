@@ -1,6 +1,6 @@
 'use client'
 
-import type { Locale, Messages } from 'next-intl'
+import type { Locale, Messages, Timezone } from 'next-intl'
 import { NextIntlClientProvider } from 'next-intl'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { NetworkNotifier } from './network-notifier'
@@ -11,11 +11,12 @@ interface AppProviderProps {
   children: React.ReactNode
   locale: Locale
   messages: Messages
+  timeZone: Timezone
 }
 
-export function AppProvider({ children, locale, messages }: AppProviderProps) {
+export function AppProvider({ children, locale, messages, timeZone }: AppProviderProps) {
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
+    <NextIntlClientProvider locale={locale} messages={messages} timeZone={timeZone}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <ToasterProvider />
         <NetworkNotifier />

@@ -71,7 +71,7 @@ export function LoginForm() {
   return (
     <Card className="w-full max-w-xl m-6">
       <CardHeader className="text-2xl font-bold">
-        <CardTitle>{t('title')}</CardTitle>
+        <CardTitle className="text-center">{t('title')}</CardTitle>
       </CardHeader>
       <CardContent>
         <form id="sign-in" onSubmit={handleSubmit(handleSignIn)}>

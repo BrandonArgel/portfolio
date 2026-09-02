@@ -1,8 +1,8 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { NavDropdownItem } from '@/components/layout/header/nav-dropdown-item'
-import { NavItemLink } from '@/components/layout/header/nav-link'
+import { NavDropdownItem } from '@/components/layout/header/ui/nav-dropdown-item'
+import { NavItemLink } from '@/components/layout/header/ui/nav-link'
 import {
   NavigationMenu,
   NavigationMenuContent,

@@ -3,16 +3,14 @@
 import { Music2 } from 'lucide-react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
-
 import { SpotifyIcon } from '@/assets/icons/social'
-import { Progress, ProgressIndicator, ProgressTrack } from '@/components/ui/progress'
+import { useIsVisible } from '@/hooks/use-is-visible'
 import { cn } from '@/lib/utils'
-
 import type { SpotifyTrack } from '../types'
 import { fetcher } from '../utils/fetcher'
-import { formatTime } from '../utils/format-time'
+import { SpotifyProgressBar } from './spotify-progress-bar'
 
 interface SpotifyWidgetProps {
   className?: string
@@ -20,51 +18,66 @@ interface SpotifyWidgetProps {
 
 export function SpotifyWidget({ className }: SpotifyWidgetProps) {
   const t = useTranslations('components.spotify')
+  const widgetRef = useRef<HTMLDivElement>(null)
 
-  const { data } = useSWR<SpotifyTrack | null>('/api/spotify', fetcher, {
-    refreshInterval: 15000,
+  const isVisible = useIsVisible(widgetRef, 0.1)
+  const [hasIntersected, setHasIntersected] = useState(false)
+
+  useEffect(() => {
+    if (isVisible && !hasIntersected) {
+      setHasIntersected(true)
+    }
+  }, [isVisible, hasIntersected])
+
+  const { data } = useSWR<SpotifyTrack | null>(hasIntersected ? '/api/spotify' : null, fetcher, {
+    refreshInterval: (currentData) => {
+      if (!isVisible) return 0
+
+      if (!currentData?.isPlaying || !currentData.item) return 15000
+
+      const duration = currentData.item.duration_ms
+      const progress = currentData.progressMs ?? 0
+      const timeRemaining = duration - progress
+
+      if (timeRemaining > 0 && timeRemaining < 15000) {
+        return timeRemaining + 1500
+      }
+
+      return 15000
+    },
     fallbackData: null,
   })
 
   const isPlaying = data?.isPlaying ?? false
   const item = data?.item
-
   const durationMs = item?.duration_ms ?? 0
   const initialProgressMs = data?.progressMs ?? 0
-
-  const [progress, setProgress] = useState<number>(initialProgressMs)
-
-  useEffect(() => {
-    if (!isPlaying) {
-      setProgress(0)
-      return
-    }
-
-    setProgress(initialProgressMs)
-    const startTime = Date.now()
-
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - startTime
-      const current = initialProgressMs + elapsed
-      setProgress(durationMs > 0 ? Math.min(current, durationMs) : current)
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [isPlaying, initialProgressMs, durationMs])
-
   const title = item?.name ?? t('not_playing')
   const artist = item?.artists?.map((a) => a.name).join(', ') ?? t('idle')
   const albumImageUrl = item?.album?.images?.[0]?.url
   const songUrl = item?.external_urls?.spotify
-  const progressPercentage = durationMs > 0 ? Math.min(100, (progress / durationMs) * 100) : 0
 
-  const containerClassName = cn(
-    'group/spotify relative block w-full overflow-hidden rounded-2xl border border-border/70 bg-card/60 p-4 shadow-lg backdrop-blur-sm transition-all duration-300 hover:border-emerald-500/30 hover:bg-card/80',
-    className,
-  )
+  return (
+    <div
+      ref={widgetRef}
+      className={cn(
+        'group/spotify relative block w-full overflow-hidden rounded-2xl border border-border/70 bg-card/60 p-4 shadow-lg backdrop-blur-sm transition-all duration-300 hover:border-emerald-500/30 hover:bg-card/80',
+        className,
+      )}
+    >
+      {isPlaying && songUrl && (
+        <a
+          href={songUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute inset-0 z-10 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+        >
+          <span className="sr-only">
+            {t('now_playing')}: {title} {t('by')} {artist}
+          </span>
+        </a>
+      )}
 
-  const content = (
-    <>
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -bottom-0.5 -right-0.5 size-6 rounded-br-2xl border-b-2 border-r-2 border-blue-500 transition-colors group-hover/spotify:border-emerald-500"
@@ -107,38 +120,12 @@ export function SpotifyWidget({ className }: SpotifyWidgetProps) {
         </div>
       </div>
 
-      {isPlaying && durationMs > 0 && (
-        <div className="mt-3 space-y-1.5">
-          <Progress value={progressPercentage} className="w-full">
-            <ProgressTrack>
-              <ProgressIndicator className="bg-emerald-500 group-hover/spotify:bg-emerald-400" />
-            </ProgressTrack>
-          </Progress>
-          <div
-            className="flex items-center justify-between text-[10px] font-mono text-muted-foreground"
-            aria-hidden="true"
-          >
-            <span>{formatTime(progress)}</span>
-            <span>{formatTime(durationMs)}</span>
-          </div>
-        </div>
-      )}
-    </>
+      <SpotifyProgressBar
+        isPlaying={isPlaying}
+        isVisible={isVisible}
+        initialProgressMs={initialProgressMs}
+        durationMs={durationMs}
+      />
+    </div>
   )
-
-  if (isPlaying && songUrl) {
-    return (
-      <a
-        href={songUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={containerClassName}
-        aria-label={`${t('now_playing')}: ${title} ${t('by')} ${artist}`}
-      >
-        {content}
-      </a>
-    )
-  }
-
-  return <div className={containerClassName}>{content}</div>
 }

@@ -15,7 +15,7 @@ export async function proxy(request: NextRequest) {
   const intlResponse = intlMiddleware(request)
 
   // Strip the locale prefix to check against auth/protected routes
-  const localePattern = /^\/(en|es)(\/|$)/
+  const localePattern = /^\/(en|es|fr)(\/|$)/
   const pathnameWithoutLocale = pathname.replace(localePattern, '/')
 
   const hasSessionToken =
