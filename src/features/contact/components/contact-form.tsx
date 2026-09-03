@@ -5,11 +5,11 @@ import { Send } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Controller, useForm } from 'react-hook-form'
 import { sileo } from 'sileo'
-import { sendContactMessageAction } from '@/actions/contact.action'
 import { ActionButton } from '@/components/ui/action-button'
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Textarea } from '@/components/ui/textarea'
 import { ControlledInput } from '@/features/auth/components/controlled-input'
+import { sendContactMessageAction } from '@/features/contact/actions/contact.action'
 import { type ContactMessageForm, contactMessageSchema } from '../schemas/contact.schema'
 
 interface ContactFormProps {

@@ -2,14 +2,15 @@ import { ArrowLeft, Calendar, Clock, User } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/ui/button'
-import type { BlogPost } from '@/types/blog'
-import { MarkdownContent } from './markdown-content'
+import type { BlogPost } from '../types'
+import { MdxContentServer } from './public/MdxContentServer'
 
 interface BlogPostContentProps {
   post: BlogPost
+  action?: React.ReactNode
 }
 
-export async function BlogPostContent({ post }: BlogPostContentProps) {
+export async function BlogPostContent({ post, action }: BlogPostContentProps) {
   const t = await getTranslations('blog')
   const locale = await getLocale()
 
@@ -21,14 +22,18 @@ export async function BlogPostContent({ post }: BlogPostContentProps) {
 
   return (
     <article className="w-full">
-      <LinkButton
-        href="/blog"
-        variant="ghost"
-        className="mb-8 -ml-4 gap-2 text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-4" />
-        {t('back_to_blog')}
-      </LinkButton>
+      <div className="mb-8 flex items-center justify-between">
+        <LinkButton
+          href="/blog"
+          variant="ghost"
+          className="-ml-4 gap-2 text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="size-4" />
+          {t('back_to_blog')}
+        </LinkButton>
+
+        {action}
+      </div>
 
       <header className="mb-10 flex flex-col items-start gap-6 border-b border-border pb-10">
         {post.tags && post.tags.length > 0 && (
@@ -65,7 +70,7 @@ export async function BlogPostContent({ post }: BlogPostContentProps) {
         </div>
       </header>
 
-      <MarkdownContent content={post.content} />
+      <MdxContentServer content={post.content} />
     </article>
   )
 }

@@ -2,7 +2,7 @@ import { Calendar, Clock } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
-import type { BlogPostCardItem } from '@/types/blog'
+import type { BlogPostCardItem } from '../types'
 import { BlogThumbnail } from './blog-thumbnail'
 
 interface BlogCardProps {

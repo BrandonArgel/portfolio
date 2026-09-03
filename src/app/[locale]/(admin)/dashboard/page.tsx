@@ -4,11 +4,10 @@ import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { getTranslations } from 'next-intl/server'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { LinkButton } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { db } from '@/db'
 import { posts, user } from '@/db/schema'
-import { Link } from '@/i18n/navigation'
 import { auth } from '@/lib/auth/auth'
 
 interface DashboardPageProps {
@@ -49,7 +48,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
   const totalUsers = totalUsersResult?.value ?? 0
 
   return (
-    <div className="space-y-8">
+    <div className="section-container py-6 space-y-8">
       {/* Welcome header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -64,14 +63,14 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
         </div>
 
         <div className="flex items-center gap-3">
-          <Button
+          <LinkButton
             size="sm"
             className="gap-2 cursor-pointer shadow-xs"
-            render={<Link href="/dashboard/blog/new" />}
+            href="/dashboard/blog/new"
           >
             <PlusCircle className="size-4" />
             <span>{t('new_post')}</span>
-          </Button>
+          </LinkButton>
         </div>
       </div>
 
@@ -161,24 +160,24 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-3">
-            <Button
+            <LinkButton
               variant="outline"
               size="sm"
               className="gap-2 cursor-pointer"
-              render={<Link href="/dashboard/posts" />}
+              href="/dashboard/posts"
             >
               <FileText className="size-4" />
               <span>{t('posts')}</span>
-            </Button>
-            <Button
+            </LinkButton>
+            <LinkButton
               variant="default"
               size="sm"
               className="gap-2 cursor-pointer"
-              render={<Link href="/dashboard/blog/new" />}
+              href="/dashboard/blog/new"
             >
               <PlusCircle className="size-4" />
               <span>{t('new_post')}</span>
-            </Button>
+            </LinkButton>
           </CardContent>
         </Card>
 
@@ -193,15 +192,15 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button
+              <LinkButton
                 variant="outline"
                 size="sm"
                 className="gap-2 cursor-pointer"
-                render={<Link href="/dashboard/users" />}
+                href="/dashboard/users"
               >
                 <ShieldCheck className="size-4 text-purple-500" />
                 <span>{t('users')}</span>
-              </Button>
+              </LinkButton>
             </CardContent>
           </Card>
         )}

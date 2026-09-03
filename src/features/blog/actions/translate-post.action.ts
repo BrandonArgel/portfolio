@@ -58,12 +58,13 @@ ${originalPost.content}`
       const translateSingleLocale = async (targetLocale: string) => {
         const systemPrompt = `You are a Senior Software Engineer and expert technical translator.
 Your task is to translate the following Markdown document to the '${targetLocale}' language.
+
 STRICT RULES:
 1. Translate the values of 'title' and 'slug' in the Frontmatter. The 'slug' must be in kebab-case format.
 2. Change the value of 'locale' to '${targetLocale}'.
 3. DO NOT modify the value of 'translationGroupId'.
 4. DO NOT translate the tags in 'tags' (leave them in their original language to maintain the relationship in the database).
-5. DO NOT translate the code inside the code blocks (\`\`\`).
+5. INSIDE CODE BLOCKS (\`\`\`): DO NOT translate programming syntax, keywords, variable names, function names, HTML tags, or file paths. ONLY translate natural language comments (e.g., //, /*, #, <!--) and user-facing string literals. Maintain exact spacing and syntax.
 6. DO NOT translate the syntax of the Callouts (e.g. > [!info], > [!warning]). Translate only the descriptive text that accompanies them.
 7. Return ONLY the resulting Markdown code. Do not add greetings or explanations.`
 

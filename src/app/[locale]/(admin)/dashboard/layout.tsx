@@ -4,10 +4,9 @@ import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { UserPreferencesMenu } from '@/components/layout/header/ui/user-menu'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Link } from '@/i18n/navigation'
+import { LinkButton } from '@/components/ui/button'
+import { DashboardNav } from '@/features/dashboard'
 import { auth } from '@/lib/auth/auth'
-import { DashboardNav } from './_components/dashboard-nav'
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -38,15 +37,15 @@ export default async function DashboardLayout({ children, params }: DashboardLay
         <div className="container mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex h-16 items-center justify-between gap-4">
             <div className="flex items-center gap-4 min-w-0">
-              <Button
+              <LinkButton
                 variant="ghost"
                 size="sm"
                 className="gap-2 text-muted-foreground hover:text-foreground shrink-0"
-                render={<Link href="/" />}
+                href="/"
               >
                 <ArrowLeft className="size-4" />
                 <span className="hidden sm:inline">{t('back_to_site')}</span>
-              </Button>
+              </LinkButton>
 
               <div className="h-4 w-px bg-border/80 hidden sm:block shrink-0" />
 
@@ -88,9 +87,7 @@ export default async function DashboardLayout({ children, params }: DashboardLay
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 container mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
     </div>
   )
 }

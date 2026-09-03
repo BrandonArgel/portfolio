@@ -1,10 +1,10 @@
-import { and, desc, eq, inArray, like, or } from 'drizzle-orm'
+import { and, count, desc, eq, inArray, like, or } from 'drizzle-orm'
 import { db } from '@/db'
 import { categories, posts, postsToCategories } from '@/db/schema'
-import type { BlogCategory, BlogPost, BlogPostCardItem } from '@/types/blog'
-import { calculateReadTime } from '@/utils/calculate-read-time'
-import { extractExcerpt } from '@/utils/extract-excerpt'
 import { error, okay, type Result } from '@/utils/result'
+import type { BlogCategory, BlogPost, BlogPostCardItem } from '../types'
+import { calculateReadTime } from '../utils/calculate-read-time'
+import { extractExcerpt } from '../utils/extract-excerpt'
 
 export type PostError =
   | { reason: 'DATABASE_ERROR'; details?: unknown }
@@ -16,13 +16,38 @@ function escapeLikePattern(input: string): string {
 
 export async function getAllCategories(): Promise<Result<BlogCategory[], PostError>> {
   try {
-    const dbCategories = await db.query.categories.findMany({
-      orderBy: [categories.name],
-    })
+    const dbCategories = await db
+      .select({
+        id: categories.id,
+        name: categories.name,
+        slug: categories.slug,
+        postCount: count(posts.id),
+      })
+      .from(categories)
+      .innerJoin(postsToCategories, eq(categories.id, postsToCategories.categoryId))
+      .innerJoin(posts, eq(postsToCategories.postId, posts.id))
+      .where(eq(posts.published, true))
+      .groupBy(categories.id, categories.name, categories.slug)
+      .orderBy(categories.name)
+
     return okay(dbCategories)
   } catch (err) {
     console.error('Error fetching categories:', err)
     return error({ reason: 'DATABASE_ERROR', details: err })
+  }
+}
+
+export async function countTotalPublishedPosts(): Promise<number> {
+  try {
+    const [res] = await db
+      .select({ count: count(posts.id) })
+      .from(posts)
+      .where(eq(posts.published, true))
+
+    return res?.count ?? 0
+  } catch (err) {
+    console.error('Error counting published posts:', err)
+    return 0
   }
 }
 
@@ -213,5 +238,28 @@ export async function getPostTranslationsByGroupId(
   } catch (err) {
     console.error('Error fetching post translations by group id:', err)
     return []
+  }
+}
+
+export async function getPostTranslationFallback(
+  translationGroupId: string | null | undefined,
+  targetLocale: string,
+): Promise<string | null> {
+  if (!translationGroupId) return null
+
+  try {
+    const post = await db.query.posts.findFirst({
+      where: and(
+        eq(posts.translationGroupId, translationGroupId),
+        eq(posts.locale, targetLocale),
+        eq(posts.published, true),
+      ),
+      columns: { slug: true },
+    })
+
+    return post?.slug ?? null
+  } catch (err) {
+    console.error('Error fetching post translation fallback:', err)
+    return null
   }
 }

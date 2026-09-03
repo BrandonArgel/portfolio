@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og'
 import { siteConfig } from '@/config/site'
-import { getPublishedPostBySlug } from '@/services/posts.service'
+import { getPublishedPostBySlug } from '@/features/blog/services/posts.service'
 
 export const runtime = 'nodejs'
 

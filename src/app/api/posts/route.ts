@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import { getPublishedPosts } from '@/services/posts.service'
+import { getPublishedPosts } from '@/features/blog/services/posts.service'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams

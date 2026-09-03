@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { usePathname, useRouter } from '@/i18n/navigation'
-import type { BlogCategory } from '@/types/blog'
+import type { BlogCategory } from '../types'
 
 interface BlogFilterProps {
   categories: BlogCategory[]

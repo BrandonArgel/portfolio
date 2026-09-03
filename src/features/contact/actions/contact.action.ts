@@ -1,7 +1,7 @@
 'use server'
 
-import { contactMessageSchema } from '@/features/contact/schemas/contact.schema'
 import { actionClient } from '@/lib/safe-action'
+import { contactMessageSchema } from '../schemas/contact.schema'
 
 export const sendContactMessageAction = actionClient
   .schema(contactMessageSchema)

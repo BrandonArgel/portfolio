@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { getBaseUrl } from '@/config/site'
+import { getAllPublishedPostsForSitemap } from '@/features/blog/services/posts.service'
 import { routing } from '@/i18n/routing'
-import { getAllPublishedPostsForSitemap } from '@/services/posts.service'
 
 const STATIC_ROUTES = [
   { path: '', priority: 1.0, changeFrequency: 'weekly' as const },
@@ -18,7 +18,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const defaultLocale = routing.defaultLocale
   const sitemapEntries: MetadataRoute.Sitemap = []
 
-  // 1. Static Routes for all supported locales
   for (const route of STATIC_ROUTES) {
     const alternateLanguages: Record<string, string> = {}
 
@@ -40,10 +39,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // 2. Dynamic Blog Posts from Database
   const publishedPosts = await getAllPublishedPostsForSitemap()
 
-  // Map translation groups to build accurate localized hreflang alternates
   const translationGroupMap = new Map<string, Map<string, string>>()
 
   for (const post of publishedPosts) {
@@ -61,9 +58,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (post.translationGroupId && translationGroupMap.has(post.translationGroupId)) {
       const groupLocales = translationGroupMap.get(post.translationGroupId)
       if (groupLocales) {
-        for (const [loc, slug] of groupLocales.entries()) {
-          alternateLanguages[loc] = `${baseUrl}/${loc}/blog/${slug}`
+        for (const loc of routing.locales) {
+          const slugToUse = groupLocales.get(loc) || post.slug
+          alternateLanguages[loc] = `${baseUrl}/${loc}/blog/${slugToUse}`
         }
+
         const defaultSlug = groupLocales.get(defaultLocale) || post.slug
         alternateLanguages['x-default'] = `${baseUrl}/${defaultLocale}/blog/${defaultSlug}`
       }

@@ -1,1 +1,2 @@
-export * from '@/types/blog'
+export * from '../schemas/blog.schema'
+export * from './blog'

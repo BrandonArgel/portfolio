@@ -9,8 +9,9 @@ import { LinkButton } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { db } from '@/db'
 import { posts } from '@/db/schema'
+import { DeletePostButton } from '@/features/blog/components/admin/delete-button'
+import { PostPublishToggle } from '@/features/blog/components/admin/publish-toggle'
 import { auth } from '@/lib/auth/auth'
-import { DeletePostButton } from './_components/delete-button'
 
 interface DashboardPostsPageProps {
   params: Promise<{ locale: string }>
@@ -57,7 +58,7 @@ export default async function DashboardPostsPage({ params }: DashboardPostsPageP
         })
 
   return (
-    <div className="space-y-6">
+    <div className="section-container py-6 space-y-6">
       <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
@@ -105,15 +106,7 @@ export default async function DashboardPostsPage({ params }: DashboardPostsPageP
                       <h2 className="font-semibold text-base text-foreground truncate">
                         {post.title}
                       </h2>
-                      {post.published ? (
-                        <Badge variant="softGreen" className="text-xs">
-                          {t('published')}
-                        </Badge>
-                      ) : (
-                        <Badge variant="outline" className="text-xs">
-                          {t('draft')}
-                        </Badge>
-                      )}
+                      <PostPublishToggle postId={post.id} initialPublished={post.published} />
                       <Badge variant="secondary" className="text-[10px] uppercase font-mono">
                         {post.locale}
                       </Badge>

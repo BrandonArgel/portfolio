@@ -3,8 +3,8 @@ import { headers } from 'next/headers'
 import { notFound, redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { BlogEditor } from '@/features/blog/components/blog-editor'
+import { getPostBySlug } from '@/features/blog/services/posts.service'
 import { auth } from '@/lib/auth/auth'
-import { getPostBySlug } from '@/services/posts.service'
 
 interface EditPostPageProps {
   params: Promise<{
@@ -61,7 +61,7 @@ tags: [${tagsString}]
 ${post.content}`
 
   return (
-    <div className="container py-8">
+    <div className="p-4 lg:p-8">
       <BlogEditor initialId={post.id} initialContent={initialMarkdown} />
     </div>
   )

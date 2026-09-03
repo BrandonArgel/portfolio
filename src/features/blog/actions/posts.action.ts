@@ -148,3 +148,50 @@ export const deletePostAction = adminActionClient
       )
     }
   })
+
+const togglePublishStatusSchema = z.object({
+  postId: z.string().min(1, 'Post ID is required'),
+  published: z.boolean(),
+})
+
+export const togglePublishStatusAction = editorActionClient
+  .inputSchema(togglePublishStatusSchema)
+  .action(async ({ parsedInput, ctx }) => {
+    const { postId, published } = parsedInput
+
+    try {
+      const existingPost = await db.query.posts.findFirst({
+        where: eq(posts.id, postId),
+      })
+
+      if (!existingPost) {
+        throw new ActionError('Post Not Found', 'The post you are trying to update does not exist.')
+      }
+
+      if (ctx.user.role !== 'admin' && existingPost.authorId !== ctx.user.id) {
+        throw new ActionError('Insufficient Permissions', 'You can only update your own posts.')
+      }
+
+      await db
+        .update(posts)
+        .set({
+          published,
+          updatedAt: new Date(),
+        })
+        .where(eq(posts.id, postId))
+
+      revalidatePath('/blog')
+      revalidatePath(`/blog/${existingPost.slug}`)
+      revalidatePath('/dashboard/posts')
+      revalidatePath('/dashboard/blog')
+
+      return { success: true, postId, published }
+    } catch (error) {
+      console.error('Error toggling publish status:', error)
+      if (error instanceof ActionError) throw error
+      throw new ActionError(
+        'Failed to update publish status',
+        error instanceof Error ? error.message : 'An unexpected database error occurred.',
+      )
+    }
+  })

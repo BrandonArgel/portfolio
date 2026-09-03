@@ -49,9 +49,6 @@ export interface PageMetadataParams {
   customSlugs?: Partial<Record<Locale, string>>
 }
 
-/**
- * Standardized helper to construct complete, production-ready Next.js Metadata objects.
- */
 export function constructPageMetadata({
   locale,
   title,

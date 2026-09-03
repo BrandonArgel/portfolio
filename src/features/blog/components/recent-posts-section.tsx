@@ -4,7 +4,7 @@ import { AnimatedText } from '@/components/ui/animated-text'
 import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/ui/button'
 import { Section, SectionTitle } from '@/components/ui/section'
-import { getPublishedPosts } from '@/services/posts.service'
+import { getPublishedPosts } from '@/features/blog/services/posts.service'
 import { BlogCard } from './blog-card'
 
 interface RecentPostsSectionProps {

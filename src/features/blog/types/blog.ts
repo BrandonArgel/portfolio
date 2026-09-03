@@ -2,6 +2,7 @@ export interface BlogCategory {
   id: string
   name: string
   slug: string
+  postCount?: number
 }
 
 export interface BlogPost {

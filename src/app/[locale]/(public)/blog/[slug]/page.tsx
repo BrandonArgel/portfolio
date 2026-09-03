@@ -5,9 +5,16 @@ import { JsonLd } from '@/components/seo/json-ld'
 import { Section } from '@/components/ui/section'
 import { getBaseUrl, siteConfig } from '@/config/site'
 import { BlogPostContent } from '@/features/blog/components/blog-post-content'
+import { EditPostButton } from '@/features/blog/components/public/EditPostButton'
+import { TranslationFallbackBanner } from '@/features/blog/components/public/TranslationFallbackBanner'
+import {
+  getPostTranslationFallback,
+  getPostTranslationsByGroupId,
+  getPublishedPostBySlug,
+} from '@/features/blog/services/posts.service'
+import { redirect } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { constructPageMetadata } from '@/lib/seo'
-import { getPostTranslationsByGroupId, getPublishedPostBySlug } from '@/services/posts.service'
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -62,22 +69,37 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const { slug } = await params
+  const { slug, locale } = await params
+  const activeLocale = locale as Locale
   const t = await getTranslations('blog')
 
   const [err, post] = await getPublishedPostBySlug(slug)
 
-  if (err) {
-    if (err.reason === 'NOT_FOUND') {
-      return notFound()
+  if (err || !post) {
+    if (err && err.reason !== 'NOT_FOUND') {
+      return (
+        <Section withGlow containerClassName="max-w-4xl py-20 text-center">
+          <h1 className="text-2xl font-bold text-destructive">{t('error_loading_article')}</h1>
+          <p className="mt-2 text-muted-foreground">{t('error_loading_article_description')}</p>
+        </Section>
+      )
     }
 
-    return (
-      <Section withGlow containerClassName="max-w-4xl py-20 text-center">
-        <h1 className="text-2xl font-bold text-destructive">{t('error_loading_article')}</h1>
-        <p className="mt-2 text-muted-foreground">{t('error_loading_article_description')}</p>
-      </Section>
-    )
+    return notFound()
+  }
+
+  let showFallbackBanner = false
+
+  if (post.locale !== activeLocale) {
+    if (post.translationGroupId) {
+      const translatedSlug = await getPostTranslationFallback(post.translationGroupId, activeLocale)
+
+      if (translatedSlug) {
+        redirect({ href: `/blog/${translatedSlug}`, locale: activeLocale })
+      }
+    }
+
+    showFallbackBanner = true
   }
 
   const baseUrl = getBaseUrl()
@@ -114,7 +136,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     <>
       <JsonLd data={jsonLd} />
       <Section withGlow containerClassName="max-w-4xl">
-        <BlogPostContent post={post} />
+        {showFallbackBanner && (
+          <div className="mb-6">
+            <TranslationFallbackBanner originalLocale={post.locale} />
+          </div>
+        )}
+        <BlogPostContent
+          post={post}
+          action={<EditPostButton authorId={post.authorId} slug={post.slug} />}
+        />
       </Section>
     </>
   )

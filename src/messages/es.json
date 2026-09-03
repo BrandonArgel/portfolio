@@ -313,23 +313,66 @@
     }
   },
   "blog": {
-    "badge": "Últimos Artículos",
+    "badge": "Blog & Artículos",
+    "title_line1": "Perspectivas sobre",
+    "title_line2": "Tecnología y Seguridad",
     "title_prefix": "Publicaciones",
     "title_highlight": "Recientes del Blog",
     "view_all": "Ver Todos los Artículos",
     "title": "Blog de Ingeniería",
-    "subtitle": "Reflexiones, Artículos y Arquitectura.",
+    "subtitle": "Explora artículos sobre ciberseguridad, desarrollo web y recursos educativos para potenciar tus habilidades técnicas.",
     "search_placeholder": "Buscar artículos...",
-    "all_topics": "Todos los temas",
+    "search_button": "Buscar",
+    "clear_search": "Limpiar búsqueda",
     "clear_filters": "Limpiar filtros",
     "back_to_blog": "Regresar al Blog",
     "read_time_suffix": "min de lectura",
+    "sidebar_categories": "Categorías",
+    "sidebar_bookmarked": "Artículos Guardados",
+    "sidebar_trending": "Tendencias",
+    "empty_bookmarked": "Aún no tienes artículos guardados. ¡Guarda tus lecturas favoritas aquí!",
+    "empty_trending": "¡Vuelve pronto para ver artículos en tendencia!",
+    "all_articles": "Todos los Artículos",
+    "showing_articles": "Mostrando {start}-{end} de {total} artículos",
+    "sort": {
+      "latest": "Más reciente",
+      "oldest": "Más antiguo",
+      "popular": "Popular",
+      "reading_time": "Tiempo de lectura"
+    },
+    "actions": {
+      "share": "Compartir artículo",
+      "bookmark": "Guardar artículo",
+      "link_copied": "Enlace copiado al portapapeles",
+      "link_copy_error": "No se pudo copiar el enlace",
+      "bookmarked": "Artículo guardado",
+      "bookmark_removed": "Artículo eliminado de guardados",
+      "edit": "Editar artículo"
+    },
     "no_results": "No se encontraron artículos con esos filtros.",
     "empty_posts": "No hay artículos publicados aún.",
     "error_loading_posts": "No se pudieron cargar los artículos en este momento.",
     "error_loading_article": "Error cargando el artículo",
     "error_loading_article_description": "Hubo un problema de conexión. Intenta nuevamente más tarde.",
-    "post_not_found": "Artículo no encontrado"
+    "post_not_found": "Artículo no encontrado",
+    "fallbackWarning": "Este artículo aún no está disponible en tu idioma. Mostrando la versión en {originalLocale, select, en {inglés} es {español} fr {francés} other {original}}.",
+    "categories": {
+      "all": "Todos",
+      "architecture": "Arquitectura",
+      "web_development": "Desarrollo Web",
+      "productivity": "Productividad",
+      "personal_development": "Desarrollo Personal",
+      "programming": "Programación",
+      "javascript": "JavaScript",
+      "nextjs": "Next.js",
+      "typescript": "TypeScript",
+      "react": "React",
+      "full_stack": "Full Stack",
+      "ui_ux": "UI/UX",
+      "performance": "Rendimiento",
+      "seo": "SEO",
+      "ai": "IA & Automatización"
+    }
   },
   "contact": {
     "badge": "Conectemos",
@@ -439,7 +482,14 @@
       "deleting": "Eliminando...",
       "delete_confirm": "¿Estás seguro de que deseas eliminar este artículo? Esta acción no se puede deshacer.",
       "delete_success": "Artículo eliminado exitosamente",
-      "delete_error": "Error al eliminar el artículo"
+      "delete_error": "Error al eliminar el artículo",
+      "publish_toggle": "Publicar",
+      "publish_success": "Artículo publicado exitosamente",
+      "unpublish_success": "Artículo despublicado exitosamente",
+      "status_update_error": "Error al actualizar el estado del artículo",
+      "delete_dialog_title": "Eliminar Artículo",
+      "delete_dialog_description": "¿Estás seguro de que deseas eliminar este artículo? Esta acción no se puede deshacer.",
+      "cancel": "Cancelar"
     },
     "users_management": {
       "title": "Gestión de Usuarios",
@@ -476,6 +526,8 @@
   "blog_editor": {
     "new_post": "Nuevo Artículo",
     "editing_post": "Editando Artículo",
+    "unsaved_changes_warning": "Tienes cambios sin guardar. ¿Estás seguro de que deseas salir?",
+    "back_to_posts": "Artículos",
     "save_button": "Guardar Artículo",
     "saving_button": "Guardando...",
     "translate_button": "Traducir con IA",
@@ -483,6 +535,8 @@
     "translate_all_button": "Traducir a todos los idiomas faltantes",
     "translate_to": "Traduciendo a {locale}...",
     "translating_all": "Traduciendo a todos los idiomas faltantes...",
+    "upload_image_button": "Subir imagen",
+    "uploading_image_button": "Subiendo...",
     "frontmatter_detected": "Frontmatter detectado:",
     "preview_empty": "Aún no hay contenido para previsualizar. Comienza a escribir Markdown a la izquierda.",
     "post_not_found": "Artículo no encontrado",
@@ -495,41 +549,39 @@
       "validation_error": "Error de validación al guardar",
       "translate_error": "Error al traducir el artículo",
       "frontmatter_required": "El Frontmatter debe incluir 'title', 'slug' y 'locale'",
-      "frontmatter_invalid": "Error de sintaxis en el Frontmatter (YAML inválido)"
+      "frontmatter_invalid": "Error de sintaxis en el Frontmatter (YAML inválido)",
+      "image_uploaded": "Imagen subida correctamente",
+      "image_upload_error": "Error al subir la imagen"
     }
   },
   "metadata": {
     "root": {
-      "title": "Brandon Argel | Desarrollador Full Stack & Especialista UI/UX",
+      "title": "Brandon Argel - Desarrollador Full Stack & Especialista UI/UX",
       "description": "Desarrollador Full Stack especializado en React, Next.js y TypeScript. Creando aplicaciones web de alto rendimiento y arquitecturas escalables.",
       "keywords": "Desarrollador Full Stack, React, Next.js, TypeScript, Node.js, Desarrollo Web, Portafolio, Brandon Argel"
     },
-    "home": {
-      "title": "Brandon Argel | Desarrollador Full Stack & Especialista UI/UX",
-      "description": "Desarrollador Full Stack especializado en React, Next.js y TypeScript. Creando aplicaciones web de alto rendimiento, arquitecturas backend escalables y experiencias de usuario excepcionales."
-    },
     "about": {
-      "title": "Sobre Brandon Argel | Desarrollador Full Stack",
+      "title": "Acerca de mí",
       "description": "Conoce la trayectoria de Brandon Argel, sus principios rectores y su experiencia creando aplicaciones web modernas y accesibles."
     },
     "blog": {
-      "title": "Blog de Ingeniería | Brandon Argel",
+      "title": "Blog de Ingeniería",
       "description": "Artículos, análisis profundos y perspectivas sobre desarrollo web moderno, TypeScript, arquitectura Next.js e ingeniería full stack."
     },
     "contact": {
-      "title": "Contacto | Brandon Argel",
+      "title": "Contacto",
       "description": "Ponte en contacto con Brandon Argel para proyectos freelance, consultoría técnica y colaboraciones de desarrollo de software."
     },
     "resume": {
-      "title": "Currículum y Trayectoria | Brandon Argel",
+      "title": "Currículum y Trayectoria",
       "description": "Explora la trayectoria profesional, competencias técnicas y logros laborales de Brandon Argel."
     },
     "privacy_policy": {
-      "title": "Política de Privacidad | Brandon Argel",
+      "title": "Política de Privacidad",
       "description": "Política de privacidad y prácticas de protección de datos del portafolio y servicios de Brandon Argel."
     },
     "terms_of_service": {
-      "title": "Términos de Servicio | Brandon Argel",
+      "title": "Términos de Servicio",
       "description": "Términos de servicio y condiciones de uso del portafolio y aplicaciones web de Brandon Argel."
     }
   }

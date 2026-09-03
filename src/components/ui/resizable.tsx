@@ -1,13 +1,56 @@
 'use client'
 
+import * as React from 'react'
 import * as ResizablePrimitive from 'react-resizable-panels'
 
 import { cn } from '@/lib/utils'
 
-function ResizablePanelGroup({ className, ...props }: ResizablePrimitive.GroupProps) {
+export type ResizablePanelGroupProps = Omit<ResizablePrimitive.GroupProps, 'orientation'> & {
+  direction?: 'horizontal' | 'vertical'
+  orientation?: 'horizontal' | 'vertical'
+  autoSaveId?: string
+}
+
+function ResizablePanelGroup({
+  className,
+  direction = 'horizontal',
+  orientation,
+  autoSaveId,
+  defaultLayout: defaultLayoutProp,
+  onLayoutChanged: onLayoutChangedProp,
+  ...props
+}: ResizablePanelGroupProps) {
+  const resolvedOrientation = orientation ?? direction
+
+  const [defaultLayout] = React.useState<ResizablePrimitive.Layout | undefined>(() => {
+    if (defaultLayoutProp) return defaultLayoutProp
+    if (typeof window !== 'undefined' && autoSaveId) {
+      try {
+        const saved = localStorage.getItem(`react-resizable-panels:${autoSaveId}`)
+        if (saved) return JSON.parse(saved)
+      } catch {}
+    }
+    return undefined
+  })
+
+  const handleLayoutChanged = React.useCallback(
+    (layout: ResizablePrimitive.Layout, meta: ResizablePrimitive.LayoutChangedMeta) => {
+      onLayoutChangedProp?.(layout, meta)
+      if (autoSaveId && typeof window !== 'undefined') {
+        try {
+          localStorage.setItem(`react-resizable-panels:${autoSaveId}`, JSON.stringify(layout))
+        } catch {}
+      }
+    },
+    [autoSaveId, onLayoutChangedProp],
+  )
+
   return (
     <ResizablePrimitive.Group
       data-slot="resizable-panel-group"
+      orientation={resolvedOrientation}
+      defaultLayout={defaultLayout}
+      onLayoutChanged={handleLayoutChanged}
       className={cn('flex h-full w-full aria-[orientation=vertical]:flex-col', className)}
       {...props}
     />
