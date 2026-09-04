@@ -50,6 +50,8 @@
   --font-heading: var(--font-sans);
   --text-fluid-title: clamp(var(--text-3xl), 1.19rem + 3.41vw, var(--text-6xl));
   --text-fluid-subtitle: clamp(var(--text-2xl), 0.95rem + 2.73vw, var(--text-5xl));
+  --text-xs: 0.625rem; 
+  --text-xs--line-height: 0.875rem;
 }
 
 :root {

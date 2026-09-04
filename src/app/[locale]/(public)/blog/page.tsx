@@ -1,7 +1,12 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { Section } from '@/components/ui/section'
-import { BlogFeed, BlogHeader, BlogSidebar } from '@/features/blog/components/public'
+import {
+  BlogFeed,
+  BlogHeader,
+  BlogPagination,
+  BlogSidebar,
+} from '@/features/blog/components/public'
 import {
   countTotalPublishedPosts,
   getAllCategories,
@@ -37,15 +42,19 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     typeof resolvedParams.category === 'string' ? resolvedParams.category : undefined
   const searchQuery = typeof resolvedParams.q === 'string' ? resolvedParams.q : undefined
   const sortParam = typeof resolvedParams.sort === 'string' ? resolvedParams.sort : 'latest'
+  const currentPage = Math.max(1, Number(resolvedParams?.page) || 1)
+  const limit = 9
 
-  const [[postsErr, postsData], [categoriesErr, categoriesData], totalPublishedCount] =
+  const [[postsErr, paginatedData], [categoriesErr, categoriesData], totalPublishedCount] =
     await Promise.all([
-      getPublishedPosts(categorySlug, searchQuery),
+      getPublishedPosts(categorySlug, searchQuery, currentPage, limit, sortParam),
       getAllCategories(),
       countTotalPublishedPosts(),
     ])
 
-  const posts = postsErr ? [] : [...postsData]
+  const posts = postsErr || !paginatedData ? [] : [...paginatedData.posts]
+  const totalCount = paginatedData?.total ?? 0
+  const totalPages = paginatedData?.totalPages ?? 1
   const categories = categoriesErr ? [] : categoriesData
 
   // Apply in-memory sort on real posts according to ?sort= URL search param
@@ -91,13 +100,21 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <div className="flex flex-col lg:flex-row gap-8 items-start w-full">
         <BlogSidebar
           categories={categories}
-          totalCount={totalPublishedCount || posts.length}
+          totalCount={totalPublishedCount || totalCount}
           categoryCounts={categoryCounts}
           bookmarkedPosts={bookmarkedPosts}
           trendingPosts={trendingPosts}
         />
 
-        <BlogFeed posts={posts} totalCount={posts.length} activeCategoryName={activeCategoryName} />
+        <BlogFeed
+          posts={posts}
+          totalCount={totalCount}
+          activeCategoryName={activeCategoryName}
+          currentPage={currentPage}
+          limit={limit}
+        >
+          {totalPages > 1 && <BlogPagination currentPage={currentPage} totalPages={totalPages} />}
+        </BlogFeed>
       </div>
     </Section>
   )

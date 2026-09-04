@@ -3,7 +3,7 @@ import { Edit3, PlusCircle } from 'lucide-react'
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
+import { getFormatter, getTranslations } from 'next-intl/server'
 import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -41,10 +41,13 @@ export default async function DashboardPostsPage({ params }: DashboardPostsPageP
     redirect(`/${locale}/login`)
   }
 
-  const t = await getTranslations({
-    locale,
-    namespace: 'dashboard.posts_management',
-  })
+  const [t, format] = await Promise.all([
+    getTranslations({
+      locale,
+      namespace: 'dashboard.posts_management',
+    }),
+    getFormatter({ locale }),
+  ])
 
   // 2. Query posts belonging to user or all posts if admin
   const userPosts =
@@ -89,11 +92,7 @@ export default async function DashboardPostsPage({ params }: DashboardPostsPageP
       ) : (
         <div className="grid gap-3">
           {userPosts.map((post) => {
-            const formattedDate = new Intl.DateTimeFormat(locale, {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
-            }).format(new Date(post.createdAt))
+            const formattedDate = format.dateTime(new Date(post.createdAt), 'short')
 
             return (
               <Card

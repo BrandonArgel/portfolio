@@ -1,5 +1,6 @@
 import { Calendar, Clock } from 'lucide-react'
-import { useLocale, useTranslations } from 'next-intl'
+import Image from 'next/image'
+import { useFormatter, useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import type { BlogPostCardItem } from '../types'
@@ -12,13 +13,9 @@ interface BlogCardProps {
 
 export function BlogCard({ post, className }: BlogCardProps) {
   const t = useTranslations('blog')
-  const locale = useLocale()
+  const format = useFormatter()
 
-  const formattedDate = new Intl.DateTimeFormat(locale === 'es' ? 'es-MX' : 'en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  }).format(new Date(post.publishedAt))
+  const formattedDate = format.dateTime(new Date(post.publishedAt), 'short')
 
   return (
     <article
@@ -29,12 +26,27 @@ export function BlogCard({ post, className }: BlogCardProps) {
     >
       <div>
         {/* Cover Graphic Banner */}
-        <Link href={`/blog/${post.slug}`} className="block focus:outline-none">
-          <BlogThumbnail
-            title={post.title}
-            coverBadge={post.coverBadge}
-            domainWatermark={post.domainWatermark}
-          />
+        <Link
+          href={`/blog/${post.slug}`}
+          className="block focus:outline-none overflow-hidden rounded-xl"
+        >
+          {post.coverImage ? (
+            <div className="relative aspect-16/10 w-full overflow-hidden rounded-xl border border-border/70 transition-transform duration-500 group-hover/blog-card:scale-[1.02]">
+              <Image
+                src={post.coverImage}
+                alt={post.title}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-cover"
+              />
+            </div>
+          ) : (
+            <BlogThumbnail
+              title={post.title}
+              coverBadge={post.coverBadge}
+              domainWatermark={post.domainWatermark}
+            />
+          )}
         </Link>
 
         {/* Tags Row */}

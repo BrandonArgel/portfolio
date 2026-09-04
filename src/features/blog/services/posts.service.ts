@@ -1,4 +1,4 @@
-import { and, count, desc, eq, inArray, like, or } from 'drizzle-orm'
+import { and, asc, count, desc, eq, inArray, like, or } from 'drizzle-orm'
 import { db } from '@/db'
 import { categories, posts, postsToCategories } from '@/db/schema'
 import { error, okay, type Result } from '@/utils/result'
@@ -51,12 +51,24 @@ export async function countTotalPublishedPosts(): Promise<number> {
   }
 }
 
+export interface PaginatedPosts {
+  posts: BlogPostCardItem[]
+  total: number
+  totalPages: number
+  currentPage: number
+}
+
 export async function getPublishedPosts(
   categorySlug?: string,
   searchQuery?: string,
-  limit = 10,
-): Promise<Result<BlogPostCardItem[], PostError>> {
+  page = 1,
+  limit = 9,
+  sortBy?: string,
+): Promise<Result<PaginatedPosts, PostError>> {
   try {
+    const safePage = Math.max(1, page)
+    const offset = (safePage - 1) * limit
+
     const conditions = [eq(posts.published, true)]
 
     if (searchQuery) {
@@ -84,18 +96,30 @@ export async function getPublishedPosts(
       )
     }
 
-    const dbPosts = await db.query.posts.findMany({
-      where: and(...conditions),
-      orderBy: [desc(posts.createdAt)],
-      limit,
-      with: {
-        postCategories: {
-          with: {
-            category: true,
+    const whereClause = and(...conditions)
+
+    const [dbPosts, [countResult]] = await Promise.all([
+      db.query.posts.findMany({
+        where: whereClause,
+        orderBy: sortBy === 'oldest' ? [asc(posts.createdAt)] : [desc(posts.createdAt)],
+        limit,
+        offset,
+        with: {
+          postCategories: {
+            with: {
+              category: true,
+            },
           },
         },
-      },
-    })
+      }),
+      db
+        .select({ count: count(posts.id) })
+        .from(posts)
+        .where(whereClause),
+    ])
+
+    const total = countResult?.count ?? 0
+    const totalPages = Math.max(1, Math.ceil(total / limit))
 
     const formatted: BlogPostCardItem[] = dbPosts.map((post) => {
       const mappedTags = post.postCategories.map((pc) => ({
@@ -109,13 +133,19 @@ export async function getPublishedPosts(
         title: post.title,
         slug: post.slug,
         excerpt: extractExcerpt(post.content),
+        coverImage: post.coverImage,
         tags: mappedTags,
         readTimeMinutes: calculateReadTime(post.content),
         publishedAt: post.createdAt,
       }
     })
 
-    return okay(formatted)
+    return okay({
+      posts: formatted,
+      total,
+      totalPages,
+      currentPage: safePage,
+    })
   } catch (err) {
     console.error('Error fetching published posts:', err)
     return error({ reason: 'DATABASE_ERROR', details: err })
@@ -182,6 +212,7 @@ function mapDbPostToBlogPost(dbPost: DbPostWithRelations): BlogPost {
     slug: dbPost.slug,
     content: dbPost.content,
     excerpt: extractExcerpt(dbPost.content),
+    coverImage: dbPost.coverImage,
     locale: dbPost.locale,
     published: dbPost.published,
     authorId: dbPost.authorId,

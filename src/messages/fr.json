@@ -378,6 +378,13 @@
       "performance": "Performance",
       "seo": "SEO",
       "ai": "IA & Automatisation"
+    },
+    "pagination": {
+      "previous": "Précédent",
+      "next": "Suivant",
+      "page": "Page {page}",
+      "aria_page": "Aller à la page {page}",
+      "aria_current": "Page actuelle, page {page}"
     }
   },
   "contact": {
@@ -543,6 +550,8 @@
     "translating_all": "Traduction dans toutes les langues manquantes...",
     "upload_image_button": "Téléverser une image",
     "uploading_image_button": "Téléversement...",
+    "set_cover_button": "Définir la Couverture",
+    "uploading_cover_button": "Téléversement...",
     "frontmatter_detected": "Frontmatter détecté :",
     "preview_empty": "Aucun contenu à prévisualiser pour le moment. Commencez à écrire en Markdown à gauche.",
     "post_not_found": "Article introuvable",
@@ -557,7 +566,8 @@
       "frontmatter_required": "Le Frontmatter doit inclure 'title', 'slug' et 'locale'",
       "frontmatter_invalid": "Erreur de syntaxe dans le Frontmatter (YAML invalide)",
       "image_uploaded": "Image téléversée avec succès",
-      "image_upload_error": "Échec du téléversement de l'image"
+      "image_upload_error": "Échec du téléversement de l'image",
+      "cover_uploaded": "Image de couverture mise à jour avec succès"
     }
   },
   "metadata": {

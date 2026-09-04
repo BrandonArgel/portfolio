@@ -1,5 +1,5 @@
 import { Calendar, Clock, TrendingUp } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import { getFormatter, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import type { BlogPostCardItem } from '../../types'
 
@@ -8,7 +8,7 @@ interface TrendingWidgetProps {
 }
 
 export async function TrendingWidget({ posts = [] }: TrendingWidgetProps) {
-  const t = await getTranslations('blog')
+  const [t, format] = await Promise.all([getTranslations('blog'), getFormatter()])
 
   return (
     <div className="bg-card text-card-foreground border border-border rounded-2xl p-5 shadow-sm">
@@ -22,10 +22,9 @@ export async function TrendingWidget({ posts = [] }: TrendingWidgetProps) {
       {posts.length > 0 ? (
         <div className="space-y-4">
           {posts.map((post) => {
-            const formattedDate =
-              post.publishedAt instanceof Date
-                ? post.publishedAt.toISOString().split('T')[0]
-                : new Date(post.publishedAt).toISOString().split('T')[0]
+            const postDate =
+              post.publishedAt instanceof Date ? post.publishedAt : new Date(post.publishedAt)
+            const formattedDate = format.dateTime(postDate, 'short')
 
             return (
               <div key={post.id} className="group space-y-1.5">

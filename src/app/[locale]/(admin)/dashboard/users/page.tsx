@@ -2,7 +2,7 @@ import { desc } from 'drizzle-orm'
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
+import { getFormatter, getTranslations } from 'next-intl/server'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -43,8 +43,11 @@ export default async function UsersPage({ params }: UsersPageProps) {
     orderBy: [desc(user.createdAt)],
   })
 
-  const t = await getTranslations({ locale, namespace: 'dashboard.users_management' })
-  const tDashboard = await getTranslations({ locale, namespace: 'dashboard' })
+  const [t, tDashboard, format] = await Promise.all([
+    getTranslations({ locale, namespace: 'dashboard.users_management' }),
+    getTranslations({ locale, namespace: 'dashboard' }),
+    getFormatter({ locale }),
+  ])
 
   return (
     <div className="section-container py-6 space-y-6">
@@ -94,11 +97,7 @@ export default async function UsersPage({ params }: UsersPageProps) {
                   {usersList.map((item) => {
                     const initials = getInitials(item.name)
                     const isSelf = item.id === session.user.id
-                    const formattedDate = new Intl.DateTimeFormat(locale, {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                    }).format(new Date(item.createdAt))
+                    const formattedDate = format.dateTime(new Date(item.createdAt), 'short')
 
                     return (
                       <tr key={item.id} className="hover:bg-muted/30 transition-colors group">

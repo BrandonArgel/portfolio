@@ -18,6 +18,7 @@ export function BlogSearchInput() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const params = new URLSearchParams(searchParams.toString())
+    params.delete('page')
     if (query.trim()) {
       params.set('q', query.trim())
     } else {
@@ -30,6 +31,7 @@ export function BlogSearchInput() {
   const handleClear = () => {
     setQuery('')
     const params = new URLSearchParams(searchParams.toString())
+    params.delete('page')
     params.delete('q')
     const queryString = params.toString() ? `?${params.toString()}` : ''
     router.push(`${pathname}${queryString}`, { scroll: false })

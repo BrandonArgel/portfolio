@@ -1,6 +1,6 @@
 'use server'
 
-import { eq } from 'drizzle-orm'
+import { eq, or } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { db } from '@/db'
@@ -16,12 +16,14 @@ const savePostSchema = z.object({
   translationGroupId: z.string().optional(),
   published: z.boolean().default(false),
   tags: z.array(z.string()).default([]),
+  coverImage: z.string().nullable().optional(),
 })
 
 export const savePostAction = editorActionClient
   .inputSchema(savePostSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const { id, title, slug, content, locale, translationGroupId, published, tags } = parsedInput
+    const { id, title, slug, content, locale, translationGroupId, published, tags, coverImage } =
+      parsedInput
 
     try {
       let postId = id
@@ -49,6 +51,7 @@ export const savePostAction = editorActionClient
             title,
             slug,
             content,
+            coverImage: coverImage ?? null,
             locale,
             translationGroupId: finalTranslationGroupId,
             published,
@@ -64,6 +67,7 @@ export const savePostAction = editorActionClient
             title,
             slug,
             content,
+            coverImage: coverImage ?? null,
             locale,
             translationGroupId: finalTranslationGroupId,
             published,
@@ -79,21 +83,40 @@ export const savePostAction = editorActionClient
           const tagSlug = tagName.toLowerCase().replace(/\s+/g, '-')
 
           let category = await db.query.categories.findFirst({
-            where: eq(categories.slug, tagSlug),
+            // Check both slug and name to be safe against case-mismatches
+            where: or(eq(categories.slug, tagSlug), eq(categories.name, tagName)),
           })
 
           if (!category) {
-            const [newCategory] = await db
+            // Attempt a safe insert that won't crash if a constraint fails
+            const inserted = await db
               .insert(categories)
               .values({ name: tagName, slug: tagSlug })
+              .onConflictDoNothing({ target: categories.name }) // Prevent the crash!
               .returning()
-            category = newCategory
+
+            if (inserted.length > 0) {
+              category = inserted[0]
+            } else {
+              // If the insert was skipped (conflict occurred but was hidden), fetch it safely
+              const existing = await db.query.categories.findFirst({
+                where: or(eq(categories.slug, tagSlug), eq(categories.name, tagName)),
+              })
+
+              if (!existing) {
+                throw new Error(`Failed to insert or retrieve category: ${tagName}`)
+              }
+              category = existing
+            }
           }
 
-          await db.insert(postsToCategories).values({
-            postId: postId,
-            categoryId: category.id,
-          })
+          await db
+            .insert(postsToCategories)
+            .values({
+              postId: postId,
+              categoryId: category.id,
+            })
+            .onConflictDoNothing()
         }
       }
 

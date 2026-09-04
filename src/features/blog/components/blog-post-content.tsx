@@ -1,5 +1,6 @@
 import { ArrowLeft, Calendar, Clock, User } from 'lucide-react'
-import { getLocale, getTranslations } from 'next-intl/server'
+import Image from 'next/image'
+import { getFormatter, getTranslations } from 'next-intl/server'
 import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/ui/button'
 import type { BlogPost } from '../types'
@@ -11,14 +12,9 @@ interface BlogPostContentProps {
 }
 
 export async function BlogPostContent({ post, action }: BlogPostContentProps) {
-  const t = await getTranslations('blog')
-  const locale = await getLocale()
+  const [t, format] = await Promise.all([getTranslations('blog'), getFormatter()])
 
-  const formattedDate = new Intl.DateTimeFormat(locale === 'es' ? 'es-MX' : 'en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  }).format(post.createdAt)
+  const formattedDate = format.dateTime(post.createdAt, 'short')
 
   return (
     <article className="w-full">
@@ -40,7 +36,7 @@ export async function BlogPostContent({ post, action }: BlogPostContentProps) {
           <div className="flex flex-wrap gap-2">
             {post.tags.map((tag) => (
               <Badge key={tag.id} variant="secondary">
-                {tag.name}
+                {t(`categories.${tag.name}`)}
               </Badge>
             ))}
           </div>
@@ -68,6 +64,19 @@ export async function BlogPostContent({ post, action }: BlogPostContentProps) {
             </span>
           </div>
         </div>
+
+        {post.coverImage && (
+          <div className="relative aspect-16/9 sm:aspect-21/9 w-full overflow-hidden rounded-2xl border border-border shadow-md mt-2">
+            <Image
+              src={post.coverImage}
+              alt={post.title}
+              fill
+              priority
+              sizes="(max-width: 1200px) 100vw, 1200px"
+              className="object-cover"
+            />
+          </div>
+        )}
       </header>
 
       <MdxContentServer content={post.content} />

@@ -3,7 +3,16 @@
 import Editor, { type BeforeMount, type OnMount } from '@monaco-editor/react'
 import { useTheme } from '@teispace/next-themes'
 import matter from 'gray-matter'
-import { ArrowLeft, ChevronDown, ImageIcon, Languages, Loader2, Save, Sparkles } from 'lucide-react'
+import {
+  ArrowLeft,
+  ChevronDown,
+  ImageIcon,
+  ImagePlus,
+  Languages,
+  Loader2,
+  Save,
+  Sparkles,
+} from 'lucide-react'
 import type { editor } from 'monaco-editor'
 import { useTranslations } from 'next-intl'
 import { useAction } from 'next-safe-action/hooks'
@@ -31,6 +40,28 @@ interface BlogEditorProps {
   initialContent?: string
 }
 
+function updateCoverImageFrontmatter(markdown: string, imageUrl: string): string {
+  const frontmatterRegex = /^---\r?\n([\s\S]*?)\r?\n---/
+  const match = markdown.match(frontmatterRegex)
+
+  if (match) {
+    const yamlContent = match[1]
+    let updatedYaml: string
+
+    const coverRegex = /^(coverImage|cover_image):\s*.*$/m
+    if (coverRegex.test(yamlContent)) {
+      updatedYaml = yamlContent.replace(coverRegex, `coverImage: "${imageUrl}"`)
+    } else {
+      const trimmedYaml = yamlContent.trimEnd()
+      updatedYaml = `${trimmedYaml}\ncoverImage: "${imageUrl}"`
+    }
+
+    return markdown.replace(frontmatterRegex, () => `---\n${updatedYaml}\n---`)
+  }
+
+  return `---\ncoverImage: "${imageUrl}"\n---\n\n${markdown}`
+}
+
 export function BlogEditor({ initialId, initialContent }: BlogEditorProps) {
   const t = useTranslations('blog_editor')
   const { resolvedTheme } = useTheme()
@@ -41,6 +72,7 @@ export function BlogEditor({ initialId, initialContent }: BlogEditorProps) {
   const lastSavePublishedRef = useRef(false)
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const coverFileInputRef = useRef<HTMLInputElement | null>(null)
 
   const hasUnsavedChanges = rawMarkdown !== savedMarkdown
 
@@ -165,6 +197,57 @@ export function BlogEditor({ initialId, initialContent }: BlogEditorProps) {
     },
   })
 
+  // ── Cover Image upload ──────────────────────────────────────────────────
+  const [isUploadingCover, setIsUploadingCover] = useState(false)
+
+  const { execute: executeUploadCover } = useAction(uploadImageAction, {
+    onSuccess: (res) => {
+      if (res.data?.success && res.data.url) {
+        const monacoEditor = editorRef.current
+        const currentContent = monacoEditor ? monacoEditor.getValue() : rawMarkdown
+        const newMarkdown = updateCoverImageFrontmatter(currentContent, res.data.url)
+
+        setRawMarkdown(newMarkdown)
+        if (monacoEditor) {
+          monacoEditor.setValue(newMarkdown)
+          monacoEditor.focus()
+        }
+
+        sileo.success({ title: t('notifications.cover_uploaded') })
+      }
+      setIsUploadingCover(false)
+    },
+    onError: ({ error }) => {
+      const serverError = error.serverError
+      sileo.error({
+        title: serverError?.title || t('notifications.image_upload_error'),
+        description: serverError?.description,
+      })
+      setIsUploadingCover(false)
+    },
+  })
+
+  const handleCoverUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      sileo.error({
+        title: t('notifications.image_upload_error'),
+        description: 'Only image files can be uploaded.',
+      })
+      return
+    }
+
+    setIsUploadingCover(true)
+    const formData = new FormData()
+    formData.append('file', file)
+    executeUploadCover({ formData })
+
+    // Reset input so the same file can be re-selected
+    e.target.value = ''
+  }
+
   const uploadFile = (file: File) => {
     if (!file.type.startsWith('image/')) {
       sileo.error({
@@ -284,6 +367,7 @@ export function BlogEditor({ initialId, initialContent }: BlogEditorProps) {
         published: isPublished,
         tags: tagsArray,
         content: content,
+        coverImage: frontmatter.coverImage || frontmatter.cover_image || null,
       })
     } catch {
       sileo.error({ title: t('notifications.frontmatter_invalid') })
@@ -319,31 +403,56 @@ export function BlogEditor({ initialId, initialContent }: BlogEditorProps) {
     executeTranslate({ postId: initialId, targetLocales: availableLocales })
   }
 
-  const isBusy = isExecuting || isTranslating || isUploading
+  const isBusy = isExecuting || isTranslating || isUploading || isUploadingCover
 
   return (
     <div className="w-full flex flex-col h-[calc(100vh-4rem)] border border-border/80 rounded-xl overflow-hidden bg-background shadow-xs">
-      <div className="flex shrink-0 items-center justify-between px-4 py-2.5 border-b border-border/80 bg-muted/20">
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="gap-1.5 text-xs text-muted-foreground hover:text-foreground h-8 cursor-pointer"
-            onClick={() => {
-              if (hasUnsavedChanges && !window.confirm(t('unsaved_changes_warning'))) return
-              router.push('/dashboard/posts')
-            }}
-          >
-            <ArrowLeft className="size-3.5" />
-            <span>{t('back_to_posts')}</span>
-          </Button>
-          <div className="h-4 w-px bg-border/80" />
-          <span className="font-semibold text-sm text-foreground">
-            {initialId ? t('editing_post') : t('new_post')}
-          </span>
+      <div className="flex flex-col md:flex-row shrink-0 items-start md:items-center justify-between gap-3 p-3 sm:px-4 sm:py-3 border-b border-border/80 bg-muted/20 w-full">
+        <div className="flex items-center justify-between w-full md:w-auto gap-2 shrink-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-1.5 text-xs text-muted-foreground hover:text-foreground h-8 cursor-pointer shrink-0"
+              onClick={() => {
+                if (hasUnsavedChanges && !window.confirm(t('unsaved_changes_warning'))) return
+                router.push('/dashboard/posts')
+              }}
+            >
+              <ArrowLeft className="size-3.5" />
+              <span>{t('back_to_posts')}</span>
+            </Button>
+            <div className="h-4 w-px bg-border/80 shrink-0" />
+            <span className="font-semibold text-xs sm:text-sm text-foreground truncate">
+              {initialId ? t('editing_post') : t('new_post')}
+            </span>
+          </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+          {/* ── Set Cover ── */}
+          <input
+            ref={coverFileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleCoverUpload}
+          />
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1.5 sm:gap-2 text-xs h-8 sm:h-9 px-2.5 sm:px-3 cursor-pointer shrink-0"
+            disabled={isBusy}
+            onClick={() => coverFileInputRef.current?.click()}
+          >
+            {isUploadingCover ? (
+              <Loader2 className="size-3.5 sm:size-4 animate-spin" />
+            ) : (
+              <ImagePlus className="size-3.5 sm:size-4" />
+            )}
+            <span>{isUploadingCover ? t('uploading_cover_button') : t('set_cover_button')}</span>
+          </Button>
+
           {/* ── Upload Image ── */}
           <input
             ref={fileInputRef}
@@ -355,14 +464,14 @@ export function BlogEditor({ initialId, initialContent }: BlogEditorProps) {
           <Button
             variant="outline"
             size="sm"
-            className="gap-2 cursor-pointer"
+            className="gap-1.5 sm:gap-2 text-xs h-8 sm:h-9 px-2.5 sm:px-3 cursor-pointer shrink-0"
             disabled={isBusy}
             onClick={() => fileInputRef.current?.click()}
           >
             {isUploading ? (
-              <Loader2 className="size-4 animate-spin" />
+              <Loader2 className="size-3.5 sm:size-4 animate-spin" />
             ) : (
-              <ImageIcon className="size-4" />
+              <ImageIcon className="size-3.5 sm:size-4" />
             )}
             <span>{isUploading ? t('uploading_image_button') : t('upload_image_button')}</span>
           </Button>
@@ -374,13 +483,13 @@ export function BlogEditor({ initialId, initialContent }: BlogEditorProps) {
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="gap-2 cursor-pointer"
+                    className="gap-1.5 sm:gap-2 text-xs h-8 sm:h-9 px-2.5 sm:px-3 cursor-pointer shrink-0"
                     disabled={isBusy}
                   >
                     {isTranslating ? (
-                      <Loader2 className="size-4 animate-spin" />
+                      <Loader2 className="size-3.5 sm:size-4 animate-spin" />
                     ) : (
-                      <Languages className="size-4" />
+                      <Languages className="size-3.5 sm:size-4" />
                     )}
                     <span>{isTranslating ? t('translating_button') : t('translate_button')}</span>
                     <ChevronDown className="size-3.5 opacity-60" />
@@ -424,11 +533,16 @@ export function BlogEditor({ initialId, initialContent }: BlogEditorProps) {
             </DropdownMenu>
           )}
 
-          <Button onClick={handleSave} disabled={isBusy} size="sm" className="gap-2 cursor-pointer">
+          <Button
+            onClick={handleSave}
+            disabled={isBusy}
+            size="sm"
+            className="gap-1.5 sm:gap-2 text-xs h-8 sm:h-9 px-2.5 sm:px-3 cursor-pointer shrink-0"
+          >
             {isExecuting ? (
-              <Loader2 className="size-4 animate-spin" />
+              <Loader2 className="size-3.5 sm:size-4 animate-spin" />
             ) : (
-              <Save className="size-4" />
+              <Save className="size-3.5 sm:size-4" />
             )}
             <span>{isExecuting ? t('saving_button') : t('save_button')}</span>
           </Button>

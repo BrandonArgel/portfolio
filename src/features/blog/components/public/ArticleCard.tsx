@@ -1,5 +1,6 @@
 import { Calendar, Clock } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import Image from 'next/image'
+import { getFormatter, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import type { BlogPostCardItem } from '../../types'
 import { ArticleCardActions } from './ArticleCardActions'
@@ -9,12 +10,10 @@ interface ArticleCardProps {
 }
 
 export async function ArticleCard({ post }: ArticleCardProps) {
-  const t = await getTranslations('blog')
+  const [t, format] = await Promise.all([getTranslations('blog'), getFormatter()])
 
-  const formattedDate =
-    post.publishedAt instanceof Date
-      ? post.publishedAt.toISOString().split('T')[0]
-      : new Date(post.publishedAt).toISOString().split('T')[0]
+  const postDate = post.publishedAt instanceof Date ? post.publishedAt : new Date(post.publishedAt)
+  const formattedDate = format.dateTime(postDate, 'short')
 
   const primaryBadge = post.tags[0]?.name || post.coverBadge || 'Engineering'
 
@@ -23,15 +22,27 @@ export async function ArticleCard({ post }: ArticleCardProps) {
       {/* Visual Cover Banner */}
       <Link href={`/blog/${post.slug}`} className="block overflow-hidden">
         <div className="relative h-44 w-full overflow-hidden bg-muted/40 border-b border-border flex flex-col items-center justify-center p-4 text-center select-none group-hover:scale-[1.01] transition-transform duration-300">
-          <div className="absolute inset-0 bg-[radial-gradient(var(--color-border)_1px,transparent_1px)] [background-size:16px_16px] opacity-40" />
+          {post.coverImage ? (
+            <Image
+              src={post.coverImage}
+              alt={post.title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          ) : (
+            <>
+              <div className="absolute inset-0 bg-[radial-gradient(var(--color-border)_1px,transparent_1px)] [background-size:16px_16px] opacity-40" />
 
-          {/* Centered card mockup badge */}
-          <div className="relative z-10 px-3 py-1.5 rounded-md bg-card text-card-foreground shadow-sm font-bold text-xs max-w-[90%] truncate border border-border">
-            {primaryBadge}
-          </div>
-          <span className="relative z-10 text-[10px] text-muted-foreground font-mono mt-1.5 tracking-wider uppercase">
-            {post.domainWatermark || 'brandonargel.com'}
-          </span>
+              {/* Centered card mockup badge */}
+              <div className="relative z-10 px-3 py-1.5 rounded-md bg-card text-card-foreground shadow-sm font-bold text-xs max-w-[90%] truncate border border-border">
+                {primaryBadge}
+              </div>
+              <span className="relative z-10 text-[10px] text-muted-foreground font-mono mt-1.5 tracking-wider uppercase">
+                {post.domainWatermark || 'brandonargel.com'}
+              </span>
+            </>
+          )}
         </div>
       </Link>
 

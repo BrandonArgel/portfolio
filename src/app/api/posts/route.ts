@@ -7,9 +7,10 @@ export async function GET(request: NextRequest) {
   const limit = limitParam ? Number.parseInt(limitParam, 10) : 3
 
   try {
-    const [err, posts] = await getPublishedPosts(
+    const [err, res] = await getPublishedPosts(
       undefined,
       undefined,
+      1,
       Number.isNaN(limit) ? 3 : limit,
     )
     if (err) {
@@ -17,7 +18,10 @@ export async function GET(request: NextRequest) {
     }
     return NextResponse.json({
       success: true,
-      data: posts,
+      data: res?.posts ?? [],
+      total: res?.total ?? 0,
+      totalPages: res?.totalPages ?? 1,
+      currentPage: res?.currentPage ?? 1,
     })
   } catch (_error) {
     return NextResponse.json(

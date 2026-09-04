@@ -56,7 +56,7 @@ export default async function DashboardLayout({ children, params }: DashboardLay
                 {isAdmin && (
                   <Badge
                     variant="softPrimary"
-                    className="text-[10px] h-4.5 px-1.5 py-0 font-medium shrink-0"
+                    className="text-sm h-4.5 px-1.5 py-0 font-medium shrink-0"
                   >
                     <ShieldCheck className="size-3 mr-1 text-primary" />
                     {t('roles.admin')}
@@ -65,7 +65,7 @@ export default async function DashboardLayout({ children, params }: DashboardLay
                 {isEditor && (
                   <Badge
                     variant="outline"
-                    className="text-[10px] h-4.5 px-1.5 py-0 font-medium text-blue-500 border-blue-500/30 bg-blue-500/10 shrink-0"
+                    className="text-sm h-4.5 px-1.5 py-0 font-medium text-blue-500 border-blue-500/30 bg-blue-500/10 shrink-0"
                   >
                     <Sparkles className="size-3 mr-1 text-blue-500" />
                     {t('roles.editor')}

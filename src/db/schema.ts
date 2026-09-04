@@ -81,6 +81,7 @@ export const posts = sqliteTable(
     title: text('title').notNull(),
     slug: text('slug').notNull().unique(),
     content: text('content').notNull(),
+    coverImage: text('cover_image'),
     published: integer('published', { mode: 'boolean' }).default(false).notNull(),
     locale: text('locale').default('en').notNull(),
     translationGroupId: text('translationGroupId'),

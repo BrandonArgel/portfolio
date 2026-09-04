@@ -11,6 +11,7 @@ export interface BlogPost {
   slug: string
   content: string
   excerpt: string
+  coverImage?: string | null
   locale: string
   translationGroupId?: string
   published: boolean
@@ -27,6 +28,7 @@ export interface BlogPostCardItem {
   title: string
   slug: string
   excerpt: string
+  coverImage?: string | null
   tags: BlogCategory[]
   readTimeMinutes: number
   publishedAt: Date

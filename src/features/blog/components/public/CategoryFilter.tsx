@@ -26,6 +26,7 @@ export function CategoryFilter({
 
   const handleSelect = (slug: string) => {
     const params = new URLSearchParams(searchParams.toString())
+    params.delete('page')
     if (!slug || slug === 'all') {
       params.delete('category')
     } else {

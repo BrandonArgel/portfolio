@@ -22,6 +22,7 @@ export function SortTabs() {
 
   const handleSelect = (sortId: string) => {
     const params = new URLSearchParams(searchParams.toString())
+    params.delete('page')
     if (sortId === 'latest') {
       params.delete('sort')
     } else {

@@ -87,6 +87,7 @@ STRICT RULES:
             title: frontmatter.title,
             slug: frontmatter.slug,
             content: translatedContent,
+            coverImage: originalPost.coverImage,
             locale: frontmatter.locale || targetLocale,
             translationGroupId,
             published: false,

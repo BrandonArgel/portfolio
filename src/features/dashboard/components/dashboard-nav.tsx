@@ -26,12 +26,6 @@ export function DashboardNav({ isAdmin }: DashboardNavProps) {
       icon: FileText,
       exact: false,
     },
-    {
-      href: '/dashboard/blog/new',
-      label: t('new_post'),
-      icon: PlusCircle,
-      exact: true,
-    },
     ...(isAdmin
       ? [
           {
