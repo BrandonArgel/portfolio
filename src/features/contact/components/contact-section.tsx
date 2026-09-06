@@ -10,7 +10,7 @@ interface ContactSectionProps {
 }
 
 export async function ContactSection({ className }: ContactSectionProps) {
-  const t = await getTranslations('contact')
+  const t = await getTranslations('features.contact')
 
   return (
     <Section

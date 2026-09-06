@@ -9,7 +9,7 @@ export function SortTabs() {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
-  const t = useTranslations('blog')
+  const t = useTranslations('features.blog.reader')
 
   const activeSort = searchParams.get('sort') || 'latest'
 

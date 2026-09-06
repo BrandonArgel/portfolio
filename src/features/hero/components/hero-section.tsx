@@ -9,7 +9,7 @@ import { HeroActions } from './hero-actions'
 import { HeroSkills } from './hero-skills'
 
 export async function HeroSection() {
-  const t = await getTranslations('hero')
+  const t = await getTranslations('features.hero')
   const skills = t.raw('skills')
 
   return (

@@ -18,7 +18,7 @@ interface MarkdownPreviewProps {
  * public blog post page — so the preview is pixel-perfect.
  */
 export function MarkdownPreview({ rawContent }: MarkdownPreviewProps) {
-  const t = useTranslations('blog_editor')
+  const t = useTranslations('features.blog.editor')
 
   // Parse frontmatter in real-time; fall back gracefully on invalid YAML.
   const { data: frontmatter, content } = useMemo(() => {

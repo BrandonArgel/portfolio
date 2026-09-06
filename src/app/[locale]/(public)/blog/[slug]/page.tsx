@@ -25,7 +25,7 @@ interface BlogPostPageProps {
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug, locale } = await params
-  const t = await getTranslations({ locale, namespace: 'blog' })
+  const t = await getTranslations({ locale, namespace: 'features.blog.reader' })
 
   const [err, post] = await getPublishedPostBySlug(slug)
 
@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug, locale } = await params
   const activeLocale = locale as Locale
-  const t = await getTranslations('blog')
+  const t = await getTranslations('features.blog.reader')
 
   const [err, post] = await getPublishedPostBySlug(slug)
 

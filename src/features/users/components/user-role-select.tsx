@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { updateUserRoleAction } from '@/features/users/actions/users.action'
+import { checkAndHandleSessionRevoked } from '@/lib/auth-interceptor'
 import { cn } from '@/lib/utils'
 
 interface UserRoleSelectProps {
@@ -42,7 +43,7 @@ export function UserRoleSelect({
   userName,
   disabled = false,
 }: UserRoleSelectProps) {
-  const t = useTranslations('dashboard')
+  const t = useTranslations('features.users')
   const [role, setRole] = useState<'admin' | 'editor' | 'user'>(
     (currentRole as 'admin' | 'editor' | 'user') || 'user',
   )
@@ -52,8 +53,8 @@ export function UserRoleSelect({
       if (res.data?.success && res.data.newRole) {
         setRole(res.data.newRole)
         sileo.success({
-          title: t('users_management.role_updated_title'),
-          description: t('users_management.role_updated_desc', {
+          title: t('management.role_updated_title'),
+          description: t('management.role_updated_desc', {
             name: userName || 'User',
             role: t(`roles.${res.data.newRole}`),
           }),
@@ -61,9 +62,10 @@ export function UserRoleSelect({
       }
     },
     onError: ({ error }) => {
+      if (checkAndHandleSessionRevoked(error)) return
       const serverError = error.serverError
       sileo.error({
-        title: serverError?.title || t('users_management.role_update_error'),
+        title: serverError?.title || t('management.role_update_error'),
         description: serverError?.description,
       })
     },

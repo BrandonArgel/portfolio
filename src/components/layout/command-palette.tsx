@@ -32,10 +32,10 @@ export function CommandPalette() {
   const router = useRouter()
   const { setTheme, resolvedTheme } = useTheme()
   const isMac = useIsMac()
-  const tCmd = useTranslations('components.command_palette')
+  const tCmd = useTranslations('components.layout.command_palette')
   const tNav = useTranslations('components.nav')
   const tGlobal = useTranslations('common')
-  const tHeader = useTranslations('components.header')
+  const tHeader = useTranslations('components.layout.header')
 
   // Global toggle shortcuts
   useKeyboardShortcut('t', () => toggleTheme())
@@ -135,12 +135,10 @@ export function CommandPalette() {
           </span>
           <InputGroupAddon align="inline-end" className="p-0 ml-auto">
             <KbdGroup className="gap-0.5">
-              <Kbd className="h-4.5 min-w-4 text-[10px] px-1 bg-muted/60 text-muted-foreground">
+              <Kbd className="h-4.5 min-w-4 text-xs px-1 bg-muted/60 text-muted-foreground">
                 {isMac ? '⌘' : 'Ctrl'}
               </Kbd>
-              <Kbd className="h-4.5 min-w-4 text-[10px] px-1 bg-muted/60 text-muted-foreground">
-                K
-              </Kbd>
+              <Kbd className="h-4.5 min-w-4 text-xs px-1 bg-muted/60 text-muted-foreground">K</Kbd>
             </KbdGroup>
           </InputGroupAddon>
         </InputGroup>
@@ -259,15 +257,15 @@ export function CommandPalette() {
               <div key={shortcut.labelKey} className="flex items-center gap-1.5">
                 {shortcut.modifier ? (
                   <KbdGroup className="gap-0.5">
-                    <Kbd className="h-4 min-w-4 text-[10px] px-1 bg-background border border-border/80">
+                    <Kbd className="h-4 min-w-4 text-xs px-1 bg-background border border-border/80">
                       {isMac ? '⌘' : 'Ctrl'}
                     </Kbd>
-                    <Kbd className="h-4 min-w-4 text-[10px] px-1 bg-background border border-border/80">
+                    <Kbd className="h-4 min-w-4 text-xs px-1 bg-background border border-border/80">
                       {shortcut.key}
                     </Kbd>
                   </KbdGroup>
                 ) : (
-                  <Kbd className="h-4 min-w-4 text-[10px] px-1 bg-background border border-border/80">
+                  <Kbd className="h-4 min-w-4 text-xs px-1 bg-background border border-border/80">
                     {shortcut.key}
                   </Kbd>
                 )}

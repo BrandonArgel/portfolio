@@ -28,6 +28,13 @@ export const actionClient = createSafeActionClient({
     }
 
     if (e instanceof Error) {
+      if (e.message === 'SESSION_REVOKED') {
+        return {
+          title: 'SESSION_REVOKED',
+          description: 'Your session has been revoked or your account has been suspended.',
+        }
+      }
+
       return {
         title: e.message || DEFAULT_SERVER_ERROR_MESSAGE,
         description: undefined,
@@ -47,8 +54,11 @@ export const authActionClient = actionClient.use(async ({ next }) => {
     headers: await headers(),
   })
 
-  if (!session || !session.user) {
-    throw new ActionError('Unauthorized', 'You are not authorized. Please sign in to continue.')
+  if (!session || !session.user || (session.user as { banned?: boolean }).banned) {
+    throw new ActionError(
+      'SESSION_REVOKED',
+      'Your session is invalid, expired, or your account has been suspended.',
+    )
   }
 
   return next({

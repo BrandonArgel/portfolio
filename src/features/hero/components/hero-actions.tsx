@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { LinkButton } from '@/components/ui/button'
 
 export async function HeroActions() {
-  const tActions = await getTranslations('hero')
+  const tActions = await getTranslations('features.hero')
 
   return (
     <div className="mt-8 flex flex-wrap gap-4">

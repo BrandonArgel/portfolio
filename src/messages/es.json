@@ -14,9 +14,10 @@
       "name": "Nombre"
     },
     "errors": {
+      "system_title": "Error del Sistema",
+      "system_description": "Ocurrió un error al procesar tu solicitud. Por favor, intenta de nuevo más tarde.",
       "unexpected_title": "Error Inesperado",
-      "unexpected_description": "Ocurrió un error inesperado. Por favor, intenta de nuevo más tarde.",
-      "system_title": "Error del Sistema"
+      "unexpected_description": "Ocurrió un error inesperado. Por favor, intenta de nuevo más tarde."
     },
     "labels": {
       "email": "Correo electrónico",
@@ -39,14 +40,92 @@
       "signing_up": "Registrando",
       "signing_out": "Cerrando sesión...",
       "no_results": "No se encontraron resultados."
+    },
+    "validation": {
+      "required": "Este campo es requerido",
+      "invalid_email": "Por favor ingresa un correo electrónico válido",
+      "too_short": "El valor es demasiado corto",
+      "too_long": "El valor es demasiado largo",
+      "password_min": "La contraseña debe tener al menos 8 caracteres",
+      "password_max": "La contraseña no debe exceder los 128 caracteres",
+      "passwords_dont_match": "Las contraseñas no coinciden",
+      "terms_required": "Debes aceptar los términos de servicio y la política de privacidad",
+      "title_required": "El título es requerido",
+      "slug_required": "El slug es requerido",
+      "content_min": "El contenido debe tener al menos 10 caracteres",
+      "locale_required": "El idioma es requerido",
+      "role_invalid": "Rol especificado inválido"
     }
   },
   "components": {
-    "header": {
-      "go_to_home": "Ir a la página principal",
-      "open_nav_menu": "Abrir menú de navegación",
-      "open_user_menu": "Abrir menú de usuario",
-      "open_search": "Abrir paleta de búsqueda"
+    "layout": {
+      "header": {
+        "go_to_home": "Ir a la página principal",
+        "open_nav_menu": "Abrir menú de navegación",
+        "open_user_menu": "Abrir menú de usuario",
+        "open_search": "Abrir paleta de búsqueda"
+      },
+      "footer": {
+        "bio": "Desarrollador Full Stack especializado en React, Next.js y TypeScript, dedicado a crear aplicaciones web de alto rendimiento y experiencias de usuario excepcionales.",
+        "columns": {
+          "platform": "Plataforma",
+          "resources": "Recursos",
+          "content": "Contenido"
+        },
+        "newsletter": {
+          "title": "Boletín",
+          "description": "Recibe actualizaciones de nuevo contenido y consejos.",
+          "placeholder": "Tu correo electrónico",
+          "button": "Suscribirse",
+          "disclaimer": "Respeto tu privacidad. Cancela tu suscripción en cualquier momento."
+        },
+        "legal": {
+          "copyright": "© 2026 Brandon Argel. Todos los derechos reservados. Hecho con 💙",
+          "privacy": "Política de Privacidad",
+          "terms": "Términos de Servicio",
+          "cookies": "Política de Cookies"
+        }
+      },
+      "command_palette": {
+        "title": "Buscar documentación y navegación",
+        "description": "Escribe un comando o busca páginas",
+        "placeholder": "Buscar documentación y páginas...",
+        "quick_actions": "Acciones rápidas",
+        "toggle_theme": "Cambiar tema",
+        "go_to_page": "Ir a la Página",
+        "menu": "Menú",
+        "toggle_theme_shortcut": "Cambiar Tema",
+        "close": "Cerrar"
+      },
+      "cookie_banner": {
+        "message": "Usamos cookies para personalizar el contenido y mejorar tu experiencia. Lee nuestra",
+        "privacy_policy": "Política de Privacidad",
+        "close_banner": "Cerrar banner"
+      },
+      "dashboard": {
+        "title": "Panel de Control",
+        "overview": "Resumen",
+        "posts": "Artículos",
+        "new_post": "Nuevo Artículo",
+        "users": "Gestión de Usuarios",
+        "back_to_site": "Volver al sitio",
+        "nav": {
+          "overview": "Resumen",
+          "content": "Contenido",
+          "blog": "Blog",
+          "blog_description": "Administra artículos y categorías",
+          "courses": "Cursos",
+          "courses_description": "Administra cursos educativos y módulos",
+          "users": "Gestión de Usuarios",
+          "back_to_site": "Volver al sitio"
+        },
+        "you": "Tú",
+        "roles": {
+          "admin": "Admin",
+          "editor": "Editor",
+          "user": "Usuario"
+        }
+      }
     },
     "nav": {
       "home": "Inicio",
@@ -79,46 +158,385 @@
       "dark": "Oscuro",
       "system": "Sistema"
     },
-    "cookie_banner": {
-      "message": "Usamos cookies para personalizar el contenido y mejorar tu experiencia. Lee nuestra",
-      "privacy_policy": "Política de Privacidad",
-      "close_banner": "Cerrar banner"
-    },
-    "command_palette": {
-      "title": "Buscar documentación y navegación",
-      "description": "Escribe un comando o busca páginas",
-      "placeholder": "Buscar documentación y páginas...",
-      "quick_actions": "Acciones rápidas",
-      "toggle_theme": "Cambiar tema",
-      "go_to_page": "Ir a la Página",
-      "menu": "Menú",
-      "toggle_theme_shortcut": "Cambiar Tema",
-      "close": "Cerrar"
-    },
     "locale_switcher": {
       "en": "English",
       "es": "Español",
       "fr": "Français"
+    }
+  },
+  "features": {
+    "about": {
+      "hero": {
+        "badge": "Acerca de mí",
+        "title_prefix": "Hola, soy",
+        "name": "Brandon Argel",
+        "purpose": "Creo firmemente en el poder del software para generar un impacto positivo y real en la vida de las personas. Mi propósito es construir herramientas y experiencias digitales donde la empatía, la accesibilidad y el diseño inclusivo permitan que cualquier usuario se beneficie de la tecnología.",
+        "bio_secondary": "Soy un desarrollador full stack apasionado, dedicado a crear aplicaciones web de alto rendimiento, arquitecturas backend escalables y experiencias de usuario excepcionales. Con más de 6 años en la industria tecnológica, colaboro con clientes y equipos de todo el mundo para construir sistemas seguros, con tipado estricto y soluciones backend robustas.",
+        "get_in_touch": "Contáctame",
+        "download_resume": "Descargar CV"
+      },
+      "philosophy": {
+        "badge": "La Disciplina del Cómo",
+        "title_prefix": "Mis",
+        "title": "Principios Rectores",
+        "description": "Las acciones y valores diarios que dan forma a mi trabajo y colaboración.",
+        "items": {
+          "learn_document_share": {
+            "title": "Aprende, documenta y comparte",
+            "description": "Convierte la curiosidad en conocimiento. Domina los conceptos para explicarlos de forma sencilla y deja siempre el camino documentado."
+          },
+          "build_parachute": {
+            "title": "Salta y construye el paracaídas",
+            "description": "Atrévete a innovar. Usa la curiosidad implacable para mirar los problemas desde ángulos distintos y encontrar soluciones."
+          },
+          "design_for_diversity": {
+            "title": "Diseña y programa para la diversidad",
+            "description": "Mantén el código y el producto abiertos. La exclusión está prohibida; buscar diferentes perspectivas es la clave para crecer."
+          },
+          "communicate_kindness": {
+            "title": "Comunica con amabilidad",
+            "description": "Entrega y recibe feedback honesto para alcanzar los objetivos del equipo, fomentando un espacio seguro e inclusivo."
+          },
+          "focus_controllable": {
+            "title": "Enfoca tu energía en lo controlable",
+            "description": "Acepta lo que escapa de tus manos para ejecutar rápido y bien. Sé organizado y prioriza tus esfuerzos."
+          },
+          "care_human_factor": {
+            "title": "Cuida el factor humano",
+            "description": "Protege a quienes te rodean. Las personas y las experiencias que creamos juntos son el núcleo de cualquier proyecto."
+          }
+        }
+      },
+      "skills": {
+        "badge": "La Coherencia del Qué",
+        "title": "Habilidades y Experiencia",
+        "description": "Los resultados tangibles y el nivel técnico que entrego en el día a día.",
+        "cards": {
+          "frontend": "Construcción de interfaces 100% accesibles, responsivas y de alto rendimiento, optimizadas para reducir tiempos de carga.",
+          "backend": "Transformación de datos y lógica de negocio en historias coherentes mediante APIs que guían al usuario de principio a fin.",
+          "fullstack": "Entrega de código escalable y reutilizable, siempre respaldado por documentación técnica clara y precisa de extremo a extremo."
+        }
+      }
     },
-    "footer": {
-      "bio": "Desarrollador Full Stack especializado en React, Next.js y TypeScript, dedicado a crear aplicaciones web de alto rendimiento y experiencias de usuario excepcionales.",
-      "columns": {
-        "platform": "Plataforma",
-        "resources": "Recursos",
-        "content": "Contenido"
+    "auth": {
+      "login": {
+        "title": "Iniciar Sesión",
+        "forgot_password": "¿Olvidaste tu contraseña?",
+        "create_account": "Crear nueva cuenta",
+        "welcome_back": "¡Bienvenido de nuevo{name, select, empty {} other {, {name}}}!",
+        "invalid_credentials_title": "Error al Iniciar Sesión",
+        "invalid_credentials_description": "Correo o contraseña inválidos. Por favor, verifica tus credenciales.",
+        "forbidden_title": "Acceso Denegado",
+        "forbidden_description": "No tienes permiso para acceder a este recurso.",
+        "unverified_email_title": "Correo No Verificado",
+        "unverified_email_description": "Por favor, verifica tu correo electrónico antes de iniciar sesión. Revisa tu bandeja de entrada.",
+        "banned_title": "Cuenta Bloqueada",
+        "banned_description": "Tu cuenta ha sido bloqueada. Por favor, contacta con soporte para más información.",
+        "rate_limited_title": "Demasiados Intentos",
+        "rate_limited_description": "Has realizado demasiados intentos de inicio de sesión. Por favor, espera unos minutos e inténtalo de nuevo."
       },
-      "newsletter": {
-        "title": "Boletín",
-        "description": "Recibe actualizaciones de nuevo contenido y consejos.",
-        "placeholder": "Tu correo electrónico",
-        "button": "Suscribirse",
-        "disclaimer": "Respeto tu privacidad. Cancela tu suscripción en cualquier momento."
+      "register": {
+        "title": "Registrarse",
+        "accept_terms": "Acepto los",
+        "terms_of_service": "Términos de Servicio",
+        "and": "y",
+        "privacy_policy": "Política de Privacidad",
+        "create_password": "Crea una contraseña segura",
+        "already_have_account": "Ya tengo una cuenta",
+        "account_created_title": "¡Cuenta creada!",
+        "account_created_description": "Bienvenido a la plataforma{name, select, empty {} other {, {name}}}.",
+        "email_in_use_title": "Correo en uso",
+        "email_in_use_description": "Este correo ya está registrado. Por favor, inicia sesión.",
+        "invalid_password_title": "Contraseña Inválida",
+        "invalid_password_description": "Asegúrate de que tu contraseña cumpla con todos los requisitos.",
+        "partial_success_title": "Éxito Parcial",
+        "partial_success_description": "Cuenta creada exitosamente, pero por favor inicia sesión manualmente.",
+        "registration_failed_title": "Error al Registrarse",
+        "registration_failed_description": "Ocurrió un error al crear tu cuenta. Por favor, intenta de nuevo más tarde."
+      }
+    },
+    "blog": {
+      "reader": {
+        "badge": "Blog & Artículos",
+        "title_line1": "Perspectivas sobre",
+        "title_line2": "Tecnología y Seguridad",
+        "title_prefix": "Publicaciones",
+        "title_highlight": "Recientes del Blog",
+        "view_all": "Ver Todos los Artículos",
+        "title": "Blog de Ingeniería",
+        "subtitle": "Explora artículos sobre ciberseguridad, desarrollo web y recursos educativos para potenciar tus habilidades técnicas.",
+        "search_placeholder": "Buscar artículos...",
+        "search_button": "Buscar",
+        "clear_search": "Limpiar búsqueda",
+        "clear_filters": "Limpiar filtros",
+        "back_to_blog": "Regresar al Blog",
+        "read_time_suffix": "min de lectura",
+        "sidebar_categories": "Categorías",
+        "sidebar_bookmarked": "Artículos Guardados",
+        "sidebar_trending": "Tendencias",
+        "empty_bookmarked": "Aún no tienes artículos guardados. ¡Guarda tus lecturas favoritas aquí!",
+        "empty_trending": "¡Vuelve pronto para ver artículos en tendencia!",
+        "all_articles": "Todos los Artículos",
+        "showing_articles": "Mostrando {start}-{end} de {total} artículos",
+        "sort": {
+          "latest": "Más reciente",
+          "oldest": "Más antiguo",
+          "popular": "Popular",
+          "reading_time": "Tiempo de lectura"
+        },
+        "actions": {
+          "share": "Compartir artículo",
+          "bookmark": "Guardar artículo",
+          "link_copied": "Enlace copiado al portapapeles",
+          "link_copy_error": "No se pudo copiar el enlace",
+          "bookmarked": "Artículo guardado",
+          "bookmark_removed": "Artículo eliminado de guardados",
+          "edit": "Editar artículo"
+        },
+        "no_results": "No se encontraron artículos con esos filtros.",
+        "empty_posts": "No hay artículos publicados aún.",
+        "error_loading_posts": "No se pudieron cargar los artículos en este momento.",
+        "error_loading_article": "Error cargando el artículo",
+        "error_loading_article_description": "Hubo un problema de conexión. Intenta nuevamente más tarde.",
+        "post_not_found": "Artículo no encontrado",
+        "fallbackWarning": "Este artículo aún no está disponible en tu idioma. Mostrando la versión en {originalLocale, select, en {inglés} es {español} fr {francés} other {original}}.",
+        "pagination": {
+          "previous": "Anterior",
+          "next": "Siguiente",
+          "page": "Página {page}",
+          "aria_page": "Ir a la página {page}",
+          "aria_current": "Página actual, página {page}"
+        }
       },
-      "legal": {
-        "copyright": "© 2026 Brandon Argel. Todos los derechos reservados. Hecho con 💙",
-        "privacy": "Política de Privacidad",
-        "terms": "Términos de Servicio",
-        "cookies": "Política de Cookies"
+      "management": {
+        "title": "Mis Artículos",
+        "session_as": "Sesión iniciada como: {name} ({role})",
+        "no_posts": "No tienes artículos todavía.",
+        "published": "Publicado",
+        "draft": "Borrador",
+        "delete": "Eliminar",
+        "deleting": "Eliminando...",
+        "delete_confirm": "¿Estás seguro de que deseas eliminar este artículo? Esta acción no se puede deshacer.",
+        "delete_success": "Artículo eliminado exitosamente",
+        "delete_error": "Error al eliminar el artículo",
+        "publish_toggle": "Publicar",
+        "publish_success": "Artículo publicado exitosamente",
+        "unpublish_success": "Artículo despublicado exitosamente",
+        "status_update_error": "Error al actualizar el estado del artículo",
+        "delete_dialog_title": "Eliminar Artículo",
+        "delete_dialog_description": "¿Estás seguro de que deseas eliminar este artículo? Esta acción no se puede deshacer.",
+        "cancel": "Cancelar",
+        "search_placeholder": "Buscar artículos...",
+        "filter_locale": "Idioma",
+        "filter_category": "Categoría",
+        "filter_all": "Todos",
+        "reset_filters": "Restablecer",
+        "showing_results": "Mostrando {from}–{to} de {total}",
+        "no_results": "Ningún artículo coincide con tus filtros.",
+        "new_article": "Nuevo Artículo",
+        "edit": "Editar",
+        "prev_page": "Anterior",
+        "next_page": "Siguiente"
+      },
+      "editor": {
+        "new_post": "Nuevo Artículo",
+        "editing_post": "Editando Artículo",
+        "unsaved_changes_warning": "Tienes cambios sin guardar. ¿Estás seguro de que deseas salir?",
+        "back_to_posts": "Artículos",
+        "save_button": "Guardar Artículo",
+        "saving_button": "Guardando...",
+        "translate_button": "Traducir con IA",
+        "translating_button": "Traduciendo con IA...",
+        "translate_all_button": "Traducir a todos los idiomas faltantes",
+        "translate_to": "Traduciendo a {locale}...",
+        "translating_all": "Traduciendo a todos los idiomas faltantes...",
+        "upload_image_button": "Subir imagen",
+        "uploading_image_button": "Subiendo...",
+        "set_cover_button": "Establecer Portada",
+        "uploading_cover_button": "Subiendo Portada...",
+        "frontmatter_detected": "Frontmatter detectado:",
+        "preview_empty": "Aún no hay contenido para previsualizar. Comienza a escribir Markdown a la izquierda.",
+        "post_not_found": "Artículo no encontrado",
+        "default_content": "---\ntitle: \"Mi Nuevo Artículo\"\nslug: \"mi-nuevo-articulo\"\nlocale: es\npublished: false\ntags: [\"Next.js\", \"Arquitectura\"]\n---\n\n# Escribe tu artículo aquí...\n",
+        "notifications": {
+          "post_updated": "Artículo actualizado",
+          "post_created": "Artículo creado",
+          "post_translated": "Artículo traducido con éxito",
+          "posts_translated_all": "Traducido a: {locales}",
+          "validation_error": "Error de validación al guardar",
+          "translate_error": "Error al traducir el artículo",
+          "frontmatter_required": "El Frontmatter debe incluir 'title', 'slug' y 'locale'",
+          "frontmatter_invalid": "Error de sintaxis en el Frontmatter (YAML inválido)",
+          "image_uploaded": "Imagen subida correctamente",
+          "image_upload_error": "Error al subir la imagen",
+          "cover_uploaded": "Imagen de portada actualizada con éxito"
+        }
+      }
+    },
+    "contact": {
+      "badge": "Conectemos",
+      "title_prefix": "¿Tienes un Proyecto en",
+      "title_highlight": "Mente?",
+      "description": "Ya sea que tengas una duda, quieras colaborar en un proyecto de software o simplemente saludar, ¡no dudes en escribirme!",
+      "status": "Disponible para nuevas oportunidades",
+      "info_title": "Construyamos algo excepcional juntos",
+      "info_description": "Siempre estoy entusiasmado por discutir nuevos retos de ingeniería, diseños UI/UX o arquitecturas de API. Escríbeme cuando gustes.",
+      "labels": {
+        "name": "Tu Nombre",
+        "email": "Correo Electrónico",
+        "subject": "Asunto",
+        "message": "Tu Mensaje"
+      },
+      "placeholders": {
+        "name": "ej. Alex Morgan",
+        "email": "alex@ejemplo.com",
+        "subject": "ej. Proyecto de Desarrollo Web",
+        "message": "Cuéntame sobre tu proyecto, tiempos o idea..."
+      },
+      "actions": {
+        "send": "Enviar Mensaje",
+        "sending": "Enviando Mensaje...",
+        "copy_email": "Copiar Correo",
+        "copied": "¡Correo Copiado!"
+      },
+      "details": {
+        "email": "Correo",
+        "location": "Ubicación",
+        "location_value": "Guadalajara, México",
+        "whatsapp": "WhatsApp / Teléfono",
+        "socials": "Perfiles Sociales"
+      },
+      "notifications": {
+        "success_title": "¡Mensaje Enviado!",
+        "success_description": "¡Gracias por contactarme! Te responderé lo antes posible.",
+        "error_title": "Error al Enviar Mensaje",
+        "error_description": "Ocurrió un error al enviar tu mensaje. Por favor intenta de nuevo o envíame un correo directo."
+      }
+    },
+    "dashboard": {
+      "title": "Panel de Control",
+      "overview": "Resumen",
+      "posts": "Artículos",
+      "new_post": "Nuevo Artículo",
+      "users": "Gestión de Usuarios",
+      "overview_stats": {
+        "welcome_back": "Bienvenido de nuevo, {name}",
+        "total_articles": "Total de Artículos",
+        "total_articles_desc": "{published} publicados, {drafts} borradores",
+        "published_title": "Publicados",
+        "published_badge": "En Vivo",
+        "published_desc": "Visibles públicamente en el blog",
+        "drafts_title": "Borradores",
+        "drafts_badge": "Borrador",
+        "drafts_desc": "Artículos no publicados en revisión",
+        "users_title": "Usuarios Registrados",
+        "users_desc": "Gestionados vía Gestión de Usuarios",
+        "content_title": "Gestión de Contenido",
+        "content_desc": "Crea y administra tus artículos en múltiples idiomas.",
+        "access_title": "Acceso y Seguridad",
+        "access_desc": "Administra roles (Admin, Editor, Usuario) y permisos de cuenta."
+      }
+    },
+    "hero": {
+      "badge": "Hola, soy Brandon Argel",
+      "title_line1": "Empoderando",
+      "title_line2": "Mentes e Inspirando el Cambio",
+      "description": "Desarrollador Full Stack especializado en React, Next.js y TypeScript, dedicado a crear aplicaciones web de alto rendimiento, arquitecturas backend escalables y experiencias de usuario excepcionales.",
+      "skills": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Node.js",
+        "Tailwind CSS",
+        "PostgreSQL",
+        "Drizzle ORM"
+      ],
+      "read_blog": "Leer Blog",
+      "view_resume": "Ver Currículum",
+      "features": {
+        "frontend_development": {
+          "title": "Especialista en React y Next.js",
+          "description": "Construyendo interfaces de usuario modernas, accesibles y de alto rendimiento con el ecosistema de React."
+        },
+        "backend_architecture": {
+          "title": "Arquitectura Backend y APIs",
+          "description": "Desarrollando APIs tipadas REST y GraphQL, Server Actions y flujos de trabajo robustos en el servidor."
+        },
+        "full_stack_solutions": {
+          "title": "Ingeniería Full Stack",
+          "description": "Diseñando aplicaciones web integrales con integración de bases de datos fluida y sincronización de estado."
+        }
+      },
+      "social": {
+        "linkedin": {
+          "label": "Visita mi perfil de LinkedIn"
+        },
+        "github": {
+          "label": "Visita mis repositorios de GitHub"
+        },
+        "facebook": {
+          "label": "Visita mi perfil de Facebook"
+        },
+        "instagram": {
+          "label": "Visita mi perfil de Instagram"
+        },
+        "youtube": {
+          "label": "Visita mi canal de YouTube"
+        },
+        "email": {
+          "label": "Envíame un correo electrónico"
+        },
+        "whatsapp": {
+          "label": "Envíame un mensaje de WhatsApp"
+        }
+      }
+    },
+    "services": {
+      "badge": "Experiencia",
+      "title_line1": "Habilidades y",
+      "title_line2": "Servicios Ofrecidos",
+      "description": "Experiencia especializada en el ecosistema moderno de desarrollo web full stack para crear productos digitales escalables, responsivos y robustos.",
+      "categories": {
+        "all": "Todos los Servicios",
+        "frontend": "Frontend y UI",
+        "backend": "Backend y APIs",
+        "cloud": "Full Stack y Cloud"
+      },
+      "items": {
+        "frontend_development": {
+          "title": "Desarrollo Frontend",
+          "description": "Interfaces de usuario modernas, responsivas y accesibles construidas con React, Next.js, TypeScript y Tailwind CSS.",
+          "tags": ["React", "Next.js", "TypeScript", "Tailwind CSS", "Gestión de Estado"]
+        },
+        "backend_development": {
+          "title": "Desarrollo Backend y APIs",
+          "description": "Arquitectura robusta del lado del servidor, APIs RESTful, Server Actions y servicios construidos con Node.js y TypeScript.",
+          "tags": ["Node.js", "Server Actions", "APIs REST", "GraphQL", "Type Safety"]
+        },
+        "database_architecture": {
+          "title": "Arquitectura de Bases de Datos y ORM",
+          "description": "Modelado de esquemas relacionales, optimización de consultas, migraciones e integración segura con ORMs.",
+          "tags": ["PostgreSQL", "SQLite / LibSQL", "Drizzle ORM", "Prisma", "Diseño de Esquemas"]
+        },
+        "full_stack_apps": {
+          "title": "Aplicaciones Full Stack",
+          "description": "Aplicaciones web completas con integración cliente-servidor fluida, autenticación y sincronización de estado.",
+          "tags": ["Next.js App Router", "Better Auth", "React 19", "Type Safety", "Zod"]
+        },
+        "cloud_deployment": {
+          "title": "Despliegue Cloud y CI/CD",
+          "description": "Pipelines de construcción automatizados, entornos en contenedores, funciones edge serverless y alojamiento escalable.",
+          "tags": ["Vercel", "Docker", "AWS", "GitHub Actions", "Edge Compute"]
+        },
+        "performance_seo": {
+          "title": "Optimización de Rendimiento y SEO",
+          "description": "Auditorías de Core Web Vitals, renderizado del lado del servidor (SSR), SEO técnico y caché para máxima velocidad.",
+          "tags": ["Core Web Vitals", "SSR / SSG", "SEO Técnico", "Caché", "Ajuste de Bundle"]
+        }
+      },
+      "cta": {
+        "question": "¿Necesitas una solución personalizada para tus requerimientos específicos?",
+        "action": "Ponte en Contacto"
       }
     },
     "spotify": {
@@ -127,441 +545,91 @@
       "not_playing": "Sin reproducción",
       "idle": "Spotify en pausa",
       "by": "por"
-    }
-  },
-  "hero": {
-    "badge": "Hola, soy Brandon Argel",
-    "title_line1": "Empoderando",
-    "title_line2": "Mentes e Inspirando el Cambio",
-    "description": "Desarrollador Full Stack especializado en React, Next.js y TypeScript, dedicado a crear aplicaciones web de alto rendimiento, arquitecturas backend escalables y experiencias de usuario excepcionales.",
-    "skills": [
-      "React",
-      "Next.js",
-      "TypeScript",
-      "Node.js",
-      "Tailwind CSS",
-      "PostgreSQL",
-      "Drizzle ORM"
-    ],
-    "read_blog": "Leer Blog",
-    "view_resume": "Ver Currículum",
-    "features": {
-      "frontend_development": {
-        "title": "Especialista en React y Next.js",
-        "description": "Construyendo interfaces de usuario modernas, accesibles y de alto rendimiento con el ecosistema de React."
-      },
-      "backend_architecture": {
-        "title": "Arquitectura Backend y APIs",
-        "description": "Desarrollando APIs tipadas REST y GraphQL, Server Actions y flujos de trabajo robustos en el servidor."
-      },
-      "full_stack_solutions": {
-        "title": "Ingeniería Full Stack",
-        "description": "Diseñando aplicaciones web integrales con integración de bases de datos fluida y sincronización de estado."
-      }
     },
-    "social": {
-      "linkedin": {
-        "label": "Visita mi perfil de LinkedIn"
-      },
-      "github": {
-        "label": "Visita mis repositorios de GitHub"
-      },
-      "facebook": {
-        "label": "Visita mi perfil de Facebook"
-      },
-      "instagram": {
-        "label": "Visita mi perfil de Instagram"
-      },
-      "youtube": {
-        "label": "Visita mi canal de YouTube"
-      },
-      "email": {
-        "label": "Envíame un correo electrónico"
-      },
-      "whatsapp": {
-        "label": "Envíame un mensaje de WhatsApp"
-      }
-    }
-  },
-  "services": {
-    "badge": "Experiencia",
-    "title_line1": "Habilidades y",
-    "title_line2": "Servicios Ofrecidos",
-    "description": "Experiencia especializada en el ecosistema moderno de desarrollo web full stack para crear productos digitales escalables, responsivos y robustos.",
-    "categories": {
-      "all": "Todos los Servicios",
-      "frontend": "Frontend y UI",
-      "backend": "Backend y APIs",
-      "cloud": "Full Stack y Cloud"
-    },
-    "items": {
-      "frontend_development": {
-        "title": "Desarrollo Frontend",
-        "description": "Interfaces de usuario modernas, responsivas y accesibles construidas con React, Next.js, TypeScript y Tailwind CSS.",
-        "tags": ["React", "Next.js", "TypeScript", "Tailwind CSS", "Gestión de Estado"]
-      },
-      "backend_development": {
-        "title": "Desarrollo Backend y APIs",
-        "description": "Arquitectura robusta del lado del servidor, APIs RESTful, Server Actions y servicios construidos con Node.js y TypeScript.",
-        "tags": ["Node.js", "Server Actions", "APIs REST", "GraphQL", "Type Safety"]
-      },
-      "database_architecture": {
-        "title": "Arquitectura de Bases de Datos y ORM",
-        "description": "Modelado de esquemas relacionales, optimización de consultas, migraciones e integración segura con ORMs.",
-        "tags": ["PostgreSQL", "SQLite / LibSQL", "Drizzle ORM", "Prisma", "Diseño de Esquemas"]
-      },
-      "full_stack_apps": {
-        "title": "Aplicaciones Full Stack",
-        "description": "Aplicaciones web completas con integración cliente-servidor fluida, autenticación y sincronización de estado.",
-        "tags": ["Next.js App Router", "Better Auth", "React 19", "Type Safety", "Zod"]
-      },
-      "cloud_deployment": {
-        "title": "Despliegue Cloud y CI/CD",
-        "description": "Pipelines de construcción automatizados, entornos en contenedores, funciones edge serverless y alojamiento escalable.",
-        "tags": ["Vercel", "Docker", "AWS", "GitHub Actions", "Edge Compute"]
-      },
-      "performance_seo": {
-        "title": "Optimización de Rendimiento y SEO",
-        "description": "Auditorías de Core Web Vitals, renderizado del lado del servidor (SSR), SEO técnico y caché para máxima velocidad.",
-        "tags": ["Core Web Vitals", "SSR / SSG", "SEO Técnico", "Caché", "Ajuste de Bundle"]
-      }
-    },
-    "cta": {
-      "question": "¿Necesitas una solución personalizada para tus requerimientos específicos?",
-      "action": "Ponte en Contacto"
-    }
-  },
-  "testimonials": {
-    "badge": "Testimonios",
-    "title_line1": "Lo que la Gente",
-    "title_line2": "Dice Sobre Mí",
-    "description": "Opiniones de compañeros de equipo, líderes y clientes que han colaborado conmigo en ingeniería de software y productos digitales.",
-    "items": {
-      "sura_cedeno": {
-        "name": "Sura Cedeño",
-        "role": "Coordinadora y Project Manager",
-        "quote": "Recomiendo ampliamente a Brandon. Es un profesional con una excelente atención al detalle, capaz de perfeccionar cada aspecto de su trabajo. Su habilidad para detectar hasta los errores más pequeños y corregirlos demuestra su compromiso con la calidad y la excelencia. Además, es un verdadero jugador de equipo, colaborando eficazmente con sus compañeros y aportando ideas valiosas a los proyectos. Sus habilidades de trabajo en equipo y su dedicación al refinamiento lo convierten en un activo invaluable para cualquier equipo de desarrollo frontend."
-      },
-      "carlos_cespedes": {
-        "name": "Carlos Céspedes",
-        "role": "Director de Contenido, Marketing y Branding",
-        "quote": "Brandon es un excelente profesional, atento a los detalles, responsable, puntual. Él es una persona dispuesta a aprender, transparente, con la que puedes contar consecuentemente dentro de tu equipo."
-      },
-      "aaron_garibay": {
-        "name": "Aaron Garibay",
-        "role": "Ingeniero de Software",
-        "quote": "Recomiendo ampliamente a Brandon a cualquier equipo que busque un desarrollador altamente calificado, autodidacta y sobresaliente. Se enfoca en entregar resultados y en crear entornos donde todos se sientan libres de participar. Muestra liderazgo, compromiso y un claro entendimiento de cada producto en el que se involucra. Ha sido un placer trabajar con él y estoy seguro de que será un activo increíblemente valioso para cualquier equipo."
-      },
-      "joel_campos": {
-        "name": "Joel Campos",
-        "role": "Product Manager",
-        "quote": "Contratamos a Brandon para construir un panel de administración personalizado para nuestras herramientas internas. Entregó antes de lo previsto, implementó las mejores prácticas y la experiencia de usuario (UI/UX) fue mucho mejor de lo que esperábamos. ¡Altamente recomendado!"
-      }
-    }
-  },
-  "about": {
-    "hero": {
-      "badge": "Acerca de mí",
-      "title_prefix": "Hola, soy",
-      "name": "Brandon Argel",
-      "purpose": "Creo firmemente en el poder del software para generar un impacto positivo y real en la vida de las personas. Mi propósito es construir herramientas y experiencias digitales donde la empatía, la accesibilidad y el diseño inclusivo permitan que cualquier usuario se beneficie de la tecnología.",
-      "bio_secondary": "Soy un desarrollador full stack apasionado, dedicado a crear aplicaciones web de alto rendimiento, arquitecturas backend escalables y experiencias de usuario excepcionales. Con más de 6 años en la industria tecnológica, colaboro con clientes y equipos de todo el mundo para construir sistemas seguros, con tipado estricto y soluciones backend robustas.",
-      "get_in_touch": "Contáctame",
-      "download_resume": "Descargar CV"
-    },
-    "philosophy": {
-      "badge": "La Disciplina del Cómo",
-      "title_prefix": "Mis",
-      "title": "Principios Rectores",
-      "description": "Las acciones y valores diarios que dan forma a mi trabajo y colaboración.",
+    "testimonials": {
+      "badge": "Testimonios",
+      "title_line1": "Lo que la Gente",
+      "title_line2": "Dice Sobre Mí",
+      "description": "Opiniones de compañeros de equipo, líderes y clientes que han colaborado conmigo en ingeniería de software y productos digitales.",
       "items": {
-        "learn_document_share": {
-          "title": "Aprende, documenta y comparte",
-          "description": "Convierte la curiosidad en conocimiento. Domina los conceptos para explicarlos de forma sencilla y deja siempre el camino documentado."
+        "sura_cedeno": {
+          "name": "Sura Cedeño",
+          "role": "Coordinadora y Project Manager",
+          "quote": "Recomiendo ampliamente a Brandon. Es un profesional con una excelente atención al detalle, capaz de perfeccionar cada aspecto de su trabajo. Su habilidad para detectar hasta los errores más pequeños y corregirlos demuestra su compromiso con la calidad y la excelencia. Además, es un verdadero jugador de equipo, colaborando eficazmente con sus compañeros y aportando ideas valiosas a los proyectos. Sus habilidades de trabajo en equipo y su dedicación al refinamiento lo convierten en un activo invaluable para cualquier equipo de desarrollo frontend."
         },
-        "build_parachute": {
-          "title": "Salta y construye el paracaídas",
-          "description": "Atrévete a innovar. Usa la curiosidad implacable para mirar los problemas desde ángulos distintos y encontrar soluciones."
+        "carlos_cespedes": {
+          "name": "Carlos Céspedes",
+          "role": "Director de Contenido, Marketing y Branding",
+          "quote": "Brandon es un excelente profesional, atento a los detalles, responsable, puntual. Él es una persona dispuesta a aprender, transparente, con la que puedes contar consecuentemente dentro de tu equipo."
         },
-        "design_for_diversity": {
-          "title": "Diseña y programa para la diversidad",
-          "description": "Mantén el código y el producto abiertos. La exclusión está prohibida; buscar diferentes perspectivas es la clave para crecer."
+        "aaron_garibay": {
+          "name": "Aaron Garibay",
+          "role": "Ingeniero de Software",
+          "quote": "Recomiendo ampliamente a Brandon a cualquier equipo que busque un desarrollador altamente calificado, autodidacta y sobresaliente. Se enfoca en entregar resultados y en crear entornos donde todos se sientan libres de participar. Muestra liderazgo, compromiso y un claro entendimiento de cada producto en el que se involucra. Ha sido un placer trabajar con él y estoy seguro de que será un activo increíblemente valioso para cualquier equipo."
         },
-        "communicate_kindness": {
-          "title": "Comunica con amabilidad",
-          "description": "Entrega y recibe feedback honesto para alcanzar los objetivos del equipo, fomentando un espacio seguro e inclusivo."
-        },
-        "focus_controllable": {
-          "title": "Enfoca tu energía en lo controlable",
-          "description": "Acepta lo que escapa de tus manos para ejecutar rápido y bien. Sé organizado y prioriza tus esfuerzos."
-        },
-        "care_human_factor": {
-          "title": "Cuida el factor humano",
-          "description": "Protege a quienes te rodean. Las personas y las experiencias que creamos juntos son el núcleo de cualquier proyecto."
+        "joel_campos": {
+          "name": "Joel Campos",
+          "role": "Product Manager",
+          "quote": "Contratamos a Brandon para construir un panel de administración personalizado para nuestras herramientas internas. Entregó antes de lo previsto, implementó las mejores prácticas y la experiencia de usuario (UI/UX) fue mucho mejor de lo que esperábamos. ¡Altamente recomendado!"
         }
       }
     },
-    "skills": {
-      "badge": "La Coherencia del Qué",
-      "title": "Habilidades y Experiencia",
-      "description": "Los resultados tangibles y el nivel técnico que entrego en el día a día.",
-      "cards": {
-        "frontend": "Construcción de interfaces 100% accesibles, responsivas y de alto rendimiento, optimizadas para reducir tiempos de carga.",
-        "backend": "Transformación de datos y lógica de negocio en historias coherentes mediante APIs que guían al usuario de principio a fin.",
-        "fullstack": "Entrega de código escalable y reutilizable, siempre respaldado por documentación técnica clara y precisa de extremo a extremo."
+    "users": {
+      "management": {
+        "title": "Gestión de Usuarios",
+        "description": "Administra los roles de usuario y permisos del sistema.",
+        "user_col": "Usuario",
+        "email_col": "Correo",
+        "role_col": "Rol",
+        "provider_col": "Proveedor",
+        "verified_col": "Verificado",
+        "created_at_col": "Registrado",
+        "status_col": "Estado",
+        "actions_col": "Acciones",
+        "banned": "Bloqueado",
+        "active": "Activo",
+        "verified": "Correo verificado",
+        "unverified": "Correo no verificado",
+        "search_placeholder": "Buscar por nombre o correo...",
+        "filter_role": "Filtrar por rol",
+        "filter_all": "Todos los roles",
+        "reset_filters": "Restablecer",
+        "actions": "Acciones",
+        "ban_user": "Banear Usuario",
+        "unban_user": "Desbanear Usuario",
+        "copy_id": "Copiar ID",
+        "id_copied": "ID de usuario copiado al portapapeles",
+        "ban_dialog_title": "Banear Usuario",
+        "ban_dialog_desc": "Restringe el acceso de este usuario a la plataforma. Las sesiones activas se cerrarán inmediatamente.",
+        "ban_reason_label": "Motivo del baneo",
+        "ban_reason_placeholder": "Explica el motivo del baneo...",
+        "ban_reason_required": "Se requiere un motivo para banear a este usuario.",
+        "ban_duration_label": "Duración",
+        "duration_24h": "24 horas",
+        "duration_7d": "7 días",
+        "duration_30d": "30 días",
+        "duration_permanent": "Permanente",
+        "cancel": "Cancelar",
+        "confirm_ban": "Confirmar Baneo",
+        "user_banned_success": "Usuario baneado exitosamente",
+        "user_unbanned_success": "Usuario desbaneado exitosamente",
+        "ban_tooltip_reason": "Motivo",
+        "ban_tooltip_expires": "Expira",
+        "ban_tooltip_permanent": "Baneo permanente",
+        "cannot_ban_self": "No puedes banear tu propia cuenta",
+        "no_users_found": "No se encontraron usuarios con esos filtros.",
+        "prev_page": "Anterior",
+        "next_page": "Siguiente",
+        "role_updated_title": "Rol actualizado",
+        "role_updated_desc": "El rol de {name} ha sido actualizado a {role}",
+        "role_update_error": "Error al actualizar el rol",
+        "no_users": "No hay usuarios registrados aún."
+      },
+      "roles": {
+        "admin": "Admin",
+        "editor": "Editor",
+        "user": "Usuario"
       }
-    }
-  },
-  "blog": {
-    "badge": "Blog & Artículos",
-    "title_line1": "Perspectivas sobre",
-    "title_line2": "Tecnología y Seguridad",
-    "title_prefix": "Publicaciones",
-    "title_highlight": "Recientes del Blog",
-    "view_all": "Ver Todos los Artículos",
-    "title": "Blog de Ingeniería",
-    "subtitle": "Explora artículos sobre ciberseguridad, desarrollo web y recursos educativos para potenciar tus habilidades técnicas.",
-    "search_placeholder": "Buscar artículos...",
-    "search_button": "Buscar",
-    "clear_search": "Limpiar búsqueda",
-    "clear_filters": "Limpiar filtros",
-    "back_to_blog": "Regresar al Blog",
-    "read_time_suffix": "min de lectura",
-    "sidebar_categories": "Categorías",
-    "sidebar_bookmarked": "Artículos Guardados",
-    "sidebar_trending": "Tendencias",
-    "empty_bookmarked": "Aún no tienes artículos guardados. ¡Guarda tus lecturas favoritas aquí!",
-    "empty_trending": "¡Vuelve pronto para ver artículos en tendencia!",
-    "all_articles": "Todos los Artículos",
-    "showing_articles": "Mostrando {start}-{end} de {total} artículos",
-    "sort": {
-      "latest": "Más reciente",
-      "oldest": "Más antiguo",
-      "popular": "Popular",
-      "reading_time": "Tiempo de lectura"
-    },
-    "actions": {
-      "share": "Compartir artículo",
-      "bookmark": "Guardar artículo",
-      "link_copied": "Enlace copiado al portapapeles",
-      "link_copy_error": "No se pudo copiar el enlace",
-      "bookmarked": "Artículo guardado",
-      "bookmark_removed": "Artículo eliminado de guardados",
-      "edit": "Editar artículo"
-    },
-    "no_results": "No se encontraron artículos con esos filtros.",
-    "empty_posts": "No hay artículos publicados aún.",
-    "error_loading_posts": "No se pudieron cargar los artículos en este momento.",
-    "error_loading_article": "Error cargando el artículo",
-    "error_loading_article_description": "Hubo un problema de conexión. Intenta nuevamente más tarde.",
-    "post_not_found": "Artículo no encontrado",
-    "fallbackWarning": "Este artículo aún no está disponible en tu idioma. Mostrando la versión en {originalLocale, select, en {inglés} es {español} fr {francés} other {original}}.",
-    "categories": {
-      "all": "Todos",
-      "architecture": "Arquitectura",
-      "web_development": "Desarrollo Web",
-      "productivity": "Productividad",
-      "personal_development": "Desarrollo Personal",
-      "programming": "Programación",
-      "javascript": "JavaScript",
-      "nextjs": "Next.js",
-      "typescript": "TypeScript",
-      "react": "React",
-      "full_stack": "Full Stack",
-      "ui_ux": "UI/UX",
-      "performance": "Rendimiento",
-      "seo": "SEO",
-      "ai": "IA & Automatización"
-    },
-    "pagination": {
-      "previous": "Anterior",
-      "next": "Siguiente",
-      "page": "Página {page}",
-      "aria_page": "Ir a la página {page}",
-      "aria_current": "Página actual, página {page}"
-    }
-  },
-  "contact": {
-    "badge": "Conectemos",
-    "title_prefix": "¿Tienes un Proyecto en",
-    "title_highlight": "Mente?",
-    "description": "Ya sea que tengas una duda, quieras colaborar en un proyecto de software o simplemente saludar, ¡no dudes en escribirme!",
-    "status": "Disponible para nuevas oportunidades",
-    "info_title": "Construyamos algo excepcional juntos",
-    "info_description": "Siempre estoy entusiasmado por discutir nuevos retos de ingeniería, diseños UI/UX o arquitecturas de API. Escríbeme cuando gustes.",
-    "labels": {
-      "name": "Tu Nombre",
-      "email": "Correo Electrónico",
-      "subject": "Asunto",
-      "message": "Tu Mensaje"
-    },
-    "placeholders": {
-      "name": "ej. Alex Morgan",
-      "email": "alex@ejemplo.com",
-      "subject": "ej. Proyecto de Desarrollo Web",
-      "message": "Cuéntame sobre tu proyecto, tiempos o idea..."
-    },
-    "actions": {
-      "send": "Enviar Mensaje",
-      "sending": "Enviando Mensaje...",
-      "copy_email": "Copiar Correo",
-      "copied": "¡Correo Copiado!"
-    },
-    "details": {
-      "email": "Correo",
-      "location": "Ubicación",
-      "location_value": "Guadalajara, México",
-      "whatsapp": "WhatsApp / Teléfono",
-      "socials": "Perfiles Sociales"
-    },
-    "notifications": {
-      "success_title": "¡Mensaje Enviado!",
-      "success_description": "¡Gracias por contactarme! Te responderé lo antes posible.",
-      "error_title": "Error al Enviar Mensaje",
-      "error_description": "Ocurrió un error al enviar tu mensaje. Por favor intenta de nuevo o envíame un correo directo."
-    }
-  },
-  "auth": {
-    "login": {
-      "title": "Iniciar Sesión",
-      "forgot_password": "¿Olvidaste tu contraseña?",
-      "create_account": "Crear nueva cuenta",
-      "welcome_back": "¡Bienvenido de nuevo{name, select, empty {} other {, {name}}}!",
-      "invalid_credentials_title": "Error al Iniciar Sesión",
-      "invalid_credentials_description": "Correo o contraseña inválidos. Por favor, verifica tus credenciales."
-    },
-    "register": {
-      "title": "Registrarse",
-      "accept_terms": "Acepto los",
-      "terms_of_service": "Términos de Servicio",
-      "and": "y",
-      "privacy_policy": "Política de Privacidad",
-      "create_password": "Crea una contraseña segura",
-      "already_have_account": "Ya tengo una cuenta",
-      "account_created_title": "¡Cuenta creada!",
-      "account_created_description": "Bienvenido a la plataforma{name, select, empty {} other {, {name}}}.",
-      "email_in_use_title": "Correo en uso",
-      "email_in_use_description": "Este correo ya está registrado. Por favor, inicia sesión.",
-      "invalid_password_title": "Contraseña Inválida",
-      "invalid_password_description": "Asegúrate de que tu contraseña cumpla con todos los requisitos.",
-      "partial_success_title": "Éxito Parcial",
-      "partial_success_description": "Cuenta creada exitosamente, pero por favor inicia sesión manualmente.",
-      "registration_failed_title": "Error al Registrarse"
-    }
-  },
-  "dashboard": {
-    "title": "Panel de Control",
-    "overview": "Resumen",
-    "posts": "Artículos",
-    "new_post": "Nuevo Artículo",
-    "users": "Gestión de Usuarios",
-    "back_to_site": "Volver al sitio",
-    "you": "Tú",
-    "roles": {
-      "admin": "Admin",
-      "editor": "Editor",
-      "user": "Usuario"
-    },
-    "overview_stats": {
-      "welcome_back": "Bienvenido de nuevo, {name}",
-      "total_articles": "Total de Artículos",
-      "total_articles_desc": "{published} publicados, {drafts} borradores",
-      "published_title": "Publicados",
-      "published_badge": "En Vivo",
-      "published_desc": "Visibles públicamente en el blog",
-      "drafts_title": "Borradores",
-      "drafts_badge": "Borrador",
-      "drafts_desc": "Artículos no publicados en revisión",
-      "users_title": "Usuarios Registrados",
-      "users_desc": "Gestionados vía Gestión de Usuarios",
-      "content_title": "Gestión de Contenido",
-      "content_desc": "Crea y administra tus artículos en múltiples idiomas.",
-      "access_title": "Acceso y Seguridad",
-      "access_desc": "Administra roles (Admin, Editor, Usuario) y permisos de cuenta."
-    },
-    "posts_management": {
-      "title": "Mis Artículos",
-      "session_as": "Sesión iniciada como: {name} ({role})",
-      "no_posts": "No tienes artículos todavía.",
-      "published": "Publicado",
-      "draft": "Borrador",
-      "delete": "Eliminar",
-      "deleting": "Eliminando...",
-      "delete_confirm": "¿Estás seguro de que deseas eliminar este artículo? Esta acción no se puede deshacer.",
-      "delete_success": "Artículo eliminado exitosamente",
-      "delete_error": "Error al eliminar el artículo",
-      "publish_toggle": "Publicar",
-      "publish_success": "Artículo publicado exitosamente",
-      "unpublish_success": "Artículo despublicado exitosamente",
-      "status_update_error": "Error al actualizar el estado del artículo",
-      "delete_dialog_title": "Eliminar Artículo",
-      "delete_dialog_description": "¿Estás seguro de que deseas eliminar este artículo? Esta acción no se puede deshacer.",
-      "cancel": "Cancelar"
-    },
-    "users_management": {
-      "title": "Gestión de Usuarios",
-      "description": "Administra los roles de usuario y permisos del sistema.",
-      "user_col": "Usuario",
-      "email_col": "Correo",
-      "role_col": "Rol",
-      "created_at_col": "Registrado",
-      "status_col": "Estado",
-      "actions_col": "Acciones",
-      "banned": "Bloqueado",
-      "active": "Activo",
-      "role_updated_title": "Rol actualizado",
-      "role_updated_desc": "El rol de {name} ha sido actualizado a {role}",
-      "role_update_error": "Error al actualizar el rol",
-      "no_users": "No hay usuarios registrados aún."
-    }
-  },
-  "validation": {
-    "required": "Este campo es requerido",
-    "invalid_email": "Por favor ingresa un correo electrónico válido",
-    "too_short": "El valor es demasiado corto",
-    "too_long": "El valor es demasiado largo",
-    "password_min": "La contraseña debe tener al menos 8 caracteres",
-    "password_max": "La contraseña no debe exceder los 128 caracteres",
-    "passwords_dont_match": "Las contraseñas no coinciden",
-    "terms_required": "Debes aceptar los términos de servicio y la política de privacidad",
-    "title_required": "El título es requerido",
-    "slug_required": "El slug es requerido",
-    "content_min": "El contenido debe tener al menos 10 caracteres",
-    "locale_required": "El idioma es requerido",
-    "role_invalid": "Rol especificado inválido"
-  },
-  "blog_editor": {
-    "new_post": "Nuevo Artículo",
-    "editing_post": "Editando Artículo",
-    "unsaved_changes_warning": "Tienes cambios sin guardar. ¿Estás seguro de que deseas salir?",
-    "back_to_posts": "Artículos",
-    "save_button": "Guardar Artículo",
-    "saving_button": "Guardando...",
-    "translate_button": "Traducir con IA",
-    "translating_button": "Traduciendo con IA...",
-    "translate_all_button": "Traducir a todos los idiomas faltantes",
-    "translate_to": "Traduciendo a {locale}...",
-    "translating_all": "Traduciendo a todos los idiomas faltantes...",
-    "upload_image_button": "Subir imagen",
-    "uploading_image_button": "Subiendo...",
-    "set_cover_button": "Establecer Portada",
-    "uploading_cover_button": "Subiendo Portada...",
-    "frontmatter_detected": "Frontmatter detectado:",
-    "preview_empty": "Aún no hay contenido para previsualizar. Comienza a escribir Markdown a la izquierda.",
-    "post_not_found": "Artículo no encontrado",
-    "default_content": "---\ntitle: \"Mi Nuevo Artículo\"\nslug: \"mi-nuevo-articulo\"\nlocale: es\npublished: false\ntags: [\"Next.js\", \"Arquitectura\"]\n---\n\n# Escribe tu artículo aquí...\n",
-    "notifications": {
-      "post_updated": "Artículo actualizado",
-      "post_created": "Artículo creado",
-      "post_translated": "Artículo traducido con éxito",
-      "posts_translated_all": "Traducido a: {locales}",
-      "validation_error": "Error de validación al guardar",
-      "translate_error": "Error al traducir el artículo",
-      "frontmatter_required": "El Frontmatter debe incluir 'title', 'slug' y 'locale'",
-      "frontmatter_invalid": "Error de sintaxis en el Frontmatter (YAML inválido)",
-      "image_uploaded": "Imagen subida correctamente",
-      "image_upload_error": "Error al subir la imagen",
-      "cover_uploaded": "Imagen de portada actualizada con éxito"
     }
   },
   "metadata": {

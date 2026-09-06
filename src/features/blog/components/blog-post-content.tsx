@@ -12,7 +12,7 @@ interface BlogPostContentProps {
 }
 
 export async function BlogPostContent({ post, action }: BlogPostContentProps) {
-  const [t, format] = await Promise.all([getTranslations('blog'), getFormatter()])
+  const [t, format] = await Promise.all([getTranslations('features.blog.reader'), getFormatter()])
 
   const formattedDate = format.dateTime(post.createdAt, 'short')
 
@@ -36,7 +36,7 @@ export async function BlogPostContent({ post, action }: BlogPostContentProps) {
           <div className="flex flex-wrap gap-2">
             {post.tags.map((tag) => (
               <Badge key={tag.id} variant="secondary">
-                {t(`categories.${tag.name}`)}
+                {tag.name}
               </Badge>
             ))}
           </div>

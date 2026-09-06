@@ -19,7 +19,7 @@ interface BlogPaginationProps {
 }
 
 export function BlogPagination({ totalPages, currentPage }: BlogPaginationProps) {
-  const t = useTranslations('blog.pagination')
+  const t = useTranslations('features.blog.reader.pagination')
   const pathname = usePathname()
   const searchParams = useSearchParams()
 

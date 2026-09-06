@@ -34,16 +34,12 @@ export function BlogThumbnail({
       />
 
       {/* Crosshair Marks on Four Corners */}
-      <span className="font-mono absolute top-2 left-2 text-[10px] text-white/40 leading-none">
+      <span className="font-mono absolute top-2 left-2 text-xs text-white/40 leading-none">+</span>
+      <span className="font-mono absolute top-2 right-2 text-xs text-white/40 leading-none">+</span>
+      <span className="font-mono absolute bottom-2 left-2 text-xs text-white/40 leading-none">
         +
       </span>
-      <span className="font-mono absolute top-2 right-2 text-[10px] text-white/40 leading-none">
-        +
-      </span>
-      <span className="font-mono absolute bottom-2 left-2 text-[10px] text-white/40 leading-none">
-        +
-      </span>
-      <span className="font-mono absolute bottom-2 right-2 text-[10px] text-white/40 leading-none">
+      <span className="font-mono absolute bottom-2 right-2 text-xs text-white/40 leading-none">
         +
       </span>
 
@@ -63,7 +59,7 @@ export function BlogThumbnail({
         {/* Center Pill Badge */}
         {coverBadge && (
           <div className="mt-3 inline-flex items-center justify-center rounded bg-white px-2.5 py-0.5 shadow-sm">
-            <span className="text-[10px] font-bold text-neutral-950 sm:text-xs">{coverBadge}</span>
+            <span className="text-xs font-bold text-neutral-950 sm:text-xs">{coverBadge}</span>
           </div>
         )}
 

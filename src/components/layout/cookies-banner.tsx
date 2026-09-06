@@ -10,7 +10,7 @@ import { track } from '@/lib/analytics/events'
 
 export function CookieBanner() {
   const [isVisible, setIsVisible] = useState(true)
-  const t = useTranslations('components.cookie_banner')
+  const t = useTranslations('components.layout.cookie_banner')
   const tGlobal = useTranslations('common.actions')
 
   const handleAccept = async () => {

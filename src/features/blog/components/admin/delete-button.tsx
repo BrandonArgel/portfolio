@@ -18,9 +18,10 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { deletePostAction } from '@/features/blog/actions/posts.action'
+import { checkAndHandleSessionRevoked } from '@/lib/auth-interceptor'
 
 export function DeletePostButton({ postId }: { postId: string }) {
-  const t = useTranslations('dashboard.posts_management')
+  const t = useTranslations('features.blog.management')
   const [open, setOpen] = useState(false)
 
   const { execute, isExecuting } = useAction(deletePostAction, {
@@ -33,6 +34,8 @@ export function DeletePostButton({ postId }: { postId: string }) {
       }
     },
     onError: ({ error }) => {
+      if (checkAndHandleSessionRevoked(error)) return
+
       const serverError = error.serverError
       sileo.error({
         title: serverError?.title || t('delete_error'),

@@ -12,7 +12,7 @@ interface BlogCardProps {
 }
 
 export function BlogCard({ post, className }: BlogCardProps) {
-  const t = useTranslations('blog')
+  const t = useTranslations('features.blog.reader')
   const format = useFormatter()
 
   const formattedDate = format.dateTime(new Date(post.publishedAt), 'short')

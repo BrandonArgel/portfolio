@@ -31,9 +31,41 @@ export async function proxy(request: NextRequest) {
 
   const isProtectedRoute = protectedRoutes.some((route) => pathnameWithoutLocale.startsWith(route))
 
-  if (isProtectedRoute && !hasSessionToken) {
+  if (isProtectedRoute) {
     const locale = pathname.match(localePattern)?.[1] || routing.defaultLocale
-    return NextResponse.redirect(new URL(`/${locale}/login`, request.url))
+
+    if (!hasSessionToken) {
+      return NextResponse.redirect(new URL(`/${locale}/login`, request.url))
+    }
+
+    // Verify session validity via Better Auth get-session endpoint to catch revoked or banned users upon hard reload
+    try {
+      const sessionUrl = new URL('/api/auth/get-session', request.url)
+      const res = await fetch(sessionUrl, {
+        headers: {
+          cookie: request.headers.get('cookie') || '',
+        },
+      })
+
+      if (res.ok) {
+        const session = await res.json()
+        const isBanned = Boolean(session?.user?.banned)
+
+        if (!session || !session.user || isBanned) {
+          const redirectRes = NextResponse.redirect(new URL(`/${locale}/login`, request.url))
+          redirectRes.cookies.delete('better-auth.session_token')
+          redirectRes.cookies.delete('__Secure-better-auth.session_token')
+          return redirectRes
+        }
+      } else {
+        const redirectRes = NextResponse.redirect(new URL(`/${locale}/login`, request.url))
+        redirectRes.cookies.delete('better-auth.session_token')
+        redirectRes.cookies.delete('__Secure-better-auth.session_token')
+        return redirectRes
+      }
+    } catch {
+      // In case the API is temporarily unreachable, fallback to server component layout validation
+    }
   }
 
   return intlResponse

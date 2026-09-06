@@ -5,7 +5,7 @@ import { Section, SectionDescription, SectionHeader, SectionTitle } from '@/comp
 import { TestimonialCarousel } from './testimonial-carousel'
 
 export async function TestimonialsSection() {
-  const t = await getTranslations('testimonials')
+  const t = await getTranslations('features.testimonials')
 
   return (
     <Section withGlow containerClassName="flex flex-col items-center group/anim">

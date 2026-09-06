@@ -13,7 +13,7 @@ export async function Header() {
     headers: await headers(),
   })
 
-  const t = await getTranslations('components.header')
+  const t = await getTranslations('components.layout.header')
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-md transition-colors supports-backdrop-filter:bg-background/60">

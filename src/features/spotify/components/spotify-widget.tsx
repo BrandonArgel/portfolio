@@ -17,7 +17,7 @@ interface SpotifyWidgetProps {
 }
 
 export function SpotifyWidget({ className }: SpotifyWidgetProps) {
-  const t = useTranslations('components.spotify')
+  const t = useTranslations('features.spotify')
   const widgetRef = useRef<HTMLDivElement>(null)
 
   const isVisible = useIsVisible(widgetRef, 0.1)

@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 
 export function FooterNewsletter() {
-  const t = useTranslations('components.footer.newsletter')
+  const t = useTranslations('components.layout.footer.newsletter')
   const [email, setEmail] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {

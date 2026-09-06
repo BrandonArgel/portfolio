@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { LinkButton } from '@/components/ui/button'
 
 export async function ServicesCta() {
-  const t = await getTranslations('services.cta')
+  const t = await getTranslations('features.services.cta')
 
   return (
     <div className="mt-14 flex flex-col items-center gap-4 text-center">

@@ -27,7 +27,7 @@ interface UserMenuProps {
 
 export function UserPreferencesMenu({ initialSession, className }: UserMenuProps) {
   const tGlobal = useTranslations('common')
-  const tHeader = useTranslations('components.header')
+  const tHeader = useTranslations('components.layout.header')
 
   const {
     user,
@@ -80,13 +80,13 @@ export function UserPreferencesMenu({ initialSession, className }: UserMenuProps
           <>
             <div className="px-2 py-1.5 flex flex-col space-y-1">
               {isAdmin && (
-                <Badge variant="softPrimary" className="w-fit text-[10px] h-4 px-1.5 py-0">
+                <Badge variant="softPrimary" className="w-fit text-xs h-4 px-1.5 py-0">
                   <ShieldCheck className="size-2.5 mr-1 text-primary" />
                   {tGlobal('labels.admin')}
                 </Badge>
               )}
               {isEditor && (
-                <Badge variant="softBlue" className="w-fit text-[10px] h-4 px-1.5 py-0 font-medium">
+                <Badge variant="softBlue" className="w-fit text-xs h-4 px-1.5 py-0 font-medium">
                   Editor
                 </Badge>
               )}

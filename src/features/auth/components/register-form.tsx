@@ -19,7 +19,7 @@ import { SocialAuthButtons } from './social-auth-buttons'
 
 export function RegisterForm() {
   const router = useRouter()
-  const t = useTranslations('auth.register')
+  const t = useTranslations('features.auth.register')
   const tGlobal = useTranslations('common')
   const {
     control,
@@ -75,14 +75,14 @@ export function RegisterForm() {
       case 'UNKNOWN_ERROR':
         sileo.error({
           title: t('registration_failed_title'),
-          description: err.details,
+          description: t('registration_failed_description'),
         })
         break
       default:
         err satisfies never
         sileo.error({
-          title: tGlobal('errors.unexpected_title'),
-          description: tGlobal('errors.unexpected_description'),
+          title: tGlobal('errors.system_title'),
+          description: tGlobal('errors.system_description'),
         })
     }
   }

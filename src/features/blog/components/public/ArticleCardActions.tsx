@@ -12,7 +12,7 @@ interface ArticleCardActionsProps {
 
 export function ArticleCardActions({ slug, title }: ArticleCardActionsProps) {
   const [isBookmarked, setIsBookmarked] = useState(false)
-  const t = useTranslations('blog')
+  const t = useTranslations('features.blog.reader')
 
   const handleShare = async (e: React.MouseEvent) => {
     e.preventDefault()

@@ -14,7 +14,7 @@ function escapeLikePattern(input: string): string {
   return input.replace(/[%_\\]/g, '\\$&')
 }
 
-export async function getAllCategories(): Promise<Result<BlogCategory[], PostError>> {
+export async function getAllCategories(locale: string): Promise<Result<BlogCategory[], PostError>> {
   try {
     const dbCategories = await db
       .select({
@@ -26,7 +26,7 @@ export async function getAllCategories(): Promise<Result<BlogCategory[], PostErr
       .from(categories)
       .innerJoin(postsToCategories, eq(categories.id, postsToCategories.categoryId))
       .innerJoin(posts, eq(postsToCategories.postId, posts.id))
-      .where(eq(posts.published, true))
+      .where(and(eq(posts.published, true), eq(posts.locale, locale)))
       .groupBy(categories.id, categories.name, categories.slug)
       .orderBy(categories.name)
 
@@ -37,12 +37,17 @@ export async function getAllCategories(): Promise<Result<BlogCategory[], PostErr
   }
 }
 
-export async function countTotalPublishedPosts(): Promise<number> {
+export async function countTotalPublishedPosts(locale?: string): Promise<number> {
   try {
+    const conditions = [eq(posts.published, true)]
+    if (locale) {
+      conditions.push(eq(posts.locale, locale))
+    }
+
     const [res] = await db
       .select({ count: count(posts.id) })
       .from(posts)
-      .where(eq(posts.published, true))
+      .where(and(...conditions))
 
     return res?.count ?? 0
   } catch (err) {
@@ -148,6 +153,173 @@ export async function getPublishedPosts(
     })
   } catch (err) {
     console.error('Error fetching published posts:', err)
+    return error({ reason: 'DATABASE_ERROR', details: err })
+  }
+}
+
+// ── Admin Dashboard ─────────────────────────────────────────────
+
+export interface AdminPostItem {
+  id: string
+  title: string
+  slug: string
+  coverImage: string | null
+  published: boolean
+  locale: string
+  authorId: string
+  authorName: string
+  createdAt: Date
+  updatedAt: Date
+  categories: { id: string; name: string; slug: string }[]
+}
+
+export interface PaginatedAdminPosts {
+  posts: AdminPostItem[]
+  totalCount: number
+  totalPages: number
+  currentPage: number
+}
+
+export interface AdminPostsParams {
+  page?: number
+  limit?: number
+  search?: string
+  locale?: string
+  categoryId?: string
+  userId?: string
+  isAdmin?: boolean
+}
+
+export async function getAdminPosts(
+  params: AdminPostsParams = {},
+): Promise<Result<PaginatedAdminPosts, PostError>> {
+  try {
+    const { page = 1, limit = 10, search, locale, categoryId, userId, isAdmin } = params
+    const safePage = Math.max(1, page)
+    const offset = (safePage - 1) * limit
+
+    const conditions = []
+
+    // Non-admin users only see their own posts
+    if (!isAdmin && userId) {
+      conditions.push(eq(posts.authorId, userId))
+    }
+
+    // Search by title or slug
+    if (search) {
+      const escaped = escapeLikePattern(search)
+      const searchCondition = or(
+        like(posts.title, `%${escaped}%`),
+        like(posts.slug, `%${escaped}%`),
+      )
+      if (searchCondition) {
+        conditions.push(searchCondition)
+      }
+    }
+
+    // Filter by locale
+    if (locale) {
+      conditions.push(eq(posts.locale, locale))
+    }
+
+    // Filter by category
+    if (categoryId) {
+      conditions.push(
+        inArray(
+          posts.id,
+          db
+            .select({ postId: postsToCategories.postId })
+            .from(postsToCategories)
+            .where(eq(postsToCategories.categoryId, categoryId)),
+        ),
+      )
+    }
+
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined
+
+    const [dbPosts, [countResult]] = await Promise.all([
+      db.query.posts.findMany({
+        where: whereClause,
+        orderBy: [desc(posts.createdAt)],
+        limit,
+        offset,
+        with: {
+          author: { columns: { name: true } },
+          postCategories: { with: { category: true } },
+        },
+      }),
+      db
+        .select({ count: count(posts.id) })
+        .from(posts)
+        .where(whereClause),
+    ])
+
+    const totalCount = countResult?.count ?? 0
+    const totalPages = Math.max(1, Math.ceil(totalCount / limit))
+
+    const formatted: AdminPostItem[] = dbPosts.map((post) => ({
+      id: post.id,
+      title: post.title,
+      slug: post.slug,
+      coverImage: post.coverImage,
+      published: post.published,
+      locale: post.locale,
+      authorId: post.authorId,
+      authorName: post.author.name,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      categories: post.postCategories.map((pc) => ({
+        id: pc.category.id,
+        name: pc.category.name,
+        slug: pc.category.slug,
+      })),
+    }))
+
+    return okay({
+      posts: formatted,
+      totalCount,
+      totalPages,
+      currentPage: safePage,
+    })
+  } catch (err) {
+    console.error('Error fetching admin posts:', err)
+    return error({ reason: 'DATABASE_ERROR', details: err })
+  }
+}
+
+export async function getAllCategoriesAdmin(
+  locale?: string,
+): Promise<Result<{ id: string; name: string; slug: string }[], PostError>> {
+  try {
+    if (locale) {
+      const dbCategories = await db
+        .select({
+          id: categories.id,
+          name: categories.name,
+          slug: categories.slug,
+        })
+        .from(categories)
+        .innerJoin(postsToCategories, eq(categories.id, postsToCategories.categoryId))
+        .innerJoin(posts, eq(postsToCategories.postId, posts.id))
+        .where(eq(posts.locale, locale))
+        .groupBy(categories.id, categories.name, categories.slug)
+        .orderBy(categories.name)
+
+      return okay(dbCategories)
+    }
+
+    const dbCategories = await db
+      .select({
+        id: categories.id,
+        name: categories.name,
+        slug: categories.slug,
+      })
+      .from(categories)
+      .orderBy(categories.name)
+
+    return okay(dbCategories)
+  } catch (err) {
+    console.error('Error fetching all categories for admin:', err)
     return error({ reason: 'DATABASE_ERROR', details: err })
   }
 }

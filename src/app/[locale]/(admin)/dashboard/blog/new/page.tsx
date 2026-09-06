@@ -8,7 +8,7 @@ interface NewPostPageProps {
 
 export async function generateMetadata({ params }: NewPostPageProps): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'blog_editor' })
+  const t = await getTranslations({ locale, namespace: 'features.blog.editor' })
 
   return {
     title: `${t('new_post')} | Brandon Argel`,

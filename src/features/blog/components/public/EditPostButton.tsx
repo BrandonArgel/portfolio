@@ -22,7 +22,7 @@ export async function EditPostButton({ authorId, slug, className }: EditPostButt
     return null
   }
 
-  const t = await getTranslations('blog')
+  const t = await getTranslations('features.blog.reader')
 
   return (
     <LinkButton

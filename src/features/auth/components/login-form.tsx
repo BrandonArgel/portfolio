@@ -19,7 +19,7 @@ import { SocialAuthButtons } from './social-auth-buttons'
 
 export function LoginForm() {
   const router = useRouter()
-  const t = useTranslations('auth.login')
+  const t = useTranslations('features.auth.login')
   const tGlobal = useTranslations('common')
 
   const {
@@ -52,10 +52,38 @@ export function LoginForm() {
         })
         break
 
+      case 'FORBIDDEN':
+        sileo.error({
+          title: t('forbidden_title'),
+          description: t('forbidden_description'),
+        })
+        break
+
+      case 'UNVERIFIED_EMAIL':
+        sileo.error({
+          title: t('unverified_email_title'),
+          description: t('unverified_email_description'),
+        })
+        break
+
+      case 'BANNED':
+        sileo.error({
+          title: t('banned_title'),
+          description: t('banned_description'),
+        })
+        break
+
+      case 'RATE_LIMITED':
+        sileo.error({
+          title: t('rate_limited_title'),
+          description: t('rate_limited_description'),
+        })
+        break
+
       case 'UNKNOWN_ERROR':
         sileo.error({
           title: tGlobal('errors.system_title'),
-          description: err.details,
+          description: tGlobal('errors.system_description'),
         })
         break
 

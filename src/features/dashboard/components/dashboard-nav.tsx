@@ -1,6 +1,6 @@
 'use client'
 
-import { FileText, LayoutDashboard, PlusCircle, Users } from 'lucide-react'
+import { FileText, LayoutDashboard, Users } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
@@ -11,7 +11,7 @@ interface DashboardNavProps {
 
 export function DashboardNav({ isAdmin }: DashboardNavProps) {
   const pathname = usePathname()
-  const t = useTranslations('dashboard')
+  const t = useTranslations('components.layout.dashboard')
 
   const navItems = [
     {

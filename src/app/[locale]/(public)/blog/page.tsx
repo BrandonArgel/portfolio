@@ -35,7 +35,8 @@ export async function generateMetadata({
   })
 }
 
-export default async function BlogPage({ searchParams }: BlogPageProps) {
+export default async function BlogPage({ params, searchParams }: BlogPageProps) {
+  const { locale } = await params
   const resolvedParams = await searchParams
 
   const categorySlug =
@@ -48,8 +49,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const [[postsErr, paginatedData], [categoriesErr, categoriesData], totalPublishedCount] =
     await Promise.all([
       getPublishedPosts(categorySlug, searchQuery, currentPage, limit, sortParam),
-      getAllCategories(),
-      countTotalPublishedPosts(),
+      getAllCategories(locale),
+      countTotalPublishedPosts(locale),
     ])
 
   const posts = postsErr || !paginatedData ? [] : [...paginatedData.posts]
@@ -94,7 +95,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       className="my-10 sm:my-16"
       containerClassName="flex flex-col group/anim"
     >
-      {/* Header Section with SectionHeader, Badge, SectionTitle, SectionDescription and Search */}
       <BlogHeader />
 
       <div className="flex flex-col lg:flex-row gap-8 items-start w-full">

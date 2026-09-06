@@ -33,6 +33,7 @@ import { savePostAction } from '@/features/blog/actions/posts.action'
 import { translatePostAction } from '@/features/blog/actions/translate-post.action'
 import { useRouter } from '@/i18n/navigation'
 import { type Locale, routing } from '@/i18n/routing'
+import { checkAndHandleSessionRevoked } from '@/lib/auth-interceptor'
 import { MarkdownPreview } from './markdown-preview'
 
 interface BlogEditorProps {
@@ -63,7 +64,7 @@ function updateCoverImageFrontmatter(markdown: string, imageUrl: string): string
 }
 
 export function BlogEditor({ initialId, initialContent }: BlogEditorProps) {
-  const t = useTranslations('blog_editor')
+  const t = useTranslations('features.blog.editor')
   const { resolvedTheme } = useTheme()
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
@@ -105,6 +106,8 @@ export function BlogEditor({ initialId, initialContent }: BlogEditorProps) {
       }
     },
     onError: ({ error }) => {
+      if (checkAndHandleSessionRevoked(error)) return
+
       const serverError = error.serverError
       sileo.error({
         title: serverError?.title || t('notifications.validation_error'),
@@ -135,6 +138,8 @@ export function BlogEditor({ initialId, initialContent }: BlogEditorProps) {
       }
     },
     onError: ({ error }) => {
+      if (checkAndHandleSessionRevoked(error)) return
+
       const serverError = error.serverError
       sileo.error({
         title: serverError?.title || t('notifications.translate_error'),
@@ -188,6 +193,8 @@ export function BlogEditor({ initialId, initialContent }: BlogEditorProps) {
       setIsUploading(false)
     },
     onError: ({ error }) => {
+      if (checkAndHandleSessionRevoked(error)) return
+
       const serverError = error.serverError
       sileo.error({
         title: serverError?.title || t('notifications.image_upload_error'),
@@ -218,6 +225,8 @@ export function BlogEditor({ initialId, initialContent }: BlogEditorProps) {
       setIsUploadingCover(false)
     },
     onError: ({ error }) => {
+      if (checkAndHandleSessionRevoked(error)) return
+
       const serverError = error.serverError
       sileo.error({
         title: serverError?.title || t('notifications.image_upload_error'),
@@ -406,7 +415,7 @@ export function BlogEditor({ initialId, initialContent }: BlogEditorProps) {
   const isBusy = isExecuting || isTranslating || isUploading || isUploadingCover
 
   return (
-    <div className="w-full flex flex-col h-[calc(100vh-4rem)] border border-border/80 rounded-xl overflow-hidden bg-background shadow-xs">
+    <div className="w-full flex flex-col h-[calc(100vh-8rem)] border border-border/80 rounded-xl overflow-hidden bg-background shadow-xs">
       <div className="flex flex-col md:flex-row shrink-0 items-start md:items-center justify-between gap-3 p-3 sm:px-4 sm:py-3 border-b border-border/80 bg-muted/20 w-full">
         <div className="flex items-center justify-between w-full md:w-auto gap-2 shrink-0">
           <div className="flex items-center gap-2 min-w-0">

@@ -10,7 +10,7 @@ export function BlogSearchInput() {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
-  const t = useTranslations('blog')
+  const t = useTranslations('features.blog.reader')
 
   const initialQuery = searchParams.get('q') || ''
   const [query, setQuery] = useState(initialQuery)

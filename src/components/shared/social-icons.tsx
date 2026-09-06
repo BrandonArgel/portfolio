@@ -35,7 +35,7 @@ interface SocialLinksProps {
 }
 
 export function SocialLinks({ className }: SocialLinksProps) {
-  const t = useTranslations('hero.social')
+  const t = useTranslations('features.hero.social')
 
   return (
     <div className={cn('flex flex-wrap items-center gap-3', className)}>

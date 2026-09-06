@@ -15,15 +15,15 @@ interface EditPostPageProps {
 
 export async function generateMetadata({ params }: EditPostPageProps): Promise<Metadata> {
   const { slug, locale } = await params
-  const t = await getTranslations({ locale, namespace: 'blog_editor' })
+  const t = await getTranslations({ locale, namespace: 'features.blog.editor' })
   const [err, post] = await getPostBySlug(slug)
 
   if (err || !post) {
-    return { title: `${t('post_not_found')} | Brandon Argel` }
+    return { title: `${t('post_not_found')}` }
   }
 
   return {
-    title: `${t('editing_post')}: ${post.title} | Brandon Argel`,
+    title: `${t('editing_post')}: ${post.title}`,
   }
 }
 

@@ -23,7 +23,7 @@ export async function BlogFeed({
   limit = 9,
   children,
 }: BlogFeedProps) {
-  const t = await getTranslations('blog')
+  const t = await getTranslations('features.blog.reader')
 
   const title = activeCategoryName || t('all_articles')
   const count = posts.length

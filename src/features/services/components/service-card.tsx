@@ -22,7 +22,7 @@ interface ServiceCardProps {
 }
 
 export function ServiceCard({ service, index }: ServiceCardProps) {
-  const t = useTranslations('services.items')
+  const t = useTranslations('features.services.items')
   const tActions = useTranslations('common.actions')
   const Icon = service.icon
   const tags: string[] = t.raw(`${service.key}.tags`)

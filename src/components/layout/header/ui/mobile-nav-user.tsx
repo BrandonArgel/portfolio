@@ -57,13 +57,13 @@ export function MobileNavUser({ onNavigate }: { onNavigate: () => void }) {
               {user.name || tGlobal('labels.user')}
             </p>
             {isAdmin && (
-              <Badge variant="softPrimary" className="w-fit text-[10px] h-4 px-1.5 py-0">
+              <Badge variant="softPrimary" className="w-fit text-xs h-4 px-1.5 py-0">
                 <ShieldCheck className="size-2.5 mr-0.5 text-primary" />
                 {tGlobal('labels.admin')}
               </Badge>
             )}
             {isEditor && (
-              <Badge variant="softBlue" className="w-fit text-[10px] h-4 px-1.5 py-0 font-medium">
+              <Badge variant="softBlue" className="w-fit text-xs h-4 px-1.5 py-0 font-medium">
                 Editor
               </Badge>
             )}

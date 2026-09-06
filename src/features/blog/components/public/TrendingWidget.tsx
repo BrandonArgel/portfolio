@@ -8,7 +8,7 @@ interface TrendingWidgetProps {
 }
 
 export async function TrendingWidget({ posts = [] }: TrendingWidgetProps) {
-  const [t, format] = await Promise.all([getTranslations('blog'), getFormatter()])
+  const [t, format] = await Promise.all([getTranslations('features.blog.reader'), getFormatter()])
 
   return (
     <div className="bg-card text-card-foreground border border-border rounded-2xl p-5 shadow-sm">

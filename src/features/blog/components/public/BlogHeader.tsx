@@ -1,16 +1,17 @@
 import { getTranslations } from 'next-intl/server'
 import { AnimatedText } from '@/components/ui/animated-text'
 import { Badge } from '@/components/ui/badge'
+import { PingDot } from '@/components/ui/ping-dot'
 import { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/section'
 import { BlogSearchInput } from './BlogSearchInput'
 
 export async function BlogHeader() {
-  const t = await getTranslations('blog')
+  const t = await getTranslations('features.blog.reader')
 
   return (
     <SectionHeader className="mb-12" align="center">
       <Badge variant="softPrimary" size="lg">
-        {t('badge')}
+        <PingDot className="mr-1" /> {t('badge')}
       </Badge>
 
       <SectionTitle as="h1">

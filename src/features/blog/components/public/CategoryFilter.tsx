@@ -20,7 +20,7 @@ export function CategoryFilter({
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
-  const t = useTranslations('blog')
+  const t = useTranslations('features.blog.reader')
 
   const currentCategory = searchParams.get('category') || 'all'
 
@@ -34,12 +34,6 @@ export function CategoryFilter({
     }
     const query = params.toString() ? `?${params.toString()}` : ''
     router.push(`${pathname}${query}`, { scroll: false })
-  }
-
-  const getCategoryLabel = (cat: BlogCategory) => {
-    const key = `categories.${cat.slug}`
-    if (t.has(key)) return t(key)
-    return cat.name
   }
 
   return (
@@ -60,7 +54,7 @@ export function CategoryFilter({
               : 'text-muted-foreground hover:text-foreground hover:bg-muted/60',
           )}
         >
-          <span>{t('categories.all')}</span>
+          <span>{t('all_articles')}</span>
           <span
             className={cn(
               'px-2 py-0.5 rounded-md text-xs font-semibold',
@@ -90,7 +84,7 @@ export function CategoryFilter({
                   : 'text-muted-foreground hover:text-foreground hover:bg-muted/60',
               )}
             >
-              <span className="capitalize">{getCategoryLabel(cat)}</span>
+              <span className="capitalize">{cat.name}</span>
               {count > 0 && (
                 <span
                   className={cn(

@@ -8,7 +8,7 @@ import { Section, SectionDescription, SectionHeader, SectionTitle } from '@/comp
 import { AboutProfileFrame } from './about-profile-frame'
 
 export async function AboutHero() {
-  const t = await getTranslations('about.hero')
+  const t = await getTranslations('features.about.hero')
 
   return (
     <Section

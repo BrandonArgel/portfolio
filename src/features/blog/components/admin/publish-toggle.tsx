@@ -7,6 +7,7 @@ import { sileo } from 'sileo'
 import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
 import { togglePublishStatusAction } from '@/features/blog/actions/posts.action'
+import { checkAndHandleSessionRevoked } from '@/lib/auth-interceptor'
 
 interface PostPublishToggleProps {
   postId: string
@@ -14,7 +15,7 @@ interface PostPublishToggleProps {
 }
 
 export function PostPublishToggle({ postId, initialPublished }: PostPublishToggleProps) {
-  const t = useTranslations('dashboard.posts_management')
+  const t = useTranslations('features.blog.management')
   const [published, setPublished] = useState(initialPublished)
 
   const { execute, isExecuting } = useAction(togglePublishStatusAction, {
@@ -27,6 +28,8 @@ export function PostPublishToggle({ postId, initialPublished }: PostPublishToggl
       }
     },
     onError: ({ error }) => {
+      if (checkAndHandleSessionRevoked(error)) return
+
       // Revert optimistic state on error
       setPublished(!published)
       const serverError = error.serverError

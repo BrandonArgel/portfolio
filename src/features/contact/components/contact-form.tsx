@@ -17,7 +17,7 @@ interface ContactFormProps {
 }
 
 export function ContactForm({ className }: ContactFormProps) {
-  const t = useTranslations('contact')
+  const t = useTranslations('features.contact')
 
   const {
     control,

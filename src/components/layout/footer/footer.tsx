@@ -21,7 +21,7 @@ function FooterLink({ href, label }: { href: string; label: string }) {
 }
 
 export async function Footer() {
-  const t = await getTranslations('components.footer')
+  const t = await getTranslations('components.layout.footer')
   const tNav = await getTranslations('components.nav')
 
   const platformLinks = [

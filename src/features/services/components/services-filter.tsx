@@ -8,7 +8,7 @@ import { useServicesFilter } from '../hooks/use-services-filter'
 import { ServiceCard } from './service-card'
 
 export function ServicesFilter() {
-  const t = useTranslations('services.categories')
+  const t = useTranslations('features.services.categories')
   const { activeCategory, setActiveCategory, filteredServices } = useServicesFilter()
 
   const isFewItems = filteredServices.length <= 3

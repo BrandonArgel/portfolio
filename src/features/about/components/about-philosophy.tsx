@@ -6,7 +6,7 @@ import { ABOUT_PHILOSOPHY_PRINCIPLES } from '../constants/about-data'
 import { AboutPhilosophyCard } from './about-philosophy-card'
 
 export async function AboutPhilosophy() {
-  const t = await getTranslations('about.philosophy')
+  const t = await getTranslations('features.about.philosophy')
 
   return (
     <Section

@@ -122,7 +122,7 @@ export const navConfig: NavItem[] = [
 
 export type CommandActionId = 'toggle-theme'
 
-type CommandPaletteMessages = typeof messages.components.command_palette
+type CommandPaletteMessages = typeof messages.components.layout.command_palette
 export type CommandPaletteMessageKey = keyof CommandPaletteMessages
 
 export type CommandPaletteQuickAction = {

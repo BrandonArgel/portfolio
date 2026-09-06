@@ -13,7 +13,7 @@ interface TestimonialCardProps {
 }
 
 export function TestimonialCard({ testimonial, className }: TestimonialCardProps) {
-  const t = useTranslations('testimonials.items')
+  const t = useTranslations('features.testimonials.items')
 
   return (
     <Card

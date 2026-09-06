@@ -14,7 +14,7 @@ interface BlogFilterProps {
 }
 
 export function BlogFilter({ categories }: BlogFilterProps) {
-  const t = useTranslations('blog')
+  const t = useTranslations('features.blog.reader')
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()

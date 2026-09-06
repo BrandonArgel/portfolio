@@ -16,7 +16,7 @@ interface DashboardPageProps {
 
 export async function generateMetadata({ params }: DashboardPageProps): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'dashboard' })
+  const t = await getTranslations({ locale, namespace: 'features.dashboard' })
 
   return {
     title: `${t('title')} | Brandon Argel`,
@@ -29,7 +29,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
     headers: await headers(),
   })
 
-  const t = await getTranslations({ locale, namespace: 'dashboard' })
+  const t = await getTranslations({ locale, namespace: 'features.dashboard' })
   const isAdmin = session?.user.role === 'admin'
 
   // Fetch quick metrics

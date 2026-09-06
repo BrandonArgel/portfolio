@@ -13,7 +13,7 @@ interface ContactInfoProps {
 }
 
 export function ContactInfo({ className }: ContactInfoProps) {
-  const t = useTranslations('contact')
+  const t = useTranslations('features.contact')
   const [copied, setCopied] = useState(false)
   const email = 'brandargel@gmail.com'
 

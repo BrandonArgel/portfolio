@@ -7,7 +7,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     <>
       <AuthTracker />
       <Header />
-      <main className="flex flex-1 flex-col overflow-hidden">{children}</main>
+      <main className="flex flex-1 flex-col overflow-clip">{children}</main>
       <Footer />
     </>
   )

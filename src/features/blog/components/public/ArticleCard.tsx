@@ -10,7 +10,7 @@ interface ArticleCardProps {
 }
 
 export async function ArticleCard({ post }: ArticleCardProps) {
-  const [t, format] = await Promise.all([getTranslations('blog'), getFormatter()])
+  const [t, format] = await Promise.all([getTranslations('features.blog.reader'), getFormatter()])
 
   const postDate = post.publishedAt instanceof Date ? post.publishedAt : new Date(post.publishedAt)
   const formattedDate = format.dateTime(postDate, 'short')
@@ -32,13 +32,13 @@ export async function ArticleCard({ post }: ArticleCardProps) {
             />
           ) : (
             <>
-              <div className="absolute inset-0 bg-[radial-gradient(var(--color-border)_1px,transparent_1px)] [background-size:16px_16px] opacity-40" />
+              <div className="absolute inset-0 bg-[radial-gradient(var(--color-border)_1px,transparent_1px)] bg-size-[16px_16px] opacity-40" />
 
               {/* Centered card mockup badge */}
               <div className="relative z-10 px-3 py-1.5 rounded-md bg-card text-card-foreground shadow-sm font-bold text-xs max-w-[90%] truncate border border-border">
                 {primaryBadge}
               </div>
-              <span className="relative z-10 text-[10px] text-muted-foreground font-mono mt-1.5 tracking-wider uppercase">
+              <span className="relative z-10 text-xs text-muted-foreground font-mono mt-1.5 tracking-wider uppercase">
                 {post.domainWatermark || 'brandonargel.com'}
               </span>
             </>

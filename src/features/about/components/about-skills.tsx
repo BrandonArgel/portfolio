@@ -6,7 +6,7 @@ import { ABOUT_SKILL_CATEGORIES } from '../constants/about-data'
 import { AboutSkillCard } from './about-skill-card'
 
 export async function AboutSkills() {
-  const t = await getTranslations('about.skills')
+  const t = await getTranslations('features.about.skills')
   const locale = ((await getLocale()) || 'en') as 'en' | 'es'
 
   return (

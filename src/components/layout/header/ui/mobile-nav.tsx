@@ -27,7 +27,7 @@ export function MobileNav({ className }: MobileNavProps) {
   const [open, setOpen] = useState(false)
   const closeDrawer = useCallback(() => setOpen(false), [])
   const tGlobal = useTranslations('common.labels')
-  const tHeader = useTranslations('components.header')
+  const tHeader = useTranslations('components.layout.header')
 
   return (
     <Drawer open={open} onOpenChange={setOpen} showSwipeHandle>

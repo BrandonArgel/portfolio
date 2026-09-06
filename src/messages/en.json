@@ -14,9 +14,10 @@
       "name": "John Doe"
     },
     "errors": {
+      "system_title": "System Error",
+      "system_description": "An error occurred while processing your request. Please try again later.",
       "unexpected_title": "Unexpected Error",
-      "unexpected_description": "An unexpected error occurred. Please try again later.",
-      "system_title": "System Error"
+      "unexpected_description": "An unexpected error occurred. Please try again later."
     },
     "labels": {
       "email": "Email",
@@ -39,14 +40,92 @@
       "signing_up": "Signing up",
       "signing_out": "Signing out...",
       "no_results": "No results found."
+    },
+    "validation": {
+      "required": "This field is required",
+      "invalid_email": "Please enter a valid email address",
+      "too_short": "Value is too short",
+      "too_long": "Value is too long",
+      "password_min": "Password must be at least 8 characters long",
+      "password_max": "Password cannot exceed 128 characters",
+      "passwords_dont_match": "Passwords do not match",
+      "terms_required": "You must accept the terms of service and privacy policy",
+      "title_required": "Title is required",
+      "slug_required": "Slug is required",
+      "content_min": "Content must be at least 10 characters long",
+      "locale_required": "Locale is required",
+      "role_invalid": "Invalid role specified"
     }
   },
   "components": {
-    "header": {
-      "go_to_home": "Go to home page",
-      "open_nav_menu": "Open navigation menu",
-      "open_user_menu": "Open user menu",
-      "open_search": "Open search command palette"
+    "layout": {
+      "header": {
+        "go_to_home": "Go to home page",
+        "open_nav_menu": "Open navigation menu",
+        "open_user_menu": "Open user menu",
+        "open_search": "Open search command palette"
+      },
+      "footer": {
+        "bio": "Full Stack Developer specialized in React, Next.js, and TypeScript, dedicated to crafting high-performance web applications and exceptional user experiences.",
+        "columns": {
+          "platform": "Platform",
+          "resources": "Resources",
+          "content": "Content"
+        },
+        "newsletter": {
+          "title": "Newsletter",
+          "description": "Get updates on new content and tips.",
+          "placeholder": "Your email",
+          "button": "Subscribe",
+          "disclaimer": "I respect your privacy. Unsubscribe at any time."
+        },
+        "legal": {
+          "copyright": "© 2026 Brandon Argel. All rights reserved. Made with 💙",
+          "privacy": "Privacy Policy",
+          "terms": "Terms of Service",
+          "cookies": "Cookies Policy"
+        }
+      },
+      "command_palette": {
+        "title": "Search documentation and navigation",
+        "description": "Type a command or search for pages",
+        "placeholder": "Search documentation and pages...",
+        "quick_actions": "Quick actions",
+        "toggle_theme": "Toggle theme",
+        "go_to_page": "Go to Page",
+        "menu": "Menu",
+        "toggle_theme_shortcut": "Toggle Theme",
+        "close": "Close"
+      },
+      "cookie_banner": {
+        "message": "We use cookies to personalize content and improve your experience. Read our",
+        "privacy_policy": "Privacy Policy",
+        "close_banner": "Close banner"
+      },
+      "dashboard": {
+        "title": "Dashboard",
+        "overview": "Overview",
+        "posts": "Articles",
+        "new_post": "New Article",
+        "users": "User Management",
+        "back_to_site": "Back to site",
+        "nav": {
+          "overview": "Overview",
+          "content": "Content",
+          "blog": "Blog",
+          "blog_description": "Manage articles and categories",
+          "courses": "Courses",
+          "courses_description": "Manage educational courses and modules",
+          "users": "User Management",
+          "back_to_site": "Back to site"
+        },
+        "you": "You",
+        "roles": {
+          "admin": "Admin",
+          "editor": "Editor",
+          "user": "User"
+        }
+      }
     },
     "nav": {
       "home": "Home",
@@ -79,46 +158,385 @@
       "dark": "Dark",
       "system": "System"
     },
-    "cookie_banner": {
-      "message": "We use cookies to personalize content and improve your experience. Read our",
-      "privacy_policy": "Privacy Policy",
-      "close_banner": "Close banner"
-    },
-    "command_palette": {
-      "title": "Search documentation and navigation",
-      "description": "Type a command or search for pages",
-      "placeholder": "Search documentation and pages...",
-      "quick_actions": "Quick actions",
-      "toggle_theme": "Toggle theme",
-      "go_to_page": "Go to Page",
-      "menu": "Menu",
-      "toggle_theme_shortcut": "Toggle Theme",
-      "close": "Close"
-    },
     "locale_switcher": {
       "en": "English",
       "es": "Español",
       "fr": "Français"
+    }
+  },
+  "features": {
+    "about": {
+      "hero": {
+        "badge": "About Me",
+        "title_prefix": "Hi, I'm",
+        "name": "Brandon Argel",
+        "purpose": "I firmly believe in the power of software to create a real, positive impact on people's lives. My purpose is to build digital tools and experiences where empathy, accessibility, and inclusive design allow anyone to benefit from technology.",
+        "bio_secondary": "I'm a passionate full stack developer dedicated to crafting high-performance web applications, scalable backend architectures, and exceptional user experiences. With over 6 years in the tech industry, I collaborate with clients and teams worldwide to build secure, type-safe systems and robust backend solutions that scale.",
+        "get_in_touch": "Get In Touch",
+        "download_resume": "Download Resume"
+      },
+      "philosophy": {
+        "badge": "Discipline of How",
+        "title_prefix": "My",
+        "title": "Guiding Principles",
+        "description": "The daily actions and values that shape my work and collaboration.",
+        "items": {
+          "learn_document_share": {
+            "title": "Learn, document, and share",
+            "description": "Turn curiosity into knowledge. Master concepts to explain them simply and always leave a documented path for others."
+          },
+          "build_parachute": {
+            "title": "Build the parachute on the way",
+            "description": "Dare to innovate. Use relentless curiosity to look at problems from different angles and find creative solutions."
+          },
+          "design_for_diversity": {
+            "title": "Design and code for diversity",
+            "description": "Keep the code and product open. Exclusion is forbidden; seeking different perspectives is the key to growth."
+          },
+          "communicate_kindness": {
+            "title": "Communicate with kindness",
+            "description": "Give and receive honest feedback to reach team goals, fostering a safe and inclusive workspace."
+          },
+          "focus_controllable": {
+            "title": "Focus on the controllable",
+            "description": "Accept what you can't control to execute fast and effectively. Be organized and prioritize actionable efforts."
+          },
+          "care_human_factor": {
+            "title": "Care for the human factor",
+            "description": "Protect those around you. The people and the experiences we create together are the core of any successful project."
+          }
+        }
+      },
+      "skills": {
+        "badge": "Consistency of What",
+        "title": "Skills & Expertise",
+        "description": "The tangible results and technical craft I deliver daily.",
+        "cards": {
+          "frontend": "Building 100% accessible, responsive, and high-performance UI/UX optimized to reduce load times and flow seamlessly.",
+          "backend": "Transforming data and business logic into resilient storytelling through APIs that guide the user from start to finish.",
+          "fullstack": "Delivering scalable, reusable code backed by clear, precise technical documentation from end-to-end."
+        }
+      }
     },
-    "footer": {
-      "bio": "Full Stack Developer specialized in React, Next.js, and TypeScript, dedicated to crafting high-performance web applications and exceptional user experiences.",
-      "columns": {
-        "platform": "Platform",
-        "resources": "Resources",
-        "content": "Content"
+    "auth": {
+      "login": {
+        "title": "Sign In",
+        "forgot_password": "Forgot password?",
+        "create_account": "Create new account",
+        "welcome_back": "Welcome back{name, select, empty {} other {, {name}}}!",
+        "invalid_credentials_title": "Sign In Failed",
+        "invalid_credentials_description": "Invalid email or password. Please check your credentials.",
+        "forbidden_title": "Access Denied",
+        "forbidden_description": "You do not have permission to access this resource.",
+        "unverified_email_title": "Email Not Verified",
+        "unverified_email_description": "Please verify your email address before signing in. Check your inbox for the verification email.",
+        "banned_title": "Account Banned",
+        "banned_description": "Your account has been banned. Please contact support for more information.",
+        "rate_limited_title": "Too Many Attempts",
+        "rate_limited_description": "You have made too many sign-in attempts. Please wait a few minutes and try again."
       },
-      "newsletter": {
-        "title": "Newsletter",
-        "description": "Get updates on new content and tips.",
-        "placeholder": "Your email",
-        "button": "Subscribe",
-        "disclaimer": "I respect your privacy. Unsubscribe at any time."
+      "register": {
+        "title": "Sign Up",
+        "accept_terms": "I agree to the",
+        "terms_of_service": "Terms of Service",
+        "and": "and",
+        "privacy_policy": "Privacy Policy",
+        "create_password": "Create a strong password",
+        "already_have_account": "I already have an account",
+        "account_created_title": "Account created!",
+        "account_created_description": "Welcome to the platform{name, select, empty {} other {, {name}}}.",
+        "email_in_use_title": "Email in use",
+        "email_in_use_description": "This email is already registered. Please log in.",
+        "invalid_password_title": "Invalid Password",
+        "invalid_password_description": "Please ensure your password meets all requirements.",
+        "partial_success_title": "Partial Success",
+        "partial_success_description": "Account created successfully, but please log in manually.",
+        "registration_failed_title": "Registration Failed",
+        "registration_failed_description": "An error occurred while creating your account. Please try again later."
+      }
+    },
+    "blog": {
+      "reader": {
+        "badge": "Blog & Articles",
+        "title_line1": "Insights on",
+        "title_line2": "Tech & Security",
+        "title_prefix": "Recent",
+        "title_highlight": "Blog Posts",
+        "view_all": "View All Posts",
+        "title": "Engineering Blog",
+        "subtitle": "Explore articles on cybersecurity, web development, and educational resources to enhance your technical knowledge and skills.",
+        "search_placeholder": "Search articles...",
+        "search_button": "Search",
+        "clear_search": "Clear search",
+        "clear_filters": "Clear filters",
+        "back_to_blog": "Back to Blog",
+        "read_time_suffix": "min read",
+        "sidebar_categories": "Categories",
+        "sidebar_bookmarked": "Bookmarked Articles",
+        "sidebar_trending": "Trending Now",
+        "empty_bookmarked": "No bookmarked articles yet. Bookmark your favorite reads to find them here!",
+        "empty_trending": "Check back soon for trending articles!",
+        "all_articles": "All Articles",
+        "showing_articles": "Showing {start}-{end} of {total} articles",
+        "sort": {
+          "latest": "Latest",
+          "oldest": "Oldest",
+          "popular": "Popular",
+          "reading_time": "Reading Time"
+        },
+        "actions": {
+          "share": "Share article",
+          "bookmark": "Bookmark article",
+          "link_copied": "Link copied to clipboard",
+          "link_copy_error": "Could not copy link",
+          "bookmarked": "Article bookmarked",
+          "bookmark_removed": "Bookmark removed",
+          "edit": "Edit article"
+        },
+        "no_results": "No articles found matching your filters.",
+        "empty_posts": "No articles published yet.",
+        "error_loading_posts": "Could not load articles at this time.",
+        "error_loading_article": "Error loading the article",
+        "error_loading_article_description": "There was a connection issue. Please try again later.",
+        "post_not_found": "Post not found",
+        "fallbackWarning": "This article is not available in your language yet. Showing the {originalLocale, select, en {English} es {Spanish} fr {French} other {original}} version.",
+        "pagination": {
+          "previous": "Previous",
+          "next": "Next",
+          "page": "Page {page}",
+          "aria_page": "Go to page {page}",
+          "aria_current": "Current page, page {page}"
+        }
       },
-      "legal": {
-        "copyright": "© 2026 Brandon Argel. All rights reserved. Made with 💙",
-        "privacy": "Privacy Policy",
-        "terms": "Terms of Service",
-        "cookies": "Cookies Policy"
+      "management": {
+        "title": "My Articles",
+        "session_as": "Signed in as: {name} ({role})",
+        "no_posts": "You don't have any articles yet.",
+        "published": "Published",
+        "draft": "Draft",
+        "delete": "Delete",
+        "deleting": "Deleting...",
+        "delete_confirm": "Are you sure you want to delete this article? This action cannot be undone.",
+        "delete_success": "Article deleted successfully",
+        "delete_error": "Failed to delete article",
+        "publish_toggle": "Publish",
+        "publish_success": "Article published successfully",
+        "unpublish_success": "Article unpublished successfully",
+        "status_update_error": "Failed to update article status",
+        "delete_dialog_title": "Delete Article",
+        "delete_dialog_description": "Are you sure you want to delete this article? This action cannot be undone.",
+        "cancel": "Cancel",
+        "search_placeholder": "Search articles...",
+        "filter_locale": "Language",
+        "filter_category": "Category",
+        "filter_all": "All",
+        "reset_filters": "Reset",
+        "showing_results": "Showing {from}–{to} of {total}",
+        "no_results": "No articles match your filters.",
+        "new_article": "New Article",
+        "edit": "Edit",
+        "prev_page": "Previous",
+        "next_page": "Next"
+      },
+      "editor": {
+        "new_post": "New Article",
+        "editing_post": "Editing Article",
+        "unsaved_changes_warning": "You have unsaved changes. Are you sure you want to leave?",
+        "back_to_posts": "Articles",
+        "save_button": "Save Article",
+        "saving_button": "Saving...",
+        "translate_button": "Translate with AI",
+        "translating_button": "Translating...",
+        "translate_all_button": "Translate to all missing languages",
+        "translate_to": "Translating to {locale}...",
+        "translating_all": "Translating to all missing languages...",
+        "upload_image_button": "Upload Image",
+        "uploading_image_button": "Uploading...",
+        "set_cover_button": "Set Cover",
+        "uploading_cover_button": "Uploading Cover...",
+        "frontmatter_detected": "Detected Frontmatter:",
+        "preview_empty": "No content to preview yet. Start writing Markdown on the left.",
+        "post_not_found": "Post not found",
+        "default_content": "---\ntitle: \"My New Article\"\nslug: \"my-new-article\"\nlocale: en\npublished: false\ntags: [\"Next.js\", \"Architecture\"]\n---\n\n# Write your article here...\n",
+        "notifications": {
+          "post_updated": "Article updated successfully",
+          "post_created": "Article created successfully",
+          "post_translated": "Article translated successfully",
+          "posts_translated_all": "Translated into: {locales}",
+          "validation_error": "Validation error while saving",
+          "translate_error": "Failed to translate article",
+          "frontmatter_required": "Frontmatter must include 'title', 'slug' and 'locale'",
+          "frontmatter_invalid": "Syntax error in Frontmatter (invalid YAML)",
+          "image_uploaded": "Image uploaded successfully",
+          "image_upload_error": "Failed to upload image",
+          "cover_uploaded": "Cover image updated successfully"
+        }
+      }
+    },
+    "contact": {
+      "badge": "Let's Connect",
+      "title_prefix": "Have a Project in",
+      "title_highlight": "Mind?",
+      "description": "Whether you have a question, want to collaborate on a software project, or just want to say hi, feel free to reach out!",
+      "status": "Available for new opportunities",
+      "info_title": "Let's build something exceptional together",
+      "info_description": "I'm always excited to discuss new engineering challenges, UI/UX designs, or API architectures. Drop me a line anytime.",
+      "labels": {
+        "name": "Your Name",
+        "email": "Email Address",
+        "subject": "Subject",
+        "message": "Your Message"
+      },
+      "placeholders": {
+        "name": "e.g. Alex Morgan",
+        "email": "alex@example.com",
+        "subject": "e.g. Web App Development Project",
+        "message": "Tell me about your project, timeline, or idea..."
+      },
+      "actions": {
+        "send": "Send Message",
+        "sending": "Sending Message...",
+        "copy_email": "Copy Email",
+        "copied": "Email Copied!"
+      },
+      "details": {
+        "email": "Email",
+        "location": "Location",
+        "location_value": "Guadalajara, Mexico",
+        "whatsapp": "WhatsApp / Phone",
+        "socials": "Social Profiles"
+      },
+      "notifications": {
+        "success_title": "Message Sent!",
+        "success_description": "Thank you for reaching out! I will get back to you as soon as possible.",
+        "error_title": "Error Sending Message",
+        "error_description": "Something went wrong while sending your message. Please try again or email me directly."
+      }
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "overview": "Overview",
+      "posts": "Articles",
+      "new_post": "New Article",
+      "users": "User Management",
+      "overview_stats": {
+        "welcome_back": "Welcome back, {name}",
+        "total_articles": "Total Articles",
+        "total_articles_desc": "{published} published, {drafts} drafts",
+        "published_title": "Published",
+        "published_badge": "Live",
+        "published_desc": "Publicly visible on the blog",
+        "drafts_title": "Drafts",
+        "drafts_badge": "Draft",
+        "drafts_desc": "Unpublished articles in review",
+        "users_title": "Registered Users",
+        "users_desc": "Managed via User Management",
+        "content_title": "Content Management",
+        "content_desc": "Create and manage your articles across multiple languages.",
+        "access_title": "Access & Security",
+        "access_desc": "Manage roles (Admin, Editor, User) and account permissions."
+      }
+    },
+    "hero": {
+      "badge": "Hi, I am Brandon Argel",
+      "title_line1": "Empowering",
+      "title_line2": "Minds & Inspiring Change",
+      "description": "Full Stack Developer specialized in React, Next.js, and TypeScript, dedicated to crafting high-performance web applications, scalable backend architectures, and exceptional user experiences.",
+      "skills": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Node.js",
+        "Tailwind CSS",
+        "PostgreSQL",
+        "Drizzle ORM"
+      ],
+      "read_blog": "Read Blog",
+      "view_resume": "View Resume",
+      "features": {
+        "frontend_development": {
+          "title": "React & Next.js Specialist",
+          "description": "Building modern, accessible, and high-performance user interfaces with the latest React ecosystem."
+        },
+        "backend_architecture": {
+          "title": "Backend & API Architecture",
+          "description": "Developing type-safe REST & GraphQL APIs, Server Actions, and robust server-side workflows."
+        },
+        "full_stack_solutions": {
+          "title": "Full Stack Engineering",
+          "description": "Designing end-to-end web applications with seamless database integration and state synchronization."
+        }
+      },
+      "social": {
+        "linkedin": {
+          "label": "Visit my LinkedIn profile"
+        },
+        "github": {
+          "label": "Check out my GitHub repositories"
+        },
+        "facebook": {
+          "label": "Visit my Facebook profile"
+        },
+        "instagram": {
+          "label": "Visit my Instagram profile"
+        },
+        "youtube": {
+          "label": "Visit my YouTube channel"
+        },
+        "email": {
+          "label": "Send me an email"
+        },
+        "whatsapp": {
+          "label": "Send me a WhatsApp message"
+        }
+      }
+    },
+    "services": {
+      "badge": "Expertise",
+      "title_line1": "Skills &",
+      "title_line2": "Services Offered",
+      "description": "Specialized expertise across the modern full stack web development ecosystem to build scalable, responsive, and robust digital products.",
+      "categories": {
+        "all": "All Services",
+        "frontend": "Frontend & UI",
+        "backend": "Backend & APIs",
+        "cloud": "Full Stack & Cloud"
+      },
+      "items": {
+        "frontend_development": {
+          "title": "Frontend Development",
+          "description": "Modern, responsive, and accessible user interfaces built with React, Next.js, TypeScript, and Tailwind CSS.",
+          "tags": ["React", "Next.js", "TypeScript", "Tailwind CSS", "State Management"]
+        },
+        "backend_development": {
+          "title": "Backend & API Development",
+          "description": "Robust server-side architecture, RESTful APIs, Server Actions, and services built with Node.js and TypeScript.",
+          "tags": ["Node.js", "Server Actions", "REST APIs", "GraphQL", "Type Safety"]
+        },
+        "database_architecture": {
+          "title": "Database Architecture & ORM",
+          "description": "Relational schema modeling, query optimization, migrations, and type-safe ORM integration.",
+          "tags": ["PostgreSQL", "SQLite / LibSQL", "Drizzle ORM", "Prisma", "Schema Design"]
+        },
+        "full_stack_apps": {
+          "title": "Full Stack Applications",
+          "description": "End-to-end web applications with seamless client-server integration, authentication, and state management.",
+          "tags": ["Next.js App Router", "Better Auth", "React 19", "Type Safety", "Zod"]
+        },
+        "cloud_deployment": {
+          "title": "Cloud Deployment & CI/CD",
+          "description": "Automated build pipelines, containerized environments, serverless edge functions, and scalable hosting.",
+          "tags": ["Vercel", "Docker", "AWS", "GitHub Actions", "Edge Compute"]
+        },
+        "performance_seo": {
+          "title": "Performance & SEO Optimization",
+          "description": "Core Web Vitals auditing, server-side rendering (SSR), technical SEO, and caching for lightning-fast apps.",
+          "tags": ["Core Web Vitals", "SSR / SSG", "Technical SEO", "Caching", "Bundle Tuning"]
+        }
+      },
+      "cta": {
+        "question": "Need a custom solution for your specific requirements?",
+        "action": "Get in Touch"
       }
     },
     "spotify": {
@@ -127,441 +545,91 @@
       "not_playing": "Not Playing",
       "idle": "Spotify is idle",
       "by": "by"
-    }
-  },
-  "hero": {
-    "badge": "Hi, I am Brandon Argel",
-    "title_line1": "Empowering",
-    "title_line2": "Minds & Inspiring Change",
-    "description": "Full Stack Developer specialized in React, Next.js, and TypeScript, dedicated to crafting high-performance web applications, scalable backend architectures, and exceptional user experiences.",
-    "skills": [
-      "React",
-      "Next.js",
-      "TypeScript",
-      "Node.js",
-      "Tailwind CSS",
-      "PostgreSQL",
-      "Drizzle ORM"
-    ],
-    "read_blog": "Read Blog",
-    "view_resume": "View Resume",
-    "features": {
-      "frontend_development": {
-        "title": "React & Next.js Specialist",
-        "description": "Building modern, accessible, and high-performance user interfaces with the latest React ecosystem."
-      },
-      "backend_architecture": {
-        "title": "Backend & API Architecture",
-        "description": "Developing type-safe REST & GraphQL APIs, Server Actions, and robust server-side workflows."
-      },
-      "full_stack_solutions": {
-        "title": "Full Stack Engineering",
-        "description": "Designing end-to-end web applications with seamless database integration and state synchronization."
-      }
     },
-    "social": {
-      "linkedin": {
-        "label": "Visit my LinkedIn profile"
-      },
-      "github": {
-        "label": "Check out my GitHub repositories"
-      },
-      "facebook": {
-        "label": "Visit my Facebook profile"
-      },
-      "instagram": {
-        "label": "Visit my Instagram profile"
-      },
-      "youtube": {
-        "label": "Visit my YouTube channel"
-      },
-      "email": {
-        "label": "Send me an email"
-      },
-      "whatsapp": {
-        "label": "Send me a WhatsApp message"
-      }
-    }
-  },
-  "services": {
-    "badge": "Expertise",
-    "title_line1": "Skills &",
-    "title_line2": "Services Offered",
-    "description": "Specialized expertise across the modern full stack web development ecosystem to build scalable, responsive, and robust digital products.",
-    "categories": {
-      "all": "All Services",
-      "frontend": "Frontend & UI",
-      "backend": "Backend & APIs",
-      "cloud": "Full Stack & Cloud"
-    },
-    "items": {
-      "frontend_development": {
-        "title": "Frontend Development",
-        "description": "Modern, responsive, and accessible user interfaces built with React, Next.js, TypeScript, and Tailwind CSS.",
-        "tags": ["React", "Next.js", "TypeScript", "Tailwind CSS", "State Management"]
-      },
-      "backend_development": {
-        "title": "Backend & API Development",
-        "description": "Robust server-side architecture, RESTful APIs, Server Actions, and services built with Node.js and TypeScript.",
-        "tags": ["Node.js", "Server Actions", "REST APIs", "GraphQL", "Type Safety"]
-      },
-      "database_architecture": {
-        "title": "Database Architecture & ORM",
-        "description": "Relational schema modeling, query optimization, migrations, and type-safe ORM integration.",
-        "tags": ["PostgreSQL", "SQLite / LibSQL", "Drizzle ORM", "Prisma", "Schema Design"]
-      },
-      "full_stack_apps": {
-        "title": "Full Stack Applications",
-        "description": "End-to-end web applications with seamless client-server integration, authentication, and state management.",
-        "tags": ["Next.js App Router", "Better Auth", "React 19", "Type Safety", "Zod"]
-      },
-      "cloud_deployment": {
-        "title": "Cloud Deployment & CI/CD",
-        "description": "Automated build pipelines, containerized environments, serverless edge functions, and scalable hosting.",
-        "tags": ["Vercel", "Docker", "AWS", "GitHub Actions", "Edge Compute"]
-      },
-      "performance_seo": {
-        "title": "Performance & SEO Optimization",
-        "description": "Core Web Vitals auditing, server-side rendering (SSR), technical SEO, and caching for lightning-fast apps.",
-        "tags": ["Core Web Vitals", "SSR / SSG", "Technical SEO", "Caching", "Bundle Tuning"]
-      }
-    },
-    "cta": {
-      "question": "Need a custom solution for your specific requirements?",
-      "action": "Get in Touch"
-    }
-  },
-  "testimonials": {
-    "badge": "Testimonials",
-    "title_line1": "What People",
-    "title_line2": "Say About Me",
-    "description": "Hear from teammates, managers, and clients who have collaborated with me on software engineering and digital products.",
-    "items": {
-      "sura_cedeno": {
-        "name": "Sura Cedeño",
-        "role": "Coordinator & Project Manager",
-        "quote": "I would highly recommend Brandon. He is a professional with excellent attention to detail, capable of perfecting every aspect of his work. His ability to spot even the smallest errors and correct them demonstrates his commitment to quality and excellence. Furthermore, he is a true team player, effectively collaborating with colleagues and bringing valuable ideas to projects. His teamwork skills and dedication to refinement make him a valuable asset to any frontend development team."
-      },
-      "carlos_cespedes": {
-        "name": "Carlos Céspedes",
-        "role": "Content, Marketing & Branding Director",
-        "quote": "Brandon is an excellent professional, attentive to details, responsible, and punctual. He is a person always willing to learn, transparent, and someone you can consistently rely on within your team."
-      },
-      "aaron_garibay": {
-        "name": "Aaron Garibay",
-        "role": "Software Engineer",
-        "quote": "I highly recommend Brandon to any team that is looking for a highly-skilled, self-taught, and outstanding developer. He is focused on delivering results, and in creating environments where everybody feels free to participate. He shows ownership and a clear understanding of every product that he is involved in. It has been and will be a pleasure to work with him and I am certainly sure he will be an incredibly valuable asset to any team he will incorporate."
-      },
-      "joel_campos": {
-        "name": "Joel Campos",
-        "role": "Product Manager",
-        "quote": "We hired Brandon to build a custom admin dashboard for our internal tools. He delivered ahead of schedule, implemented best practices, and the UI/UX was way better than we expected. Highly recommend!"
-      }
-    }
-  },
-  "about": {
-    "hero": {
-      "badge": "About Me",
-      "title_prefix": "Hi, I'm",
-      "name": "Brandon Argel",
-      "purpose": "I firmly believe in the power of software to create a real, positive impact on people's lives. My purpose is to build digital tools and experiences where empathy, accessibility, and inclusive design allow anyone to benefit from technology.",
-      "bio_secondary": "I'm a passionate full stack developer dedicated to crafting high-performance web applications, scalable backend architectures, and exceptional user experiences. With over 6 years in the tech industry, I collaborate with clients and teams worldwide to build secure, type-safe systems and robust backend solutions that scale.",
-      "get_in_touch": "Get In Touch",
-      "download_resume": "Download Resume"
-    },
-    "philosophy": {
-      "badge": "Discipline of How",
-      "title_prefix": "My",
-      "title": "Guiding Principles",
-      "description": "The daily actions and values that shape my work and collaboration.",
+    "testimonials": {
+      "badge": "Testimonials",
+      "title_line1": "What People",
+      "title_line2": "Say About Me",
+      "description": "Hear from teammates, managers, and clients who have collaborated with me on software engineering and digital products.",
       "items": {
-        "learn_document_share": {
-          "title": "Learn, document, and share",
-          "description": "Turn curiosity into knowledge. Master concepts to explain them simply and always leave a documented path for others."
+        "sura_cedeno": {
+          "name": "Sura Cedeño",
+          "role": "Coordinator & Project Manager",
+          "quote": "I would highly recommend Brandon. He is a professional with excellent attention to detail, capable of perfecting every aspect of his work. His ability to spot even the smallest errors and correct them demonstrates his commitment to quality and excellence. Furthermore, he is a true team player, effectively collaborating with colleagues and bringing valuable ideas to projects. His teamwork skills and dedication to refinement make him a valuable asset to any frontend development team."
         },
-        "build_parachute": {
-          "title": "Build the parachute on the way",
-          "description": "Dare to innovate. Use relentless curiosity to look at problems from different angles and find creative solutions."
+        "carlos_cespedes": {
+          "name": "Carlos Céspedes",
+          "role": "Content, Marketing & Branding Director",
+          "quote": "Brandon is an excellent professional, attentive to details, responsible, and punctual. He is a person always willing to learn, transparent, and someone you can consistently rely on within your team."
         },
-        "design_for_diversity": {
-          "title": "Design and code for diversity",
-          "description": "Keep the code and product open. Exclusion is forbidden; seeking different perspectives is the key to growth."
+        "aaron_garibay": {
+          "name": "Aaron Garibay",
+          "role": "Software Engineer",
+          "quote": "I highly recommend Brandon to any team that is looking for a highly-skilled, self-taught, and outstanding developer. He is focused on delivering results, and in creating environments where everybody feels free to participate. He shows ownership and a clear understanding of every product that he is involved in. It has been and will be a pleasure to work with him and I am certainly sure he will be an incredibly valuable asset to any team he will incorporate."
         },
-        "communicate_kindness": {
-          "title": "Communicate with kindness",
-          "description": "Give and receive honest feedback to reach team goals, fostering a safe and inclusive workspace."
-        },
-        "focus_controllable": {
-          "title": "Focus on the controllable",
-          "description": "Accept what you can't control to execute fast and effectively. Be organized and prioritize actionable efforts."
-        },
-        "care_human_factor": {
-          "title": "Care for the human factor",
-          "description": "Protect those around you. The people and the experiences we create together are the core of any successful project."
+        "joel_campos": {
+          "name": "Joel Campos",
+          "role": "Product Manager",
+          "quote": "We hired Brandon to build a custom admin dashboard for our internal tools. He delivered ahead of schedule, implemented best practices, and the UI/UX was way better than we expected. Highly recommend!"
         }
       }
     },
-    "skills": {
-      "badge": "Consistency of What",
-      "title": "Skills & Expertise",
-      "description": "The tangible results and technical craft I deliver daily.",
-      "cards": {
-        "frontend": "Building 100% accessible, responsive, and high-performance UI/UX optimized to reduce load times and flow seamlessly.",
-        "backend": "Transforming data and business logic into resilient storytelling through APIs that guide the user from start to finish.",
-        "fullstack": "Delivering scalable, reusable code backed by clear, precise technical documentation from end-to-end."
+    "users": {
+      "management": {
+        "title": "User Management",
+        "description": "Manage user roles and system access permissions.",
+        "user_col": "User",
+        "email_col": "Email",
+        "role_col": "Role",
+        "provider_col": "Provider",
+        "verified_col": "Verified",
+        "created_at_col": "Registered",
+        "status_col": "Status",
+        "actions_col": "Actions",
+        "banned": "Banned",
+        "active": "Active",
+        "verified": "Email Verified",
+        "unverified": "Email Unverified",
+        "search_placeholder": "Search by name or email...",
+        "filter_role": "Filter by role",
+        "filter_all": "All Roles",
+        "reset_filters": "Reset",
+        "actions": "Actions",
+        "ban_user": "Ban User",
+        "unban_user": "Unban User",
+        "copy_id": "Copy ID",
+        "id_copied": "User ID copied to clipboard",
+        "ban_dialog_title": "Ban User",
+        "ban_dialog_desc": "Restrict this user from accessing the platform. Active sessions will be terminated immediately.",
+        "ban_reason_label": "Reason for ban",
+        "ban_reason_placeholder": "Explain why this user is being banned...",
+        "ban_reason_required": "A reason is required to ban this user.",
+        "ban_duration_label": "Duration",
+        "duration_24h": "24 hours",
+        "duration_7d": "7 days",
+        "duration_30d": "30 days",
+        "duration_permanent": "Permanent",
+        "cancel": "Cancel",
+        "confirm_ban": "Confirm Ban",
+        "user_banned_success": "User banned successfully",
+        "user_unbanned_success": "User unbanned successfully",
+        "ban_tooltip_reason": "Reason",
+        "ban_tooltip_expires": "Expires",
+        "ban_tooltip_permanent": "Permanent ban",
+        "cannot_ban_self": "You cannot ban your own account",
+        "no_users_found": "No users matching your filters.",
+        "prev_page": "Previous",
+        "next_page": "Next",
+        "role_updated_title": "Role updated",
+        "role_updated_desc": "Role for {name} updated to {role}",
+        "role_update_error": "Failed to update role",
+        "no_users": "No users registered yet."
+      },
+      "roles": {
+        "admin": "Admin",
+        "editor": "Editor",
+        "user": "User"
       }
-    }
-  },
-  "blog": {
-    "badge": "Blog & Articles",
-    "title_line1": "Insights on",
-    "title_line2": "Tech & Security",
-    "title_prefix": "Recent",
-    "title_highlight": "Blog Posts",
-    "view_all": "View All Posts",
-    "title": "Engineering Blog",
-    "subtitle": "Explore articles on cybersecurity, web development, and educational resources to enhance your technical knowledge and skills.",
-    "search_placeholder": "Search articles...",
-    "search_button": "Search",
-    "clear_search": "Clear search",
-    "clear_filters": "Clear filters",
-    "back_to_blog": "Back to Blog",
-    "read_time_suffix": "min read",
-    "sidebar_categories": "Categories",
-    "sidebar_bookmarked": "Bookmarked Articles",
-    "sidebar_trending": "Trending Now",
-    "empty_bookmarked": "No bookmarked articles yet. Bookmark your favorite reads to find them here!",
-    "empty_trending": "Check back soon for trending articles!",
-    "all_articles": "All Articles",
-    "showing_articles": "Showing {start}-{end} of {total} articles",
-    "sort": {
-      "latest": "Latest",
-      "oldest": "Oldest",
-      "popular": "Popular",
-      "reading_time": "Reading Time"
-    },
-    "actions": {
-      "share": "Share article",
-      "bookmark": "Bookmark article",
-      "link_copied": "Link copied to clipboard",
-      "link_copy_error": "Could not copy link",
-      "bookmarked": "Article bookmarked",
-      "bookmark_removed": "Bookmark removed",
-      "edit": "Edit article"
-    },
-    "no_results": "No articles found matching your filters.",
-    "empty_posts": "No articles published yet.",
-    "error_loading_posts": "Could not load articles at this time.",
-    "error_loading_article": "Error loading the article",
-    "error_loading_article_description": "There was a connection issue. Please try again later.",
-    "post_not_found": "Post not found",
-    "fallbackWarning": "This article is not available in your language yet. Showing the {originalLocale, select, en {English} es {Spanish} fr {French} other {original}} version.",
-    "categories": {
-      "all": "All",
-      "architecture": "Architecture",
-      "web_development": "Web Development",
-      "productivity": "Productivity",
-      "personal_development": "Personal Development",
-      "programming": "Programming",
-      "javascript": "JavaScript",
-      "nextjs": "Next.js",
-      "typescript": "TypeScript",
-      "react": "React",
-      "full_stack": "Full Stack",
-      "ui_ux": "UI/UX",
-      "performance": "Performance",
-      "seo": "SEO",
-      "ai": "AI & Automation"
-    },
-    "pagination": {
-      "previous": "Previous",
-      "next": "Next",
-      "page": "Page {page}",
-      "aria_page": "Go to page {page}",
-      "aria_current": "Current page, page {page}"
-    }
-  },
-  "contact": {
-    "badge": "Let's Connect",
-    "title_prefix": "Have a Project in",
-    "title_highlight": "Mind?",
-    "description": "Whether you have a question, want to collaborate on a software project, or just want to say hi, feel free to reach out!",
-    "status": "Available for new opportunities",
-    "info_title": "Let's build something exceptional together",
-    "info_description": "I'm always excited to discuss new engineering challenges, UI/UX designs, or API architectures. Drop me a line anytime.",
-    "labels": {
-      "name": "Your Name",
-      "email": "Email Address",
-      "subject": "Subject",
-      "message": "Your Message"
-    },
-    "placeholders": {
-      "name": "e.g. Alex Morgan",
-      "email": "alex@example.com",
-      "subject": "e.g. Web App Development Project",
-      "message": "Tell me about your project, timeline, or idea..."
-    },
-    "actions": {
-      "send": "Send Message",
-      "sending": "Sending Message...",
-      "copy_email": "Copy Email",
-      "copied": "Email Copied!"
-    },
-    "details": {
-      "email": "Email",
-      "location": "Location",
-      "location_value": "Guadalajara, Mexico",
-      "whatsapp": "WhatsApp / Phone",
-      "socials": "Social Profiles"
-    },
-    "notifications": {
-      "success_title": "Message Sent!",
-      "success_description": "Thank you for reaching out! I will get back to you as soon as possible.",
-      "error_title": "Error Sending Message",
-      "error_description": "Something went wrong while sending your message. Please try again or email me directly."
-    }
-  },
-  "auth": {
-    "login": {
-      "title": "Sign In",
-      "forgot_password": "Forgot password?",
-      "create_account": "Create new account",
-      "welcome_back": "Welcome back{name, select, empty {} other {, {name}}}!",
-      "invalid_credentials_title": "Sign In Failed",
-      "invalid_credentials_description": "Invalid email or password. Please check your credentials."
-    },
-    "register": {
-      "title": "Sign Up",
-      "accept_terms": "I agree to the",
-      "terms_of_service": "Terms of Service",
-      "and": "and",
-      "privacy_policy": "Privacy Policy",
-      "create_password": "Create a strong password",
-      "already_have_account": "I already have an account",
-      "account_created_title": "Account created!",
-      "account_created_description": "Welcome to the platform{name, select, empty {} other {, {name}}}.",
-      "email_in_use_title": "Email in use",
-      "email_in_use_description": "This email is already registered. Please log in.",
-      "invalid_password_title": "Invalid Password",
-      "invalid_password_description": "Please ensure your password meets all requirements.",
-      "partial_success_title": "Partial Success",
-      "partial_success_description": "Account created successfully, but please log in manually.",
-      "registration_failed_title": "Registration Failed"
-    }
-  },
-  "dashboard": {
-    "title": "Dashboard",
-    "overview": "Overview",
-    "posts": "Articles",
-    "new_post": "New Article",
-    "users": "User Management",
-    "back_to_site": "Back to site",
-    "you": "You",
-    "roles": {
-      "admin": "Admin",
-      "editor": "Editor",
-      "user": "User"
-    },
-    "overview_stats": {
-      "welcome_back": "Welcome back, {name}",
-      "total_articles": "Total Articles",
-      "total_articles_desc": "{published} published, {drafts} drafts",
-      "published_title": "Published",
-      "published_badge": "Live",
-      "published_desc": "Publicly visible on the blog",
-      "drafts_title": "Drafts",
-      "drafts_badge": "Draft",
-      "drafts_desc": "Unpublished articles in review",
-      "users_title": "Registered Users",
-      "users_desc": "Managed via User Management",
-      "content_title": "Content Management",
-      "content_desc": "Create and manage your articles across multiple languages.",
-      "access_title": "Access & Security",
-      "access_desc": "Manage roles (Admin, Editor, User) and account permissions."
-    },
-    "posts_management": {
-      "title": "My Articles",
-      "session_as": "Signed in as: {name} ({role})",
-      "no_posts": "You don't have any articles yet.",
-      "published": "Published",
-      "draft": "Draft",
-      "delete": "Delete",
-      "deleting": "Deleting...",
-      "delete_confirm": "Are you sure you want to delete this article? This action cannot be undone.",
-      "delete_success": "Article deleted successfully",
-      "delete_error": "Failed to delete article",
-      "publish_toggle": "Publish",
-      "publish_success": "Article published successfully",
-      "unpublish_success": "Article unpublished successfully",
-      "status_update_error": "Failed to update article status",
-      "delete_dialog_title": "Delete Article",
-      "delete_dialog_description": "Are you sure you want to delete this article? This action cannot be undone.",
-      "cancel": "Cancel"
-    },
-    "users_management": {
-      "title": "User Management",
-      "description": "Manage user roles and system access permissions.",
-      "user_col": "User",
-      "email_col": "Email",
-      "role_col": "Role",
-      "created_at_col": "Registered",
-      "status_col": "Status",
-      "actions_col": "Actions",
-      "banned": "Banned",
-      "active": "Active",
-      "role_updated_title": "Role updated",
-      "role_updated_desc": "Role for {name} updated to {role}",
-      "role_update_error": "Failed to update role",
-      "no_users": "No users registered yet."
-    }
-  },
-  "validation": {
-    "required": "This field is required",
-    "invalid_email": "Please enter a valid email address",
-    "too_short": "Value is too short",
-    "too_long": "Value is too long",
-    "password_min": "Password must be at least 8 characters long",
-    "password_max": "Password cannot exceed 128 characters",
-    "passwords_dont_match": "Passwords do not match",
-    "terms_required": "You must accept the terms of service and privacy policy",
-    "title_required": "Title is required",
-    "slug_required": "Slug is required",
-    "content_min": "Content must be at least 10 characters long",
-    "locale_required": "Locale is required",
-    "role_invalid": "Invalid role specified"
-  },
-  "blog_editor": {
-    "new_post": "New Article",
-    "editing_post": "Editing Article",
-    "unsaved_changes_warning": "You have unsaved changes. Are you sure you want to leave?",
-    "back_to_posts": "Articles",
-    "save_button": "Save Article",
-    "saving_button": "Saving...",
-    "translate_button": "Translate with AI",
-    "translating_button": "Translating...",
-    "translate_all_button": "Translate to all missing languages",
-    "translate_to": "Translating to {locale}...",
-    "translating_all": "Translating to all missing languages...",
-    "upload_image_button": "Upload Image",
-    "uploading_image_button": "Uploading...",
-    "set_cover_button": "Set Cover",
-    "uploading_cover_button": "Uploading Cover...",
-    "frontmatter_detected": "Detected Frontmatter:",
-    "preview_empty": "No content to preview yet. Start writing Markdown on the left.",
-    "post_not_found": "Post not found",
-    "default_content": "---\ntitle: \"My New Article\"\nslug: \"my-new-article\"\nlocale: en\npublished: false\ntags: [\"Next.js\", \"Architecture\"]\n---\n\n# Write your article here...\n",
-    "notifications": {
-      "post_updated": "Article updated successfully",
-      "post_created": "Article created successfully",
-      "post_translated": "Article translated successfully",
-      "posts_translated_all": "Translated into: {locales}",
-      "validation_error": "Validation error while saving",
-      "translate_error": "Failed to translate article",
-      "frontmatter_required": "Frontmatter must include 'title', 'slug' and 'locale'",
-      "frontmatter_invalid": "Syntax error in Frontmatter (invalid YAML)",
-      "image_uploaded": "Image uploaded successfully",
-      "image_upload_error": "Failed to upload image",
-      "cover_uploaded": "Cover image updated successfully"
     }
   },
   "metadata": {

@@ -8,7 +8,7 @@ interface TranslationFallbackBannerProps {
 export async function TranslationFallbackBanner({
   originalLocale,
 }: TranslationFallbackBannerProps) {
-  const t = await getTranslations('blog')
+  const t = await getTranslations('features.blog.reader')
 
   return (
     <div className="flex items-center gap-3 rounded-lg border border-amber-500/20 bg-amber-500/10 p-4 text-sm text-amber-500 shadow-xs">

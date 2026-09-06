@@ -6,7 +6,7 @@ import { ServicesCta } from './services-cta'
 import { ServicesFilter } from './services-filter'
 
 export async function ServicesSection() {
-  const t = await getTranslations('services')
+  const t = await getTranslations('features.services')
 
   return (
     <Section

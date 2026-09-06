@@ -12,7 +12,7 @@ interface FeatureCardProps {
 }
 
 export function FeatureCard({ feature, isActive, onClick }: FeatureCardProps) {
-  const t = useTranslations('hero.features')
+  const t = useTranslations('features.hero.features')
   const Icon = feature.icon
 
   return (

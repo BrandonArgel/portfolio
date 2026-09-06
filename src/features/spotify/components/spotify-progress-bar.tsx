@@ -49,7 +49,7 @@ export function SpotifyProgressBar({
         </ProgressTrack>
       </Progress>
       <div
-        className="flex items-center justify-between text-[10px] font-mono text-muted-foreground"
+        className="flex items-center justify-between text-xs font-mono text-muted-foreground"
         aria-hidden="true"
       >
         <span>{formatTime(progress)}</span>

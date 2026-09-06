@@ -8,7 +8,7 @@ interface BookmarkedWidgetProps {
 }
 
 export async function BookmarkedWidget({ posts = [] }: BookmarkedWidgetProps) {
-  const t = await getTranslations('blog')
+  const t = await getTranslations('features.blog.reader')
 
   return (
     <div className="bg-card text-card-foreground border border-border rounded-2xl p-5 shadow-sm">

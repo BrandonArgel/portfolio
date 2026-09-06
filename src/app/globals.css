@@ -50,8 +50,35 @@
   --font-heading: var(--font-sans);
   --text-fluid-title: clamp(var(--text-3xl), 1.19rem + 3.41vw, var(--text-6xl));
   --text-fluid-subtitle: clamp(var(--text-2xl), 0.95rem + 2.73vw, var(--text-5xl));
-  --text-xs: 0.625rem; 
+  --text-xs: 0.625rem;
   --text-xs--line-height: 0.875rem;
+
+  /* Code blocks */
+  --color-code-bg: var(--code-bg);
+  --color-code-border: var(--code-border);
+  --color-code-header: var(--code-header);
+
+  /* Callouts */
+  --color-callout-red: var(--callout-red);
+  --color-callout-red-text: var(--callout-red-text);
+
+  --color-callout-purple: var(--callout-purple);
+  --color-callout-purple-text: var(--callout-purple-text);
+
+  --color-callout-blue: var(--callout-blue);
+  --color-callout-blue-text: var(--callout-blue-text);
+
+  --color-callout-cyan: var(--callout-cyan);
+  --color-callout-cyan-text: var(--callout-cyan-text);
+
+  --color-callout-green: var(--callout-green);
+  --color-callout-green-text: var(--callout-green-text);
+
+  --color-callout-yellow: var(--callout-yellow);
+  --color-callout-yellow-text: var(--callout-yellow-text);
+
+  --color-callout-gray: var(--callout-gray);
+  --color-callout-gray-text: var(--callout-gray-text);
 }
 
 :root {
@@ -73,12 +100,14 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
+  --radius: 0.625rem;
+
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
+
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -87,6 +116,31 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  --code-bg: oklch(0.97 0 0);
+  --code-border: oklch(0.922 0 0);
+  --code-header: oklch(0.922 0 0 / 60%);
+
+  --callout-red: var(--color-red-500);
+  --callout-red-text: var(--color-red-950);
+
+  --callout-purple: var(--color-purple-500);
+  --callout-purple-text: var(--color-purple-950);
+
+  --callout-blue: var(--color-blue-500);
+  --callout-blue-text: var(--color-blue-950);
+
+  --callout-cyan: var(--color-cyan-500);
+  --callout-cyan-text: var(--color-cyan-950);
+
+  --callout-green: var(--color-emerald-500);
+  --callout-green-text: var(--color-emerald-950);
+
+  --callout-yellow: var(--color-amber-500);
+  --callout-yellow-text: var(--color-amber-950);
+
+  --callout-gray: var(--color-zinc-500);
+  --callout-gray-text: var(--color-zinc-900);
 }
 
 .dark {
@@ -108,11 +162,14 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
+  --radius: 0.625rem;
+
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
+
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
@@ -121,6 +178,18 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  --code-bg: #282c34;
+  --code-border: oklch(1 0 0 / 10%);
+  --code-header: oklch(1 0 0 / 5%);
+
+  --callout-red-text: var(--color-red-200);
+  --callout-purple-text: var(--color-purple-200);
+  --callout-blue-text: var(--color-blue-200);
+  --callout-cyan-text: var(--color-cyan-200);
+  --callout-green-text: var(--color-emerald-200);
+  --callout-yellow-text: var(--color-amber-200);
+  --callout-gray-text: var(--color-zinc-200);
 }
 
 .typeset-docs {
