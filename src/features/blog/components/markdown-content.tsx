@@ -1,6 +1,6 @@
 'use client'
 
-import type { Components } from 'react-markdown' // Importamos el tipo exacto
+import type { Components } from 'react-markdown'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import { cn } from '@/lib/utils'

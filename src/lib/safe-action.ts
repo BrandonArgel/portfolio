@@ -1,5 +1,8 @@
+import { eq } from 'drizzle-orm'
 import { headers } from 'next/headers'
 import { createSafeActionClient, DEFAULT_SERVER_ERROR_MESSAGE } from 'next-safe-action'
+import { db } from '@/db'
+import { user } from '@/db/schema'
 import { auth } from '@/lib/auth/auth'
 
 export class ActionError extends Error {
@@ -48,17 +51,23 @@ export const actionClient = createSafeActionClient({
   },
 })
 
-// 2. Authentication Middleware: verifies active session
+// 2. Authentication Middleware: verifies active session and real-time ban status
 export const authActionClient = actionClient.use(async ({ next }) => {
   const session = await auth.api.getSession({
     headers: await headers(),
   })
 
-  if (!session || !session.user || (session.user as { banned?: boolean }).banned) {
-    throw new ActionError(
-      'SESSION_REVOKED',
-      'Your session is invalid, expired, or your account has been suspended.',
-    )
+  if (!session || !session.user) {
+    throw new ActionError('SESSION_REVOKED', 'Your session is invalid or expired.')
+  }
+
+  const realUser = await db.query.user.findFirst({
+    where: eq(user.id, session.user.id),
+    columns: { banned: true },
+  })
+
+  if (!realUser || realUser.banned) {
+    throw new ActionError('SESSION_REVOKED', 'Your account has been suspended.')
   }
 
   return next({

@@ -30,7 +30,6 @@ export async function generateMetadata({ params }: EditPostPageProps): Promise<M
 export default async function EditPostPage({ params }: EditPostPageProps) {
   const { slug, locale } = await params
 
-  // Verify authentication and authorization
   const session = await auth.api.getSession({
     headers: await headers(),
   })
@@ -43,7 +42,6 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
 
   if (err || !post) return notFound()
 
-  // Only admins or the original author can edit a post
   if (session.user.role !== 'admin' && post.authorId !== session.user.id) {
     redirect(`/${locale}/dashboard/posts`)
   }

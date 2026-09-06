@@ -19,7 +19,7 @@ export function BlogSidebar({
   trendingPosts = [],
 }: BlogSidebarProps) {
   return (
-    <aside className="sticky top-24 w-full lg:w-72 shrink-0 space-y-5">
+    <aside className="w-full lg:w-72 shrink-0 space-y-5 lg:sticky lg:top-24">
       <CategoryFilter
         categories={categories}
         totalCount={totalCount}

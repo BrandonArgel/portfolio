@@ -10,6 +10,7 @@ import { getBaseUrl, siteConfig } from '@/config/site'
 import { routing } from '@/i18n/routing'
 import { constructPageMetadata } from '@/lib/seo'
 import { AppProvider } from '@/providers/app-provider'
+import 'katex/dist/katex.min.css'
 import '../globals.css'
 
 const plusJakarta = Plus_Jakarta_Sans({

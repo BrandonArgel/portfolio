@@ -32,7 +32,6 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
   const t = await getTranslations({ locale, namespace: 'features.dashboard' })
   const isAdmin = session?.user.role === 'admin'
 
-  // Fetch quick metrics
   const [totalPostsResult] = await db.select({ value: count() }).from(posts)
   const [publishedPostsResult] = await db
     .select({ value: count() })

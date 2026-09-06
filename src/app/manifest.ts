@@ -22,8 +22,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: siteConfig.description,
     start_url: '/',
     display: 'standalone',
-    background_color: '#020617', // slate-950
-    theme_color: '#1447e6', // primary brand blue
+    background_color: '#020617',
+    theme_color: '#1447e6',
     icons: [
       {
         src: '/android-chrome-192x192.png',
