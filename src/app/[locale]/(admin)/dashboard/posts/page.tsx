@@ -4,6 +4,14 @@ import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { getFormatter, getTranslations } from 'next-intl/server'
 import { Badge } from '@/components/ui/badge'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb'
 import { LinkButton } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
@@ -14,6 +22,7 @@ import { DeletePostButton } from '@/features/blog/components/admin/delete-button
 import { PostTableToolbar } from '@/features/blog/components/admin/post-table-toolbar'
 import { PostPublishToggle } from '@/features/blog/components/admin/publish-toggle'
 import { getAdminPosts, getAllCategoriesAdmin } from '@/features/blog/services/posts.service'
+import { Link } from '@/i18n/navigation'
 import { auth } from '@/lib/auth/auth'
 
 interface DashboardPostsPageProps {
@@ -83,7 +92,7 @@ export default async function DashboardPostsPage({
   if (postsError) {
     // Fallback — show empty state on error
     return (
-      <div className="section-container py-6 space-y-6">
+      <div className="py-6 space-y-6">
         <Empty className="py-16">
           <EmptyHeader>
             <EmptyMedia variant="icon">
@@ -112,22 +121,22 @@ export default async function DashboardPostsPage({
   }
 
   return (
-    <div className="section-container py-6 space-y-6">
+    <div className="space-y-4">
       <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-            {t('title')}
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            {t('session_as', {
-              name: session.user.name || 'User',
-              role: session.user.role || 'user',
-            })}
-          </p>
-        </div>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink render={<Link href="/dashboard" />}>{t('dashboard')}</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{t('title')}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
         <LinkButton
-          href={'/dashboard/blog/new'}
+          href={'/dashboard/posts/new'}
           size="sm"
           className="gap-2 cursor-pointer shadow-xs w-fit"
         >
@@ -214,7 +223,7 @@ export default async function DashboardPostsPage({
                       variant="outline"
                       size="sm"
                       className="gap-1.5 cursor-pointer text-xs h-8"
-                      href={`/dashboard/blog/${post.slug}/edit`}
+                      href={`/dashboard/posts/${post.slug}/edit`}
                     >
                       <Edit3 className="size-3.5" />
                       <span>{t('edit')}</span>

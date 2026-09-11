@@ -127,7 +127,7 @@ export async function getPublishedPosts(
     const totalPages = Math.max(1, Math.ceil(total / limit))
 
     const formatted: BlogPostCardItem[] = dbPosts.map((post) => {
-      const mappedTags = post.postCategories.map((pc) => ({
+      const mappedCategories = post.postCategories.map((pc) => ({
         id: pc.category.id,
         name: pc.category.name,
         slug: pc.category.slug,
@@ -138,8 +138,9 @@ export async function getPublishedPosts(
         title: post.title,
         slug: post.slug,
         excerpt: extractExcerpt(post.content),
+        description: post.description,
         coverImage: post.coverImage,
-        tags: mappedTags,
+        categories: mappedCategories,
         readTimeMinutes: calculateReadTime(post.content),
         publishedAt: post.createdAt,
       }
@@ -382,6 +383,7 @@ function mapDbPostToBlogPost(dbPost: DbPostWithRelations): BlogPost {
     id: dbPost.id,
     title: dbPost.title,
     slug: dbPost.slug,
+    description: dbPost.description,
     content: dbPost.content,
     excerpt: extractExcerpt(dbPost.content),
     coverImage: dbPost.coverImage,
@@ -390,7 +392,7 @@ function mapDbPostToBlogPost(dbPost: DbPostWithRelations): BlogPost {
     authorId: dbPost.authorId,
     authorName: dbPost.author.name,
     translationGroupId: dbPost.translationGroupId ?? undefined,
-    tags: mappedTags,
+    categories: mappedTags,
     readTimeMinutes: calculateReadTime(dbPost.content),
     createdAt: dbPost.createdAt,
     updatedAt: dbPost.updatedAt,

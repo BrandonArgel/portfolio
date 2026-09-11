@@ -49,15 +49,15 @@ export function BlogCard({ post, className }: BlogCardProps) {
           )}
         </Link>
 
-        {/* Tags Row */}
-        {post.tags && post.tags.length > 0 && (
+        {/* Categories Row */}
+        {post.categories && post.categories.length > 0 && (
           <div className="mt-4 mb-3 flex flex-wrap gap-1.5 sm:gap-2">
-            {post.tags.map((tag) => (
+            {post.categories.map((category) => (
               <span
-                key={tag.id}
+                key={category.id}
                 className="inline-flex items-center rounded-md border border-border/60 bg-muted/40 dark:bg-slate-800/80 px-2.5 py-0.5 text-xs font-medium text-muted-foreground transition-colors group-hover/blog-card:border-primary/30 group-hover/blog-card:text-foreground"
               >
-                {tag.name}
+                {category.name}
               </span>
             ))}
           </div>

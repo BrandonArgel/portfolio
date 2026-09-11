@@ -21,6 +21,7 @@ interface UserTableToolbarProps {
 
 export function UserTableToolbar({ initialSearch = '', initialRole = '' }: UserTableToolbarProps) {
   const t = useTranslations('features.users.management')
+  const tRoles = useTranslations('features.users.roles')
   const router = useRouter()
   const pathname = usePathname()
   const [isPending, startTransition] = useTransition()
@@ -108,13 +109,13 @@ export function UserTableToolbar({ initialSearch = '', initialRole = '' }: UserT
             {t('filter_all')}
           </SelectItem>
           <SelectItem value="admin" className="text-xs">
-            Admin
+            {tRoles('admin')}
           </SelectItem>
           <SelectItem value="editor" className="text-xs">
-            Editor
+            {tRoles('editor')}
           </SelectItem>
           <SelectItem value="user" className="text-xs">
-            User
+            {tRoles('user')}
           </SelectItem>
         </SelectContent>
       </Select>

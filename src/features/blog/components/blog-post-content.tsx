@@ -1,3 +1,4 @@
+// src/features/blog/components/blog-post-content.tsx
 import { ArrowLeft, Calendar, Clock, User } from 'lucide-react'
 import Image from 'next/image'
 import { getFormatter, getTranslations } from 'next-intl/server'
@@ -32,11 +33,12 @@ export async function BlogPostContent({ post, action }: BlogPostContentProps) {
       </div>
 
       <header className="mb-10 flex flex-col items-start gap-6 border-b border-border pb-10">
-        {post.tags && post.tags.length > 0 && (
+        {/* ✨ CAMBIO: Ahora iteramos sobre categories en lugar de tags */}
+        {post.categories && post.categories.length > 0 && (
           <div className="flex flex-wrap gap-2">
-            {post.tags.map((tag) => (
-              <Badge key={tag.id} variant="secondary">
-                {tag.name}
+            {post.categories.map((category) => (
+              <Badge key={category.id} variant="secondary">
+                {category.name}
               </Badge>
             ))}
           </div>
@@ -57,16 +59,18 @@ export async function BlogPostContent({ post, action }: BlogPostContentProps) {
             <Calendar className="size-4" />
             <time dateTime={post.createdAt.toISOString()}>{formattedDate}</time>
           </div>
-          <div className="flex items-center gap-2">
-            <Clock className="size-4" />
-            <span>
-              {post.readTimeMinutes} {t('read_time_suffix')}
-            </span>
-          </div>
+          {post.readTimeMinutes && (
+            <div className="flex items-center gap-2">
+              <Clock className="size-4" />
+              <span>
+                {post.readTimeMinutes} {t('read_time_suffix')}
+              </span>
+            </div>
+          )}
         </div>
 
         {post.coverImage && (
-          <div className="relative aspect-16/9 sm:aspect-21/9 w-full overflow-hidden rounded-2xl border border-border shadow-md mt-2">
+          <div className="relative aspect-video sm:aspect-21/9 w-full overflow-hidden rounded-2xl border border-border shadow-md mt-2">
             <Image
               src={post.coverImage}
               alt={post.title}
@@ -78,7 +82,6 @@ export async function BlogPostContent({ post, action }: BlogPostContentProps) {
           </div>
         )}
       </header>
-
       <MdxContentServer content={post.content} />
     </article>
   )

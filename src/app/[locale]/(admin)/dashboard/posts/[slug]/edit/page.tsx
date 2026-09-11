@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { notFound, redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import { BlogEditor } from '@/features/blog/components/blog-editor'
-import { getPostBySlug } from '@/features/blog/services/posts.service'
+import { BlogComposer } from '@/features/blog/components/blog-composer'
+import { getAllCategoriesAdmin, getPostBySlug } from '@/features/blog/services/posts.service'
 import { auth } from '@/lib/auth/auth'
 
 interface EditPostPageProps {
@@ -29,14 +29,9 @@ export async function generateMetadata({ params }: EditPostPageProps): Promise<M
 
 export default async function EditPostPage({ params }: EditPostPageProps) {
   const { slug, locale } = await params
+  const session = await auth.api.getSession({ headers: await headers() })
 
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
-
-  if (!session || !session.user) {
-    redirect(`/${locale}/login`)
-  }
+  if (!session || !session.user) redirect(`/${locale}/login`)
 
   const [err, post] = await getPostBySlug(slug)
 
@@ -46,21 +41,26 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
     redirect(`/${locale}/dashboard/posts`)
   }
 
-  const tagsString = post.tags.map((t) => `"${t.name}"`).join(', ')
+  const [, allCategories] = await getAllCategoriesAdmin()
+  const categoriesArray = allCategories?.map((c) => c.name) ?? []
 
-  const initialMarkdown = `---
-title: "${post.title}"
-slug: "${post.slug}"
-locale: "${post.locale}"
-translationGroupId: "${post.translationGroupId || ''}"
-published: ${post.published}
-tags: [${tagsString}]
----
-${post.content}`
+  const initialFrontmatter = {
+    title: post.title,
+    slug: post.slug,
+    description: post.description || '',
+    coverImage: post.coverImage || '',
+    locale: post.locale as 'en' | 'es',
+    translationGroupId: post.translationGroupId || '',
+    published: post.published,
+    categories: post.categories.map((c) => c.name),
+  }
 
   return (
-    <div className="p-4 lg:p-8">
-      <BlogEditor initialId={post.id} initialContent={initialMarkdown} />
-    </div>
+    <BlogComposer
+      initialId={post.id}
+      initialFrontmatter={initialFrontmatter}
+      initialContent={post.content}
+      existingCategories={categoriesArray}
+    />
   )
 }

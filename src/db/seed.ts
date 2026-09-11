@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { eq } from 'drizzle-orm'
 import { db } from './index'
-import { posts, user } from './schema'
+import { posts, users } from './schema'
 
 async function runSeed() {
   console.log('⏳ Initializing seed...')
@@ -10,19 +10,19 @@ async function runSeed() {
     const adminEmail = 'brandargel@gmail.com'
     let adminId: string
 
-    const existingUser = await db.query.user.findFirst({
-      where: eq(user.email, adminEmail),
+    const existingUser = await db.query.users.findFirst({
+      where: eq(users.email, adminEmail),
     })
 
     if (existingUser) {
       console.log('✅ User found in Turso. Updating role to admin...')
       adminId = existingUser.id
 
-      await db.update(user).set({ role: 'admin' }).where(eq(user.id, adminId))
+      await db.update(users).set({ role: 'admin' }).where(eq(users.id, adminId))
     } else {
       console.log('✅ Creating new admin user...')
       adminId = randomUUID()
-      await db.insert(user).values({
+      await db.insert(users).values({
         id: adminId,
         name: 'Brandon Argel Verdeja Dominguez',
         email: adminEmail,

@@ -15,7 +15,7 @@ export async function ArticleCard({ post }: ArticleCardProps) {
   const postDate = post.publishedAt instanceof Date ? post.publishedAt : new Date(post.publishedAt)
   const formattedDate = format.dateTime(postDate, 'short')
 
-  const primaryBadge = post.tags[0]?.name || post.coverBadge || 'Engineering'
+  const primaryBadge = post.categories[0]?.name || post.coverBadge || 'Engineering'
 
   return (
     <article className="group flex flex-col h-full bg-card text-card-foreground hover:bg-card/90 border border-border hover:border-primary/40 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg">
@@ -50,9 +50,9 @@ export async function ArticleCard({ post }: ArticleCardProps) {
       <div className="p-5 flex-1 flex flex-col justify-between">
         <div>
           {/* Tags */}
-          {post.tags && post.tags.length > 0 && (
+          {post.categories && post.categories.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-3">
-              {post.tags.map((tag) => (
+              {post.categories.map((tag) => (
                 <span
                   key={tag.id}
                   className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-muted text-muted-foreground border border-border"

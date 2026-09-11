@@ -68,13 +68,12 @@ export function AdminHeader({
   return (
     <header className="sticky top-0 z-50 flex h-16 w-full border-b border-border/80 bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="section-container flex items-center justify-between">
-        {/* 1. Left (Brand): Dashboard title + Role badge */}
         <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
           <Link
             href="/dashboard"
             className="flex items-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg transition-transform active:scale-95"
           >
-            <span className="font-bold text-base sm:text-lg tracking-tight">{t('title')}</span>
+            <span className="font-bold sm:text-lg tracking-tight">{t('title')}</span>
           </Link>
 
           {isAdmin && (

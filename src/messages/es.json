@@ -336,7 +336,10 @@
         "new_article": "Nuevo Artículo",
         "edit": "Editar",
         "prev_page": "Anterior",
-        "next_page": "Siguiente"
+        "next_page": "Siguiente",
+        "dashboard": "Panel",
+        "filter_all_languages": "Todos los idiomas",
+        "filter_all_categories": "Todas las categorías"
       },
       "editor": {
         "new_post": "Nuevo Artículo",
@@ -370,6 +373,45 @@
           "image_uploaded": "Imagen subida correctamente",
           "image_upload_error": "Error al subir la imagen",
           "cover_uploaded": "Imagen de portada actualizada con éxito"
+        }
+      },
+      "composer": {
+        "breadcrumb_dashboard": "Panel",
+        "breadcrumb_posts": "Artículos",
+        "new_post": "Nuevo Artículo",
+        "edit_post": "Editar Artículo",
+        "save": "Guardar",
+        "saving": "Guardando...",
+        "notifications": {
+          "post_updated": "Artículo actualizado con éxito",
+          "post_created": "Artículo creado con éxito",
+          "save_error": "Error al guardar el artículo",
+          "title_slug_required": "El título y el slug son obligatorios",
+          "uploading_image": "Subiendo imagen...",
+          "image_inserted": "Imagen insertada con éxito",
+          "image_upload_error": "Error al subir la imagen",
+          "cover_uploaded": "Imagen de portada subida con éxito",
+          "cover_upload_error": "Error al subir la imagen de portada",
+          "invalid_file_title": "Archivo no válido",
+          "invalid_file_description": "Solo se pueden subir archivos de imagen."
+        },
+        "frontmatter": {
+          "title": "Metadatos del Artículo",
+          "field_title": "Título",
+          "title_placeholder": "Título...",
+          "field_description": "Descripción",
+          "description_placeholder": "Resumen SEO...",
+          "field_cover_image": "Imagen de Portada",
+          "cover_image_placeholder": "https://...",
+          "field_categories": "Categorías",
+          "add_category_placeholder": "Añadir categoría...",
+          "create_category": "Crear \"{category}\"",
+          "no_categories_found": "No se encontraron categorías",
+          "field_locale": "Idioma",
+          "select_locale_placeholder": "Seleccionar idioma...",
+          "field_published": "Publicado",
+          "status_live": "Publicado",
+          "status_draft": "Borrador"
         }
       }
     },
@@ -435,6 +477,72 @@
         "content_desc": "Crea y administra tus artículos en múltiples idiomas.",
         "access_title": "Acceso y Seguridad",
         "access_desc": "Administra roles (Admin, Editor, Usuario) y permisos de cuenta."
+      }
+    },
+    "editor": {
+      "writing": "Escribiendo...",
+      "saved_locally": "Guardado localmente",
+      "placeholder": "Escribe '/' para comandos o comienza a escribir tu artículo...",
+      "image_alt_placeholder": "Descripción de la imagen",
+      "show_preview": "Mostrar Vista Previa",
+      "hide_preview": "Ocultar Vista Previa",
+      "toggle_preview": "Alternar panel de vista previa",
+      "commands": {
+        "text": "Texto",
+        "h1": "Encabezado 1",
+        "h2": "Encabezado 2",
+        "h3": "Encabezado 3",
+        "h4": "Encabezado 4",
+        "h5": "Encabezado 5",
+        "h6": "Encabezado 6",
+        "bullet_list": "Lista con viñetas",
+        "ordered_list": "Lista numerada",
+        "code_block": "Código",
+        "quote": "Cita",
+        "callout": "Destacado",
+        "divider": "Divisor",
+        "horizontal_rule": "Línea horizontal",
+        "image": "Imagen",
+        "video": "Video",
+        "table": "Tabla",
+        "task_list": "Lista de tareas",
+        "bold": "Negrita",
+        "italic": "Cursiva",
+        "strike": "Tachado",
+        "code": "Código",
+        "underline": "Subrayado",
+        "undo": "Deshacer",
+        "redo": "Rehacer",
+        "clear_format": "Limpiar formato",
+        "no_commands_found": "No se encontraron comandos",
+        "youtube_prompt": "URL de YouTube:"
+      },
+      "bubble_menu": {
+        "bold": "Negrita",
+        "italic": "Cursiva",
+        "strikethrough": "Tachado",
+        "inline_code": "Código en línea",
+        "highlight": "Resaltar",
+        "add_link": "Añadir enlace",
+        "insert_link": "Insertar enlace",
+        "link_description": "Escribe la URL del hipervínculo. Deja el campo vacío para quitar el enlace actual.",
+        "cancel": "Cancelar",
+        "save": "Guardar"
+      },
+      "callout": {
+        "title": "Título",
+        "type": {
+          "tip": "Consejo",
+          "info": "Información",
+          "pencil": "Nota",
+          "quote": "Cita",
+          "warning": "Advertencia",
+          "failure": "Fallo",
+          "danger": "Peligro",
+          "success": "Éxito",
+          "bug": "Error",
+          "example": "Ejemplo"
+        }
       }
     },
     "hero": {

@@ -4,7 +4,7 @@ import { put } from '@vercel/blob'
 import { z } from 'zod'
 import { ActionError, authActionClient } from '@/lib/safe-action'
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5 MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml']
 
 const uploadImageSchema = z.object({

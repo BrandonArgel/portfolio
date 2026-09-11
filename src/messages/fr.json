@@ -336,7 +336,10 @@
         "new_article": "Nouvel Article",
         "edit": "Modifier",
         "prev_page": "Précédent",
-        "next_page": "Suivant"
+        "next_page": "Suivant",
+        "dashboard": "Tableau de bord",
+        "filter_all_languages": "Toutes les langues",
+        "filter_all_categories": "Toutes les catégories"
       },
       "editor": {
         "new_post": "Nouvel Article",
@@ -370,6 +373,45 @@
           "image_uploaded": "Image téléversée avec succès",
           "image_upload_error": "Échec du téléversement de l'image",
           "cover_uploaded": "Image de couverture mise à jour avec succès"
+        }
+      },
+      "composer": {
+        "breadcrumb_dashboard": "Tableau de bord",
+        "breadcrumb_posts": "Articles",
+        "new_post": "Nouvel Article",
+        "edit_post": "Modifier l'Article",
+        "save": "Enregistrer",
+        "saving": "Enregistrement...",
+        "notifications": {
+          "post_updated": "Article mis à jour avec succès",
+          "post_created": "Article créé avec succès",
+          "save_error": "Erreur lors de l'enregistrement de l'article",
+          "title_slug_required": "Le titre et le slug sont obligatoires",
+          "uploading_image": "Téléversement de l'image...",
+          "image_inserted": "Image insérée avec succès",
+          "image_upload_error": "Erreur lors du téléversement de l'image",
+          "cover_uploaded": "Image de couverture téléversée avec succès",
+          "cover_upload_error": "Erreur lors du téléversement de l'image de couverture",
+          "invalid_file_title": "Fichier non valide",
+          "invalid_file_description": "Seuls les fichiers image peuvent être téléversés."
+        },
+        "frontmatter": {
+          "title": "Métadonnées de l'Article",
+          "field_title": "Titre",
+          "title_placeholder": "Titre...",
+          "field_description": "Description",
+          "description_placeholder": "Résumé SEO...",
+          "field_cover_image": "Image de Couverture",
+          "cover_image_placeholder": "https://...",
+          "field_categories": "Catégories",
+          "add_category_placeholder": "Ajouter une catégorie...",
+          "create_category": "Créer \"{category}\"",
+          "no_categories_found": "Aucune catégorie trouvée",
+          "field_locale": "Langue",
+          "select_locale_placeholder": "Sélectionner la langue...",
+          "field_published": "Publié",
+          "status_live": "En ligne",
+          "status_draft": "Brouillon"
         }
       }
     },
@@ -635,6 +677,72 @@
         "admin": "Admin",
         "editor": "Éditeur",
         "user": "Utilisateur"
+      }
+    },
+    "editor": {
+      "writing": "Écriture...",
+      "saved_locally": "Enregistré localement",
+      "placeholder": "Tapez '/' pour les commandes ou commencez à rédiger votre article...",
+      "image_alt_placeholder": "Description de l'image",
+      "show_preview": "Afficher Aperçu",
+      "hide_preview": "Masquer Aperçu",
+      "toggle_preview": "Basculer le panneau d'aperçu",
+      "commands": {
+        "text": "Texte",
+        "h1": "Titre 1",
+        "h2": "Titre 2",
+        "h3": "Titre 3",
+        "h4": "Titre 4",
+        "h5": "Titre 5",
+        "h6": "Titre 6",
+        "bullet_list": "Liste à puces",
+        "ordered_list": "Liste numérotée",
+        "code_block": "Code",
+        "quote": "Citation",
+        "callout": "Encadré",
+        "divider": "Séparateur",
+        "horizontal_rule": "Ligne de séparation",
+        "image": "Image",
+        "video": "Vidéo",
+        "table": "Tableau",
+        "task_list": "Liste de tâches",
+        "bold": "Gras",
+        "italic": "Italique",
+        "strike": "Barré",
+        "code": "Code",
+        "underline": "Souligné",
+        "undo": "Annuler",
+        "redo": "Rétablir",
+        "clear_format": "Effacer le format",
+        "no_commands_found": "Aucune commande trouvée",
+        "youtube_prompt": "URL YouTube :"
+      },
+      "bubble_menu": {
+        "bold": "Gras",
+        "italic": "Italique",
+        "strikethrough": "Barré",
+        "inline_code": "Code en ligne",
+        "highlight": "Surligner",
+        "add_link": "Ajouter un lien",
+        "insert_link": "Insérer un lien",
+        "link_description": "Entrez l'URL du lien hypertexte. Laissez vide pour supprimer le lien actuel.",
+        "cancel": "Annuler",
+        "save": "Enregistrer"
+      },
+      "callout": {
+        "title": "Titre",
+        "type": {
+          "tip": "Astuce",
+          "info": "Information",
+          "pencil": "Note",
+          "quote": "Citation",
+          "warning": "Avertissement",
+          "failure": "Échec",
+          "danger": "Danger",
+          "success": "Succès",
+          "bug": "Bogue",
+          "example": "Exemple"
+        }
       }
     }
   },

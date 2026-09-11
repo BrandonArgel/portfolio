@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { db } from '@/db'
-import { posts, user } from '@/db/schema'
+import { posts, users } from '@/db/schema'
 import { auth } from '@/lib/auth/auth'
 
 interface DashboardPageProps {
@@ -38,7 +38,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
     .from(posts)
     .where(eq(posts.published, true))
   const [totalUsersResult] = isAdmin
-    ? await db.select({ value: count() }).from(user)
+    ? await db.select({ value: count() }).from(users)
     : [{ value: 0 }]
 
   const totalPosts = totalPostsResult?.value ?? 0
@@ -47,13 +47,11 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
   const totalUsers = totalUsersResult?.value ?? 0
 
   return (
-    <div className="section-container py-6 space-y-8">
+    <div className="space-y-4">
       {/* Welcome header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-            {t('overview')}
-          </h1>
+          <h1 className="text-md font-bold tracking-tight">{t('overview')}</h1>
           <p className="text-sm text-muted-foreground mt-1">
             {t('overview_stats.welcome_back', {
               name: session?.user.name || 'User',
@@ -65,7 +63,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
           <LinkButton
             size="sm"
             className="gap-2 cursor-pointer shadow-xs"
-            href="/dashboard/blog/new"
+            href="/dashboard/posts/new"
           >
             <PlusCircle className="size-4" />
             <span>{t('new_post')}</span>
@@ -148,7 +146,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
       </div>
 
       {/* Quick Access Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="border-border/70 shadow-xs">
           <CardHeader>
             <CardTitle className="text-base font-semibold">
@@ -172,7 +170,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
               variant="default"
               size="sm"
               className="gap-2 cursor-pointer"
-              href="/dashboard/blog/new"
+              href="/dashboard/posts/new"
             >
               <PlusCircle className="size-4" />
               <span>{t('new_post')}</span>

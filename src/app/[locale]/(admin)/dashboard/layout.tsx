@@ -28,7 +28,7 @@ export default async function DashboardLayout({ children, params }: DashboardLay
     <SessionGuard>
       <div className="min-h-screen flex flex-col bg-background text-foreground">
         <AdminHeader session={session} isAdmin={isAdmin} isEditor={isEditor} />
-        <main className="flex-1">{children}</main>
+        <main className="section-container flex-1 pt-4">{children}</main>
       </div>
     </SessionGuard>
   )

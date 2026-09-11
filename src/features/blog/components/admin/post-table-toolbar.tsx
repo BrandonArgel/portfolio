@@ -12,9 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { LOCALE_META } from '@/config/locale'
 import { usePathname, useRouter } from '@/i18n/navigation'
-
-const SUPPORTED_LOCALES = ['en', 'es', 'fr'] as const
 
 interface PostTableToolbarProps {
   categories: { id: string; name: string; slug: string }[]
@@ -121,10 +120,10 @@ export function PostTableToolbar({
           <SelectValue placeholder={t('filter_locale')} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="_all">{t('filter_all')}</SelectItem>
-          {SUPPORTED_LOCALES.map((loc) => (
+          <SelectItem value="_all">{t('filter_all_languages')}</SelectItem>
+          {Object.entries(LOCALE_META).map(([loc, meta]) => (
             <SelectItem key={loc} value={loc}>
-              {loc.toUpperCase()}
+              {meta.flag} {loc.toUpperCase()}
             </SelectItem>
           ))}
         </SelectContent>
@@ -137,7 +136,7 @@ export function PostTableToolbar({
             <SelectValue placeholder={t('filter_category')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="_all">{t('filter_all')}</SelectItem>
+            <SelectItem value="_all">{t('filter_all_categories')}</SelectItem>
             {categories.map((cat) => (
               <SelectItem key={cat.id} value={cat.id}>
                 {cat.name}

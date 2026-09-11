@@ -1,6 +1,6 @@
 import { and, count, desc, eq, like, or } from 'drizzle-orm'
 import { db } from '@/db'
-import { user } from '@/db/schema'
+import { users } from '@/db/schema'
 import { error, okay, type Result } from '@/utils/result'
 
 export type UserError =
@@ -54,20 +54,20 @@ export async function getAdminUsers({
     const conditions = []
 
     if (role && role !== '_all') {
-      conditions.push(eq(user.role, role))
+      conditions.push(eq(users.role, role))
     }
 
     if (search?.trim()) {
       const escaped = escapeLikePattern(search.trim())
-      conditions.push(or(like(user.name, `%${escaped}%`), like(user.email, `%${escaped}%`)))
+      conditions.push(or(like(users.name, `%${escaped}%`), like(users.email, `%${escaped}%`)))
     }
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined
 
     const [dbUsers, [countResult]] = await Promise.all([
-      db.query.user.findMany({
+      db.query.users.findMany({
         where: whereClause,
-        orderBy: [desc(user.createdAt)],
+        orderBy: [desc(users.createdAt)],
         limit: safeLimit,
         offset,
         with: {
@@ -79,8 +79,8 @@ export async function getAdminUsers({
         },
       }),
       db
-        .select({ count: count(user.id) })
-        .from(user)
+        .select({ count: count(users.id) })
+        .from(users)
         .where(whereClause),
     ])
 

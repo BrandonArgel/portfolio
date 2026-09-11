@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     }
   }
 
-  const tags = post.tags.map((tag) => tag.name)
+  const tags = post.categories.map((category) => category.name)
   const authorName = post.authorName || siteConfig.author.name
   const pathname = `/blog/${post.slug}`
 
@@ -74,6 +74,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const t = await getTranslations('features.blog.reader')
 
   const [err, post] = await getPublishedPostBySlug(slug)
+  console.log({ post })
 
   if (err || !post) {
     if (err && err.reason !== 'NOT_FOUND') {
@@ -129,7 +130,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       name: siteConfig.name,
       url: siteConfig.url,
     },
-    keywords: post.tags.map((tag) => tag.name).join(', '),
+    keywords: post.categories.map((category) => category.name).join(', '),
   }
 
   return (

@@ -4,6 +4,14 @@ import { redirect } from 'next/navigation'
 import { getFormatter, getTranslations } from 'next-intl/server'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Table,
@@ -23,6 +31,7 @@ import {
   UserTableToolbar,
   UserVerifiedBadge,
 } from '@/features/users'
+import { Link } from '@/i18n/navigation'
 import { auth } from '@/lib/auth/auth'
 import { getInitials } from '@/utils/get-initials'
 
@@ -61,7 +70,6 @@ export default async function UsersPage({ params, searchParams }: UsersPageProps
   const currentPage = Number(sp.page) || 1
   const limit = 10
 
-  // 2. Fetch paginated users from Drizzle ORM service
   const [t, tDashboard, format, usersResult] = await Promise.all([
     getTranslations({ locale, namespace: 'features.users.management' }),
     getTranslations({ locale, namespace: 'components.layout.dashboard' }),
@@ -78,7 +86,7 @@ export default async function UsersPage({ params, searchParams }: UsersPageProps
 
   if (usersError || !usersData) {
     return (
-      <div className="section-container py-6 space-y-6">
+      <div className="space-y-4">
         <div className="py-12 text-center text-sm text-destructive">
           Error loading users. Please try again.
         </div>
@@ -89,21 +97,26 @@ export default async function UsersPage({ params, searchParams }: UsersPageProps
   const usersList = usersData.users
 
   return (
-    <div className="section-container py-6 space-y-6">
-      {/* Page Header */}
+    <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-            {t('title')}
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">{t('description')}</p>
-        </div>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink render={<Link href="/dashboard" />}>
+                {tDashboard('title')}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{t('title')}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
         <Badge variant="softPrimary" className="w-fit">
           {usersData.totalCount} {t('user_col')}s
         </Badge>
       </div>
 
-      {/* Toolbar Filter */}
       <UserTableToolbar initialSearch={sp.q} initialRole={sp.role} />
 
       {/* Data Table */}
@@ -153,13 +166,13 @@ export default async function UsersPage({ params, searchParams }: UsersPageProps
                               {isSelf && (
                                 <Badge
                                   variant="outline"
-                                  className="text-[10px] h-4 px-1 text-primary border-primary/30 bg-primary/5 shrink-0"
+                                  className="text-xs h-4 px-1 text-primary border-primary/30 bg-primary/5 shrink-0"
                                 >
                                   {tDashboard('you')}
                                 </Badge>
                               )}
                             </div>
-                            <p className="text-xs text-muted-foreground font-mono truncate max-w-35 sm:max-w-55">
+                            <p className="text-sm text-muted-foreground font-mono truncate max-w-35 sm:max-w-55">
                               {item.email}
                             </p>
                           </div>

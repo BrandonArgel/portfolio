@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm'
 import { headers } from 'next/headers'
 import { createSafeActionClient, DEFAULT_SERVER_ERROR_MESSAGE } from 'next-safe-action'
 import { db } from '@/db'
-import { user } from '@/db/schema'
+import { users } from '@/db/schema'
 import { auth } from '@/lib/auth/auth'
 
 export class ActionError extends Error {
@@ -61,8 +61,8 @@ export const authActionClient = actionClient.use(async ({ next }) => {
     throw new ActionError('SESSION_REVOKED', 'Your session is invalid or expired.')
   }
 
-  const realUser = await db.query.user.findFirst({
-    where: eq(user.id, session.user.id),
+  const realUser = await db.query.users.findFirst({
+    where: eq(users.id, session.user.id),
     columns: { banned: true },
   })
 

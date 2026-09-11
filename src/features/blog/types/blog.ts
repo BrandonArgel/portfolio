@@ -9,6 +9,7 @@ export interface BlogPost {
   id: string
   title: string
   slug: string
+  description: string
   content: string
   excerpt: string
   coverImage?: string | null
@@ -17,7 +18,7 @@ export interface BlogPost {
   published: boolean
   authorId: string
   authorName?: string
-  tags: BlogCategory[]
+  categories: BlogCategory[]
   readTimeMinutes: number
   createdAt: Date
   updatedAt: Date
@@ -27,9 +28,10 @@ export interface BlogPostCardItem {
   id: string
   title: string
   slug: string
+  description: string
   excerpt: string
   coverImage?: string | null
-  tags: BlogCategory[]
+  categories: BlogCategory[]
   readTimeMinutes: number
   publishedAt: Date
   coverBadge?: string

@@ -11,23 +11,33 @@ const savePostSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(1, 'Title is required'),
   slug: z.string().min(1, 'Slug is required'),
+  description: z.string().min(1, 'Description is required'),
   content: z.string().min(10, 'Content is too short'),
   locale: z.string().min(1, 'Locale is required'),
   translationGroupId: z.string().optional(),
   published: z.boolean().default(false),
-  tags: z.array(z.string()).default([]),
+  categories: z.array(z.string()).default([]),
   coverImage: z.string().nullable().optional(),
 })
 
 export const savePostAction = editorActionClient
   .inputSchema(savePostSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const { id, title, slug, content, locale, translationGroupId, published, tags, coverImage } =
-      parsedInput
+    const {
+      id,
+      title,
+      slug,
+      description,
+      content,
+      locale,
+      translationGroupId,
+      published,
+      categories: categoryNames,
+      coverImage,
+    } = parsedInput
 
     try {
       let postId = id
-
       const finalTranslationGroupId = translationGroupId || crypto.randomUUID()
 
       if (postId) {
@@ -50,6 +60,7 @@ export const savePostAction = editorActionClient
           .set({
             title,
             slug,
+            description,
             content,
             coverImage: coverImage ?? null,
             locale,
@@ -66,6 +77,7 @@ export const savePostAction = editorActionClient
           .values({
             title,
             slug,
+            description,
             content,
             coverImage: coverImage ?? null,
             locale,
@@ -78,21 +90,21 @@ export const savePostAction = editorActionClient
         postId = newPost.id
       }
 
-      if (tags.length > 0) {
-        for (const tagName of tags) {
-          const tagSlug = tagName.toLowerCase().replace(/\s+/g, '-')
+      if (categoryNames.length > 0) {
+        for (const categoryName of categoryNames) {
+          const categorySlug = categoryName.toLowerCase().replace(/\s+/g, '-')
 
           let category = await db.query.categories.findFirst({
             // Check both slug and name to be safe against case-mismatches
-            where: or(eq(categories.slug, tagSlug), eq(categories.name, tagName)),
+            where: or(eq(categories.slug, categorySlug), eq(categories.name, categoryName)),
           })
 
           if (!category) {
             // Attempt a safe insert that won't crash if a constraint fails
             const inserted = await db
               .insert(categories)
-              .values({ name: tagName, slug: tagSlug })
-              .onConflictDoNothing({ target: categories.name }) // Prevent the crash!
+              .values({ name: categoryName, slug: categorySlug })
+              .onConflictDoNothing({ target: categories.name })
               .returning()
 
             if (inserted.length > 0) {
@@ -100,11 +112,11 @@ export const savePostAction = editorActionClient
             } else {
               // If the insert was skipped (conflict occurred but was hidden), fetch it safely
               const existing = await db.query.categories.findFirst({
-                where: or(eq(categories.slug, tagSlug), eq(categories.name, tagName)),
+                where: or(eq(categories.slug, categorySlug), eq(categories.name, categoryName)),
               })
 
               if (!existing) {
-                throw new Error(`Failed to insert or retrieve category: ${tagName}`)
+                throw new Error(`Failed to insert or retrieve category: ${categoryName}`)
               }
               category = existing
             }

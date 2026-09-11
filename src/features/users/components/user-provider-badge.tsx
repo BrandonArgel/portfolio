@@ -6,7 +6,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import {
   SUPPORTED_OAUTH_PROVIDER_DETAILS,
   type SupportedOAuthProvider,
-} from '@/config/o-auth-providers'
+} from '@/features/auth/config/o-auth-providers'
 
 interface UserProviderBadgeProps {
   providers: string[]

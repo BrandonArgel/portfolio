@@ -6,7 +6,7 @@ import { index, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlit
 // ==========================================
 // 1. AUTH (Better Auth)
 // ==========================================
-export const user = sqliteTable('user', {
+export const users = sqliteTable('users', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   email: text('email').notNull().unique(),
@@ -20,7 +20,7 @@ export const user = sqliteTable('user', {
   updatedAt: integer('updatedAt', { mode: 'timestamp' }).notNull(),
 })
 
-export const session = sqliteTable('session', {
+export const sessions = sqliteTable('sessions', {
   id: text('id').primaryKey(),
   expiresAt: integer('expiresAt', { mode: 'timestamp' }).notNull(),
   token: text('token').notNull().unique(),
@@ -30,16 +30,16 @@ export const session = sqliteTable('session', {
   userAgent: text('userAgent'),
   userId: text('userId')
     .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
+    .references(() => users.id, { onDelete: 'cascade' }),
 })
 
-export const account = sqliteTable('account', {
+export const accounts = sqliteTable('accounts', {
   id: text('id').primaryKey(),
   accountId: text('accountId').notNull(),
   providerId: text('providerId').notNull(),
   userId: text('userId')
     .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
+    .references(() => users.id, { onDelete: 'cascade' }),
   issuer: text('issuer'),
   accessToken: text('accessToken'),
   refreshToken: text('refreshToken'),
@@ -52,7 +52,7 @@ export const account = sqliteTable('account', {
   updatedAt: integer('updatedAt', { mode: 'timestamp' }).notNull(),
 })
 
-export const verification = sqliteTable('verification', {
+export const verifications = sqliteTable('verifications', {
   id: text('id').primaryKey(),
   identifier: text('identifier').notNull(),
   value: text('value').notNull(),
@@ -79,6 +79,7 @@ export const posts = sqliteTable(
       .primaryKey()
       .$defaultFn(() => crypto.randomUUID()),
     title: text('title').notNull(),
+    description: text('description').notNull().default(''),
     slug: text('slug').notNull().unique(),
     content: text('content').notNull(),
     coverImage: text('cover_image'),
@@ -87,7 +88,7 @@ export const posts = sqliteTable(
     translationGroupId: text('translationGroupId'),
     authorId: text('authorId')
       .notNull()
-      .references(() => user.id, { onDelete: 'cascade' }),
+      .references(() => users.id, { onDelete: 'cascade' }),
     createdAt: integer('createdAt', { mode: 'timestamp' })
       .default(sql`(strftime('%s', 'now'))`)
       .notNull(),
@@ -95,10 +96,10 @@ export const posts = sqliteTable(
       .default(sql`(strftime('%s', 'now'))`)
       .notNull(),
   },
-  (t) => ({
-    translationGroupIdx: index('idx_posts_translation_group').on(t.translationGroupId),
-    localeSlugIdx: index('idx_posts_locale_slug').on(t.locale, t.slug),
-  }),
+  (t) => [
+    index('idx_posts_translation_group').on(t.translationGroupId),
+    index('idx_posts_locale_slug').on(t.locale, t.slug),
+  ],
 )
 
 export const postsToCategories = sqliteTable(
@@ -111,9 +112,7 @@ export const postsToCategories = sqliteTable(
       .notNull()
       .references(() => categories.id, { onDelete: 'cascade' }),
   },
-  (t) => ({
-    pk: primaryKey({ columns: [t.postId, t.categoryId] }),
-  }),
+  (t) => [primaryKey({ columns: [t.postId, t.categoryId] })],
 )
 
 // ==========================================
@@ -121,9 +120,9 @@ export const postsToCategories = sqliteTable(
 // ==========================================
 export const postsRelations = relations(posts, ({ many, one }) => ({
   postCategories: many(postsToCategories),
-  author: one(user, {
+  author: one(users, {
     fields: [posts.authorId],
-    references: [user.id],
+    references: [users.id],
   }),
 }))
 
@@ -142,22 +141,22 @@ export const postsToCategoriesRelations = relations(postsToCategories, ({ one })
   }),
 }))
 
-export const userRelations = relations(user, ({ many }) => ({
-  accounts: many(account),
-  sessions: many(session),
+export const userRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+  sessions: many(sessions),
   posts: many(posts),
 }))
 
-export const accountRelations = relations(account, ({ one }) => ({
-  user: one(user, {
-    fields: [account.userId],
-    references: [user.id],
+export const accountRelations = relations(accounts, ({ one }) => ({
+  user: one(users, {
+    fields: [accounts.userId],
+    references: [users.id],
   }),
 }))
 
-export const sessionRelations = relations(session, ({ one }) => ({
-  user: one(user, {
-    fields: [session.userId],
-    references: [user.id],
+export const sessionRelations = relations(sessions, ({ one }) => ({
+  user: one(users, {
+    fields: [sessions.userId],
+    references: [users.id],
   }),
 }))

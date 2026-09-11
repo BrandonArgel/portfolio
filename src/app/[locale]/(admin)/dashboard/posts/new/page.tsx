@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import { BlogEditor } from '@/features/blog/components/blog-editor'
+import { BlogComposer } from '@/features/blog/components/blog-composer'
+import { getAllCategoriesAdmin } from '@/features/blog/services/posts.service'
 
 interface NewPostPageProps {
   params: Promise<{ locale: string }>
@@ -15,10 +16,13 @@ export async function generateMetadata({ params }: NewPostPageProps): Promise<Me
   }
 }
 
-export default function NewPostPage() {
+export default async function NewPostPage() {
+  const [, categories] = await getAllCategoriesAdmin()
+  const categoriesArray = categories?.map((c) => c.name) ?? []
+
   return (
     <div className="container mx-auto px-4 py-6 max-w-7xl">
-      <BlogEditor />
+      <BlogComposer existingCategories={categoriesArray} />
     </div>
   )
 }

@@ -329,14 +329,17 @@
         "search_placeholder": "Search articles...",
         "filter_locale": "Language",
         "filter_category": "Category",
-        "filter_all": "All",
+        "filter_all_languages": "All languages",
+        "filter_all_categories": "All categories",
         "reset_filters": "Reset",
         "showing_results": "Showing {from}–{to} of {total}",
         "no_results": "No articles match your filters.",
         "new_article": "New Article",
         "edit": "Edit",
         "prev_page": "Previous",
-        "next_page": "Next"
+        "next_page": "Next",
+        "dashboard": "Dashboard",
+        "filter_all": "All"
       },
       "editor": {
         "new_post": "New Article",
@@ -370,6 +373,45 @@
           "image_uploaded": "Image uploaded successfully",
           "image_upload_error": "Failed to upload image",
           "cover_uploaded": "Cover image updated successfully"
+        }
+      },
+      "composer": {
+        "breadcrumb_dashboard": "Dashboard",
+        "breadcrumb_posts": "Articles",
+        "new_post": "New Article",
+        "edit_post": "Edit Article",
+        "save": "Save",
+        "saving": "Saving...",
+        "notifications": {
+          "post_updated": "Article updated successfully",
+          "post_created": "Article created successfully",
+          "save_error": "Error saving article",
+          "title_slug_required": "Title and slug are required",
+          "uploading_image": "Uploading image...",
+          "image_inserted": "Image inserted successfully",
+          "image_upload_error": "Error uploading image",
+          "cover_uploaded": "Cover image uploaded successfully",
+          "cover_upload_error": "Error uploading cover image",
+          "invalid_file_title": "Invalid file",
+          "invalid_file_description": "Only image files can be uploaded."
+        },
+        "frontmatter": {
+          "title": "Article Metadata",
+          "field_title": "Title",
+          "title_placeholder": "Title...",
+          "field_description": "Description",
+          "description_placeholder": "SEO summary...",
+          "field_cover_image": "Cover Image",
+          "cover_image_placeholder": "https://...",
+          "field_categories": "Categories",
+          "add_category_placeholder": "Add category...",
+          "create_category": "Create \"{category}\"",
+          "no_categories_found": "No categories found",
+          "field_locale": "Locale",
+          "select_locale_placeholder": "Select locale...",
+          "field_published": "Published",
+          "status_live": "Live",
+          "status_draft": "Draft"
         }
       }
     },
@@ -420,7 +462,7 @@
       "new_post": "New Article",
       "users": "User Management",
       "overview_stats": {
-        "welcome_back": "Welcome back, {name}",
+        "welcome_back": "Welcome back, {name}!",
         "total_articles": "Total Articles",
         "total_articles_desc": "{published} published, {drafts} drafts",
         "published_title": "Published",
@@ -435,6 +477,72 @@
         "content_desc": "Create and manage your articles across multiple languages.",
         "access_title": "Access & Security",
         "access_desc": "Manage roles (Admin, Editor, User) and account permissions."
+      }
+    },
+    "editor": {
+      "writing": "Writing...",
+      "saved_locally": "Saved locally",
+      "placeholder": "Type '/' for commands or start writing your article...",
+      "image_alt_placeholder": "Image description",
+      "show_preview": "Show Preview",
+      "hide_preview": "Hide Preview",
+      "toggle_preview": "Toggle preview panel",
+      "commands": {
+        "text": "Text",
+        "h1": "Heading 1",
+        "h2": "Heading 2",
+        "h3": "Heading 3",
+        "h4": "Heading 4",
+        "h5": "Heading 5",
+        "h6": "Heading 6",
+        "bullet_list": "Bullet List",
+        "ordered_list": "Ordered List",
+        "code_block": "Code",
+        "quote": "Quote",
+        "callout": "Callout",
+        "divider": "Divider",
+        "horizontal_rule": "Divider",
+        "image": "Image",
+        "video": "Video",
+        "table": "Table",
+        "task_list": "Task List",
+        "bold": "Bold",
+        "italic": "Italic",
+        "strike": "Strike",
+        "code": "Code",
+        "underline": "Underline",
+        "undo": "Undo",
+        "redo": "Redo",
+        "clear_format": "Clear Format",
+        "no_commands_found": "No commands found",
+        "youtube_prompt": "YouTube URL:"
+      },
+      "bubble_menu": {
+        "bold": "Bold",
+        "italic": "Italic",
+        "strikethrough": "Strikethrough",
+        "inline_code": "Inline Code",
+        "highlight": "Highlight",
+        "add_link": "Add Link",
+        "insert_link": "Insert Link",
+        "link_description": "Enter the hyperlink URL. Leave blank to remove current link.",
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "callout": {
+        "title": "Title",
+        "type": {
+          "tip": "Tip",
+          "info": "Info",
+          "pencil": "Pencil",
+          "quote": "Quote",
+          "warning": "Warning",
+          "failure": "Failure",
+          "danger": "Danger",
+          "success": "Success",
+          "bug": "Bug",
+          "example": "Example"
+        }
       }
     },
     "hero": {

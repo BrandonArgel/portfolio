@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { db } from '@/db'
-import { session, user } from '@/db/schema'
+import { sessions, users } from '@/db/schema'
 import { ActionError, adminActionClient } from '@/lib/safe-action'
 
 const updateUserRoleSchema = z.object({
@@ -19,8 +19,8 @@ export const updateUserRoleAction = adminActionClient
 
     try {
       // Find the target user in the database
-      const targetUser = await db.query.user.findFirst({
-        where: eq(user.id, userId),
+      const targetUser = await db.query.users.findFirst({
+        where: eq(users.id, userId),
       })
 
       if (!targetUser) {
@@ -40,12 +40,12 @@ export const updateUserRoleAction = adminActionClient
 
       // Update user role in Drizzle database
       await db
-        .update(user)
+        .update(users)
         .set({
           role: newRole,
           updatedAt: new Date(),
         })
-        .where(eq(user.id, userId))
+        .where(eq(users.id, userId))
 
       // Revalidate user management dashboard
       revalidatePath('/dashboard/users')
@@ -86,8 +86,8 @@ export const banUserAction = adminActionClient
         throw new ActionError('Action Not Allowed', 'You cannot ban your own account.')
       }
 
-      const targetUser = await db.query.user.findFirst({
-        where: eq(user.id, userId),
+      const targetUser = await db.query.users.findFirst({
+        where: eq(users.id, userId),
       })
 
       if (!targetUser) {
@@ -104,17 +104,17 @@ export const banUserAction = adminActionClient
 
       // Update user status to banned
       await db
-        .update(user)
+        .update(users)
         .set({
           banned: true,
           banReason: reason.trim(),
           banExpires,
           updatedAt: new Date(),
         })
-        .where(eq(user.id, userId))
+        .where(eq(users.id, userId))
 
       // Terminate all active sessions for the banned user immediately
-      await db.delete(session).where(eq(session.userId, userId))
+      await db.delete(sessions).where(eq(sessions.userId, userId))
 
       revalidatePath('/dashboard/users')
       revalidatePath('/dashboard')
@@ -147,8 +147,8 @@ export const unbanUserAction = adminActionClient
     const { userId } = parsedInput
 
     try {
-      const targetUser = await db.query.user.findFirst({
-        where: eq(user.id, userId),
+      const targetUser = await db.query.users.findFirst({
+        where: eq(users.id, userId),
       })
 
       if (!targetUser) {
@@ -160,14 +160,14 @@ export const unbanUserAction = adminActionClient
 
       // Restore user status to active
       await db
-        .update(user)
+        .update(users)
         .set({
           banned: false,
           banReason: null,
           banExpires: null,
           updatedAt: new Date(),
         })
-        .where(eq(user.id, userId))
+        .where(eq(users.id, userId))
 
       revalidatePath('/dashboard/users')
       revalidatePath('/dashboard')

@@ -25,7 +25,7 @@ export default async function Image({ params }: ImageProps) {
   const isFallback = Boolean(err || !post)
   const title = !isFallback && post ? post.title : 'Engineering Blog & Architecture'
   const authorName = !isFallback && post?.authorName ? post.authorName : siteConfig.author.name
-  const tags = !isFallback && post?.tags?.length ? post.tags.slice(0, 3) : []
+  const categories = !isFallback && post?.categories?.length ? post.categories.slice(0, 3) : []
 
   return new ImageResponse(
     <div
@@ -53,14 +53,14 @@ export default async function Image({ params }: ImageProps) {
 
       {/* Main Title & Tags */}
       <div tw="flex flex-col my-auto max-w-4xl">
-        {tags.length > 0 && (
+        {categories.length > 0 && (
           <div tw="flex items-center mb-6">
-            {tags.map((tag) => (
+            {categories.map((category) => (
               <span
-                key={tag.id}
+                key={category.id}
                 tw="text-sm font-semibold text-blue-400 bg-blue-950/60 border border-blue-800/60 px-3.5 py-1.5 rounded-md mr-3"
               >
-                #{tag.name}
+                #{category.name}
               </span>
             ))}
           </div>
