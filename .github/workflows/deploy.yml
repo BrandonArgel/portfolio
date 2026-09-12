@@ -37,6 +37,9 @@ jobs:
       - name: Run Drizzle Database Migrations
         run: bun run db:migrate
 
+      - name: Run Database Seed
+        run: bun run db:seed
+
       - name: Install Vercel CLI
         run: bun install -g vercel
 
