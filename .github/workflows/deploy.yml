@@ -1,0 +1,59 @@
+name: Production & Staging Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+
+jobs:
+  migrate-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install Dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Set Environment Context
+        id: env-context
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "DATABASE_URL=${{ secrets.TURSO_DATABASE_URL_PROD }}" >> $GITHUB_ENV
+            echo "DATABASE_AUTH_TOKEN=${{ secrets.TURSO_AUTH_TOKEN_PROD }}" >> $GITHUB_ENV
+            echo "VERCEL_ENV=production" >> $GITHUB_ENV
+            echo "VERCEL_FLAGS=--prod" >> $GITHUB_ENV
+          else
+            echo "DATABASE_URL=${{ secrets.TURSO_DATABASE_URL_PREVIEW }}" >> $GITHUB_ENV
+            echo "DATABASE_AUTH_TOKEN=${{ secrets.TURSO_AUTH_TOKEN_PREVIEW }}" >> $GITHUB_ENV
+            echo "VERCEL_ENV=preview" >> $GITHUB_ENV
+            echo "VERCEL_FLAGS=" >> $GITHUB_ENV
+          fi
+
+      - name: Run Drizzle Database Migrations
+        run: bun run db:migrate
+
+      - name: Install Vercel CLI
+        run: bun install -g vercel
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=$VERCEL_ENV --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Build Project Artifacts
+        run: vercel build $VERCEL_FLAGS --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Deploy to Vercel
+        run: vercel deploy --prebuilt $VERCEL_FLAGS --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}

@@ -6,7 +6,9 @@
       "sign_in": "Sign In",
       "sign_up": "Sign Up",
       "sign_out": "Sign Out",
-      "learn_more": "Learn more"
+      "learn_more": "Learn more",
+      "toggle_bubble_item": "Toggle {value}",
+      "delete": "Delete"
     },
     "placeholders": {
       "email": "user@domain.com",
@@ -480,6 +482,7 @@
       }
     },
     "editor": {
+      "title": "Editor",
       "writing": "Writing...",
       "saved_locally": "Saved locally",
       "placeholder": "Type '/' for commands or start writing your article...",
@@ -523,7 +526,7 @@
         "strikethrough": "Strikethrough",
         "inline_code": "Inline Code",
         "highlight": "Highlight",
-        "add_link": "Add Link",
+        "link": "Link",
         "insert_link": "Insert Link",
         "link_description": "Enter the hyperlink URL. Leave blank to remove current link.",
         "cancel": "Cancel",

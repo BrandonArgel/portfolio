@@ -2,22 +2,14 @@ import { useCallback, useRef } from 'react'
 
 import { useIsomorphicLayoutEffect } from './use-isomorphic-layout-effect'
 
-export function useEventCallback<Args extends unknown[], R>(
-  fn: (...args: Args) => R,
-): (...args: Args) => R
-export function useEventCallback<Args extends unknown[], R>(
-  fn: ((...args: Args) => R) | undefined,
-): ((...args: Args) => R) | undefined
-export function useEventCallback<Args extends unknown[], R>(
-  fn: ((...args: Args) => R) | undefined,
-): ((...args: Args) => R) | undefined {
-  const ref = useRef<typeof fn>(() => {
-    throw new Error('Cannot call an event handler while rendering.')
-  })
+export function useEventCallback<Args extends unknown[], Return>(
+  callback: (...args: Args) => Return,
+): (...args: Args) => Return {
+  const callbackRef = useRef(callback)
 
   useIsomorphicLayoutEffect(() => {
-    ref.current = fn
-  }, [fn])
+    callbackRef.current = callback
+  }, [callback])
 
-  return useCallback((...args: Args) => ref.current?.(...args), [ref]) as (...args: Args) => R
+  return useCallback((...args: Args) => callbackRef.current(...args), [])
 }

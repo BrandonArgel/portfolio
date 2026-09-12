@@ -1,6 +1,6 @@
 import { Extension } from '@tiptap/core'
 import { ReactRenderer } from '@tiptap/react'
-import Suggestion from '@tiptap/suggestion'
+import Suggestion, { type SuggestionKeyDownProps, type SuggestionProps } from '@tiptap/suggestion'
 import {
   Code,
   Heading1,
@@ -19,9 +19,10 @@ import {
   Type,
   Video,
 } from 'lucide-react'
-import tippy from 'tippy.js'
+import tippy, { type Instance as TippyInstance } from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
-import { SlashMenuList } from '../components/slash-menu-list'
+import { type SlashMenuItem, SlashMenuList } from '../components/slash-menu-list'
+import { createCalloutContent } from '../config/callout'
 
 export const SlashCommand = Extension.create({
   name: 'slashCommand',
@@ -64,122 +65,121 @@ export const SlashCommand = Extension.create({
         items: ({ query }) => {
           const dict = this.options.dictionary
 
-          // La lista se construye de forma local
-          const items = [
+          const items: SlashMenuItem[] = [
             {
               title: dict.text,
               icon: <Type className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).setNode('paragraph').run()
               },
             },
             {
               title: dict.h1,
               icon: <Heading1 className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).setNode('heading', { level: 1 }).run()
               },
             },
             {
               title: dict.h2,
               icon: <Heading2 className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).setNode('heading', { level: 2 }).run()
               },
             },
             {
               title: dict.h3,
               icon: <Heading3 className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).setNode('heading', { level: 3 }).run()
               },
             },
             {
               title: dict.h4,
               icon: <Heading4 className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).setNode('heading', { level: 4 }).run()
               },
             },
             {
               title: dict.h5,
               icon: <Heading5 className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).setNode('heading', { level: 5 }).run()
               },
             },
             {
               title: dict.h6,
               icon: <Heading6 className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).setNode('heading', { level: 6 }).run()
               },
             },
             {
               title: dict.bulletList,
               icon: <List className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).toggleBulletList().run()
               },
             },
             {
               title: dict.orderedList,
               icon: <ListOrdered className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).toggleOrderedList().run()
               },
             },
             {
               title: dict.taskList,
               icon: <List className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).toggleTaskList().run()
               },
             },
             {
               title: dict.codeBlock,
               icon: <Code className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).toggleCodeBlock().run()
               },
             },
             {
               title: dict.quote,
               icon: <Quote className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).toggleBlockquote().run()
               },
             },
             {
               title: dict.callout,
               icon: <Info className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor
                   .chain()
                   .focus()
                   .deleteRange(range)
-                  .insertContent({ type: 'callout', attrs: { type: 'info' } })
+                  .insertContent(createCalloutContent())
                   .run()
               },
             },
             {
               title: dict.divider,
               icon: <Minus className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).setHorizontalRule().run()
               },
             },
             {
               title: dict.image,
               icon: <Image className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).setNode('image').run()
               },
             },
             {
               title: dict.video,
               icon: <Video className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 const url = prompt(dict.youtubePrompt || 'YouTube URL:')
                 if (url) {
                   editor.chain().focus().deleteRange(range).setYoutubeVideo({ src: url }).run()
@@ -189,7 +189,7 @@ export const SlashCommand = Extension.create({
             {
               title: dict.table,
               icon: <Table className="size-4" />,
-              command: ({ editor, range }: any) => {
+              command: ({ editor, range }) => {
                 editor
                   .chain()
                   .focus()
@@ -202,15 +202,15 @@ export const SlashCommand = Extension.create({
 
           return items.filter((item) => item.title.toLowerCase().includes(query.toLowerCase()))
         },
-        command: ({ editor, range, props }: any) => {
+        command: ({ editor, range, props }) => {
           props.command({ editor, range })
         },
         render: () => {
           let component: ReactRenderer<any>
-          let popup: any
+          let popup: TippyInstance | undefined
 
           return {
-            onStart: (props: any) => {
+            onStart: (props: SuggestionProps) => {
               component = new ReactRenderer(SlashMenuList, {
                 props: { ...props, emptyText: this.options.dictionary.emptyText },
                 editor: props.editor,
@@ -221,7 +221,7 @@ export const SlashCommand = Extension.create({
               const dummyElement = document.createElement('div')
 
               popup = tippy(dummyElement, {
-                getReferenceClientRect: props.clientRect,
+                getReferenceClientRect: props.clientRect as () => DOMRect,
                 appendTo: () => document.body,
                 content: component.element,
                 showOnCreate: true,
@@ -234,19 +234,19 @@ export const SlashCommand = Extension.create({
                 theme: 'notion',
               })
             },
-            onUpdate: (props: any) => {
+            onUpdate: (props: SuggestionProps) => {
               component.updateProps({ ...props, emptyText: this.options.dictionary.emptyText })
               if (!props.clientRect) return
               popup?.setProps({
-                getReferenceClientRect: props.clientRect,
+                getReferenceClientRect: props.clientRect as () => DOMRect,
               })
             },
-            onKeyDown: (props: any) => {
+            onKeyDown: (props: SuggestionKeyDownProps) => {
               if (props.event.key === 'Escape') {
                 popup?.hide()
                 return true
               }
-              return component.ref?.onKeyDown(props)
+              return component.ref?.onKeyDown(props) || false
             },
             onExit: () => {
               popup?.destroy()

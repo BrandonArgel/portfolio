@@ -1,31 +1,68 @@
 import { mergeAttributes, Node, textblockTypeInputRule } from '@tiptap/core'
-import { TextSelection } from '@tiptap/pm/state'
 import { ReactNodeViewRenderer } from '@tiptap/react'
+
 import { CalloutComponent } from '../components/callout'
+import { DEFAULT_CALLOUT_TYPE, isCalloutType } from '../config/callout'
 import { MDX_REGEX } from '../config/regex'
 
 export const CalloutNode = Node.create({
   name: 'callout',
+
   group: 'block',
-  content: 'inline*',
+  content: 'block+',
+
   defining: true,
   isolating: true,
 
   addAttributes() {
     return {
-      type: { default: 'info' },
-      title: { default: 'INFO' },
+      type: {
+        default: DEFAULT_CALLOUT_TYPE,
+
+        parseHTML: (element) => element.getAttribute('data-callout-type') ?? DEFAULT_CALLOUT_TYPE,
+
+        renderHTML: (attributes) => ({
+          'data-callout-type': attributes.type,
+        }),
+      },
+
+      title: {
+        default: 'INFO',
+
+        parseHTML: (element) => element.getAttribute('data-callout-title') ?? 'INFO',
+
+        renderHTML: (attributes) => ({
+          'data-callout-title': attributes.title,
+        }),
+      },
     }
   },
 
   parseHTML() {
-    return [{ tag: 'div[data-type="callout"]' }]
+    return [
+      {
+        tag: 'div[data-type="callout"]',
+      },
+    ]
   },
+
   renderHTML({ HTMLAttributes }) {
-    return ['div', mergeAttributes(HTMLAttributes, { 'data-type': 'callout' }), 0]
+    return [
+      'div',
+      mergeAttributes(
+        {
+          'data-type': 'callout',
+        },
+        HTMLAttributes,
+      ),
+      0,
+    ]
   },
+
   addNodeView() {
-    return ReactNodeViewRenderer(CalloutComponent)
+    return ReactNodeViewRenderer(CalloutComponent, {
+      selectedOnTextSelection: true,
+    })
   },
 
   addInputRules() {
@@ -33,151 +70,177 @@ export const CalloutNode = Node.create({
       textblockTypeInputRule({
         find: MDX_REGEX.calloutPrefix,
         type: this.type,
-        getAttributes: (match: any) => {
+
+        getAttributes: (match) => {
           const type = match[1].toLowerCase()
+
+          if (!isCalloutType(type)) {
+            return {
+              type: DEFAULT_CALLOUT_TYPE,
+              title: 'INFO',
+            }
+          }
+
           return {
-            type: type,
+            type,
             title: type.toUpperCase(),
           }
         },
       }),
     ]
   },
+
+  markdownTokenizer: {
+    name: 'callout',
+    level: 'block',
+
+    start: (src) => src.indexOf(':::'),
+
+    tokenize: (src, _tokens, lexer) => {
+      const match = /^:::(\w+)(?:\s+([^\n]*))?\n([\s\S]*?)\n:::\n?/.exec(src)
+
+      if (!match) {
+        return undefined
+      }
+
+      const type = match[1].toLowerCase()
+
+      if (!isCalloutType(type)) {
+        return undefined
+      }
+
+      const title = match[2]?.trim() || type.toUpperCase()
+      const text = match[3]
+
+      return {
+        type: 'callout',
+        raw: match[0],
+        calloutType: type,
+        calloutTitle: title,
+        text,
+        tokens: lexer.blockTokens(text),
+      }
+    },
+  },
+
+  parseMarkdown: (token, helpers) => {
+    const type =
+      typeof token.calloutType === 'string' && isCalloutType(token.calloutType)
+        ? token.calloutType
+        : DEFAULT_CALLOUT_TYPE
+
+    const title =
+      typeof token.calloutTitle === 'string' && token.calloutTitle.trim()
+        ? token.calloutTitle.trim()
+        : type.toUpperCase()
+
+    const content = helpers.parseChildren(token.tokens ?? [])
+
+    return {
+      type: 'callout',
+      attrs: {
+        type,
+        title,
+      },
+      content:
+        content.length > 0
+          ? content
+          : [
+              {
+                type: 'paragraph',
+              },
+            ],
+    }
+  },
+
+  renderMarkdown: (node, helpers) => {
+    const type =
+      typeof node.attrs?.type === 'string' && isCalloutType(node.attrs.type)
+        ? node.attrs.type
+        : DEFAULT_CALLOUT_TYPE
+
+    const title =
+      typeof node.attrs?.title === 'string' && node.attrs.title.trim()
+        ? node.attrs.title.trim()
+        : type.toUpperCase()
+
+    const content = helpers.renderChildren(node.content ?? []).trim()
+
+    return [`:::${type} ${title}`, content, ':::', ''].join('\n')
+  },
+
   addKeyboardShortcuts() {
     return {
       ArrowUp: ({ editor }) => {
-        if (!editor.isActive('callout')) return false
-
-        if (editor.view.endOfTextblock('up')) {
-          const { $head } = editor.state.selection
-          const calloutPos = $head.before($head.depth)
-          const dom = editor.view.nodeDOM(calloutPos) as HTMLElement
-          if (dom) {
-            const input = dom.querySelector('input')
-            if (input) {
-              editor.commands.blur()
-              setTimeout(() => input.focus(), 10)
-              return true
-            }
-          }
-        }
-        return false
-      },
-      ArrowLeft: ({ editor }) => {
-        if (!editor.isActive('callout')) return false
-        const { $head, empty } = editor.state.selection
-        if (!empty) return false
-
-        const calloutPos = $head.before($head.depth)
-        if ($head.pos === calloutPos + 1) {
-          const dom = editor.view.nodeDOM(calloutPos) as HTMLElement
-          if (dom) {
-            const input = dom.querySelector('input')
-            if (input) {
-              editor.commands.blur()
-              setTimeout(() => input.focus(), 10)
-              return true
-            }
-          }
-        }
-        return false
-      },
-      ArrowDown: ({ editor }) => {
-        if (editor.view.endOfTextblock('down')) {
-          const { $head } = editor.state.selection
-          const nextNodePos = $head.after($head.depth)
-          const nextNode = editor.state.doc.nodeAt(nextNodePos)
-
-          if (nextNode && nextNode.type.name === 'callout') {
-            const dom = editor.view.nodeDOM(nextNodePos) as HTMLElement
-            if (dom) {
-              const input = dom.querySelector('input')
-              if (input) {
-                editor.commands.blur()
-                setTimeout(() => input.focus(), 10)
-                return true
-              }
-            }
-          }
-        }
-        return false
-      },
-      ArrowRight: ({ editor }) => {
-        if (editor.view.endOfTextblock('right') || editor.view.endOfTextblock('forward')) {
-          const { $head } = editor.state.selection
-          const nextNodePos = $head.after($head.depth)
-          const nextNode = editor.state.doc.nodeAt(nextNodePos)
-
-          if (nextNode && nextNode.type.name === 'callout') {
-            const dom = editor.view.nodeDOM(nextNodePos) as HTMLElement
-            if (dom) {
-              const input = dom.querySelector('input')
-              if (input) {
-                editor.commands.blur()
-                setTimeout(() => input.focus(), 10)
-                return true
-              }
-            }
-          }
-        }
-        return false
-      },
-      Tab: ({ editor }) => {
-        const { $head } = editor.state.selection
-
-        const nextNodePos = $head.after($head.depth)
-        const nextNode = editor.state.doc.nodeAt(nextNodePos)
-
-        if (nextNode && nextNode.type.name === 'callout') {
-          const dom = editor.view.nodeDOM(nextNodePos) as HTMLElement
-          if (dom) {
-            const input = dom.querySelector('input')
-            if (input) {
-              editor.commands.blur()
-              setTimeout(() => input.focus(), 10)
-              return true
-            }
-          }
+        if (!editor.isActive('callout')) {
+          return false
         }
 
-        return false
-      },
-      'Shift-Tab': ({ editor }) => {
-        if (editor.isActive('callout')) {
-          const { $head } = editor.state.selection
-          const calloutPos = $head.before($head.depth)
-          const dom = editor.view.nodeDOM(calloutPos) as HTMLElement
-
-          if (dom) {
-            const input = dom.querySelector('input')
-            if (input) {
-              editor.commands.blur()
-              setTimeout(() => input.focus(), 10)
-              return true
-            }
-          }
+        if (!editor.view.endOfTextblock('up')) {
           return false
         }
 
         const { $head } = editor.state.selection
+        const calloutPos = $head.before($head.depth)
+        const dom = editor.view.nodeDOM(calloutPos)
 
-        const posBeforeBlock = $head.before($head.depth)
-
-        const tr = editor.state.tr
-        const resolvedPos = tr.doc.resolve(posBeforeBlock)
-
-        const prevSelection = TextSelection.findFrom(resolvedPos, -1, true)
-
-        if (prevSelection) {
-          const parent = tr.doc.resolve(prevSelection.from).parent
-          if (parent.type.name === 'callout') {
-            editor.view.dispatch(tr.setSelection(prevSelection))
-            editor.view.focus()
-            return true
-          }
+        if (!(dom instanceof HTMLElement)) {
+          return false
         }
 
-        return false
+        const input = dom.querySelector<HTMLInputElement>('input')
+
+        if (!input) {
+          return false
+        }
+
+        editor.commands.blur()
+
+        requestAnimationFrame(() => {
+          input.focus()
+          input.setSelectionRange(input.value.length, input.value.length)
+        })
+
+        return true
+      },
+
+      ArrowLeft: ({ editor }) => {
+        if (!editor.isActive('callout')) {
+          return false
+        }
+
+        const { $head, empty } = editor.state.selection
+
+        if (!empty) {
+          return false
+        }
+
+        const calloutPos = $head.before($head.depth)
+
+        if ($head.pos !== calloutPos + 1) {
+          return false
+        }
+
+        const dom = editor.view.nodeDOM(calloutPos)
+
+        if (!(dom instanceof HTMLElement)) {
+          return false
+        }
+
+        const input = dom.querySelector<HTMLInputElement>('input')
+
+        if (!input) {
+          return false
+        }
+
+        editor.commands.blur()
+
+        requestAnimationFrame(() => {
+          input.focus()
+          input.setSelectionRange(0, 0)
+        })
+
+        return true
       },
     }
   },

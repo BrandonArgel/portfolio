@@ -5,7 +5,7 @@ export const serverEnv = createEnv({
   server: {
     // Turso Database
     DATABASE_URL: z.url(),
-    DATABASE_AUTH_TOKEN: z.string().min(1, 'Turso token is required'),
+    DATABASE_AUTH_TOKEN: z.string().optional(),
 
     // Better Auth Configuration
     BETTER_AUTH_SECRET: z.string().min(1, 'The auth secret is required'),
@@ -31,6 +31,11 @@ export const serverEnv = createEnv({
 
     // AI
     GOOGLE_GENERATIVE_AI_API_KEY: z.string().min(1),
+
+    // BLOB storage
+    BLOB_READ_WRITE_TOKEN: z.string().min(1, 'BLOB token is required'),
+    BLOB_STORE_ID: z.string().optional(),
+    BLOB_WEBHOOK_PUBLIC_KEY: z.string().optional(),
 
     // Injected env variables
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),

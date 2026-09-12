@@ -1,13 +1,20 @@
+import type { Editor, Range } from '@tiptap/core'
 import { type Ref, useCallback, useEffect, useImperativeHandle, useState } from 'react'
 import { cn } from '@/lib/utils'
+
+export interface SlashMenuItem {
+  title: string
+  icon: React.ReactNode
+  command: (props: { editor: Editor; range: Range }) => void
+}
 
 interface SlashMenuListRef {
   onKeyDown: (args: { event: KeyboardEvent }) => boolean
 }
 
 interface SlashMenuListProps {
-  items: any[]
-  command: (item: any) => void
+  items: SlashMenuItem[]
+  command: (item: SlashMenuItem) => void
   emptyText: string
   ref?: Ref<SlashMenuListRef>
 }
