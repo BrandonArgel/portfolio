@@ -1,1 +1,0 @@
-ALTER TABLE `posts` ADD `description` text DEFAULT '' NOT NULL;

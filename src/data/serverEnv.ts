@@ -4,7 +4,7 @@ import { z } from 'zod'
 export const serverEnv = createEnv({
   server: {
     // Turso Database
-    DATABASE_URL: z.url(),
+    DATABASE_URL: z.url().min(1, 'The database URL is required'),
     DATABASE_AUTH_TOKEN: z.string().optional(),
 
     // Better Auth Configuration
