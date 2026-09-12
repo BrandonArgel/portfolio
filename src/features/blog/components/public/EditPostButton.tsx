@@ -26,7 +26,7 @@ export async function EditPostButton({ authorId, slug, className }: EditPostButt
 
   return (
     <LinkButton
-      href={`/dashboard/blog/${slug}/edit`}
+      href={`/dashboard/posts/${slug}/edit`}
       variant="outline"
       size="sm"
       className={cn('gap-1.5 text-xs font-medium border-border hover:bg-muted', className)}

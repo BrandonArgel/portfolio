@@ -1,6 +1,7 @@
-import Gapcursor from '@tiptap/extension-gapcursor'
+'use client'
+
+import type { Editor } from '@tiptap/core'
 import Highlight from '@tiptap/extension-highlight'
-import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Table } from '@tiptap/extension-table'
 import TableCell from '@tiptap/extension-table-cell'
@@ -8,13 +9,15 @@ import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import TaskList from '@tiptap/extension-task-list'
 import Youtube from '@tiptap/extension-youtube'
+import { Markdown } from '@tiptap/markdown'
 import { useEditor as useTiptapEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { useTranslations } from 'next-intl'
-import { useState, useTransition } from 'react'
-import { Markdown } from 'tiptap-markdown'
-import { useDebounceCallback } from '@/hooks/use-debounced-callback'
+import { useCallback, useMemo, useRef } from 'react'
+
+import { useDebouncedCallback } from '@/hooks/use-debounced-callback'
 import { cn } from '@/lib/utils'
+
 import { CalloutNode } from '../extensions/callout-node'
 import { ImageNode } from '../extensions/image-node'
 import { SlashCommand } from '../extensions/slash-command'
@@ -24,46 +27,81 @@ interface UseBlogEditorProps {
   initialContent?: string
   onChange?: (content: string) => void
   onImageUpload?: (file: File) => Promise<string | undefined>
+  onSavingChange?: (isSaving: boolean) => void
 }
 
-export function useEditor({ initialContent = '', onChange, onImageUpload }: UseBlogEditorProps) {
+export function useEditor({
+  initialContent = '',
+  onChange,
+  onImageUpload,
+  onSavingChange,
+}: UseBlogEditorProps) {
   const t = useTranslations('features.editor')
-  const [saveStatus, setSaveStatus] = useState<boolean>(true)
-  const [isPending, startTransition] = useTransition()
 
-  const debouncedUpdates = useDebounceCallback((editorInstance: any) => {
-    const markdown = editorInstance.storage.markdown?.getMarkdown() || ''
-    startTransition(() => {
-      onChange?.(markdown)
-      setSaveStatus(true)
-    })
-  }, 500)
+  const onChangeRef = useRef(onChange)
+  const onImageUploadRef = useRef(onImageUpload)
+  const onSavingChangeRef = useRef(onSavingChange)
 
-  const editor = useTiptapEditor({
-    extensions: [
+  onChangeRef.current = onChange
+  onImageUploadRef.current = onImageUpload
+  onSavingChangeRef.current = onSavingChange
+
+  const editorRef = useRef<Editor | null>(null)
+
+  const isSavingRef = useRef(false)
+
+  const setSaving = useCallback((value: boolean) => {
+    if (isSavingRef.current === value) return
+
+    isSavingRef.current = value
+    onSavingChangeRef.current?.(value)
+  }, [])
+
+  const debouncedUpdates = useDebouncedCallback(
+    useCallback(
+      (editor: Editor) => {
+        const markdown = editor.getMarkdown()
+
+        queueMicrotask(() => {
+          onChangeRef.current?.(markdown)
+          setSaving(false)
+        })
+      },
+      [setSaving],
+    ),
+    500,
+  )
+
+  const extensions = useMemo(
+    () => [
       StarterKit.configure({
-        heading: { HTMLAttributes: { class: 'font-bold font-heading' } },
+        heading: {
+          HTMLAttributes: {
+            class: 'font-bold font-heading',
+          },
+        },
         codeBlock: {
           HTMLAttributes: {
             class: 'rounded-md bg-code-bg border border-code-border p-5 font-mono',
           },
         },
+        link: {
+          openOnClick: false,
+          HTMLAttributes: {
+            class:
+              'text-primary underline underline-offset-4 cursor-pointer font-medium transition-colors hover:text-primary/80',
+          },
+        },
       }),
-      CalloutNode,
-      Gapcursor,
       Highlight.configure({
         HTMLAttributes: {
           class: 'bg-primary/20 text-primary rounded-sm px-1',
         },
       }),
-      Link.configure({
-        openOnClick: false,
-        HTMLAttributes: {
-          class:
-            'text-primary underline underline-offset-4 cursor-pointer font-medium transition-colors hover:text-primary/80',
-        },
+      Placeholder.configure({
+        placeholder: t('placeholder'),
+        showOnlyCurrent: true,
       }),
-      Placeholder.configure({ placeholder: t('placeholder'), showOnlyCurrent: true }),
       SlashCommand.configure({
         dictionary: {
           emptyText: t('commands.no_commands_found'),
@@ -87,6 +125,7 @@ export function useEditor({ initialContent = '', onChange, onImageUpload }: UseB
           table: t('commands.table'),
         },
       }),
+      CalloutNode,
       ImageNode,
       Markdown,
       TaskList.configure({
@@ -97,7 +136,9 @@ export function useEditor({ initialContent = '', onChange, onImageUpload }: UseB
       TaskItemNode.configure({
         nested: false,
       }),
-      Table.configure({ resizable: true }),
+      Table.configure({
+        resizable: true,
+      }),
       TableRow,
       TableHeader,
       TableCell,
@@ -108,8 +149,11 @@ export function useEditor({ initialContent = '', onChange, onImageUpload }: UseB
         },
       }),
     ],
-    content: initialContent,
-    editorProps: {
+    [t],
+  )
+
+  const editorProps = useMemo(
+    () => ({
       attributes: {
         class: cn(
           'typeset typeset-docs prose-neutral dark:prose-invert',
@@ -120,42 +164,79 @@ export function useEditor({ initialContent = '', onChange, onImageUpload }: UseB
         autocorrect: 'off',
         autocapitalize: 'off',
       },
-      handlePaste: (_, event) => {
+
+      handlePaste: (_view: unknown, event: ClipboardEvent) => {
         const items = event.clipboardData?.items
-        if (!items || !onImageUpload) return false
+        const upload = onImageUploadRef.current
+
+        if (!items || !upload) {
+          return false
+        }
 
         for (const item of items) {
-          if (item.type.indexOf('image') === 0) {
-            event.preventDefault()
-            const file = item.getAsFile()
+          if (!item.type.startsWith('image/')) {
+            continue
+          }
 
-            if (file) {
-              onImageUpload(file).then((url) => {
-                if (url && editor) {
-                  editor
-                    .chain()
-                    .focus()
-                    .insertContent({
-                      type: 'image',
-                      attrs: { src: url, alt: t('image_alt_placeholder') },
-                    })
-                    .run()
-                }
-              })
-            }
+          event.preventDefault()
+
+          const file = item.getAsFile()
+
+          if (!file) {
             return true
           }
+
+          upload(file).then((url) => {
+            if (!url) {
+              return
+            }
+
+            const editor = editorRef.current
+
+            if (!editor) {
+              return
+            }
+
+            editor
+              .chain()
+              .focus()
+              .insertContent({
+                type: 'image',
+                attrs: {
+                  src: url,
+                  alt: t('image_alt_placeholder'),
+                },
+              })
+              .run()
+          })
+
+          return true
         }
+
         return false
       },
+    }),
+    [t],
+  )
+
+  const editor = useTiptapEditor({
+    content: initialContent,
+    contentType: 'markdown',
+    editorProps,
+    extensions,
+    immediatelyRender: false,
+    shouldRerenderOnTransaction: false,
+    onCreate: ({ editor }) => {
+      editorRef.current = editor
+    },
+    onDestroy: () => {
+      editorRef.current = null
     },
     onUpdate: ({ editor }) => {
-      setSaveStatus(false)
+      setSaving(true)
       debouncedUpdates(editor)
     },
   })
 
-  const isSaving = !saveStatus || isPending
-
-  return { editor, isSaving }
+  return editor
 }

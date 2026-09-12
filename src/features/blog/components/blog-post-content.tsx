@@ -1,4 +1,3 @@
-// src/features/blog/components/blog-post-content.tsx
 import { ArrowLeft, Calendar, Clock, User } from 'lucide-react'
 import Image from 'next/image'
 import { getFormatter, getTranslations } from 'next-intl/server'
@@ -33,7 +32,6 @@ export async function BlogPostContent({ post, action }: BlogPostContentProps) {
       </div>
 
       <header className="mb-10 flex flex-col items-start gap-6 border-b border-border pb-10">
-        {/* ✨ CAMBIO: Ahora iteramos sobre categories en lugar de tags */}
         {post.categories && post.categories.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {post.categories.map((category) => (

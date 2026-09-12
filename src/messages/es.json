@@ -6,7 +6,9 @@
       "sign_in": "Iniciar Sesión",
       "sign_up": "Registrarse",
       "sign_out": "Cerrar Sesión",
-      "learn_more": "Más información"
+      "learn_more": "Más información",
+      "toggle_bubble_item": "Alternar {value}",
+      "delete": "Eliminar"
     },
     "placeholders": {
       "email": "usuario@dominio.com",
@@ -480,6 +482,7 @@
       }
     },
     "editor": {
+      "title": "Editor",
       "writing": "Escribiendo...",
       "saved_locally": "Guardado localmente",
       "placeholder": "Escribe '/' para comandos o comienza a escribir tu artículo...",
@@ -523,7 +526,7 @@
         "strikethrough": "Tachado",
         "inline_code": "Código en línea",
         "highlight": "Resaltar",
-        "add_link": "Añadir enlace",
+        "link": "Enlace",
         "insert_link": "Insertar enlace",
         "link_description": "Escribe la URL del hipervínculo. Deja el campo vacío para quitar el enlace actual.",
         "cancel": "Cancelar",

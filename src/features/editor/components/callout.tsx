@@ -1,12 +1,32 @@
 import { TextSelection } from '@tiptap/pm/state'
 import { NodeViewContent, type NodeViewProps, NodeViewWrapper } from '@tiptap/react'
-import { AlertTriangle, Bug, Check, Flame, Info, List, Pencil, Quote, X, Zap } from 'lucide-react'
+import {
+  AlertTriangle,
+  Bug,
+  Check,
+  Flame,
+  Info,
+  List,
+  Pencil,
+  Quote,
+  Trash2,
+  X,
+  Zap,
+} from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
+
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
+import { CALLOUT_TYPES, type CalloutType, getCalloutTitle, isCalloutType } from '../config/callout'
 
-const CALLOUT_CONFIG: Record<string, { container: string; icon: React.ReactNode }> = {
+const CALLOUT_CONFIG: Record<
+  CalloutType,
+  {
+    container: string
+    icon: React.ReactNode
+  }
+> = {
   tip: {
     container: 'border-callout-cyan bg-callout-cyan/10 text-callout-cyan-text',
     icon: <Flame className="size-5 text-callout-cyan" />,
@@ -47,143 +67,193 @@ const CALLOUT_CONFIG: Record<string, { container: string; icon: React.ReactNode 
     container: 'border-callout-purple bg-callout-purple/10 text-callout-purple-text',
     icon: <List className="size-5 text-callout-purple" />,
   },
-}
+} as const
 
 export function CalloutComponent(props: NodeViewProps) {
+  const { node, selected, deleteNode, updateAttributes, editor, getPos } = props
   const t = useTranslations('features.editor.callout')
-  const { node, updateAttributes, editor, getPos } = props
-  const [localTitle, setLocalTitle] = useState(node.attrs.title || '')
-  const inputRef = useRef<HTMLInputElement>(null)
-  const contentRef = useRef<HTMLDivElement>(null)
+  const tActions = useTranslations('common.actions')
 
-  const currentType = node.attrs.type
-  const config = CALLOUT_CONFIG[currentType] || CALLOUT_CONFIG.info
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const [localTitle, setLocalTitle] = useState(
+    typeof node.attrs.title === 'string' ? node.attrs.title : '',
+  )
+
+  const rawType = typeof node.attrs.type === 'string' ? node.attrs.type : 'info'
+
+  const currentType = isCalloutType(rawType) ? rawType : 'info'
+
+  const config = CALLOUT_CONFIG[currentType]
 
   useEffect(() => {
-    setLocalTitle(node.attrs.title || '')
+    setLocalTitle(typeof node.attrs.title === 'string' ? node.attrs.title : '')
   }, [node.attrs.title])
 
-  const changeType = (newType: string) => {
-    if (!localTitle || localTitle.trim() === '') {
-      const defaultTitle = newType.toUpperCase()
-      setLocalTitle(defaultTitle)
-      updateAttributes({ type: newType, title: defaultTitle })
-    } else {
-      updateAttributes({ type: newType })
-    }
-  }
+  const focusBeforeCallout = () => {
+    const pos = getPos()
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVal = e.target.value
-    setLocalTitle(newVal)
-    updateAttributes({ title: newVal })
-  }
-
-  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const isAtStart = inputRef.current?.selectionStart === 0
-    const isAtEnd = inputRef.current?.selectionStart === localTitle.length
-
-    const checkPos = () => {
-      const pos = getPos()
-      if (typeof pos === 'number') {
-        const tr = editor.state.tr
-        const resolvedPos = tr.doc.resolve(pos)
-        const selection = TextSelection.findFrom(resolvedPos, -1, true)
-
-        if (selection) {
-          editor.view.dispatch(tr.setSelection(selection))
-          editor.view.focus()
-        }
-      }
-    }
-
-    if (e.key === 'ArrowLeft' && isAtStart) {
-      e.preventDefault()
-      e.stopPropagation()
-      checkPos()
+    if (typeof pos !== 'number') {
       return
     }
 
-    if (e.key === 'ArrowRight' && isAtEnd) {
-      e.preventDefault()
-      e.stopPropagation()
-      const pos = getPos()
-      if (typeof pos === 'number') {
-        editor.commands.setTextSelection(pos + 1)
-        editor.commands.focus()
-      }
+    const tr = editor.state.tr
+    const resolvedPos = tr.doc.resolve(pos)
+
+    const selection = TextSelection.findFrom(resolvedPos, -1, true)
+
+    if (!selection) {
       return
     }
 
-    const keysToStop = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', ' ', 'Home', 'End']
-    if (keysToStop.includes(e.key)) {
-      e.stopPropagation()
-    }
-    if (e.key === 'Enter' || e.key === 'ArrowDown' || (e.key === 'Tab' && !e.shiftKey)) {
-      e.preventDefault()
-      const pos = getPos()
-      if (typeof pos === 'number') {
-        editor.commands.setTextSelection(pos + 1)
-        editor.commands.focus()
-      }
+    editor.view.dispatch(tr.setSelection(selection))
+
+    editor.view.focus()
+  }
+
+  const _focusAfterCallout = () => {
+    const pos = getPos()
+
+    if (typeof pos !== 'number') {
+      return
     }
 
-    if (e.key === 'ArrowUp' || (e.key === 'Tab' && e.shiftKey)) {
-      e.preventDefault()
-      checkPos()
+    editor
+      .chain()
+      .focus()
+      .setTextSelection(pos + node.nodeSize)
+      .run()
+  }
+
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const title = event.target.value
+
+    setLocalTitle(title)
+
+    updateAttributes({
+      title,
+    })
+  }
+
+  const handleTypeChange = (type: CalloutType) => {
+    const title = localTitle.trim() || getCalloutTitle(type)
+
+    setLocalTitle(title)
+
+    updateAttributes({
+      type,
+      title,
+    })
+  }
+
+  const handleTitleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const input = inputRef.current
+
+    if (!input) return
+
+    const atStart = input.selectionStart === 0
+    const atEnd = input.selectionStart === input.value.length
+
+    if (event.key === 'ArrowLeft' && atStart) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      focusBeforeCallout()
+      return
+    }
+
+    if (
+      (event.key === 'ArrowRight' && atEnd) ||
+      event.key === 'Enter' ||
+      event.key === 'ArrowDown'
+    ) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      // focusFirstBlock()
+      return
+    }
+
+    if (event.key === 'ArrowUp') {
+      event.preventDefault()
+      event.stopPropagation()
+
+      focusBeforeCallout()
     }
   }
 
   return (
-    <NodeViewWrapper className="relative group">
-      <div className="absolute -top-10 right-0 pb-1 hidden group-hover:block z-10 transition-opacity">
-        <div className="flex items-center gap-1 bg-background border border-border shadow-sm rounded-md p-1">
-          {Object.entries(CALLOUT_CONFIG).map(([key, value]) => (
-            <Tooltip key={key}>
-              <TooltipTrigger
-                render={
-                  <button
-                    type="button"
-                    onClick={() => changeType(key)}
-                    className="p-1 hover:bg-muted rounded-sm cursor-pointer"
-                  >
-                    {value.icon}
-                  </button>
-                }
-              />
-              <TooltipContent>{t(`type.${key}`)}</TooltipContent>
-            </Tooltip>
-          ))}
+    <NodeViewWrapper className={cn('group relative rounded-xl')}>
+      {selected && (
+        <button
+          type="button"
+          contentEditable={false}
+          aria-label={tActions('delete')}
+          className="absolute right-2 top-2 z-20 rounded-md p-1.5 hover:bg-destructive/10 hover:text-destructive"
+          onMouseDown={(event) => {
+            event.preventDefault()
+          }}
+          onClick={() => deleteNode()}
+        >
+          <Trash2 className="size-4" />
+        </button>
+      )}
+      <div
+        className="absolute -top-10 right-0 z-10 hidden pb-1 group-hover:block"
+        contentEditable={false}
+      >
+        <div className="flex items-center gap-1 rounded-md border border-border bg-background p-1 shadow-sm">
+          {CALLOUT_TYPES.map((type) => {
+            const value = CALLOUT_CONFIG[type]
+
+            return (
+              <Tooltip key={type}>
+                <TooltipTrigger
+                  render={
+                    <button
+                      type="button"
+                      contentEditable={false}
+                      aria-label={t(`type.${type}`)}
+                      onMouseDown={(event) => {
+                        event.preventDefault()
+                      }}
+                      onClick={() => handleTypeChange(type)}
+                      className="cursor-pointer rounded-sm p-1 hover:bg-muted"
+                    >
+                      {value.icon}
+                    </button>
+                  }
+                />
+
+                <TooltipContent>{t(`type.${type}`)}</TooltipContent>
+              </Tooltip>
+            )
+          })}
         </div>
       </div>
 
       <div
-        ref={contentRef}
         className={cn('not-typeset my-5 flex gap-3 rounded-r-xl border-l-4 p-4', config.container)}
       >
+        <div className="shrink-0 pt-0.5" contentEditable={false} aria-hidden="true">
+          {config.icon}
+        </div>
+
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <span
-              className="shrink-0 text-base leading-none"
-              aria-hidden="true"
-              contentEditable={false}
-            >
-              {config.icon}
-            </span>
-            <div contentEditable={false} className="py-0 w-full">
-              <input
-                ref={inputRef}
-                type="text"
-                tabIndex={-1}
-                value={localTitle}
-                onChange={handleTitleChange}
-                onKeyDown={handleInputKeyDown}
-                className="w-full bg-transparent outline-none border-none p-0 text-[11px] font-bold uppercase tracking-widest opacity-80 placeholder:text-current/50"
-                placeholder={t('title')}
-              />
-            </div>
+          <div className="mb-2 flex items-center" contentEditable={false}>
+            <input
+              ref={inputRef}
+              type="text"
+              value={localTitle}
+              onChange={handleTitleChange}
+              onKeyDown={handleTitleKeyDown}
+              className="w-full border-none bg-transparent p-0 text-[11px] font-bold uppercase tracking-widest opacity-80 outline-none placeholder:text-current/50"
+              placeholder={t('title')}
+              aria-label={t('title')}
+            />
           </div>
-          <NodeViewContent className="m-0 text-sm leading-relaxed sm:text-base outline-none" />
+
+          <NodeViewContent className="space-y-3 outline-none" />
         </div>
       </div>
     </NodeViewWrapper>

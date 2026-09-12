@@ -1,6 +1,6 @@
 'use client'
 
-import { Columns, Eye, EyeOff } from 'lucide-react'
+import { Columns, EyeOff } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type React from 'react'
 import { useState } from 'react'

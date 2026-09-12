@@ -208,13 +208,13 @@
 }
 
 .tippy-box[data-theme~="notion"] {
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .tippy-box[data-theme~="notion"] > .tippy-content {
-  padding: 0 !important;
+  padding: 0;
 }
 
 @layer base {
