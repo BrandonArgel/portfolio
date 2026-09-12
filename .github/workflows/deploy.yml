@@ -35,7 +35,7 @@ jobs:
           fi
 
       - name: Run Drizzle Database Migrations
-        run: npx drizzle-kit migrate --config=drizzle.config.ts
+        run: bun run db:migrate
 
       - name: Install Vercel CLI
         run: bun install -g vercel

@@ -11,7 +11,7 @@
     "i18n:check": "bun run ./src/scripts/check-locales.ts",
     "db:push": "drizzle-kit push --config=drizzle.config.ts",
     "db:generate": "drizzle-kit generate --config=drizzle.config.ts",
-    "db:migrate": "drizzle-kit migrate --config=drizzle.config.ts",
+    "db:migrate": "bun run src/db/migrate.ts",
     "db:studio": "drizzle-kit studio --config=drizzle.config.ts",
     "db:seed": "tsx src/db/seed.ts",
     "prepare": "husky"
