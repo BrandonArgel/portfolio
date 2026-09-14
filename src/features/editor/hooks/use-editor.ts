@@ -12,16 +12,20 @@ import Youtube from '@tiptap/extension-youtube'
 import { Markdown } from '@tiptap/markdown'
 import { useEditor as useTiptapEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+import { common, createLowlight } from 'lowlight'
 import { useTranslations } from 'next-intl'
 import { useCallback, useMemo, useRef } from 'react'
-
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback'
 import { cn } from '@/lib/utils'
 
 import { CalloutNode } from '../extensions/callout-node'
+import { CalloutTitleNode } from '../extensions/callout-title-node'
+import { CodeBlockNode } from '../extensions/code-block-node'
 import { ImageNode } from '../extensions/image-node'
 import { SlashCommand } from '../extensions/slash-command'
 import { TaskItemNode } from '../extensions/task-item-node'
+
+const lowlight = createLowlight(common)
 
 interface UseBlogEditorProps {
   initialContent?: string
@@ -80,17 +84,17 @@ export function useEditor({
             class: 'font-bold font-heading',
           },
         },
-        codeBlock: {
-          HTMLAttributes: {
-            class: 'rounded-md bg-code-bg border border-code-border p-5 font-mono',
-          },
-        },
+        codeBlock: false,
         link: {
           openOnClick: false,
           HTMLAttributes: {
             class:
               'text-primary underline underline-offset-4 cursor-pointer font-medium transition-colors hover:text-primary/80',
           },
+        },
+        dropcursor: {
+          color: 'var(--color-primary)',
+          width: 2,
         },
       }),
       Highlight.configure({
@@ -125,9 +129,22 @@ export function useEditor({
           table: t('commands.table'),
         },
       }),
+      CodeBlockNode.configure({
+        lowlight,
+        defaultLanguage: 'plaintext',
+      }),
       CalloutNode,
-      ImageNode,
-      Markdown,
+      CalloutTitleNode,
+      ImageNode.configure({
+        uploadFn: async (file: File) => {
+          return onImageUploadRef.current?.(file)
+        },
+      }),
+      Markdown.configure({
+        markedOptions: {
+          gfm: true,
+        },
+      }),
       TaskList.configure({
         HTMLAttributes: {
           class: 'list-none p-0 m-0',
@@ -164,59 +181,8 @@ export function useEditor({
         autocorrect: 'off',
         autocapitalize: 'off',
       },
-
-      handlePaste: (_view: unknown, event: ClipboardEvent) => {
-        const items = event.clipboardData?.items
-        const upload = onImageUploadRef.current
-
-        if (!items || !upload) {
-          return false
-        }
-
-        for (const item of items) {
-          if (!item.type.startsWith('image/')) {
-            continue
-          }
-
-          event.preventDefault()
-
-          const file = item.getAsFile()
-
-          if (!file) {
-            return true
-          }
-
-          upload(file).then((url) => {
-            if (!url) {
-              return
-            }
-
-            const editor = editorRef.current
-
-            if (!editor) {
-              return
-            }
-
-            editor
-              .chain()
-              .focus()
-              .insertContent({
-                type: 'image',
-                attrs: {
-                  src: url,
-                  alt: t('image_alt_placeholder'),
-                },
-              })
-              .run()
-          })
-
-          return true
-        }
-
-        return false
-      },
     }),
-    [t],
+    [],
   )
 
   const editor = useTiptapEditor({

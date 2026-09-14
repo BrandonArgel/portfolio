@@ -31,6 +31,7 @@
       "admin": "Admin",
       "user": "Usuario",
       "dashboard": "Panel",
+      "profile": "Perfil",
       "navigation": "Navegación",
       "active": "Activo",
       "theme": "Tema",
@@ -218,6 +219,12 @@
           "backend": "Transformación de datos y lógica de negocio en historias coherentes mediante APIs que guían al usuario de principio a fin.",
           "fullstack": "Entrega de código escalable y reutilizable, siempre respaldado por documentación técnica clara y precisa de extremo a extremo."
         }
+      }
+    },
+    "account": {
+      "page": {
+        "title": "Cuenta",
+        "subtitle": "Administra la configuración y preferencias de tu cuenta."
       }
     },
     "auth": {
@@ -487,6 +494,14 @@
       "saved_locally": "Guardado localmente",
       "placeholder": "Escribe '/' para comandos o comienza a escribir tu artículo...",
       "image_alt_placeholder": "Descripción de la imagen",
+      "image_upload_prompt": "Haz clic para subir una imagen o arrastra y suelta",
+      "image_uploading": "Subiendo imagen...",
+      "image_upload_hint": "PNG, JPG, GIF, WebP hasta 5MB",
+      "image_tab_upload": "Subir",
+      "image_tab_link": "Insertar enlace",
+      "image_link_placeholder": "Pega la URL de una imagen...",
+      "image_embed_button": "Insertar",
+      "image_link_hint": "Funciona con cualquier enlace directo de imagen de la web",
       "show_preview": "Mostrar Vista Previa",
       "hide_preview": "Ocultar Vista Previa",
       "toggle_preview": "Alternar panel de vista previa",
@@ -530,10 +545,19 @@
         "insert_link": "Insertar enlace",
         "link_description": "Escribe la URL del hipervínculo. Deja el campo vacío para quitar el enlace actual.",
         "cancel": "Cancelar",
-        "save": "Guardar"
+        "save": "Guardar",
+        "add_column_before": "Insertar columna a la izquierda",
+        "add_column_after": "Insertar columna a la derecha",
+        "delete_column": "Eliminar columna",
+        "add_row_before": "Insertar fila arriba",
+        "add_row_after": "Insertar fila abajo",
+        "delete_row": "Eliminar fila",
+        "delete_table": "Eliminar tabla"
       },
       "callout": {
         "title": "Título",
+        "change_type": "Cambiar tipo",
+        "delete": "Eliminar",
         "type": {
           "tip": "Consejo",
           "info": "Información",
@@ -546,6 +570,14 @@
           "bug": "Error",
           "example": "Ejemplo"
         }
+      },
+      "code_block": {
+        "auto": "Automático (Texto sin formato)",
+        "plain_text": "Texto sin formato",
+        "copy": "Copiar código al portapapeles",
+        "copied": "Código copiado al portapapeles",
+        "select_language": "Seleccionar lenguaje de programación",
+        "actions": "Acciones del bloque de código"
       }
     },
     "hero": {
@@ -752,6 +784,10 @@
     "about": {
       "title": "Acerca de mí",
       "description": "Conoce la trayectoria de Brandon Argel, sus principios rectores y su experiencia creando aplicaciones web modernas y accesibles."
+    },
+    "account": {
+      "title": "Configuración de la cuenta",
+      "description": "Administra tu perfil, seguridad y preferencias."
     },
     "blog": {
       "title": "Blog de Ingeniería",

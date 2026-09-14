@@ -7,7 +7,6 @@ import {
   Image as ImageIcon,
   Languages,
   Link2,
-  Loader2,
   ToggleLeft,
   Type,
   Upload,
@@ -32,6 +31,7 @@ import {
   ComboboxValue,
   useComboboxAnchor,
 } from '@/components/ui/combobox'
+import { Spinner } from '@/components/ui/spinner'
 import { Switch } from '@/components/ui/switch'
 import { LOCALE_META } from '@/config/locale'
 import { uploadImageAction } from '@/features/blog/actions/image.action'
@@ -224,11 +224,7 @@ export function BlogFrontmatterPanel({
                     onClick={() => fileInputRef.current?.click()}
                     disabled={isUploadingCover}
                   >
-                    {isUploadingCover ? (
-                      <Loader2 className="size-4 animate-spin" />
-                    ) : (
-                      <Upload className="size-4" />
-                    )}
+                    {isUploadingCover ? <Spinner /> : <Upload className="size-4" />}
                   </Button>
                 </div>
               </div>

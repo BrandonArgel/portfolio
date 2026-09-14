@@ -13,17 +13,14 @@ import {
   DropdownMenuSubTrigger,
 } from '@/components/ui/dropdown-menu'
 import { THEME_OPTIONS } from '@/config/theme'
+import { useMounted } from '@/hooks/use-mounted'
 
 export function ThemeSubMenu() {
-  const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
+  const mounted = useMounted()
 
   const tGlobal = useTranslations('common')
   const tTheme = useTranslations('components.theme_selector')
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   return (
     <DropdownMenuSub>

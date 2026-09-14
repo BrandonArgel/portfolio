@@ -1,6 +1,6 @@
 'use client'
 
-import { LayoutDashboard, LogOut, ShieldCheck, User as UserIcon } from 'lucide-react'
+import { LayoutDashboard, LogOut, ShieldCheck, User, User as UserIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -71,6 +71,15 @@ export function MobileNavUser({ onNavigate }: { onNavigate: () => void }) {
           <p className="text-xs text-muted-foreground truncate">{user.email}</p>
         </div>
       </div>
+
+      <Link
+        href="/account"
+        onClick={onNavigate}
+        className="flex items-center justify-center gap-2 w-full h-9 rounded-lg border border-border bg-background text-sm font-medium hover:bg-muted transition-colors"
+      >
+        <User className="size-4 text-muted-foreground" />
+        <span>{tGlobal('labels.profile')}</span>
+      </Link>
 
       {canAccessDashboard && (
         <Link
