@@ -57,7 +57,7 @@ export const authActionClient = actionClient.use(async ({ next }) => {
     headers: await headers(),
   })
 
-  if (!session || !session.user) {
+  if (!session?.user) {
     throw new ActionError('SESSION_REVOKED', 'Your session is invalid or expired.')
   }
 

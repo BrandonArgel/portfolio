@@ -51,7 +51,7 @@ export async function proxy(request: NextRequest) {
         const session = await res.json()
         const isBanned = Boolean(session?.user?.banned)
 
-        if (!session || !session.user || isBanned) {
+        if (!session?.user || isBanned) {
           const redirectRes = NextResponse.redirect(new URL(`/${locale}/login`, request.url))
           redirectRes.cookies.delete('better-auth.session_token')
           redirectRes.cookies.delete('__Secure-better-auth.session_token')

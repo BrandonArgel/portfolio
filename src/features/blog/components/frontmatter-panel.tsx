@@ -15,6 +15,7 @@ import { useTranslations } from 'next-intl'
 import { useAction } from 'next-safe-action/hooks'
 import { useRef, useState } from 'react'
 import { sileo } from 'sileo'
+import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
@@ -73,13 +74,13 @@ export function BlogFrontmatterPanel({
     )
 
   const validation = BlogFrontmatterSchema.safeParse(data)
-  const errors = !validation.success ? validation.error.flatten().fieldErrors : {}
+  const errors = !validation.success ? z.flattenError(validation.error).fieldErrors : {}
 
-  const updateField = (key: keyof BlogFrontmatter, value: any) => {
+  const updateField = <K extends keyof BlogFrontmatter>(key: K, value: BlogFrontmatter[K]) => {
     const newData = { ...data, [key]: value }
 
     if (key === 'title') {
-      newData.slug = generateSlug(value)
+      newData.slug = generateSlug(value as string)
     }
 
     onChange(newData)

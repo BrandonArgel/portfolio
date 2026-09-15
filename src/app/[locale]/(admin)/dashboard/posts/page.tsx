@@ -58,7 +58,7 @@ export default async function DashboardPostsPage({
     headers: await headers(),
   })
 
-  if (!session || !session.user) {
+  if (!session?.user) {
     redirect(`/${locale}/login`)
   }
 

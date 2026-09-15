@@ -31,7 +31,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
   const { slug, locale } = await params
   const session = await auth.api.getSession({ headers: await headers() })
 
-  if (!session || !session.user) redirect(`/${locale}/login`)
+  if (!session?.user) redirect(`/${locale}/login`)
 
   const [err, post] = await getPostBySlug(slug)
 

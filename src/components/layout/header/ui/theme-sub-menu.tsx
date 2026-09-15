@@ -1,10 +1,8 @@
-// src/components/layout/header/ui/theme-sub-menu.tsx
 'use client'
 
 import { useTheme } from '@teispace/next-themes'
 import { Check, SunMoon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
 
 import {
   DropdownMenuItem,
