@@ -3,10 +3,10 @@
 import { useTheme } from '@teispace/next-themes'
 import { Monitor, Moon, Sun } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup } from '@/components/ui/button-group'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useMounted } from '@/hooks/use-mounted'
 
 const THEME_ICONS = {
   light: Sun,
@@ -23,13 +23,9 @@ const THEME_LABEL_KEYS = {
 type ThemeKey = keyof typeof THEME_LABEL_KEYS
 
 export function ThemeToggleButtons() {
-  const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
   const t = useTranslations('components.theme_selector')
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const mounted = useMounted()
 
   if (!mounted) {
     return (

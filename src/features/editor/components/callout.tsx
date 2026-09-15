@@ -1,4 +1,3 @@
-import { TextSelection } from '@tiptap/pm/state'
 import { NodeViewContent, type NodeViewProps, NodeViewWrapper } from '@tiptap/react'
 import {
   AlertTriangle,
@@ -14,11 +13,16 @@ import {
   Zap,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useRef, useState } from 'react'
 
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
-import { CALLOUT_TYPES, type CalloutType, getCalloutTitle, isCalloutType } from '../config/callout'
+import { CALLOUT_TYPES, type CalloutType, isCalloutType } from '../config/callout'
 
 const CALLOUT_CONFIG: Record<
   CalloutType,
@@ -70,191 +74,75 @@ const CALLOUT_CONFIG: Record<
 } as const
 
 export function CalloutComponent(props: NodeViewProps) {
-  const { node, selected, deleteNode, updateAttributes, editor, getPos } = props
+  const { node, deleteNode, updateAttributes } = props
   const t = useTranslations('features.editor.callout')
   const tActions = useTranslations('common.actions')
 
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  const [localTitle, setLocalTitle] = useState(
-    typeof node.attrs.title === 'string' ? node.attrs.title : '',
-  )
-
   const rawType = typeof node.attrs.type === 'string' ? node.attrs.type : 'info'
-
   const currentType = isCalloutType(rawType) ? rawType : 'info'
-
   const config = CALLOUT_CONFIG[currentType]
 
-  useEffect(() => {
-    setLocalTitle(typeof node.attrs.title === 'string' ? node.attrs.title : '')
-  }, [node.attrs.title])
-
-  const focusBeforeCallout = () => {
-    const pos = getPos()
-
-    if (typeof pos !== 'number') {
-      return
-    }
-
-    const tr = editor.state.tr
-    const resolvedPos = tr.doc.resolve(pos)
-
-    const selection = TextSelection.findFrom(resolvedPos, -1, true)
-
-    if (!selection) {
-      return
-    }
-
-    editor.view.dispatch(tr.setSelection(selection))
-
-    editor.view.focus()
-  }
-
-  const _focusAfterCallout = () => {
-    const pos = getPos()
-
-    if (typeof pos !== 'number') {
-      return
-    }
-
-    editor
-      .chain()
-      .focus()
-      .setTextSelection(pos + node.nodeSize)
-      .run()
-  }
-
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const title = event.target.value
-
-    setLocalTitle(title)
-
-    updateAttributes({
-      title,
-    })
-  }
-
   const handleTypeChange = (type: CalloutType) => {
-    const title = localTitle.trim() || getCalloutTitle(type)
-
-    setLocalTitle(title)
-
-    updateAttributes({
-      type,
-      title,
-    })
-  }
-
-  const handleTitleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const input = inputRef.current
-
-    if (!input) return
-
-    const atStart = input.selectionStart === 0
-    const atEnd = input.selectionStart === input.value.length
-
-    if (event.key === 'ArrowLeft' && atStart) {
-      event.preventDefault()
-      event.stopPropagation()
-
-      focusBeforeCallout()
-      return
-    }
-
-    if (
-      (event.key === 'ArrowRight' && atEnd) ||
-      event.key === 'Enter' ||
-      event.key === 'ArrowDown'
-    ) {
-      event.preventDefault()
-      event.stopPropagation()
-
-      // focusFirstBlock()
-      return
-    }
-
-    if (event.key === 'ArrowUp') {
-      event.preventDefault()
-      event.stopPropagation()
-
-      focusBeforeCallout()
-    }
+    updateAttributes({ type })
   }
 
   return (
-    <NodeViewWrapper className={cn('group relative rounded-xl')}>
-      {selected && (
-        <button
-          type="button"
-          contentEditable={false}
-          aria-label={tActions('delete')}
-          className="absolute right-2 top-2 z-20 rounded-md p-1.5 hover:bg-destructive/10 hover:text-destructive"
-          onMouseDown={(event) => {
-            event.preventDefault()
-          }}
-          onClick={() => deleteNode()}
-        >
-          <Trash2 className="size-4" />
-        </button>
-      )}
-      <div
-        className="absolute -top-10 right-0 z-10 hidden pb-1 group-hover:block"
-        contentEditable={false}
-      >
-        <div className="flex items-center gap-1 rounded-md border border-border bg-background p-1 shadow-sm">
-          {CALLOUT_TYPES.map((type) => {
-            const value = CALLOUT_CONFIG[type]
-
-            return (
-              <Tooltip key={type}>
-                <TooltipTrigger
-                  render={
-                    <button
-                      type="button"
-                      contentEditable={false}
-                      aria-label={t(`type.${type}`)}
-                      onMouseDown={(event) => {
-                        event.preventDefault()
-                      }}
-                      onClick={() => handleTypeChange(type)}
-                      className="cursor-pointer rounded-sm p-1 hover:bg-muted"
-                    >
-                      {value.icon}
-                    </button>
-                  }
-                />
-
-                <TooltipContent>{t(`type.${type}`)}</TooltipContent>
-              </Tooltip>
-            )
-          })}
-        </div>
-      </div>
-
-      <div
-        className={cn('not-typeset my-5 flex gap-3 rounded-r-xl border-l-4 p-4', config.container)}
-      >
-        <div className="shrink-0 pt-0.5" contentEditable={false} aria-hidden="true">
-          {config.icon}
-        </div>
-
-        <div className="min-w-0 flex-1">
-          <div className="mb-2 flex items-center" contentEditable={false}>
-            <input
-              ref={inputRef}
-              type="text"
-              value={localTitle}
-              onChange={handleTitleChange}
-              onKeyDown={handleTitleKeyDown}
-              className="w-full border-none bg-transparent p-0 text-[11px] font-bold uppercase tracking-widest opacity-80 outline-none placeholder:text-current/50"
-              placeholder={t('title')}
-              aria-label={t('title')}
+    <NodeViewWrapper
+      data-type="callout"
+      className={cn('not-typeset group relative my-5 rounded-r-xl border-l-4', config.container)}
+    >
+      <div className="flex gap-3 p-4">
+        <div contentEditable={false} className="shrink-0 pt-0.5" aria-hidden="true">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <button
+                  type="button"
+                  className="flex size-6 cursor-pointer items-center justify-center rounded-sm transition-colors hover:bg-black/10 dark:hover:bg-white/10"
+                  aria-label={t('change_type')}
+                >
+                  {config.icon}
+                </button>
+              }
             />
-          </div>
 
-          <NodeViewContent className="space-y-3 outline-none" />
+            <DropdownMenuContent align="start" className="w-48">
+              {CALLOUT_TYPES.map((type) => {
+                const typeConfig = CALLOUT_CONFIG[type]
+                return (
+                  <DropdownMenuItem
+                    key={type}
+                    onClick={() => handleTypeChange(type)}
+                    className="flex cursor-pointer items-center gap-2"
+                  >
+                    <div className="shrink-0">{typeConfig.icon}</div>
+                    <span className="capitalize">{t(`type.${type}`)}</span>
+                  </DropdownMenuItem>
+                )
+              })}
+
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem
+                onClick={deleteNode}
+                className="flex cursor-pointer items-center gap-2 text-destructive focus:bg-destructive/10 focus:text-destructive"
+              >
+                <Trash2 className="size-4" />
+                <span>{tActions('delete')}</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
+        <NodeViewContent
+          className={cn(
+            'not-draggable min-w-0 flex-1 outline-none [&>p]:my-0',
+            '*:data-[type=callout-title]:text-sm',
+            '*:data-[type=callout-title]:font-bold',
+            '*:data-[type=callout-title]:uppercase',
+            '*:data-[type=callout-title]:tracking-widest',
+            '*:data-[type=callout-title]:opacity-80',
+          )}
+        />
       </div>
     </NodeViewWrapper>
   )

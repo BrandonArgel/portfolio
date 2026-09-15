@@ -1,0 +1,189 @@
+/* ==========================================================================
+   Syntax Highlighting (WCAG Accessible Dual-Theme)
+   ========================================================================== */
+
+.hljs {
+  @apply text-foreground;
+  background: transparent;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-subst {
+  @apply text-purple-700 dark:text-purple-300 font-medium;
+}
+
+.hljs-string,
+.hljs-doctag,
+.hljs-regexp {
+  @apply text-emerald-700 dark:text-emerald-300;
+}
+
+.hljs-title,
+.hljs-title.function_,
+.hljs-title.class_,
+.hljs-section {
+  @apply text-blue-700 dark:text-blue-300 font-semibold;
+}
+
+.hljs-variable,
+.hljs-template-variable {
+  @apply text-rose-700 dark:text-rose-300;
+}
+
+.hljs-type,
+.hljs-attr,
+.hljs-attribute {
+  @apply text-cyan-800 dark:text-cyan-300;
+}
+
+.hljs-number,
+.hljs-literal {
+  @apply text-amber-700 dark:text-amber-300;
+}
+
+.hljs-comment,
+.hljs-quote {
+  @apply text-zinc-500 dark:text-zinc-400 italic;
+}
+
+.hljs-punctuation,
+.hljs-operator {
+  @apply text-zinc-700 dark:text-zinc-300;
+}
+
+.hljs-built_in,
+.hljs-symbol,
+.hljs-bullet {
+  @apply text-indigo-700 dark:text-indigo-300;
+}
+
+.hljs-meta,
+.hljs-meta .hljs-keyword,
+.hljs-meta .hljs-string {
+  @apply text-zinc-600 dark:text-zinc-400;
+}
+
+.hljs-deletion {
+  @apply text-red-700 bg-red-100/50 dark:text-red-300 dark:bg-red-950/40;
+}
+
+.hljs-addition {
+  @apply text-emerald-700 bg-emerald-100/50 dark:text-emerald-300 dark:bg-emerald-950/40;
+}
+
+.hljs-emphasis {
+  @apply italic;
+}
+
+.hljs-strong {
+  @apply font-bold;
+}
+
+/* ==========================================================================
+   Tiptap Editor Enhancements: Gapcursor, Drag Handle & Dragging States
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   ProseMirror Gapcursor
+   -------------------------------------------------------------------------- */
+.ProseMirror-gapcursor {
+  display: none;
+  pointer-events: none;
+  position: absolute;
+}
+
+.ProseMirror-gapcursor::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -2px;
+  width: 100%;
+  max-width: 100%;
+  border-top: 2px solid var(--color-primary, currentColor);
+  animation: ProseMirror-cursor-blink 1.1s steps(2, start) infinite;
+}
+
+@keyframes ProseMirror-cursor-blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+.ProseMirror-focused .ProseMirror-gapcursor {
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   ProseMirror Dragging States
+   -------------------------------------------------------------------------- */
+.ProseMirror.dragging {
+  cursor: grabbing;
+}
+
+/* --------------------------------------------------------------------------
+   ProseMirror Tables & Cell Selection
+   -------------------------------------------------------------------------- */
+.ProseMirror .tableWrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.ProseMirror table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+}
+
+.ProseMirror table td,
+.ProseMirror table th {
+  min-width: 100px;
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+  text-align: left;
+}
+
+.ProseMirror table th {
+  font-weight: 600;
+  background-color: var(--color-muted);
+}
+
+.ProseMirror table .selectedCell:after {
+  z-index: 2;
+  position: absolute;
+  content: "";
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+  pointer-events: none;
+}
+
+.ProseMirror table .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: -2px;
+  width: 4px;
+  background-color: var(--color-primary);
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Task List Strikethrough (Checked State)
+   -------------------------------------------------------------------------- */
+li[data-checked="true"] > div:last-child,
+li.task-item-wrapper[data-checked="true"] [data-node-view-content],
+ul[data-type="taskList"] li[data-checked="true"] > div:last-child,
+ul[data-type="taskList"] li[data-checked="true"] [data-node-view-content] {
+  text-decoration: line-through;
+  opacity: 0.7;
+}

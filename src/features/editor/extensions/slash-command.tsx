@@ -21,7 +21,11 @@ import {
 } from 'lucide-react'
 import tippy, { type Instance as TippyInstance } from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
-import { type SlashMenuItem, SlashMenuList } from '../components/slash-menu-list'
+import {
+  type SlashMenuItem,
+  SlashMenuList,
+  type SlashMenuListRef,
+} from '../components/slash-menu-list'
 import { createCalloutContent } from '../config/callout'
 
 export const SlashCommand = Extension.create({
@@ -173,7 +177,12 @@ export const SlashCommand = Extension.create({
               title: dict.image,
               icon: <Image className="size-4" />,
               command: ({ editor, range }) => {
-                editor.chain().focus().deleteRange(range).setNode('image').run()
+                editor
+                  .chain()
+                  .focus()
+                  .deleteRange(range)
+                  .insertContent({ type: 'image', attrs: { src: '', alt: '' } })
+                  .run()
               },
             },
             {
@@ -206,7 +215,7 @@ export const SlashCommand = Extension.create({
           props.command({ editor, range })
         },
         render: () => {
-          let component: ReactRenderer<any>
+          let component: ReactRenderer<SlashMenuListRef>
           let popup: TippyInstance | undefined
 
           return {

@@ -31,6 +31,7 @@
       "admin": "Admin",
       "user": "User",
       "dashboard": "Dashboard",
+      "profile": "Profile",
       "navigation": "Navigation",
       "active": "Active",
       "theme": "Theme",
@@ -218,6 +219,12 @@
           "backend": "Transforming data and business logic into resilient storytelling through APIs that guide the user from start to finish.",
           "fullstack": "Delivering scalable, reusable code backed by clear, precise technical documentation from end-to-end."
         }
+      }
+    },
+    "account": {
+      "page": {
+        "title": "Account",
+        "subtitle": "Manage your account settings and preferences."
       }
     },
     "auth": {
@@ -487,6 +494,14 @@
       "saved_locally": "Saved locally",
       "placeholder": "Type '/' for commands or start writing your article...",
       "image_alt_placeholder": "Image description",
+      "image_upload_prompt": "Click to upload an image, or drag and drop",
+      "image_uploading": "Uploading image...",
+      "image_upload_hint": "PNG, JPG, GIF, WebP up to 5MB",
+      "image_tab_upload": "Upload",
+      "image_tab_link": "Embed Link",
+      "image_link_placeholder": "Paste an image URL...",
+      "image_embed_button": "Embed",
+      "image_link_hint": "Works with any direct image link from the web",
       "show_preview": "Show Preview",
       "hide_preview": "Hide Preview",
       "toggle_preview": "Toggle preview panel",
@@ -530,10 +545,19 @@
         "insert_link": "Insert Link",
         "link_description": "Enter the hyperlink URL. Leave blank to remove current link.",
         "cancel": "Cancel",
-        "save": "Save"
+        "save": "Save",
+        "add_column_before": "Insert column left",
+        "add_column_after": "Insert column right",
+        "delete_column": "Delete column",
+        "add_row_before": "Insert row above",
+        "add_row_after": "Insert row below",
+        "delete_row": "Delete row",
+        "delete_table": "Delete table"
       },
       "callout": {
         "title": "Title",
+        "change_type": "Change Type",
+        "delete": "Delete",
         "type": {
           "tip": "Tip",
           "info": "Info",
@@ -546,6 +570,14 @@
           "bug": "Bug",
           "example": "Example"
         }
+      },
+      "code_block": {
+        "auto": "Auto (Plain Text)",
+        "plain_text": "Plain Text",
+        "copy": "Copy code to clipboard",
+        "copied": "Copied code to clipboard",
+        "select_language": "Select programming language",
+        "actions": "Code block actions"
       }
     },
     "hero": {
@@ -752,6 +784,10 @@
     "about": {
       "title": "About",
       "description": "Discover Brandon Argel's background, guiding principles, and expertise in crafting modern, accessible web applications."
+    },
+    "account": {
+      "title": "Account Settings",
+      "description": "Manage your profile, security, and preferences."
     },
     "blog": {
       "title": "Engineering Blog",

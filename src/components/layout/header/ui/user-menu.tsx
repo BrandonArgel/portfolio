@@ -1,6 +1,6 @@
 'use client'
 
-import { LayoutDashboard, LogIn, LogOut, ShieldCheck } from 'lucide-react'
+import { LayoutDashboard, LogIn, LogOut, ShieldCheck, User } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -48,7 +48,7 @@ export function UserPreferencesMenu({ initialSession, className }: UserMenuProps
           className,
         )}
         aria-label={tHeader('open_user_menu')}
-        disabled={isPending}
+        disabled={isLoading}
       >
         {isLoading && (
           <div className="absolute inset-0 z-10 flex items-center justify-center rounded-full bg-background/60 backdrop-blur-sm">
@@ -100,6 +100,13 @@ export function UserPreferencesMenu({ initialSession, className }: UserMenuProps
         )}
 
         <DropdownMenuGroup>
+          {user && (
+            <DropdownMenuItem render={<Link href="/account" />} className="gap-2 cursor-pointer">
+              <User className="size-4 text-muted-foreground" />
+              <span>{tGlobal('labels.profile')}</span>
+            </DropdownMenuItem>
+          )}
+
           {user && canAccessDashboard && (
             <DropdownMenuItem render={<Link href="/dashboard" />} className="gap-2 cursor-pointer">
               <LayoutDashboard className="size-4 text-muted-foreground" />

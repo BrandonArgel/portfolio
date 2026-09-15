@@ -1,6 +1,6 @@
 'use client'
 
-import { Loader2, Save } from 'lucide-react'
+import { Save } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useAction } from 'next-safe-action/hooks'
 import { useCallback } from 'react'
@@ -14,6 +14,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner'
 import { uploadImageAction } from '@/features/blog/actions/image.action'
 import { savePostAction } from '@/features/blog/actions/posts.action'
 import { Editor } from '@/features/editor/components/editor'
@@ -101,7 +102,7 @@ export function BlogComposer({
 
   const { executeAsync: executeUpload } = useAction(uploadImageAction)
 
-  const handleImagePaste = useCallback(
+  const handleImageUpload = useCallback(
     async (file: File) => {
       const formData = new FormData()
       formData.append('file', file)
@@ -150,7 +151,7 @@ export function BlogComposer({
         </Breadcrumb>
 
         <Button onClick={handleSave} disabled={!canEdit || isSaving} className="gap-2">
-          {isSaving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
+          {isSaving ? <Spinner /> : <Save className="size-4" />}
           {isSaving ? t('saving') : t('save')}
         </Button>
       </div>
@@ -166,7 +167,7 @@ export function BlogComposer({
           key={storageKey}
           initialContent={content}
           onChange={handleContentChange}
-          onImageUpload={handleImagePaste}
+          onImageUpload={handleImageUpload}
         />
       ) : (
         <div className="min-h-150 w-full rounded-xl border border-border bg-background" />

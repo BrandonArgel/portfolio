@@ -17,7 +17,7 @@ export default async function DashboardLayout({ children, params }: DashboardLay
 
   const isBanned = Boolean((session?.user as { banned?: boolean })?.banned)
 
-  if (!session || !session.user || session.user.role === 'user' || isBanned) {
+  if (!session?.user || session.user.role === 'user' || isBanned) {
     redirect(`/${locale}/login`)
   }
 

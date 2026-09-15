@@ -31,6 +31,7 @@
       "admin": "Admin",
       "user": "Utilisateur",
       "dashboard": "Tableau de bord",
+      "profile": "Profil",
       "navigation": "Navigation",
       "active": "Actif",
       "theme": "Thème",
@@ -218,6 +219,12 @@
           "backend": "Transformation des données et de la logique métier en récits résilients grâce à des API qui guident l'utilisateur de bout en bout.",
           "fullstack": "Livraison de code évolutif et réutilisable, soutenu par une documentation technique claire et rigoureuse de bout en bout."
         }
+      }
+    },
+    "account": {
+      "page": {
+        "title": "Compte",
+        "subtitle": "Gérez les paramètres et préférences de votre compte."
       }
     },
     "auth": {
@@ -687,6 +694,14 @@
       "saved_locally": "Enregistré localement",
       "placeholder": "Tapez '/' pour les commandes ou commencez à rédiger votre article...",
       "image_alt_placeholder": "Description de l'image",
+      "image_upload_prompt": "Cliquez pour téléverser une image ou glissez-déposez",
+      "image_uploading": "Téléversement de l'image...",
+      "image_upload_hint": "PNG, JPG, GIF, WebP jusqu'à 5 Mo",
+      "image_tab_upload": "Téléverser",
+      "image_tab_link": "Intégrer un lien",
+      "image_link_placeholder": "Collez l'URL d'une image...",
+      "image_embed_button": "Intégrer",
+      "image_link_hint": "Fonctionne avec tout lien direct vers une image",
       "show_preview": "Afficher Aperçu",
       "hide_preview": "Masquer Aperçu",
       "toggle_preview": "Basculer le panneau d'aperçu",
@@ -730,10 +745,19 @@
         "insert_link": "Insérer un lien",
         "link_description": "Entrez l'URL du lien hypertexte. Laissez vide pour supprimer le lien actuel.",
         "cancel": "Annuler",
-        "save": "Enregistrer"
+        "save": "Enregistrer",
+        "add_column_before": "Insérer une colonne à gauche",
+        "add_column_after": "Insérer une colonne à droite",
+        "delete_column": "Supprimer la colonne",
+        "add_row_before": "Insérer une ligne au-dessus",
+        "add_row_after": "Insérer une ligne en dessous",
+        "delete_row": "Supprimer la ligne",
+        "delete_table": "Supprimer le tableau"
       },
       "callout": {
         "title": "Titre",
+        "change_type": "Changer le type",
+        "delete": "Supprimer",
         "type": {
           "tip": "Astuce",
           "info": "Information",
@@ -746,6 +770,14 @@
           "bug": "Bogue",
           "example": "Exemple"
         }
+      },
+      "code_block": {
+        "auto": "Automatique (Texte brut)",
+        "plain_text": "Texte brut",
+        "copy": "Copier le code dans le presse-papiers",
+        "copied": "Code copié dans le presse-papiers",
+        "select_language": "Sélectionner le langage de programmation",
+        "actions": "Actions du bloc de code"
       }
     }
   },
@@ -758,6 +790,10 @@
     "about": {
       "title": "À Propos de Brandon Argel | Développeur Full Stack",
       "description": "Découvrez le parcours de Brandon Argel, ses principes directeurs et son expertise dans la création d'applications web modernes et accessibles."
+    },
+    "account": {
+      "title": "Paramètres du compte",
+      "description": "Gérez votre profil, sécurité et préférences."
     },
     "blog": {
       "title": "Blog d'Ingénierie | Brandon Argel",
