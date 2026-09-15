@@ -1,7 +1,7 @@
 'use client'
 
 import { type NodeViewProps, NodeViewWrapper } from '@tiptap/react'
-import { ImagePlus, Text, Trash2 } from 'lucide-react'
+import { ImagePlus, Link, Text, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 
@@ -17,12 +17,14 @@ export function ImageComponent(props: NodeViewProps) {
   const { src, alt } = node.attrs
   const [linkUrl, setLinkUrl] = useState('')
   const [altText, setAltText] = useState(alt || '')
+  const [srcText, setSrcText] = useState(src || '')
   const [localUploading, setLocalUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     setAltText(alt || '')
-  }, [alt])
+    setSrcText(src || '')
+  }, [alt, src])
 
   const isUploading = localUploading || Boolean(node.attrs.isUploading)
   const uploadFn = props.extension.options.uploadFn as
@@ -72,6 +74,12 @@ export function ImageComponent(props: NodeViewProps) {
   const handleAltCommit = () => {
     if (altText !== alt) {
       updateAttributes({ alt: altText })
+    }
+  }
+
+  const handleSrcCommit = () => {
+    if (srcText !== src) {
+      updateAttributes({ src: srcText })
     }
   }
 
@@ -213,29 +221,52 @@ export function ImageComponent(props: NodeViewProps) {
           <div
             role="toolbar"
             aria-label="Image actions"
+            contentEditable={false}
             onMouseDown={stopInputPropagation}
             onClick={stopInputPropagation}
             onKeyDown={stopInputPropagation}
             className="absolute top-4 right-4 z-10 flex items-center gap-2 p-2 bg-background/95 backdrop-blur-sm border border-border rounded-xl shadow-xl animate-in fade-in zoom-in-95 duration-150"
           >
-            <div className="flex items-center gap-2 px-2.5 py-1.5 bg-muted/40 rounded-lg border border-border/60">
-              <Text className="size-4 text-muted-foreground shrink-0" />
-              <input
-                type="text"
-                value={altText}
-                onChange={(e) => setAltText(e.target.value)}
-                onBlur={handleAltCommit}
-                onKeyDown={(e) => {
-                  stopInputPropagation(e)
-                  if (e.key === 'Enter') {
-                    e.preventDefault()
-                    handleAltCommit()
-                  }
-                }}
-                onMouseDown={stopInputPropagation}
-                placeholder={t('image_alt_placeholder')}
-                className="bg-transparent outline-none text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 w-36 sm:w-56 focus:outline-none"
-              />
+            <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex items-center gap-2 px-2.5 py-1.5 bg-muted/40 rounded-lg border border-border/60">
+                <Link className="size-4 text-muted-foreground shrink-0" />
+                <input
+                  type="url"
+                  value={srcText}
+                  onChange={(e) => setSrcText(e.target.value)}
+                  onBlur={handleSrcCommit}
+                  onKeyDown={(e) => {
+                    stopInputPropagation(e)
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      handleSrcCommit()
+                    }
+                  }}
+                  onMouseDown={stopInputPropagation}
+                  placeholder={t('image_link_placeholder')}
+                  className="bg-transparent outline-none text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 w-36 sm:w-56 focus:outline-none"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 px-2.5 py-1.5 bg-muted/40 rounded-lg border border-border/60">
+                <Text className="size-4 text-muted-foreground shrink-0" />
+                <input
+                  type="text"
+                  value={altText}
+                  onChange={(e) => setAltText(e.target.value)}
+                  onBlur={handleAltCommit}
+                  onKeyDown={(e) => {
+                    stopInputPropagation(e)
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      handleAltCommit()
+                    }
+                  }}
+                  onMouseDown={stopInputPropagation}
+                  placeholder={t('image_alt_placeholder')}
+                  className="bg-transparent outline-none text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 w-36 sm:w-56 focus:outline-none"
+                />
+              </div>
             </div>
 
             <div className="h-4 w-px bg-border shrink-0" />
