@@ -187,3 +187,34 @@ ul[data-type="taskList"] li[data-checked="true"] [data-node-view-content] {
   text-decoration: line-through;
   opacity: 0.7;
 }
+
+/* --------------------------------------------------------------------------
+   Mathematics Extension (Inline & Block Math)
+   -------------------------------------------------------------------------- */
+.tiptap-mathematics-editor {
+  @apply inline rounded-md bg-muted/60 px-1.5 py-0.5 font-mono text-sm text-foreground outline-none ring-1 ring-border transition-colors;
+}
+
+.tiptap-mathematics-editor:focus {
+  @apply ring-2 ring-primary/50 bg-muted;
+}
+
+.tiptap-mathematics-render {
+  @apply inline cursor-pointer rounded-sm px-1 py-0.5 transition-colors hover:bg-muted/50;
+}
+
+.tiptap-mathematics-render.ProseMirror-selectednode {
+  @apply bg-primary/10 ring-1 ring-primary/30;
+}
+
+[data-type="blockMath"] {
+  @apply my-4 flex items-center justify-center rounded-lg border border-border bg-muted/20 px-4 py-6;
+}
+
+[data-type="blockMath"] .tiptap-mathematics-editor {
+  @apply block w-full text-center text-base;
+}
+
+[data-type="blockMath"] .tiptap-mathematics-render {
+  @apply block text-center;
+}

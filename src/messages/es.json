@@ -228,6 +228,11 @@
       }
     },
     "auth": {
+      "last_used": "Usado previamente",
+      "social": {
+        "access_denied": "Acceso denegado",
+        "create_error": "Error al crear cuenta"
+      },
       "login": {
         "title": "Iniciar Sesión",
         "forgot_password": "¿Olvidaste tu contraseña?",
@@ -239,8 +244,8 @@
         "forbidden_description": "No tienes permiso para acceder a este recurso.",
         "unverified_email_title": "Correo No Verificado",
         "unverified_email_description": "Por favor, verifica tu correo electrónico antes de iniciar sesión. Revisa tu bandeja de entrada.",
-        "banned_title": "Cuenta Bloqueada",
-        "banned_description": "Tu cuenta ha sido bloqueada. Por favor, contacta con soporte para más información.",
+        "banned_title": "Cuenta Baneada",
+        "banned_description": "Tu cuenta ha sido baneada. Por favor, contacta con soporte para más información.",
         "rate_limited_title": "Demasiados Intentos",
         "rate_limited_description": "Has realizado demasiados intentos de inicio de sesión. Por favor, espera unos minutos e inténtalo de nuevo."
       },
@@ -261,7 +266,11 @@
         "partial_success_title": "Éxito Parcial",
         "partial_success_description": "Cuenta creada exitosamente, pero por favor inicia sesión manualmente.",
         "registration_failed_title": "Error al Registrarse",
-        "registration_failed_description": "Ocurrió un error al crear tu cuenta. Por favor, intenta de nuevo más tarde."
+        "registration_failed_description": "Ocurrió un error al crear tu cuenta. Por favor, intenta de nuevo más tarde.",
+        "rate_limited_title": "Demasiados Intentos",
+        "rate_limited_description": "Has realizado demasiados intentos de registro. Por favor, espera unos minutos e inténtalo de nuevo.",
+        "forbidden_title": "Acceso Denegado",
+        "forbidden_description": "No tienes permiso para acceder a este recurso."
       }
     },
     "blog": {
@@ -347,6 +356,8 @@
         "prev_page": "Anterior",
         "next_page": "Siguiente",
         "dashboard": "Panel",
+        "all_languages": "Todos los idiomas",
+        "all_categories": "Todas las categorías",
         "filter_all_languages": "Todos los idiomas",
         "filter_all_categories": "Todas las categorías"
       },
@@ -492,6 +503,7 @@
       "title": "Editor",
       "writing": "Escribiendo...",
       "saved_locally": "Guardado localmente",
+      "loading": "Cargando editor...",
       "placeholder": "Escribe '/' para comandos o comienza a escribir tu artículo...",
       "image_alt_placeholder": "Descripción de la imagen",
       "image_upload_prompt": "Haz clic para subir una imagen o arrastra y suelta",
@@ -533,7 +545,15 @@
         "redo": "Rehacer",
         "clear_format": "Limpiar formato",
         "no_commands_found": "No se encontraron comandos",
-        "youtube_prompt": "URL de YouTube:"
+        "inline_math": "Fórmula en línea",
+        "block_math": "Bloque de fórmula"
+      },
+      "video_dialog": {
+        "title": "Insertar video de YouTube",
+        "description": "Pega la URL de un video de YouTube para incrustarlo en tu artículo.",
+        "placeholder": "Pega una URL de YouTube...",
+        "cancel": "Cancelar",
+        "insert": "Insertar video"
       },
       "bubble_menu": {
         "bold": "Negrita",
@@ -578,6 +598,11 @@
         "copied": "Código copiado al portapapeles",
         "select_language": "Seleccionar lenguaje de programación",
         "actions": "Acciones del bloque de código"
+      },
+      "math": {
+        "label": "Editar fórmula LaTeX",
+        "placeholder": "Escribe LaTeX...",
+        "hint": "Usa sintaxis LaTeX, ej. x^2, \\frac{a}{b}, \\sum_{i=1}^{n}"
       }
     },
     "hero": {
@@ -736,6 +761,7 @@
         "search_placeholder": "Buscar por nombre o correo...",
         "filter_role": "Filtrar por rol",
         "filter_all": "Todos los roles",
+        "all_roles": "Todos los roles",
         "reset_filters": "Restablecer",
         "actions": "Acciones",
         "ban_user": "Banear Usuario",

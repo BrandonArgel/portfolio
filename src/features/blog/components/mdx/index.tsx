@@ -43,7 +43,7 @@ export const mdxComponents: MDXComponents = {
   iframe: MdxIframe,
   pre: MdxPre,
   code: MdxCode,
-  YouTube: MdxYouTube,
+  YouTube: (props: any) => <MdxYouTube url={props.src} id={props.id} {...props} />,
   Callout: MdxCallout,
 }
 

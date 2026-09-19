@@ -15,6 +15,7 @@ import {
   ListOrdered,
   Minus,
   Quote,
+  Sigma,
   Table,
   Type,
   Video,
@@ -27,6 +28,7 @@ import {
   type SlashMenuListRef,
 } from '../components/slash-menu-list'
 import { createCalloutContent } from '../config/callout'
+import { useEditorUI } from '../store/use-editor-ui'
 
 export const SlashCommand = Extension.create({
   name: 'slashCommand',
@@ -51,8 +53,9 @@ export const SlashCommand = Extension.create({
         divider: 'Divider',
         image: 'Image',
         video: 'Video',
-        youtubePrompt: 'YouTube URL:',
         table: 'Table',
+        inlineMath: 'Inline Math',
+        blockMath: 'Block Math',
       },
       suggestion: {
         char: '/',
@@ -189,10 +192,9 @@ export const SlashCommand = Extension.create({
               title: dict.video,
               icon: <Video className="size-4" />,
               command: ({ editor, range }) => {
-                const url = prompt(dict.youtubePrompt || 'YouTube URL:')
-                if (url) {
-                  editor.chain().focus().deleteRange(range).setYoutubeVideo({ src: url }).run()
-                }
+                useEditorUI.getState().openVideoDialog(({ videoUrl }) => {
+                  editor.chain().focus().deleteRange(range).setYoutubeVideo({ src: videoUrl }).run()
+                })
               },
             },
             {
@@ -205,6 +207,26 @@ export const SlashCommand = Extension.create({
                   .deleteRange(range)
                   .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
                   .run()
+              },
+            },
+            {
+              title: dict.inlineMath,
+              icon: <Sigma className="size-4" />,
+              command: ({ editor, range }) => {
+                useEditorUI.getState().openMathDialog('', 'inline', ({ latex }) => {
+                  editor.chain().focus().deleteRange(range).run()
+                  editor.chain().focus().insertInlineMath({ latex }).run()
+                })
+              },
+            },
+            {
+              title: dict.blockMath,
+              icon: <Sigma className="size-4" />,
+              command: ({ editor, range }) => {
+                useEditorUI.getState().openMathDialog('', 'block', ({ latex }) => {
+                  editor.chain().focus().deleteRange(range).run()
+                  editor.chain().focus().insertBlockMath({ latex }).run()
+                })
               },
             },
           ]

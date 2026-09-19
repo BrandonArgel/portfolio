@@ -2,10 +2,10 @@
 
 import type { NodeViewProps } from '@tiptap/react'
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react'
-import { Check, ChevronDown, Copy, FileCode, FileText } from 'lucide-react'
+import { Check, ChevronDown, FileCode, FileText } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type React from 'react'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import {
   SiCplusplus,
   SiCss,
@@ -32,12 +32,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-export interface CodeLanguageOption {
+interface CodeLanguageOption {
   label: string
   value: string
 }
 
-export interface LanguageIconProps extends React.ComponentPropsWithoutRef<'svg'> {
+interface LanguageIconProps extends React.ComponentPropsWithoutRef<'svg'> {
   language: string
   className?: string
 }
@@ -80,7 +80,7 @@ const LANGUAGE_ICON_MAP: Readonly<Record<string, React.ComponentType<{ className
   dockerfile: SiDocker,
 }
 
-export function LanguageIcon({ language, className, ...props }: LanguageIconProps) {
+function LanguageIcon({ language, className, ...props }: LanguageIconProps) {
   const lang = language.trim().toLowerCase()
 
   if (!lang) {
@@ -93,7 +93,6 @@ export function LanguageIcon({ language, className, ...props }: LanguageIconProp
 
 export function CodeBlockComponent({ node, updateAttributes }: NodeViewProps) {
   const t = useTranslations('features.editor')
-  const [copied, setCopied] = useState(false)
   const currentLanguage = typeof node.attrs.language === 'string' ? node.attrs.language : ''
 
   const codeLanguages = useMemo<readonly CodeLanguageOption[]>(
@@ -135,25 +134,13 @@ export function CodeBlockComponent({ node, updateAttributes }: NodeViewProps) {
     updateAttributes({ language: newLanguage })
   }
 
-  const handleCopy = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation()
-    try {
-      await navigator.clipboard.writeText(node.textContent)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch (err) {
-      console.error('Failed to copy code block content', err)
-    }
-  }
-
   return (
-    <NodeViewWrapper as="div" className="not-typeset group relative my-5" data-type="code-block">
-      {/* Floating Toolbar with DropdownMenu and Copy Button */}
+    <NodeViewWrapper className="not-typeset group relative my-5" data-type="code-block">
       <div
         role="toolbar"
         aria-label={t('code_block.actions')}
         contentEditable={false}
-        className="absolute top-2 right-2 z-10 flex items-center gap-1.5 select-none opacity-70 transition-opacity hover:opacity-100 group-hover:opacity-100 group-focus-within:opacity-100"
+        className="absolute top-0 right-0 z-10 flex items-center gap-1.5 select-none opacity-70 transition-opacity hover:opacity-100 group-hover:opacity-100 group-focus-within:opacity-100"
         onMouseDown={(e) => e.stopPropagation()}
         onPointerDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}
@@ -193,23 +180,9 @@ export function CodeBlockComponent({ node, updateAttributes }: NodeViewProps) {
             })}
           </DropdownMenuContent>
         </DropdownMenu>
-
-        <button
-          type="button"
-          onClick={handleCopy}
-          aria-label={copied ? t('code_block.copied') : t('code_block.copy')}
-          title={copied ? t('code_block.copied') : t('code_block.copy')}
-          className="flex size-7 cursor-pointer items-center justify-center rounded-md border border-border bg-background/95 text-muted-foreground shadow-xs backdrop-blur-md transition-colors hover:bg-background hover:text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-        >
-          {copied ? (
-            <Check className="size-3.5 text-green-500 transition-transform scale-110" />
-          ) : (
-            <Copy className="size-3.5" />
-          )}
-        </button>
       </div>
 
-      <pre className="overflow-x-auto rounded-xl border border-code-border bg-code-bg p-4 font-mono text-sm leading-relaxed shadow-xs">
+      <pre className="overflow-x-auto rounded-xl border border-code-border bg-code-bg py-8 px-4 font-mono text-sm leading-relaxed shadow-xs">
         <NodeViewContent className={currentLanguage ? `language-${currentLanguage}` : undefined} />
       </pre>
     </NodeViewWrapper>

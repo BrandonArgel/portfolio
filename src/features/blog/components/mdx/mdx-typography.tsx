@@ -143,7 +143,7 @@ function stripCalloutMarker(node: React.ReactNode): React.ReactNode {
       return child
     }
     if (Array.isArray(child)) {
-      return child.map(clean).filter((c) => c !== null)
+      return React.Children.map(child, clean)
     }
     if (
       React.isValidElement(child) &&
