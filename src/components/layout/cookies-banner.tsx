@@ -40,7 +40,7 @@ export function CookieBanner() {
         </p>
       </div>
 
-      <div className="flex shrink-0 items-center gap-2">
+      <div className="flex justify-end-safe shrink-0 items-center gap-2">
         <Button size="sm" onClick={handleAccept}>
           {tGlobal('accept')}
         </Button>

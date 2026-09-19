@@ -4,7 +4,7 @@ import { put } from '@vercel/blob'
 import { z } from 'zod'
 import { ActionError, authActionClient } from '@/lib/safe-action'
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024
+const MAX_FILE_SIZE = 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml']
 
 const uploadImageSchema = z.object({
@@ -33,7 +33,7 @@ export const uploadImageAction = authActionClient
     if (file.size > MAX_FILE_SIZE) {
       throw new ActionError(
         'File too large',
-        `Maximum file size is 5 MB. Uploaded file is ${(file.size / (1024 * 1024)).toFixed(1)} MB.`,
+        `Maximum file size is 1 MB. Uploaded file is ${(file.size / (1024 * 1024)).toFixed(1)} MB.`,
       )
     }
 

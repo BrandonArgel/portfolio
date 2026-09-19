@@ -4,6 +4,7 @@
 @import "shadcn/tailwind.css";
 @import "../styles/typeset.css";
 @import "../styles/utilities.css";
+@import "../styles/editor.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -146,9 +147,9 @@
   --secondary-foreground: oklch(0.985 0 0);
   --background: oklch(0.1298 0.0425 265.13);
   --foreground: oklch(0.985 0 0);
-  --card: #0f172b;
+  --card: oklch(0.2084 0.0417 266.36);
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
+  --popover: oklch(0.2084 0.0417 266.36);
   --popover-foreground: oklch(0.985 0 0);
 
   --muted: oklch(0.22 0.04 264.376);
@@ -168,11 +169,11 @@
   --chart-4: oklch(0.7 0.18 340);
   --chart-5: oklch(0.8 0.15 50);
 
-  --sidebar: oklch(0.205 0 0);
+  --sidebar: oklch(0.1298 0.0425 265.13);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent: oklch(0.2084 0.0417 266.36);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
@@ -199,12 +200,20 @@
   --typeset-flow: 1.25em;
 }
 
+.tiptap p.is-empty {
+  position: relative;
+}
+
 .tiptap p.is-empty::before {
   color: var(--color-muted-foreground);
   content: attr(data-placeholder);
-  float: left;
-  height: 0;
   pointer-events: none;
+  position: absolute;
+  left: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tippy-box[data-theme~="notion"] {

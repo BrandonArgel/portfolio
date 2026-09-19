@@ -11,7 +11,7 @@ import {
   countTotalPublishedPosts,
   getAllCategories,
   getPublishedPosts,
-} from '@/features/blog/services/posts.service'
+} from '@/features/blog/services/posts-service'
 import { constructPageMetadata } from '@/lib/seo'
 
 interface BlogPageProps {

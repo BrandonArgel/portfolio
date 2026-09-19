@@ -1,6 +1,6 @@
 'use client'
 
-import { Loader2, Trash2 } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
@@ -17,6 +17,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner'
 import { deletePostAction } from '@/features/blog/actions/posts.action'
 import { checkAndHandleSessionRevoked } from '@/lib/auth-interceptor'
 
@@ -58,11 +59,7 @@ export function DeletePostButton({ postId }: { postId: string }) {
             className="gap-1.5 cursor-pointer text-xs h-8"
             disabled={isExecuting}
           >
-            {isExecuting ? (
-              <Loader2 className="size-3.5 animate-spin" />
-            ) : (
-              <Trash2 className="size-3.5" />
-            )}
+            {isExecuting ? <Spinner className="size-3.5" /> : <Trash2 className="size-3.5" />}
             <span>{isExecuting ? t('deleting') : t('delete')}</span>
           </Button>
         }
@@ -75,7 +72,7 @@ export function DeletePostButton({ postId }: { postId: string }) {
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isExecuting}>{t('cancel')}</AlertDialogCancel>
           <AlertDialogAction variant="destructive" onClick={handleDelete} disabled={isExecuting}>
-            {isExecuting ? <Loader2 className="size-3.5 animate-spin mr-1.5" /> : null}
+            {isExecuting ? <Spinner className="size-3.5 animate-spin mr-1.5" /> : null}
             {t('delete')}
           </AlertDialogAction>
         </AlertDialogFooter>

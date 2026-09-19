@@ -1,6 +1,6 @@
 'use client'
 
-import { LayoutDashboard, LogOut, ShieldCheck, User as UserIcon } from 'lucide-react'
+import { LayoutDashboard, LogOut, ShieldCheck, User, User as UserIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -20,7 +20,7 @@ export function MobileNavUser({ onNavigate }: { onNavigate: () => void }) {
     isEditor,
     canAccessDashboard,
     isLoading,
-    isPending,
+    isSignOutPending,
     handleSignOut,
   } = useUserSession()
 
@@ -72,6 +72,15 @@ export function MobileNavUser({ onNavigate }: { onNavigate: () => void }) {
         </div>
       </div>
 
+      <Link
+        href="/account"
+        onClick={onNavigate}
+        className="flex items-center justify-center gap-2 w-full h-9 rounded-lg border border-border bg-background text-sm font-medium hover:bg-muted transition-colors"
+      >
+        <User className="size-4 text-muted-foreground" />
+        <span>{tGlobal('labels.profile')}</span>
+      </Link>
+
       {canAccessDashboard && (
         <Link
           href="/dashboard"
@@ -86,11 +95,17 @@ export function MobileNavUser({ onNavigate }: { onNavigate: () => void }) {
       <Button
         variant="destructive"
         onClick={onSignOut}
-        disabled={isPending}
+        disabled={isSignOutPending}
         className="w-full gap-2 font-medium"
       >
-        {isPending ? <Spinner className="size-4 animate-spin" /> : <LogOut className="size-4" />}
-        <span>{isPending ? tGlobal('states.signing_out') : tGlobal('actions.sign_out')}</span>
+        {isSignOutPending ? (
+          <Spinner className="size-4 animate-spin" />
+        ) : (
+          <LogOut className="size-4" />
+        )}
+        <span>
+          {isSignOutPending ? tGlobal('states.signing_out') : tGlobal('actions.sign_out')}
+        </span>
       </Button>
     </div>
   )

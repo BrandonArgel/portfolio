@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertTriangle, Loader2 } from 'lucide-react'
+import { AlertTriangle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Spinner } from '@/components/ui/spinner'
 import { Textarea } from '@/components/ui/textarea'
 import { banUserAction } from '@/features/users/actions/users.action'
 import { checkAndHandleSessionRevoked } from '@/lib/auth-interceptor'
@@ -174,7 +175,7 @@ export function BanUserDialog({
               className="text-xs gap-1.5"
             >
               {isExecuting ? (
-                <Loader2 className="size-3.5 animate-spin" />
+                <Spinner className="size-3.5" />
               ) : (
                 <AlertTriangle className="size-3.5" />
               )}

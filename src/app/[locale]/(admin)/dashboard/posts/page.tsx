@@ -21,7 +21,7 @@ import { AdminPagination } from '@/features/blog/components/admin/admin-paginati
 import { DeletePostButton } from '@/features/blog/components/admin/delete-button'
 import { PostTableToolbar } from '@/features/blog/components/admin/post-table-toolbar'
 import { PostPublishToggle } from '@/features/blog/components/admin/publish-toggle'
-import { getAdminPosts, getAllCategoriesAdmin } from '@/features/blog/services/posts.service'
+import { getAdminPosts, getAllCategoriesAdmin } from '@/features/blog/services/posts-service'
 import { Link } from '@/i18n/navigation'
 import { auth } from '@/lib/auth/auth'
 
@@ -58,7 +58,7 @@ export default async function DashboardPostsPage({
     headers: await headers(),
   })
 
-  if (!session || !session.user) {
+  if (!session?.user) {
     redirect(`/${locale}/login`)
   }
 
@@ -68,7 +68,17 @@ export default async function DashboardPostsPage({
   const localeFilter = sp.locale || ''
   const categoryFilter = sp.category || ''
 
-  const [t, format, postsResult, categoriesResult] = await Promise.all([
+  // 1. Fetch categories first to resolve slug to ID
+  const [_, categoriesData] = await getAllCategoriesAdmin()
+  const allCategories = categoriesData ?? []
+
+  // 2. Resolve category slug from URL to matching category id
+  const categoryIdForQuery = categoryFilter
+    ? allCategories.find((c) => c.slug === categoryFilter)?.id
+    : undefined
+
+  // 3. Fetch translations, formatter, and admin posts using categoryIdForQuery
+  const [t, format, postsResult] = await Promise.all([
     getTranslations({
       locale,
       namespace: 'features.blog.management',
@@ -79,15 +89,13 @@ export default async function DashboardPostsPage({
       limit: 10,
       search: searchQuery || undefined,
       locale: localeFilter || undefined,
-      categoryId: categoryFilter || undefined,
+      categoryId: categoryIdForQuery,
       userId: session.user.id,
       isAdmin,
     }),
-    getAllCategoriesAdmin(),
   ])
 
   const [postsError, postsData] = postsResult
-  const [_, categoriesData] = categoriesResult
 
   if (postsError) {
     // Fallback — show empty state on error
@@ -106,7 +114,6 @@ export default async function DashboardPostsPage({
   }
 
   const { posts: userPosts, totalPages, totalCount } = postsData
-  const allCategories = categoriesData ?? []
 
   // Compute showing range
   const limit = 10
