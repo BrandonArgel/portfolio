@@ -228,6 +228,11 @@
       }
     },
     "auth": {
+      "last_used": "Last used",
+      "social": {
+        "access_denied": "Social access denied",
+        "create_error": "Social create error"
+      },
       "login": {
         "title": "Sign In",
         "forgot_password": "Forgot password?",
@@ -261,7 +266,11 @@
         "partial_success_title": "Partial Success",
         "partial_success_description": "Account created successfully, but please log in manually.",
         "registration_failed_title": "Registration Failed",
-        "registration_failed_description": "An error occurred while creating your account. Please try again later."
+        "registration_failed_description": "An error occurred while creating your account. Please try again later.",
+        "rate_limited_title": "Too Many Attempts",
+        "rate_limited_description": "You have made too many sign-up attempts. Please wait a few minutes and try again.",
+        "forbidden_title": "Access Denied",
+        "forbidden_description": "You do not have permission to access this resource."
       }
     },
     "blog": {
@@ -338,6 +347,8 @@
         "search_placeholder": "Search articles...",
         "filter_locale": "Language",
         "filter_category": "Category",
+        "all_languages": "All languages",
+        "all_categories": "All categories",
         "filter_all_languages": "All languages",
         "filter_all_categories": "All categories",
         "reset_filters": "Reset",
@@ -492,6 +503,7 @@
       "title": "Editor",
       "writing": "Writing...",
       "saved_locally": "Saved locally",
+      "loading": "Loading editor...",
       "placeholder": "Type '/' for commands or start writing your article...",
       "image_alt_placeholder": "Image description",
       "image_upload_prompt": "Click to upload an image, or drag and drop",
@@ -533,7 +545,15 @@
         "redo": "Redo",
         "clear_format": "Clear Format",
         "no_commands_found": "No commands found",
-        "youtube_prompt": "YouTube URL:"
+        "inline_math": "Inline Math",
+        "block_math": "Block Math"
+      },
+      "video_dialog": {
+        "title": "Insert YouTube Video",
+        "description": "Paste a YouTube video URL to embed it in your article.",
+        "placeholder": "Paste a YouTube URL...",
+        "cancel": "Cancel",
+        "insert": "Insert Video"
       },
       "bubble_menu": {
         "bold": "Bold",
@@ -578,6 +598,11 @@
         "copied": "Copied code to clipboard",
         "select_language": "Select programming language",
         "actions": "Code block actions"
+      },
+      "math": {
+        "label": "Edit LaTeX formula",
+        "placeholder": "Enter LaTeX...",
+        "hint": "Use LaTeX syntax"
       }
     },
     "hero": {
@@ -736,6 +761,7 @@
         "search_placeholder": "Search by name or email...",
         "filter_role": "Filter by role",
         "filter_all": "All Roles",
+        "all_roles": "All Roles",
         "reset_filters": "Reset",
         "actions": "Actions",
         "ban_user": "Ban User",

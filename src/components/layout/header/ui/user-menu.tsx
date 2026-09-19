@@ -36,7 +36,7 @@ export function UserPreferencesMenu({ initialSession, className }: UserMenuProps
     isEditor,
     canAccessDashboard,
     isLoading,
-    isPending,
+    isSignOutPending,
     handleSignOut,
   } = useUserSession(initialSession)
 
@@ -124,11 +124,13 @@ export function UserPreferencesMenu({ initialSession, className }: UserMenuProps
           <DropdownMenuItem
             variant="destructive"
             onClick={handleSignOut}
-            disabled={isPending}
+            disabled={isSignOutPending}
             className="gap-2 cursor-pointer"
           >
             <LogOut className="size-4" />
-            <span>{isPending ? tGlobal('states.signing_out') : tGlobal('actions.sign_out')}</span>
+            <span>
+              {isSignOutPending ? tGlobal('states.signing_out') : tGlobal('actions.sign_out')}
+            </span>
           </DropdownMenuItem>
         ) : (
           <DropdownMenuItem

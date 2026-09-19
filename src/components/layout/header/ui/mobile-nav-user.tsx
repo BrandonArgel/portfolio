@@ -20,7 +20,7 @@ export function MobileNavUser({ onNavigate }: { onNavigate: () => void }) {
     isEditor,
     canAccessDashboard,
     isLoading,
-    isPending,
+    isSignOutPending,
     handleSignOut,
   } = useUserSession()
 
@@ -95,11 +95,17 @@ export function MobileNavUser({ onNavigate }: { onNavigate: () => void }) {
       <Button
         variant="destructive"
         onClick={onSignOut}
-        disabled={isPending}
+        disabled={isSignOutPending}
         className="w-full gap-2 font-medium"
       >
-        {isPending ? <Spinner className="size-4 animate-spin" /> : <LogOut className="size-4" />}
-        <span>{isPending ? tGlobal('states.signing_out') : tGlobal('actions.sign_out')}</span>
+        {isSignOutPending ? (
+          <Spinner className="size-4 animate-spin" />
+        ) : (
+          <LogOut className="size-4" />
+        )}
+        <span>
+          {isSignOutPending ? tGlobal('states.signing_out') : tGlobal('actions.sign_out')}
+        </span>
       </Button>
     </div>
   )

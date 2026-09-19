@@ -3,7 +3,7 @@ import { headers } from 'next/headers'
 import { notFound, redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { BlogComposer } from '@/features/blog/components/blog-composer'
-import { getAllCategoriesAdmin, getPostBySlug } from '@/features/blog/services/posts.service'
+import { getAllCategoriesAdmin, getPostBySlug } from '@/features/blog/services/posts-service'
 import { auth } from '@/lib/auth/auth'
 
 interface EditPostPageProps {

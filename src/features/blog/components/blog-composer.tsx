@@ -21,6 +21,7 @@ import { Editor } from '@/features/editor/components/editor'
 import { useLocalStorage } from '@/hooks/use-local-storage'
 import { useMounted } from '@/hooks/use-mounted'
 import { Link, useRouter } from '@/i18n/navigation'
+// import { useBlogErrors } from '../hooks/use-blog-errors'
 import { type BlogFrontmatter, defaultFrontmatter } from '../schemas/post.schema'
 import { BlogFrontmatterPanel } from './frontmatter-panel'
 
@@ -40,6 +41,8 @@ export function BlogComposer({
   const t = useTranslations('features.blog.composer')
   const router = useRouter()
   const mounted = useMounted()
+
+  // const { handleSaveError, handleUploadError } = useBlogErrors()
 
   const storageKey = initialId ? `blog-${initialId}` : 'blog-new'
 
@@ -107,13 +110,29 @@ export function BlogComposer({
       const formData = new FormData()
       formData.append('file', file)
       sileo.info({ title: t('notifications.uploading_image') })
-      const result = await executeUpload({ formData })
-      if (result?.data?.success && result.data.url) {
-        sileo.success({ title: t('notifications.image_inserted') })
-        return result.data.url
+      console.log('🚀 ~ BlogComposer ~ file:', file)
+
+      try {
+        const result = await executeUpload({ formData })
+        console.log({ result })
+
+        if (result?.serverError || result?.validationErrors) {
+          sileo.error({ title: t('notifications.image_upload_error') })
+          return undefined
+        }
+
+        if (result?.data?.success && result.data.url) {
+          sileo.success({ title: t('notifications.image_inserted') })
+          return result.data.url
+        }
+
+        sileo.error({ title: t('notifications.image_upload_error') })
+        return undefined
+      } catch (error) {
+        console.error('Error durante la carga:', error)
+        sileo.error({ title: t('notifications.image_upload_error') })
+        return undefined
       }
-      sileo.error({ title: t('notifications.image_upload_error') })
-      return undefined
     },
     [executeUpload, t],
   )
@@ -129,7 +148,7 @@ export function BlogComposer({
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center justify-between mb-8 pb-4">
+      <div className="flex items-center justify-between pb-4">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>

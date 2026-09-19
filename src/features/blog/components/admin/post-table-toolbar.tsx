@@ -85,11 +85,11 @@ export function PostTableToolbar({
   }, [searchValue, pushParams])
 
   const handleLocaleChange = (value: string | null) => {
-    pushParams({ locale: !value || value === '_all' ? '' : value })
+    pushParams({ locale: value || '' })
   }
 
   const handleCategoryChange = (value: string | null) => {
-    pushParams({ category: !value || value === '_all' ? '' : value })
+    pushParams({ category: value || '' })
   }
 
   const handleReset = () => {
@@ -115,12 +115,12 @@ export function PostTableToolbar({
       </div>
 
       {/* Locale Filter */}
-      <Select value={initialLocale || '_all'} onValueChange={handleLocaleChange}>
+      <Select value={initialLocale || ''} onValueChange={handleLocaleChange}>
         <SelectTrigger className="w-full sm:w-32" size="sm">
-          <SelectValue placeholder={t('filter_locale')} />
+          <SelectValue placeholder={t('all_languages')} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="_all">{t('filter_all_languages')}</SelectItem>
+          <SelectItem value="">{t('all_languages')}</SelectItem>
           {Object.entries(LOCALE_META).map(([loc, meta]) => (
             <SelectItem key={loc} value={loc}>
               {meta.flag} {loc.toUpperCase()}
@@ -131,14 +131,14 @@ export function PostTableToolbar({
 
       {/* Category Filter */}
       {categories.length > 0 && (
-        <Select value={initialCategory || '_all'} onValueChange={handleCategoryChange}>
+        <Select value={initialCategory || ''} onValueChange={handleCategoryChange}>
           <SelectTrigger className="w-full sm:w-40" size="sm">
-            <SelectValue placeholder={t('filter_category')} />
+            <SelectValue placeholder={t('all_categories')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="_all">{t('filter_all_categories')}</SelectItem>
+            <SelectItem value="">{t('all_categories')}</SelectItem>
             {categories.map((cat) => (
-              <SelectItem key={cat.id} value={cat.id}>
+              <SelectItem key={cat.id} value={cat.slug}>
                 {cat.name}
               </SelectItem>
             ))}

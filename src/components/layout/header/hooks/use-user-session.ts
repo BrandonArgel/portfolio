@@ -1,17 +1,15 @@
 import { useTransition } from 'react'
-import { useMounted } from '@/hooks/use-mounted'
 import { useRouter } from '@/i18n/navigation'
 import { type Session, signOut, useSession } from '@/lib/auth/auth-client'
 import { getInitials } from '@/utils/get-initials'
 
 export function useUserSession(initialSession?: Session | null) {
   const router = useRouter()
-  const mounted = useMounted()
-  const [isPending, startTransition] = useTransition()
+  const [isSignOutPending, startTransition] = useTransition()
 
   const { data: clientSession, isPending: isSessionPending } = useSession()
 
-  const currentSession = clientSession !== undefined ? clientSession : (initialSession ?? null)
+  const currentSession = isSessionPending ? initialSession || clientSession : clientSession
   const user = currentSession?.user
   const initials = getInitials(user?.name)
   const userRole = (user as { role?: string } | undefined)?.role
@@ -19,7 +17,7 @@ export function useUserSession(initialSession?: Session | null) {
   const isEditor = userRole === 'editor'
   const canAccessDashboard = isAdmin || isEditor
 
-  const isLoading = isPending || (isSessionPending && !mounted && !currentSession)
+  const isLoading = isSignOutPending || (isSessionPending && !currentSession)
 
   const handleSignOut = () => {
     startTransition(async () => {
@@ -41,7 +39,7 @@ export function useUserSession(initialSession?: Session | null) {
     isEditor,
     canAccessDashboard,
     isLoading,
-    isPending,
+    isSignOutPending,
     handleSignOut,
   }
 }

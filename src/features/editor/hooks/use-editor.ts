@@ -2,6 +2,7 @@
 
 import type { Editor } from '@tiptap/core'
 import Highlight from '@tiptap/extension-highlight'
+import { Mathematics } from '@tiptap/extension-mathematics'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Table } from '@tiptap/extension-table'
 import TableCell from '@tiptap/extension-table-cell'
@@ -125,8 +126,9 @@ export function useEditor({
           divider: t('commands.divider'),
           image: t('commands.image'),
           video: t('commands.video'),
-          youtubePrompt: t('commands.youtube_prompt'),
           table: t('commands.table'),
+          inlineMath: t('commands.inline_math'),
+          blockMath: t('commands.block_math'),
         },
       }),
       CodeBlockNode.configure({
@@ -163,6 +165,11 @@ export function useEditor({
         inline: false,
         HTMLAttributes: {
           class: 'w-full aspect-video rounded-lg border border-border shadow-sm my-6',
+        },
+      }),
+      Mathematics.configure({
+        katexOptions: {
+          throwOnError: false,
         },
       }),
     ],
