@@ -5,6 +5,10 @@ on:
     branches:
       - main
       - staging
+  pull_request:
+    branches:
+      - main
+      - staging
 
 jobs:
   migrate-and-deploy:
@@ -18,6 +22,13 @@ jobs:
 
       - name: Install Dependencies
         run: bun install --frozen-lockfile
+
+      - name: Code Quality Checks
+        run: |
+          bun run format
+          bun run lint
+          bun run i18n:check
+          bunx tsc --noEmit
 
       - name: Set Environment Context
         id: env-context

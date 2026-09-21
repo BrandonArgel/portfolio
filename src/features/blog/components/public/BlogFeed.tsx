@@ -34,7 +34,7 @@ export async function BlogFeed({
   const showingText = count > 0 ? t('showing_articles', { start, end, total }) : ''
 
   return (
-    <div className="flex-1 min-w-0 space-y-6">
+    <div className="w-full flex-1 space-y-4">
       {/* Top Header Row with Title and SortTabs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -51,8 +51,8 @@ export async function BlogFeed({
 
       {/* Articles Grid */}
       {posts.length > 0 ? (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {posts.map((post) => (
               <ArticleCard key={post.id} post={post} />
             ))}

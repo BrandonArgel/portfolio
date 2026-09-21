@@ -15,7 +15,7 @@ export async function GET() {
 
     const song: EndpointSpotifyTrack = await response.json()
 
-    if (!song || !song.item || song.is_playing === false) {
+    if (!song?.item || song.is_playing === false) {
       return NextResponse.json<SpotifyTrack>({ isPlaying: false })
     }
 

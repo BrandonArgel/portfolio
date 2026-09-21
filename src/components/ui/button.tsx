@@ -70,4 +70,4 @@ function LinkButton({ className, variant, size, ref, ...props }: LinkButtonProps
   )
 }
 
-export { Button, LinkButton, buttonVariants }
+export { Button, buttonVariants, LinkButton }

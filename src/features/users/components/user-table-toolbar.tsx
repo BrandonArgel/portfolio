@@ -74,7 +74,7 @@ export function UserTableToolbar({ initialSearch = '', initialRole = '' }: UserT
   }, [searchValue, pushParams])
 
   const handleRoleChange = (value: string | null) => {
-    pushParams({ role: !value || value === '_all' ? '' : value })
+    pushParams({ role: value || '' })
   }
 
   const handleReset = () => {
@@ -100,13 +100,22 @@ export function UserTableToolbar({ initialSearch = '', initialRole = '' }: UserT
       </div>
 
       {/* Role Filter */}
-      <Select value={initialRole || '_all'} onValueChange={handleRoleChange}>
+      <Select
+        value={initialRole || ''}
+        onValueChange={handleRoleChange}
+        items={{
+          all: t('all_roles'),
+          admin: tRoles('admin'),
+          editor: tRoles('editor'),
+          user: tRoles('user'),
+        }}
+      >
         <SelectTrigger className="w-full sm:w-36 h-8 text-xs font-medium" size="sm">
           <SelectValue placeholder={t('filter_role')} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="_all" className="text-xs">
-            {t('filter_all')}
+          <SelectItem value="" className="text-xs">
+            {t('all_roles')}
           </SelectItem>
           <SelectItem value="admin" className="text-xs">
             {tRoles('admin')}

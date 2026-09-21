@@ -1,6 +1,6 @@
 'use client'
 
-import { Ban, Copy, Loader2, MoreHorizontal, UserCheck } from 'lucide-react'
+import { Ban, Copy, MoreHorizontal, UserCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Spinner } from '@/components/ui/spinner'
 import { unbanUserAction } from '@/features/users/actions/users.action'
 import { checkAndHandleSessionRevoked } from '@/lib/auth-interceptor'
 import { BanUserDialog } from './ban-user-dialog'
@@ -86,7 +87,7 @@ export function UserActionsMenu({
           }
         >
           {isUnbanning ? (
-            <Loader2 className="size-4 animate-spin text-primary" />
+            <Spinner className="size-4 text-primary" />
           ) : (
             <MoreHorizontal className="size-4" />
           )}

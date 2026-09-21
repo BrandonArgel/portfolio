@@ -5,6 +5,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google'
 import { cookies } from 'next/headers'
 import { getLocale, getMessages, getTimeZone, getTranslations } from 'next-intl/server'
 import NextTopLoader from 'nextjs-toploader'
+import type { ReactNode } from 'react'
 import { CookieBanner } from '@/components/layout/cookies-banner'
 import { getBaseUrl, siteConfig } from '@/config/site'
 import { routing } from '@/i18n/routing'
@@ -12,6 +13,11 @@ import { constructPageMetadata } from '@/lib/seo'
 import { AppProvider } from '@/providers/app-provider'
 import 'katex/dist/katex.min.css'
 import '../globals.css'
+
+interface RootLayoutProps {
+  children: ReactNode
+  params: Promise<{ locale: string }>
+}
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -49,7 +55,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function RootLayout({ children }: LayoutProps<'/[locale]'>) {
+export default async function RootLayout({ children }: RootLayoutProps) {
   const currentLocale = await getLocale()
   const cookieStore = await cookies()
   const hasConsentCookie = cookieStore.has('cookie-consent')

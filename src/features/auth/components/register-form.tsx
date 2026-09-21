@@ -3,24 +3,24 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
-import { sileo } from 'sileo'
 import { ActionButton } from '@/components/ui/action-button'
 import { LinkButton } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { FieldGroup } from '@/components/ui/field'
-import { Marker, MarkerContent } from '@/components/ui/marker'
-import { registerUserService } from '@/features/auth/services/auth.service'
-import { Link, useRouter } from '@/i18n/navigation'
-import { track } from '@/lib/analytics/events'
-import { type SignUpForm, signUpSchema } from '../schemas/auth.schema'
+import { useAuthSuccess } from '@/features/auth/hooks/use-auth-success'
+import { useRegisterErrors } from '@/features/auth/hooks/use-register-errors'
+import { registerService } from '@/features/auth/services/register-service'
+import { Link } from '@/i18n/navigation'
+import { type SignUpForm, signUpSchema } from '../schemas/auth-schema'
+import { AuthCardLayout } from './auth-card-layout'
 import { ControlledCheckbox } from './controlled-checkbox'
 import { ControlledInput } from './controlled-input'
-import { SocialAuthButtons } from './social-auth-buttons'
 
 export function RegisterForm() {
-  const router = useRouter()
   const t = useTranslations('features.auth.register')
   const tGlobal = useTranslations('common')
+  const { handleRegisterError } = useRegisterErrors()
+  const { handleAuthSuccess } = useAuthSuccess()
+
   const {
     control,
     handleSubmit,
@@ -39,145 +39,99 @@ export function RegisterForm() {
   async function handleSignUp(data: SignUpForm) {
     const { confirmPassword, acceptTerms, ...signUpData } = data
 
-    const [err, user] = await registerUserService(signUpData)
+    const [err, user] = await registerService(signUpData)
 
-    if (err === null) {
-      track('Signup', { provider: 'credentials' })
-      sileo.success({
-        title: t('account_created_title'),
-        description: t('account_created_description', { name: user.name || 'empty' }),
-      })
-      router.push('/')
-      router.refresh()
+    if (err) {
+      handleRegisterError(err)
       return
     }
 
-    switch (err.reason) {
-      case 'USER_ALREADY_EXISTS':
-        sileo.error({
-          title: t('email_in_use_title'),
-          description: t('email_in_use_description'),
-        })
-        break
-      case 'WEAK_PASSWORD':
-        sileo.error({
-          title: t('invalid_password_title'),
-          description: t('invalid_password_description'),
-        })
-        break
-      case 'AUTO_LOGIN_FAILED':
-        sileo.warning({
-          title: t('partial_success_title'),
-          description: t('partial_success_description'),
-        })
-        router.push('/login')
-        break
-      case 'UNKNOWN_ERROR':
-        sileo.error({
-          title: t('registration_failed_title'),
-          description: t('registration_failed_description'),
-        })
-        break
-      default:
-        err satisfies never
-        sileo.error({
-          title: tGlobal('errors.system_title'),
-          description: tGlobal('errors.system_description'),
-        })
-    }
+    handleAuthSuccess({
+      event: 'Signup',
+      title: t('account_created_title'),
+      description: t('account_created_description', { name: user.name || 'empty' }),
+      user,
+    })
   }
 
   return (
-    <Card className="w-full max-w-xl m-6">
-      <CardHeader className="text-2xl font-bold">
-        <CardTitle className="text-center">{t('title')}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form id="sign-up" onSubmit={handleSubmit(handleSignUp)}>
-          <FieldGroup>
-            <ControlledInput
-              control={control}
-              name="name"
-              label={tGlobal('labels.name')}
-              placeholder={tGlobal('placeholders.name')}
-              autoComplete="name"
-            />
-            <ControlledInput
-              control={control}
-              name="email"
-              label={tGlobal('labels.email')}
-              type="email"
-              placeholder={tGlobal('placeholders.email')}
-              autoComplete="email"
-            />
-            <ControlledInput
-              control={control}
-              name="password"
-              label={tGlobal('labels.password')}
-              placeholder={tGlobal('placeholders.password')}
-              autoComplete="new-password"
-              isPassword
-            />
-            <ControlledInput
-              control={control}
-              name="confirmPassword"
-              label={tGlobal('labels.confirm_password')}
-              placeholder={tGlobal('placeholders.password')}
-              autoComplete="new-password"
-              isPassword
-            />
-            <ControlledCheckbox control={control} name="acceptTerms">
-              <span className="text-sm text-muted-foreground">
-                {t('accept_terms')}{' '}
-                <Link
-                  href="/legal/terms-of-service"
-                  className="text-primary underline-offset-4 hover:underline"
-                  target="_blank"
-                >
-                  {t('terms_of_service')}
-                </Link>{' '}
-                {t('and')}{' '}
-                <Link
-                  href="/legal/privacy-policy"
-                  className="text-primary underline-offset-4 hover:underline"
-                  target="_blank"
-                >
-                  {t('privacy_policy')}
-                </Link>
-                .
-              </span>
-            </ControlledCheckbox>
+    <AuthCardLayout title={t('title')}>
+      <form id="sign-up" onSubmit={handleSubmit(handleSignUp)}>
+        <FieldGroup>
+          <ControlledInput
+            control={control}
+            name="name"
+            label={tGlobal('labels.name')}
+            placeholder={tGlobal('placeholders.name')}
+            autoComplete="name"
+          />
+          <ControlledInput
+            control={control}
+            name="email"
+            label={tGlobal('labels.email')}
+            type="email"
+            placeholder={tGlobal('placeholders.email')}
+            autoComplete="email"
+          />
+          <ControlledInput
+            control={control}
+            name="password"
+            label={tGlobal('labels.password')}
+            placeholder={tGlobal('placeholders.password')}
+            autoComplete="new-password"
+            isPassword
+          />
+          <ControlledInput
+            control={control}
+            name="confirmPassword"
+            label={tGlobal('labels.confirm_password')}
+            placeholder={tGlobal('placeholders.password')}
+            autoComplete="new-password"
+            isPassword
+          />
+          <ControlledCheckbox control={control} name="acceptTerms">
+            <span className="text-sm text-muted-foreground">
+              {t('accept_terms')}{' '}
+              <Link
+                href="/legal/terms-of-service"
+                className="text-primary underline-offset-4 hover:underline"
+                target="_blank"
+              >
+                {t('terms_of_service')}
+              </Link>{' '}
+              {t('and')}{' '}
+              <Link
+                href="/legal/privacy-policy"
+                className="text-primary underline-offset-4 hover:underline"
+                target="_blank"
+              >
+                {t('privacy_policy')}
+              </Link>
+              .
+            </span>
+          </ControlledCheckbox>
 
-            <ActionButton
-              type="submit"
-              className="mt-4"
-              loadingText={tGlobal('states.signing_up')}
-              isLoading={isSubmitting}
-              disabled={isSubmitting}
-            >
-              {tGlobal('actions.sign_up')}
-            </ActionButton>
-            <LinkButton
-              className="w-full"
-              href="https://securitytool.brandonargel.com"
-              variant="ghost"
-            >
-              {t('create_password')}
-            </LinkButton>
-          </FieldGroup>
-        </form>
-        <LinkButton className="mt-12 w-full" href="/login" variant="outline">
-          {t('already_have_account')}
-        </LinkButton>
-      </CardContent>
-
-      <Marker variant="separator">
-        <MarkerContent>{tGlobal('labels.or')}</MarkerContent>
-      </Marker>
-
-      <CardFooter className="grid grid-cols-1 gap-3 border-t-0 bg-inherit sm:grid-cols-2">
-        <SocialAuthButtons />
-      </CardFooter>
-    </Card>
+          <ActionButton
+            type="submit"
+            className="mt-4"
+            loadingText={tGlobal('states.signing_up')}
+            isLoading={isSubmitting}
+            disabled={isSubmitting}
+          >
+            {tGlobal('actions.sign_up')}
+          </ActionButton>
+          <LinkButton
+            className="w-full"
+            href="https://securitytool.brandonargel.com"
+            variant="ghost"
+          >
+            {t('create_password')}
+          </LinkButton>
+        </FieldGroup>
+      </form>
+      <LinkButton className="mt-12 w-full" href="/login" variant="outline">
+        {t('already_have_account')}
+      </LinkButton>
+    </AuthCardLayout>
   )
 }

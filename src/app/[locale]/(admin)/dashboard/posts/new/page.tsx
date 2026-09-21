@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { BlogComposer } from '@/features/blog/components/blog-composer'
-import { getAllCategoriesAdmin } from '@/features/blog/services/posts.service'
+import { getAllCategoriesAdmin } from '@/features/blog/services/posts-service'
 
 interface NewPostPageProps {
   params: Promise<{ locale: string }>

@@ -1,6 +1,6 @@
 'use client'
 
-import { Loader2, Save } from 'lucide-react'
+import { Save } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useAction } from 'next-safe-action/hooks'
 import { useCallback } from 'react'
@@ -14,12 +14,14 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner'
 import { uploadImageAction } from '@/features/blog/actions/image.action'
 import { savePostAction } from '@/features/blog/actions/posts.action'
 import { Editor } from '@/features/editor/components/editor'
 import { useLocalStorage } from '@/hooks/use-local-storage'
 import { useMounted } from '@/hooks/use-mounted'
 import { Link, useRouter } from '@/i18n/navigation'
+// import { useBlogErrors } from '../hooks/use-blog-errors'
 import { type BlogFrontmatter, defaultFrontmatter } from '../schemas/post.schema'
 import { BlogFrontmatterPanel } from './frontmatter-panel'
 
@@ -39,6 +41,8 @@ export function BlogComposer({
   const t = useTranslations('features.blog.composer')
   const router = useRouter()
   const mounted = useMounted()
+
+  // const { handleSaveError, handleUploadError } = useBlogErrors()
 
   const storageKey = initialId ? `blog-${initialId}` : 'blog-new'
 
@@ -101,18 +105,34 @@ export function BlogComposer({
 
   const { executeAsync: executeUpload } = useAction(uploadImageAction)
 
-  const handleImagePaste = useCallback(
+  const handleImageUpload = useCallback(
     async (file: File) => {
       const formData = new FormData()
       formData.append('file', file)
       sileo.info({ title: t('notifications.uploading_image') })
-      const result = await executeUpload({ formData })
-      if (result?.data?.success && result.data.url) {
-        sileo.success({ title: t('notifications.image_inserted') })
-        return result.data.url
+      console.log('🚀 ~ BlogComposer ~ file:', file)
+
+      try {
+        const result = await executeUpload({ formData })
+        console.log({ result })
+
+        if (result?.serverError || result?.validationErrors) {
+          sileo.error({ title: t('notifications.image_upload_error') })
+          return undefined
+        }
+
+        if (result?.data?.success && result.data.url) {
+          sileo.success({ title: t('notifications.image_inserted') })
+          return result.data.url
+        }
+
+        sileo.error({ title: t('notifications.image_upload_error') })
+        return undefined
+      } catch (error) {
+        console.error('Error durante la carga:', error)
+        sileo.error({ title: t('notifications.image_upload_error') })
+        return undefined
       }
-      sileo.error({ title: t('notifications.image_upload_error') })
-      return undefined
     },
     [executeUpload, t],
   )
@@ -128,7 +148,7 @@ export function BlogComposer({
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center justify-between mb-8 pb-4">
+      <div className="flex items-center justify-between pb-4">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -150,7 +170,7 @@ export function BlogComposer({
         </Breadcrumb>
 
         <Button onClick={handleSave} disabled={!canEdit || isSaving} className="gap-2">
-          {isSaving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
+          {isSaving ? <Spinner /> : <Save className="size-4" />}
           {isSaving ? t('saving') : t('save')}
         </Button>
       </div>
@@ -166,7 +186,7 @@ export function BlogComposer({
           key={storageKey}
           initialContent={content}
           onChange={handleContentChange}
-          onImageUpload={handleImagePaste}
+          onImageUpload={handleImageUpload}
         />
       ) : (
         <div className="min-h-150 w-full rounded-xl border border-border bg-background" />

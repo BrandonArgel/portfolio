@@ -1,10 +1,8 @@
-// src/components/layout/header/ui/theme-sub-menu.tsx
 'use client'
 
 import { useTheme } from '@teispace/next-themes'
 import { Check, SunMoon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
 
 import {
   DropdownMenuItem,
@@ -13,17 +11,14 @@ import {
   DropdownMenuSubTrigger,
 } from '@/components/ui/dropdown-menu'
 import { THEME_OPTIONS } from '@/config/theme'
+import { useMounted } from '@/hooks/use-mounted'
 
 export function ThemeSubMenu() {
-  const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
+  const mounted = useMounted()
 
   const tGlobal = useTranslations('common')
   const tTheme = useTranslations('components.theme_selector')
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   return (
     <DropdownMenuSub>

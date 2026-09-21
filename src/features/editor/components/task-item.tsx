@@ -1,7 +1,9 @@
+import type { NodeViewProps } from '@tiptap/react'
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react'
 import { Checkbox } from '@/components/ui/checkbox'
+import { cn } from '@/lib/utils'
 
-export const TaskItemComponent = (props: any) => {
+export const TaskItemComponent = (props: NodeViewProps) => {
   const { node, updateAttributes, editor: isEditable } = props
   const { checked } = node.attrs
 
@@ -9,6 +11,7 @@ export const TaskItemComponent = (props: any) => {
     <NodeViewWrapper
       className="not-typeset flex w-full items-center gap-3 my-2 not-prose"
       data-type="taskItem"
+      data-checked={checked ? 'true' : 'false'}
     >
       <div
         className="flex items-center justify-center select-none"
@@ -26,7 +29,12 @@ export const TaskItemComponent = (props: any) => {
         />
       </div>
 
-      <NodeViewContent className="flex-1 min-w-0" />
+      <NodeViewContent
+        className={cn(
+          'flex-1 min-w-0 transition-all duration-150',
+          checked && 'line-through text-muted-foreground opacity-70',
+        )}
+      />
     </NodeViewWrapper>
   )
 }

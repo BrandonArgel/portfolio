@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { getBaseUrl } from '@/config/site'
-import { getAllPublishedPostsForSitemap } from '@/features/blog/services/posts.service'
+import { getAllPublishedPostsForSitemap } from '@/features/blog/services/posts-service'
 import { routing } from '@/i18n/routing'
 
 const STATIC_ROUTES = [

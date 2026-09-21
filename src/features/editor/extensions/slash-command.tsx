@@ -15,14 +15,20 @@ import {
   ListOrdered,
   Minus,
   Quote,
+  Sigma,
   Table,
   Type,
   Video,
 } from 'lucide-react'
 import tippy, { type Instance as TippyInstance } from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
-import { type SlashMenuItem, SlashMenuList } from '../components/slash-menu-list'
+import {
+  type SlashMenuItem,
+  SlashMenuList,
+  type SlashMenuListRef,
+} from '../components/slash-menu-list'
 import { createCalloutContent } from '../config/callout'
+import { useEditorUI } from '../store/use-editor-ui'
 
 export const SlashCommand = Extension.create({
   name: 'slashCommand',
@@ -47,8 +53,9 @@ export const SlashCommand = Extension.create({
         divider: 'Divider',
         image: 'Image',
         video: 'Video',
-        youtubePrompt: 'YouTube URL:',
         table: 'Table',
+        inlineMath: 'Inline Math',
+        blockMath: 'Block Math',
       },
       suggestion: {
         char: '/',
@@ -173,17 +180,21 @@ export const SlashCommand = Extension.create({
               title: dict.image,
               icon: <Image className="size-4" />,
               command: ({ editor, range }) => {
-                editor.chain().focus().deleteRange(range).setNode('image').run()
+                editor
+                  .chain()
+                  .focus()
+                  .deleteRange(range)
+                  .insertContent({ type: 'image', attrs: { src: '', alt: '' } })
+                  .run()
               },
             },
             {
               title: dict.video,
               icon: <Video className="size-4" />,
               command: ({ editor, range }) => {
-                const url = prompt(dict.youtubePrompt || 'YouTube URL:')
-                if (url) {
-                  editor.chain().focus().deleteRange(range).setYoutubeVideo({ src: url }).run()
-                }
+                useEditorUI.getState().openVideoDialog(({ videoUrl }) => {
+                  editor.chain().focus().deleteRange(range).setYoutubeVideo({ src: videoUrl }).run()
+                })
               },
             },
             {
@@ -198,6 +209,26 @@ export const SlashCommand = Extension.create({
                   .run()
               },
             },
+            {
+              title: dict.inlineMath,
+              icon: <Sigma className="size-4" />,
+              command: ({ editor, range }) => {
+                useEditorUI.getState().openMathDialog('', 'inline', ({ latex }) => {
+                  editor.chain().focus().deleteRange(range).run()
+                  editor.chain().focus().insertInlineMath({ latex }).run()
+                })
+              },
+            },
+            {
+              title: dict.blockMath,
+              icon: <Sigma className="size-4" />,
+              command: ({ editor, range }) => {
+                useEditorUI.getState().openMathDialog('', 'block', ({ latex }) => {
+                  editor.chain().focus().deleteRange(range).run()
+                  editor.chain().focus().insertBlockMath({ latex }).run()
+                })
+              },
+            },
           ]
 
           return items.filter((item) => item.title.toLowerCase().includes(query.toLowerCase()))
@@ -206,7 +237,7 @@ export const SlashCommand = Extension.create({
           props.command({ editor, range })
         },
         render: () => {
-          let component: ReactRenderer<any>
+          let component: ReactRenderer<SlashMenuListRef>
           let popup: TippyInstance | undefined
 
           return {

@@ -11,7 +11,7 @@ import {
   getPostTranslationFallback,
   getPostTranslationsByGroupId,
   getPublishedPostBySlug,
-} from '@/features/blog/services/posts.service'
+} from '@/features/blog/services/posts-service'
 import { redirect } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { constructPageMetadata } from '@/lib/seo'

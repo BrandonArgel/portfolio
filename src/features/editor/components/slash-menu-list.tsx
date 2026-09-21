@@ -8,7 +8,7 @@ export interface SlashMenuItem {
   command: (props: { editor: Editor; range: Range }) => void
 }
 
-interface SlashMenuListRef {
+export interface SlashMenuListRef {
   onKeyDown: (args: { event: KeyboardEvent }) => boolean
 }
 

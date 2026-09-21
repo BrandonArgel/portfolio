@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { useCallback, useState } from 'react'
+import { EditorDialogs } from './editor-dialogs'
 import { SaveIndicator } from './editor-save-indicator'
 import { TiptapEditor } from './tiptap-editor'
 
@@ -28,6 +29,7 @@ export function Editor({ initialContent = '', onChange, onImageUpload }: EditorP
         onImageUpload={onImageUpload}
         onSavingChange={handleSavingChange}
       />
+      <EditorDialogs />
       <span className="sr-only">{t('title')}</span>
     </div>
   )

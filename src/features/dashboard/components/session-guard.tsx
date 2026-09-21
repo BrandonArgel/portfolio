@@ -28,7 +28,7 @@ export function SessionGuard({ children }: SessionGuardProps) {
 
     const isBanned = Boolean((session?.user as { banned?: boolean })?.banned)
 
-    if (!session || !session.user || isBanned) {
+    if (!session?.user || isBanned) {
       kick()
     }
   }, [session, isPending, kick])
@@ -45,7 +45,7 @@ export function SessionGuard({ children }: SessionGuardProps) {
         const currentSession = res.data
         const isBanned = Boolean((currentSession?.user as { banned?: boolean })?.banned)
 
-        if (!currentSession || !currentSession.user || isBanned) {
+        if (!currentSession?.user || isBanned) {
           kick()
         }
       } catch {

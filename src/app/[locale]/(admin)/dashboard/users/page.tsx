@@ -58,12 +58,11 @@ export default async function UsersPage({ params, searchParams }: UsersPageProps
   const { locale } = await params
   const sp = await searchParams
 
-  // 1. Verify authentication and strictly require 'admin' role
   const session = await auth.api.getSession({
     headers: await headers(),
   })
 
-  if (!session || !session.user || session.user.role !== 'admin') {
+  if (session?.user?.role !== 'admin') {
     redirect(`/${locale}/dashboard`)
   }
 
