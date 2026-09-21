@@ -22,6 +22,7 @@ interface PostTableToolbarProps {
   initialCategory?: string
 }
 
+/** Renders filters and search controls for the post table. */
 export function PostTableToolbar({
   categories,
   initialSearch = '',

@@ -11,6 +11,7 @@ interface DashboardLayoutProps {
   params: Promise<{ locale: string }>
 }
 
+/** Protects and renders the dashboard layout. */
 export default async function DashboardLayout({ children, params }: DashboardLayoutProps) {
   const { locale } = await params
 

@@ -85,6 +85,7 @@ export interface MdxCalloutProps {
   className?: string
 }
 
+/** Renders a typed callout block for MDX content. */
 export function MdxCallout({ type = 'info', title, children, className }: MdxCalloutProps) {
   const normalizedType = type.toLowerCase()
   const config = CALLOUT_STYLES[normalizedType] || CALLOUT_STYLES.info

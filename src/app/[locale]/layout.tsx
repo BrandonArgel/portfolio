@@ -55,6 +55,7 @@ export async function generateMetadata({
   }
 }
 
+/** Renders the localized application shell. */
 export default async function RootLayout({ children }: RootLayoutProps) {
   const currentLocale = await getLocale()
   const cookieStore = await cookies()

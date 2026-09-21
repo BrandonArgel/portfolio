@@ -35,6 +35,7 @@ interface UseBlogEditorProps {
   onSavingChange?: (isSaving: boolean) => void
 }
 
+/** Creates and configures the portfolio rich-text editor. */
 export function useEditor({
   initialContent = '',
   onChange,

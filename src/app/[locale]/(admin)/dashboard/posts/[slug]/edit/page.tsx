@@ -27,6 +27,7 @@ export async function generateMetadata({ params }: EditPostPageProps): Promise<M
   }
 }
 
+/** Loads an existing post into the editor. */
 export default async function EditPostPage({ params }: EditPostPageProps) {
   const { slug, locale } = await params
   const session = await auth.api.getSession({ headers: await headers() })

@@ -3,6 +3,7 @@ import React from 'react'
 import { cn } from '@/lib/utils'
 import { MdxCopyButton } from './mdx-copy-button'
 
+/** Flattens renderable node content into plain text. */
 function extractText(node: React.ReactNode): string {
   if (typeof node === 'string' || typeof node === 'number') {
     return String(node)
@@ -21,6 +22,7 @@ function extractText(node: React.ReactNode): string {
   return ''
 }
 
+/** Renders a styled preformatted MDX code container. */
 export function MdxPre({ children, className, ...props }: React.ComponentPropsWithoutRef<'pre'>) {
   const codeString = extractText(children).replace(/\n$/, '')
   const language =
@@ -46,6 +48,7 @@ export function MdxPre({ children, className, ...props }: React.ComponentPropsWi
   )
 }
 
+/** Renders styled inline MDX code. */
 export function MdxCode({ children, className, ...props }: React.ComponentPropsWithoutRef<'code'>) {
   const isBlock = 'data-theme' in props || 'data-language' in props
 

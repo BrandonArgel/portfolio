@@ -47,6 +47,7 @@ export async function generateMetadata({ params }: DashboardPostsPageProps): Pro
   }
 }
 
+/** Renders the filtered dashboard post listing. */
 export default async function DashboardPostsPage({
   params,
   searchParams,

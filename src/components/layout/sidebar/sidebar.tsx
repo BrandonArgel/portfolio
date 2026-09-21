@@ -19,6 +19,7 @@ export interface DashboardSidebarProps extends React.ComponentProps<typeof Sideb
   isEditor?: boolean
 }
 
+/** Renders dashboard navigation inside the shared sidebar. */
 export function DashboardSidebar({
   session,
   isAdmin,

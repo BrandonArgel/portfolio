@@ -15,6 +15,7 @@ import { AuthCardLayout } from './auth-card-layout'
 import { ControlledCheckbox } from './controlled-checkbox'
 import { ControlledInput } from './controlled-input'
 
+/** Renders the account registration form. */
 export function RegisterForm() {
   const t = useTranslations('features.auth.register')
   const tGlobal = useTranslations('common')
@@ -36,6 +37,7 @@ export function RegisterForm() {
     },
   })
 
+  /** Registers a user with submitted account details. */
   async function handleSignUp(data: SignUpForm) {
     const { confirmPassword, acceptTerms, ...signUpData } = data
 

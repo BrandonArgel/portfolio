@@ -7,6 +7,7 @@ const querySchema = z.object({
   limit: z.coerce.number().int().min(1).max(50).default(3),
 })
 
+/** Returns posts matching the validated request filters. */
 export async function GET(request: NextRequest) {
   const searchParams = Object.fromEntries(request.nextUrl.searchParams)
   const parseResult = querySchema.safeParse(searchParams)

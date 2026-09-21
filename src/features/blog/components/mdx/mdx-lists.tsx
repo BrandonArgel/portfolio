@@ -2,6 +2,7 @@ import type React from 'react'
 
 import { cn } from '@/lib/utils'
 
+/** Renders a styled unordered MDX list. */
 export function MdxUl({ className, ...props }: React.ComponentPropsWithoutRef<'ul'>) {
   return (
     <ul
@@ -14,10 +15,12 @@ export function MdxUl({ className, ...props }: React.ComponentPropsWithoutRef<'u
   )
 }
 
+/** Renders a styled ordered MDX list. */
 export function MdxOl({ className, ...props }: React.ComponentPropsWithoutRef<'ol'>) {
   return <ol className={cn('my-6 ml-6 list-decimal [&>li]:mt-2', className)} {...props} />
 }
 
+/** Renders a styled MDX list item. */
 export function MdxLi({ className, ...props }: React.ComponentPropsWithoutRef<'li'>) {
   return (
     <li
@@ -30,6 +33,7 @@ export function MdxLi({ className, ...props }: React.ComponentPropsWithoutRef<'l
   )
 }
 
+/** Renders an MDX input with task-checkbox styling. */
 export function MdxInput({ type, className, ...props }: React.ComponentPropsWithoutRef<'input'>) {
   if (type === 'checkbox') {
     return (

@@ -3,6 +3,7 @@ import React from 'react'
 import { cn } from '@/lib/utils'
 import { MdxCallout } from './mdx-callout'
 
+/** Renders an MDX level-1 heading. */
 export function MdxH1({ className, ...props }: React.ComponentPropsWithoutRef<'h1'>) {
   return (
     <h1
@@ -15,6 +16,7 @@ export function MdxH1({ className, ...props }: React.ComponentPropsWithoutRef<'h
   )
 }
 
+/** Renders an MDX level-2 heading. */
 export function MdxH2({ className, ...props }: React.ComponentPropsWithoutRef<'h2'>) {
   return (
     <h2
@@ -27,6 +29,7 @@ export function MdxH2({ className, ...props }: React.ComponentPropsWithoutRef<'h
   )
 }
 
+/** Renders an MDX level-3 heading. */
 export function MdxH3({ className, ...props }: React.ComponentPropsWithoutRef<'h3'>) {
   return (
     <h3
@@ -39,6 +42,7 @@ export function MdxH3({ className, ...props }: React.ComponentPropsWithoutRef<'h
   )
 }
 
+/** Renders an MDX level-4 heading. */
 export function MdxH4({ className, ...props }: React.ComponentPropsWithoutRef<'h4'>) {
   return (
     <h4
@@ -51,6 +55,7 @@ export function MdxH4({ className, ...props }: React.ComponentPropsWithoutRef<'h
   )
 }
 
+/** Renders an MDX level-5 heading. */
 export function MdxH5({ className, ...props }: React.ComponentPropsWithoutRef<'h5'>) {
   return (
     <h5
@@ -63,6 +68,7 @@ export function MdxH5({ className, ...props }: React.ComponentPropsWithoutRef<'h
   )
 }
 
+/** Renders an MDX level-6 heading. */
 export function MdxH6({ className, ...props }: React.ComponentPropsWithoutRef<'h6'>) {
   return (
     <h6
@@ -75,6 +81,7 @@ export function MdxH6({ className, ...props }: React.ComponentPropsWithoutRef<'h
   )
 }
 
+/** Renders a styled MDX paragraph. */
 export function MdxP({ className, ...props }: React.ComponentPropsWithoutRef<'p'>) {
   return (
     <p
@@ -87,6 +94,7 @@ export function MdxP({ className, ...props }: React.ComponentPropsWithoutRef<'p'
   )
 }
 
+/** Renders an MDX link with internal and external link handling. */
 export function MdxA({ href, className, children, ...props }: React.ComponentPropsWithoutRef<'a'>) {
   const isExternal = href?.startsWith('http://') || href?.startsWith('https://')
 
@@ -106,10 +114,12 @@ export function MdxA({ href, className, children, ...props }: React.ComponentPro
   )
 }
 
+/** Renders a styled thematic break for MDX content. */
 export function MdxHr({ className, ...props }: React.ComponentPropsWithoutRef<'hr'>) {
   return <hr className={cn('my-8 border-border/60', className)} {...props} />
 }
 
+/** Flattens renderable node content into plain text. */
 function extractText(node: React.ReactNode): string {
   if (typeof node === 'string' || typeof node === 'number') {
     return String(node)
@@ -128,9 +138,11 @@ function extractText(node: React.ReactNode): string {
   return ''
 }
 
+/** Removes a leading callout marker from rendered content. */
 function stripCalloutMarker(node: React.ReactNode): React.ReactNode {
   let stripped = false
 
+  /** Recursively removes a leading callout marker from child nodes. */
   function clean(child: React.ReactNode): React.ReactNode {
     if (stripped) return child
     if (typeof child === 'string') {
@@ -168,6 +180,7 @@ function stripCalloutMarker(node: React.ReactNode): React.ReactNode {
 
 const CALLOUT_HEADER_REGEX = /^\s*\[!([a-zA-Z]+)\](?:\s*(.*))?/
 
+/** Renders an MDX blockquote or callout. */
 export function MdxBlockquote({
   children,
   className,

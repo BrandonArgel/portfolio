@@ -20,6 +20,7 @@ import { useEditorUI } from '../store/use-editor-ui'
 
 // ─── Video Dialog ────────────────────────────────────────────────────────────
 
+/** Renders the editor dialog for inserting a video URL. */
 function VideoDialog() {
   const t = useTranslations('features.editor.video_dialog')
   const { isOpen, pendingCallback } = useEditorUI((s) => s.videoDialog)
@@ -81,6 +82,7 @@ function VideoDialog() {
 
 // ─── Math Editor Dialog ──────────────────────────────────────────────────────
 
+/** Renders the editor dialog for creating or editing math. */
 function MathEditorDialog() {
   const t = useTranslations('features.editor.math')
   const { isOpen, latex: initialLatex, type, pendingCallback } = useEditorUI((s) => s.mathDialog)
@@ -158,6 +160,7 @@ function MathEditorDialog() {
 
 // ─── Composite ───────────────────────────────────────────────────────────────
 
+/** Renders dialogs backed by the shared editor UI store. */
 export function EditorDialogs() {
   return (
     <>

@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 import { sileo } from 'sileo'
 import type { SavePostError, UploadImageError } from '../types/errors'
 
+/** Returns localized handlers for blog save and upload errors. */
 export function useBlogErrors() {
   const t = useTranslations('features.blog.composer.notifications.errors')
   const tGlobal = useTranslations('common.errors')

@@ -12,6 +12,7 @@ import { useLocalStorage } from '@/hooks/use-local-storage'
 import { useMounted } from '@/hooks/use-mounted'
 import { signIn } from '@/lib/auth/auth-client'
 
+/** Renders the configured social sign-in providers. */
 export function SocialAuthButtons() {
   const t = useTranslations('features.auth')
   const { getSocialErrorMessage } = useSocialErrors()

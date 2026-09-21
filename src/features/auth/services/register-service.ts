@@ -4,6 +4,7 @@ import type { SignUpForm } from '../schemas/auth-schema'
 import type { RegisterError } from '../types/errors'
 import { loginService } from './login-service'
 
+/** Creates an account and maps typed registration errors. */
 export async function registerService(
   data: Omit<SignUpForm, 'confirmPassword' | 'acceptTerms'>,
 ): Promise<Result<User, RegisterError>> {

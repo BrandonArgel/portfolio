@@ -80,6 +80,7 @@ const LANGUAGE_ICON_MAP: Readonly<Record<string, React.ComponentType<{ className
   dockerfile: SiDocker,
 }
 
+/** Renders the icon associated with a code block language. */
 function LanguageIcon({ language, className, ...props }: LanguageIconProps) {
   const lang = language.trim().toLowerCase()
 
@@ -91,6 +92,7 @@ function LanguageIcon({ language, className, ...props }: LanguageIconProps) {
   return <IconComponent className={className} {...props} />
 }
 
+/** Renders an editable code block with language selection. */
 export function CodeBlockComponent({ node, updateAttributes }: NodeViewProps) {
   const t = useTranslations('features.editor')
   const currentLanguage = typeof node.attrs.language === 'string' ? node.attrs.language : ''

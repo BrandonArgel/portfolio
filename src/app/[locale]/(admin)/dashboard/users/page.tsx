@@ -54,6 +54,7 @@ export async function generateMetadata({ params }: UsersPageProps): Promise<Meta
   }
 }
 
+/** Renders the filtered dashboard user listing. */
 export default async function UsersPage({ params, searchParams }: UsersPageProps) {
   const { locale } = await params
   const sp = await searchParams

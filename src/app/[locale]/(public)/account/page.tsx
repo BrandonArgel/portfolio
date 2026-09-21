@@ -7,6 +7,7 @@ type Props = {
   params: Promise<{ locale: string }>
 }
 
+/** Builds localized metadata for this page. */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'metadata.account' })
@@ -19,6 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   })
 }
 
+/** Renders the public account page. */
 export default function AccountPage() {
   return <AccountContainer />
 }

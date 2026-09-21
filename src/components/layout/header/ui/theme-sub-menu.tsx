@@ -13,6 +13,7 @@ import {
 import { THEME_OPTIONS } from '@/config/theme'
 import { useMounted } from '@/hooks/use-mounted'
 
+/** Renders theme choices inside a navigation submenu. */
 export function ThemeSubMenu() {
   const { theme, setTheme } = useTheme()
   const mounted = useMounted()

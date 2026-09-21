@@ -12,6 +12,7 @@ interface AuthSuccessOptions {
   user: User
 }
 
+/** Returns a handler for successful authentication flows. */
 export function useAuthSuccess() {
   const router = useRouter()
 

@@ -53,6 +53,7 @@ interface BlogFrontmatterPanelProps {
   existingCategories?: string[]
 }
 
+/** Renders and updates editable blog frontmatter fields. */
 export function BlogFrontmatterPanel({
   data,
   onChange,

@@ -58,6 +58,7 @@ interface TableActionButtonProps {
   danger?: boolean
 }
 
+/** Renders a labeled action in the table bubble menu. */
 function TableActionButton({ icon: Icon, action, label, danger = false }: TableActionButtonProps) {
   return (
     <Tooltip>
@@ -85,6 +86,7 @@ function TableActionButton({ icon: Icon, action, label, danger = false }: TableA
   )
 }
 
+/** Renders contextual controls for the editor selection. */
 export function BubbleMenu({ editor }: BubbleMenuProps) {
   const t = useTranslations('features.editor.bubble_menu')
   const tActions = useTranslations('common.actions')

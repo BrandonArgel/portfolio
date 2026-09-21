@@ -29,6 +29,7 @@ export interface SidebarNavMainProps {
   isAdmin?: boolean
 }
 
+/** Renders role-aware primary dashboard navigation. */
 export function SidebarNavMain({ isAdmin = false }: SidebarNavMainProps) {
   const t = useTranslations('components.layout.dashboard')
   const pathname = usePathname()

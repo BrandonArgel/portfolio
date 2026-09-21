@@ -16,6 +16,7 @@ const prettyCodeOptions: RehypePrettyCodeOptions = {
   keepBackground: false,
 }
 
+/** Renders serialized MDX with the portfolio component mapping. */
 export function MdxContentServer({ content }: MdxContentServerProps) {
   // Sanitize Tiptap's malformed youtube directive into a valid MDX JSX component
   const safeContent = content.replace(/:::youtube\s*\{([^}]+)\}\s*:::/g, '<YouTube $1 />')

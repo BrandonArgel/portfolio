@@ -12,6 +12,7 @@ interface EditorProps {
   onImageUpload?: (file: File) => Promise<string | undefined>
 }
 
+/** Renders the rich-text editor and its save status. */
 export function Editor({ initialContent = '', onChange, onImageUpload }: EditorProps) {
   const t = useTranslations('features.editor')
   const [isSaving, setIsSaving] = useState(false)

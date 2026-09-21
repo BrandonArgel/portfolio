@@ -11,6 +11,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils'
 
+/** Renders an editable image with upload and metadata controls. */
 export function ImageComponent(props: NodeViewProps) {
   const { node, selected: isSelected, updateAttributes, deleteNode } = props
   const t = useTranslations('features.editor')

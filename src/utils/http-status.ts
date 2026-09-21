@@ -1,3 +1,4 @@
+/** Maps a service error reason to an HTTP status code. */
 export function getHttpStatusFromError(reason: string): number {
   switch (reason) {
     case 'NOT_FOUND':

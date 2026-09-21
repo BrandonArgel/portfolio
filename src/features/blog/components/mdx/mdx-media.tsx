@@ -3,6 +3,7 @@ import type React from 'react'
 
 import { cn } from '@/lib/utils'
 
+/** Renders a responsive image for MDX content. */
 export function MdxImage({
   src,
   alt,
@@ -40,6 +41,7 @@ export function MdxImage({
   )
 }
 
+/** Renders a responsive iframe for MDX content. */
 export function MdxIframe({
   src,
   title = 'Embedded video',
@@ -60,6 +62,7 @@ export function MdxIframe({
   )
 }
 
+/** Extracts a YouTube video identifier from a supported URL. */
 function extractYouTubeId(url: string): string {
   const match = url.match(
     /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/,
@@ -67,6 +70,7 @@ function extractYouTubeId(url: string): string {
   return match ? match[1] : url
 }
 
+/** Renders a responsive YouTube embed for MDX content. */
 export function MdxYouTube({
   id,
   url,

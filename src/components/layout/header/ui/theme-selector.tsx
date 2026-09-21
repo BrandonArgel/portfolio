@@ -22,6 +22,7 @@ const THEME_LABEL_KEYS = {
 
 type ThemeKey = keyof typeof THEME_LABEL_KEYS
 
+/** Renders controls for selecting the active theme. */
 export function ThemeToggleButtons() {
   const { theme, setTheme } = useTheme()
   const t = useTranslations('components.theme_selector')

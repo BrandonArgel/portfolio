@@ -26,6 +26,7 @@ interface UserActionsMenuProps {
   isSelf: boolean
 }
 
+/** Renders administrative actions for a user. */
 export function UserActionsMenu({
   userId,
   userName,

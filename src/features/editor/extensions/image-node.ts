@@ -12,6 +12,7 @@ export interface CustomImageOptions extends ImageOptions {
   uploadFn?: (file: File) => Promise<string | undefined>
 }
 
+/** Finds an uploading image node by its temporary identifier. */
 function findNodeByUploadId(
   doc: ProsemirrorNode,
   uploadId: string,
@@ -29,6 +30,7 @@ function findNodeByUploadId(
   return result
 }
 
+/** Uploads an image and replaces its temporary editor node. */
 function handleAsyncUpload(
   view: EditorView,
   uploadId: string,

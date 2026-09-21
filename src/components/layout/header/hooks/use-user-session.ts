@@ -3,6 +3,7 @@ import { useRouter } from '@/i18n/navigation'
 import { type Session, signOut, useSession } from '@/lib/auth/auth-client'
 import { getInitials } from '@/utils/get-initials'
 
+/** Tracks the current user session and sign-out state. */
 export function useUserSession(initialSession?: Session | null) {
   const router = useRouter()
   const [isSignOutPending, startTransition] = useTransition()

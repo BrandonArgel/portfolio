@@ -15,6 +15,7 @@ interface MathBubbleMenuProps {
   editor: Editor
 }
 
+/** Renders contextual controls for the selected math node. */
 export function MathBubbleMenu({ editor }: MathBubbleMenuProps) {
   const t = useTranslations('features.editor.math')
 

@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server'
 // import { ProfileSection } from './ProfileSection';
 // import { SecuritySection } from './SecuritySection';
 
+/** Loads the session and renders account details. */
 export async function AccountContainer() {
   const t = await getTranslations('features.account.page')
 

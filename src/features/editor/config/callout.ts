@@ -17,14 +17,17 @@ export type CalloutType = (typeof CALLOUT_TYPES)[number]
 
 export const DEFAULT_CALLOUT_TYPE: CalloutType = 'info'
 
+/** Checks whether a value is a supported callout type. */
 export function isCalloutType(value: unknown): value is CalloutType {
   return typeof value === 'string' && CALLOUT_TYPES.includes(value as CalloutType)
 }
 
+/** Normalizes an unknown value to a supported callout type. */
 export function normalizeCalloutType(value: unknown): CalloutType {
   return isCalloutType(value) ? value : DEFAULT_CALLOUT_TYPE
 }
 
+/** Returns the display label for a callout type. */
 export function getCalloutLabel(type: CalloutType): string {
   return type.charAt(0).toUpperCase() + type.slice(1)
 }
@@ -35,6 +38,7 @@ export interface CalloutAttributes {
   type: CalloutType
 }
 
+/** Creates the initial document structure for a callout. */
 export function createCalloutContent(type: CalloutType = DEFAULT_CALLOUT_TYPE): JSONContent {
   return {
     type: 'callout',

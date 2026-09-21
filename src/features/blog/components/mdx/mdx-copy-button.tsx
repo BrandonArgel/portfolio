@@ -10,6 +10,7 @@ export interface MdxCopyButtonProps {
   className?: string
 }
 
+/** Renders a button that copies a code block to the clipboard. */
 export function MdxCopyButton({ code, className }: MdxCopyButtonProps) {
   const [copied, setCopied] = useState(false)
 

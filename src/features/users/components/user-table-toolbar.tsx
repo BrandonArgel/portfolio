@@ -19,6 +19,7 @@ interface UserTableToolbarProps {
   initialRole?: string
 }
 
+/** Renders filters and search controls for the user table. */
 export function UserTableToolbar({ initialSearch = '', initialRole = '' }: UserTableToolbarProps) {
   const t = useTranslations('features.users.management')
   const tRoles = useTranslations('features.users.roles')

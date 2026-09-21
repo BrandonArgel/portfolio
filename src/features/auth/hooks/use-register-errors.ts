@@ -5,6 +5,7 @@ import { sileo } from 'sileo'
 import { useRouter } from '@/i18n/navigation'
 import type { RegisterError } from '../types/errors'
 
+/** Returns localized registration error handling. */
 export function useRegisterErrors() {
   const t = useTranslations('features.auth.register')
   const tGlobal = useTranslations('common')

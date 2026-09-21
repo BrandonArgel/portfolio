@@ -2,6 +2,7 @@ import type React from 'react'
 
 import { cn } from '@/lib/utils'
 
+/** Renders a responsive MDX table wrapper. */
 export function MdxTable({
   className,
   children,
@@ -16,16 +17,19 @@ export function MdxTable({
   )
 }
 
+/** Renders an MDX table header section. */
 export function MdxThead({ className, ...props }: React.ComponentPropsWithoutRef<'thead'>) {
   return (
     <thead className={cn('border-b border-border bg-muted/50 font-medium', className)} {...props} />
   )
 }
 
+/** Renders an MDX table body section. */
 export function MdxTbody({ className, ...props }: React.ComponentPropsWithoutRef<'tbody'>) {
   return <tbody className={cn('[&_tr:last-child]:border-0', className)} {...props} />
 }
 
+/** Renders a styled MDX table row. */
 export function MdxTr({ className, ...props }: React.ComponentPropsWithoutRef<'tr'>) {
   return (
     <tr
@@ -38,6 +42,7 @@ export function MdxTr({ className, ...props }: React.ComponentPropsWithoutRef<'t
   )
 }
 
+/** Renders a styled MDX table header cell. */
 export function MdxTh({ className, ...props }: React.ComponentPropsWithoutRef<'th'>) {
   return (
     <th
@@ -50,6 +55,7 @@ export function MdxTh({ className, ...props }: React.ComponentPropsWithoutRef<'t
   )
 }
 
+/** Renders a styled MDX table data cell. */
 export function MdxTd({ className, ...props }: React.ComponentPropsWithoutRef<'td'>) {
   return (
     <td

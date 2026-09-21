@@ -35,6 +35,7 @@ interface BanUserDialogProps {
   onOpenChange: (open: boolean) => void
 }
 
+/** Renders the confirmation form for banning a user. */
 export function BanUserDialog({
   userId,
   userName,

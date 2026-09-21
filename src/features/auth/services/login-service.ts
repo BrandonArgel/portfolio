@@ -3,6 +3,7 @@ import { error, okay, type Result } from '@/utils/result'
 import type { SignInForm } from '../schemas/auth-schema'
 import type { LoginError } from '../types/errors'
 
+/** Authenticates credentials and maps typed login errors. */
 export async function loginService(data: SignInForm): Promise<Result<User, LoginError>> {
   const { data: signInData, error: signInError } = await signIn.email({
     email: data.email,

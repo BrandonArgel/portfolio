@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 import { sileo } from 'sileo'
 import type { LoginError } from '../types/errors'
 
+/** Returns localized login error handling. */
 export function useLoginErrors() {
   const t = useTranslations('features.auth.login')
   const tGlobal = useTranslations('common')

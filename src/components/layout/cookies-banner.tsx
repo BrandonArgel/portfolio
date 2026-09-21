@@ -8,6 +8,7 @@ import { setCookieConsent } from '@/features/shared/actions/cookies.action'
 import { Link } from '@/i18n/navigation'
 import { track } from '@/lib/analytics/events'
 
+/** Renders controls for accepting or dismissing cookies. */
 export function CookieBanner() {
   const [isVisible, setIsVisible] = useState(true)
   const t = useTranslations('components.layout.cookie_banner')

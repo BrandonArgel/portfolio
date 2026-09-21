@@ -73,6 +73,7 @@ const CALLOUT_CONFIG: Record<
   },
 } as const
 
+/** Renders an editable callout and type selector. */
 export function CalloutComponent(props: NodeViewProps) {
   const { node, deleteNode, updateAttributes } = props
   const t = useTranslations('features.editor.callout')

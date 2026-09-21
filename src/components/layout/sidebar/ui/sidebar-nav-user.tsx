@@ -31,6 +31,7 @@ export interface SidebarNavUserProps {
   className?: string
 }
 
+/** Renders session-aware user actions in the dashboard sidebar. */
 export function SidebarNavUser({ initialSession, className }: SidebarNavUserProps) {
   const tGlobal = useTranslations('common')
   const tHeader = useTranslations('components.layout.header')

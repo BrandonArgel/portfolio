@@ -13,6 +13,7 @@ interface UseCopyToClipboardReturn {
   clearCopiedText: () => void
 }
 
+/** Provides clipboard state and a timed copied indicator. */
 export function useCopyToClipboard(timeout: number = 2000): UseCopyToClipboardReturn {
   const [copiedText, setCopiedText] = useState<CopiedValue>(null)
   const [error, setError] = useState<CopyError>(null)

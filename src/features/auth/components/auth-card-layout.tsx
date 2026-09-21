@@ -9,6 +9,7 @@ interface AuthCardLayoutProps {
   children: ReactNode
 }
 
+/** Renders the shared card layout for authentication forms. */
 export function AuthCardLayout({ title, children }: AuthCardLayoutProps) {
   const tGlobal = useTranslations('common')
 

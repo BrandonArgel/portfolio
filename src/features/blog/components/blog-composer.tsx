@@ -32,6 +32,7 @@ interface BlogComposerProps {
   existingCategories?: string[]
 }
 
+/** Renders the blog editor and coordinates draft persistence. */
 export function BlogComposer({
   initialId,
   initialFrontmatter,

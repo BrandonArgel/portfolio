@@ -14,6 +14,7 @@ import { AuthCardLayout } from './auth-card-layout'
 import { ControlledCheckbox } from './controlled-checkbox'
 import { ControlledInput } from './controlled-input'
 
+/** Renders the email and password login form. */
 export function LoginForm() {
   const t = useTranslations('features.auth.login')
   const tGlobal = useTranslations('common')
@@ -29,6 +30,7 @@ export function LoginForm() {
     defaultValues: { email: '', password: '', rememberMe: false },
   })
 
+  /** Authenticates a user with submitted credentials. */
   async function handleSignIn(data: SignInForm) {
     const [error, user] = await loginService(data)
 

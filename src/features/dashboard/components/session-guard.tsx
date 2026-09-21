@@ -9,6 +9,7 @@ interface SessionGuardProps {
   children: React.ReactNode
 }
 
+/** Monitors the dashboard session and redirects revoked sessions. */
 export function SessionGuard({ children }: SessionGuardProps) {
   const params = useParams()
   const pathname = usePathname()

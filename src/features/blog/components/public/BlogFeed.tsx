@@ -15,6 +15,7 @@ interface BlogFeedProps {
   children?: React.ReactNode
 }
 
+/** Loads and renders the public blog feed. */
 export async function BlogFeed({
   posts,
   totalCount = 0,

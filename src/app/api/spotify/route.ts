@@ -5,6 +5,7 @@ import type { EndpointSpotifyTrack, SpotifyTrack } from '@/features/spotify/type
 
 export const dynamic = 'force-dynamic'
 
+/** Returns the current Spotify playback state. */
 export async function GET() {
   try {
     const response = await getNowPlaying()

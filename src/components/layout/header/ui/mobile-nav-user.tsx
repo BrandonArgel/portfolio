@@ -11,6 +11,7 @@ import { AuthButtons } from '@/features/auth/components/auth-buttons'
 import { Link } from '@/i18n/navigation'
 import { useUserSession } from '../hooks/use-user-session'
 
+/** Renders signed-in user controls in mobile navigation. */
 export function MobileNavUser({ onNavigate }: { onNavigate: () => void }) {
   const tGlobal = useTranslations('common')
   const {

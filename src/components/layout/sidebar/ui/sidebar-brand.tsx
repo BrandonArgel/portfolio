@@ -13,6 +13,7 @@ export interface SidebarBrandProps {
   isEditor?: boolean
 }
 
+/** Renders the sidebar brand link and collapse control. */
 export function SidebarBrand({
   session,
   isAdmin: propIsAdmin,

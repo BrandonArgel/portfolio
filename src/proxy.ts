@@ -8,6 +8,7 @@ const intlMiddleware = createIntlMiddleware(routing)
 const authRoutes = ['/login', '/register', '/login/identify']
 const protectedRoutes = ['/dashboard', '/settings']
 
+/** Applies locale routing and authentication checks to incoming requests. */
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 

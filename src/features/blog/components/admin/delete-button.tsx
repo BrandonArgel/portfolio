@@ -21,6 +21,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { deletePostAction } from '@/features/blog/actions/posts.action'
 import { checkAndHandleSessionRevoked } from '@/lib/auth-interceptor'
 
+/** Renders the confirmation flow for deleting a post. */
 export function DeletePostButton({ postId }: { postId: string }) {
   const t = useTranslations('features.blog.management')
   const [open, setOpen] = useState(false)

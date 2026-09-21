@@ -25,6 +25,7 @@ interface UserMenuProps {
   className?: string
 }
 
+/** Renders account, theme, and sign-out actions for the current user. */
 export function UserPreferencesMenu({ initialSession, className }: UserMenuProps) {
   const tGlobal = useTranslations('common')
   const tHeader = useTranslations('components.layout.header')

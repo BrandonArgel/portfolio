@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 
+/** Returns localized social authentication error handling. */
 export function useSocialErrors() {
   const t = useTranslations('features.auth.social')
   const tGlobal = useTranslations('common')
