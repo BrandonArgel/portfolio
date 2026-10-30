@@ -2,13 +2,11 @@ import { and, asc, count, desc, eq, inArray, like, or } from 'drizzle-orm'
 import { db } from '@/db'
 import { categories, posts, postsToCategories } from '@/db/schema'
 import { error, okay, type Result } from '@/utils/result'
-import type { BlogCategory, BlogPost, BlogPostCardItem } from '../types'
+import type { BlogCategory, BlogPost, BlogPostCardItem, PostQueryError } from '../types'
 import { calculateReadTime } from '../utils/calculate-read-time'
 import { extractExcerpt } from '../utils/extract-excerpt'
 
-export type PostError =
-  | { reason: 'DATABASE_ERROR'; details?: unknown }
-  | { reason: 'NOT_FOUND'; identifier?: string }
+export type PostError = PostQueryError
 
 function escapeLikePattern(input: string): string {
   return input.replace(/[%_\\]/g, '\\$&')
@@ -63,13 +61,21 @@ export interface PaginatedPosts {
   currentPage: number
 }
 
-export async function getPublishedPosts(
-  categorySlug?: string,
-  searchQuery?: string,
+export interface PublishedPostsOptions {
+  categorySlug?: string
+  searchQuery?: string
+  page?: number
+  limit?: number
+  sortBy?: string
+}
+
+export async function getPublishedPosts({
+  categorySlug,
+  searchQuery,
   page = 1,
   limit = 9,
-  sortBy?: string,
-): Promise<Result<PaginatedPosts, PostError>> {
+  sortBy,
+}: PublishedPostsOptions = {}): Promise<Result<PaginatedPosts, PostError>> {
   try {
     const safePage = Math.max(1, page)
     const offset = (safePage - 1) * limit

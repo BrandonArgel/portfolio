@@ -48,7 +48,13 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
 
   const [[postsErr, paginatedData], [categoriesErr, categoriesData], totalPublishedCount] =
     await Promise.all([
-      getPublishedPosts(categorySlug, searchQuery, currentPage, limit, sortParam),
+      getPublishedPosts({
+        categorySlug,
+        searchQuery,
+        page: currentPage,
+        limit,
+        sortBy: sortParam,
+      }),
       getAllCategories(locale),
       countTotalPublishedPosts(locale),
     ])

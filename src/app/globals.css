@@ -10,6 +10,7 @@
 
 @theme inline {
   --color-background: var(--background);
+  --color-secondary-background: var(--secondary-background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-jakarta-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -88,6 +89,7 @@
   --secondary: oklch(0.7425 0.1975 295.1302);
   --secondary-foreground: oklch(0.205 0 0);
   --background: oklch(1 0 0);
+  --secondary-background: oklch(0.985 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -146,6 +148,7 @@
   --secondary: oklch(0.5425 0.1752 296.251);
   --secondary-foreground: oklch(0.985 0 0);
   --background: oklch(0.1298 0.0425 265.13);
+  --secondary-background: oklch(0.13 0.06 265);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.2084 0.0417 266.36);
   --card-foreground: oklch(0.985 0 0);
@@ -169,7 +172,7 @@
   --chart-4: oklch(0.7 0.18 340);
   --chart-5: oklch(0.8 0.15 50);
 
-  --sidebar: oklch(0.1298 0.0425 265.13);
+  --sidebar: oklch(0.13 0.06 265);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.985 0 0);
@@ -198,32 +201,6 @@
   --typeset-size: 16px;
   --typeset-leading: 1.75;
   --typeset-flow: 1.25em;
-}
-
-.tiptap p.is-empty {
-  position: relative;
-}
-
-.tiptap p.is-empty::before {
-  color: var(--color-muted-foreground);
-  content: attr(data-placeholder);
-  pointer-events: none;
-  position: absolute;
-  left: 0;
-  max-width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.tippy-box[data-theme~="notion"] {
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-}
-
-.tippy-box[data-theme~="notion"] > .tippy-content {
-  padding: 0;
 }
 
 @layer base {

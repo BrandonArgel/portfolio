@@ -10,6 +10,7 @@ import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import TaskList from '@tiptap/extension-task-list'
 import Youtube from '@tiptap/extension-youtube'
+import { CharacterCount } from '@tiptap/extensions'
 import { Markdown } from '@tiptap/markdown'
 import { useEditor as useTiptapEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -98,6 +99,7 @@ export function useEditor({
           width: 2,
         },
       }),
+      CharacterCount,
       Highlight.configure({
         HTMLAttributes: {
           class: 'bg-primary/20 text-primary rounded-sm px-1',
@@ -181,7 +183,7 @@ export function useEditor({
       attributes: {
         class: cn(
           'typeset typeset-docs prose-neutral dark:prose-invert',
-          'w-full max-w-none focus:outline-none overflow-y-auto p-8 sm:p-12 min-h-[600px] h-full scroll-smooth',
+          'w-full max-w-none focus:outline-none overflow-y-auto p-8 h-full scroll-smooth',
         ),
         spellcheck: 'false',
         autocomplete: 'off',

@@ -16,10 +16,10 @@
       "name": "John Doe"
     },
     "errors": {
-      "system_title": "System Error",
-      "system_description": "An error occurred while processing your request. Please try again later.",
-      "unexpected_title": "Unexpected Error",
-      "unexpected_description": "An unexpected error occurred. Please try again later."
+      "unknown_title": "Unknown error",
+      "unknown_description": "An unknown error occurred. Please try again.",
+      "unexpected_title": "Unexpected error",
+      "unexpected_description": "An unexpected error occurred. Please try again."
     },
     "labels": {
       "email": "Email",
@@ -238,16 +238,28 @@
         "forgot_password": "Forgot password?",
         "create_account": "Create new account",
         "welcome_back": "Welcome back{name, select, empty {} other {, {name}}}!",
-        "invalid_credentials_title": "Sign In Failed",
-        "invalid_credentials_description": "Invalid email or password. Please check your credentials.",
-        "forbidden_title": "Access Denied",
-        "forbidden_description": "You do not have permission to access this resource.",
-        "unverified_email_title": "Email Not Verified",
-        "unverified_email_description": "Please verify your email address before signing in. Check your inbox for the verification email.",
-        "banned_title": "Account Banned",
-        "banned_description": "Your account has been banned. Please contact support for more information.",
-        "rate_limited_title": "Too Many Attempts",
-        "rate_limited_description": "You have made too many sign-in attempts. Please wait a few minutes and try again."
+        "errors": {
+          "BANNED": {
+            "title": "Account Banned",
+            "description": "Your account has been banned. Please contact support for more information."
+          },
+          "FORBIDDEN": {
+            "title": "Access Denied",
+            "description": "You do not have permission to access this resource."
+          },
+          "INVALID_CREDENTIALS": {
+            "title": "Invalid credentials",
+            "description": "Invalid email or password. Please check your credentials."
+          },
+          "RATE_LIMITED": {
+            "title": "Too Many Attempts",
+            "description": "You have made too many sign-in attempts. Please wait a few minutes and try again."
+          },
+          "UNVERIFIED_EMAIL": {
+            "title": "Email Not Verified",
+            "description": "Please verify your email address before signing in. Check your inbox for the verification email."
+          }
+        }
       },
       "register": {
         "title": "Sign Up",
@@ -259,18 +271,32 @@
         "already_have_account": "I already have an account",
         "account_created_title": "Account created!",
         "account_created_description": "Welcome to the platform{name, select, empty {} other {, {name}}}.",
-        "email_in_use_title": "Email in use",
-        "email_in_use_description": "This email is already registered. Please log in.",
-        "invalid_password_title": "Invalid Password",
-        "invalid_password_description": "Please ensure your password meets all requirements.",
-        "partial_success_title": "Partial Success",
-        "partial_success_description": "Account created successfully, but please log in manually.",
-        "registration_failed_title": "Registration Failed",
-        "registration_failed_description": "An error occurred while creating your account. Please try again later.",
-        "rate_limited_title": "Too Many Attempts",
-        "rate_limited_description": "You have made too many sign-up attempts. Please wait a few minutes and try again.",
-        "forbidden_title": "Access Denied",
-        "forbidden_description": "You do not have permission to access this resource."
+        "errors": {
+          "AUTO_LOGIN_FAILED": {
+            "title": "Auto login failed",
+            "description": "Please log in manually."
+          },
+          "FORBIDDEN": {
+            "title": "Access Denied",
+            "description": "You do not have permission to access this resource."
+          },
+          "RATE_LIMITED": {
+            "title": "Too Many Attempts",
+            "description": "You have made too many sign-up attempts. Please wait a few minutes and try again."
+          },
+          "UNKNOWN_ERROR": {
+            "title": "System Error",
+            "description": "An error occurred while creating your account. Please try again later."
+          },
+          "USER_ALREADY_EXISTS": {
+            "title": "Email in use",
+            "description": "This email is already registered. Please log in."
+          },
+          "WEAK_PASSWORD": {
+            "title": "Invalid Password",
+            "description": "Please ensure your password meets all requirements."
+          }
+        }
       }
     },
     "blog": {
@@ -295,6 +321,7 @@
         "empty_bookmarked": "No bookmarked articles yet. Bookmark your favorite reads to find them here!",
         "empty_trending": "Check back soon for trending articles!",
         "all_articles": "All Articles",
+        "all_topics": "All topics",
         "showing_articles": "Showing {start}-{end} of {total} articles",
         "sort": {
           "latest": "Latest",
@@ -433,6 +460,28 @@
           "status_live": "Live",
           "status_draft": "Draft"
         }
+      },
+      "errors": {
+        "NOT_FOUND": {
+          "title": "Article not found",
+          "description": "The article you are looking for does not exist or was removed."
+        },
+        "UNAUTHORIZED": {
+          "title": "Authentication required",
+          "description": "Please sign in to continue."
+        },
+        "FORBIDDEN": {
+          "title": "Access Denied",
+          "description": "You do not have permission to perform this action."
+        },
+        "DATABASE_ERROR": {
+          "title": "Database error",
+          "description": "We could not complete the operation. Please try again later."
+        },
+        "VALIDATION_ERROR": {
+          "title": "Validation error",
+          "description": "Please review the data and try again."
+        }
       }
     },
     "contact": {
@@ -503,6 +552,8 @@
       "title": "Editor",
       "writing": "Writing...",
       "saved_locally": "Saved locally",
+      "characters": "Characters",
+      "words": "Words",
       "loading": "Loading editor...",
       "placeholder": "Type '/' for commands or start writing your article...",
       "image_alt_placeholder": "Image description",

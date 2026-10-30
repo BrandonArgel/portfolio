@@ -8,14 +8,14 @@ export interface BlogCategory {
 export interface BlogPost {
   id: string
   title: string
-  slug: string
   description: string
+  slug: string
   content: string
   excerpt: string
   coverImage?: string | null
+  published: boolean
   locale: string
   translationGroupId?: string
-  published: boolean
   authorId: string
   authorName?: string
   categories: BlogCategory[]

@@ -68,7 +68,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       suppressHydrationWarning
     >
       <head />
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full h-screen flex flex-col">
         <NextTopLoader showSpinner={false} color="#1447e6" height={3} />
         <AppProvider locale={currentLocale} messages={messages} timeZone={timeZone}>
           {!hasConsentCookie && <CookieBanner />}

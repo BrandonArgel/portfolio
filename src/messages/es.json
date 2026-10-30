@@ -16,10 +16,10 @@
       "name": "Nombre"
     },
     "errors": {
-      "system_title": "Error del Sistema",
-      "system_description": "Ocurrió un error al procesar tu solicitud. Por favor, intenta de nuevo más tarde.",
-      "unexpected_title": "Error Inesperado",
-      "unexpected_description": "Ocurrió un error inesperado. Por favor, intenta de nuevo más tarde."
+      "unknown_title": "Error desconocido",
+      "unknown_description": "Ocurrió un error desconocido. Por favor, intenta de nuevo.",
+      "unexpected_title": "Error inesperado",
+      "unexpected_description": "Ocurrió un error inesperado. Por favor, intenta de nuevo."
     },
     "labels": {
       "email": "Correo electrónico",
@@ -238,16 +238,28 @@
         "forgot_password": "¿Olvidaste tu contraseña?",
         "create_account": "Crear nueva cuenta",
         "welcome_back": "¡Bienvenido de nuevo{name, select, empty {} other {, {name}}}!",
-        "invalid_credentials_title": "Error al Iniciar Sesión",
-        "invalid_credentials_description": "Correo o contraseña inválidos. Por favor, verifica tus credenciales.",
-        "forbidden_title": "Acceso Denegado",
-        "forbidden_description": "No tienes permiso para acceder a este recurso.",
-        "unverified_email_title": "Correo No Verificado",
-        "unverified_email_description": "Por favor, verifica tu correo electrónico antes de iniciar sesión. Revisa tu bandeja de entrada.",
-        "banned_title": "Cuenta Baneada",
-        "banned_description": "Tu cuenta ha sido baneada. Por favor, contacta con soporte para más información.",
-        "rate_limited_title": "Demasiados Intentos",
-        "rate_limited_description": "Has realizado demasiados intentos de inicio de sesión. Por favor, espera unos minutos e inténtalo de nuevo."
+        "errors": {
+          "BANNED": {
+            "title": "Cuenta Baneada",
+            "description": "Tu cuenta ha sido baneada. Por favor, contacta con soporte para más información."
+          },
+          "FORBIDDEN": {
+            "title": "Acceso Denegado",
+            "description": "No tienes permiso para acceder a este recurso."
+          },
+          "INVALID_CREDENTIALS": {
+            "title": "Credenciales inválidas",
+            "description": "Correo o contraseña inválidos. Por favor, verifica tus credenciales."
+          },
+          "RATE_LIMITED": {
+            "title": "Demasiados Intentos",
+            "description": "Has realizado demasiados intentos de inicio de sesión. Por favor, espera unos minutos e inténtalo de nuevo."
+          },
+          "UNVERIFIED_EMAIL": {
+            "title": "Correo No Verificado",
+            "description": "Por favor, verifica tu correo electrónico antes de iniciar sesión. Revisa tu bandeja de entrada."
+          }
+        }
       },
       "register": {
         "title": "Registrarse",
@@ -259,18 +271,32 @@
         "already_have_account": "Ya tengo una cuenta",
         "account_created_title": "¡Cuenta creada!",
         "account_created_description": "Bienvenido a la plataforma{name, select, empty {} other {, {name}}}.",
-        "email_in_use_title": "Correo en uso",
-        "email_in_use_description": "Este correo ya está registrado. Por favor, inicia sesión.",
-        "invalid_password_title": "Contraseña Inválida",
-        "invalid_password_description": "Asegúrate de que tu contraseña cumpla con todos los requisitos.",
-        "partial_success_title": "Éxito Parcial",
-        "partial_success_description": "Cuenta creada exitosamente, pero por favor inicia sesión manualmente.",
-        "registration_failed_title": "Error al Registrarse",
-        "registration_failed_description": "Ocurrió un error al crear tu cuenta. Por favor, intenta de nuevo más tarde.",
-        "rate_limited_title": "Demasiados Intentos",
-        "rate_limited_description": "Has realizado demasiados intentos de registro. Por favor, espera unos minutos e inténtalo de nuevo.",
-        "forbidden_title": "Acceso Denegado",
-        "forbidden_description": "No tienes permiso para acceder a este recurso."
+        "errors": {
+          "AUTO_LOGIN_FAILED": {
+            "title": "Fallo en el inicio de sesión automático",
+            "description": "Por favor, inicia sesión manualmente."
+          },
+          "FORBIDDEN": {
+            "title": "Acceso Denegado",
+            "description": "No tienes permiso para acceder a este recurso."
+          },
+          "RATE_LIMITED": {
+            "title": "Demasiados Intentos",
+            "description": "Has realizado demasiados intentos de registro. Por favor, espera unos minutos e inténtalo de nuevo."
+          },
+          "UNKNOWN_ERROR": {
+            "title": "Error del Sistema",
+            "description": "Ocurrió un error al crear tu cuenta. Por favor, intenta de nuevo más tarde."
+          },
+          "USER_ALREADY_EXISTS": {
+            "title": "Correo en uso",
+            "description": "Este correo ya está registrado. Por favor, inicia sesión."
+          },
+          "WEAK_PASSWORD": {
+            "title": "Contraseña Inválida",
+            "description": "Asegúrate de que tu contraseña cumpla con todos los requisitos."
+          }
+        }
       }
     },
     "blog": {
@@ -295,6 +321,7 @@
         "empty_bookmarked": "Aún no tienes artículos guardados. ¡Guarda tus lecturas favoritas aquí!",
         "empty_trending": "¡Vuelve pronto para ver artículos en tendencia!",
         "all_articles": "Todos los Artículos",
+        "all_topics": "Todos los temas",
         "showing_articles": "Mostrando {start}-{end} de {total} artículos",
         "sort": {
           "latest": "Más reciente",
@@ -347,7 +374,10 @@
         "search_placeholder": "Buscar artículos...",
         "filter_locale": "Idioma",
         "filter_category": "Categoría",
-        "filter_all": "Todos",
+        "all_languages": "Todos los idiomas",
+        "all_categories": "Todas las categorías",
+        "filter_all_languages": "Todos los idiomas",
+        "filter_all_categories": "Todas las categorías",
         "reset_filters": "Restablecer",
         "showing_results": "Mostrando {from}–{to} de {total}",
         "no_results": "Ningún artículo coincide con tus filtros.",
@@ -356,10 +386,7 @@
         "prev_page": "Anterior",
         "next_page": "Siguiente",
         "dashboard": "Panel",
-        "all_languages": "Todos los idiomas",
-        "all_categories": "Todas las categorías",
-        "filter_all_languages": "Todos los idiomas",
-        "filter_all_categories": "Todas las categorías"
+        "filter_all": "Todos"
       },
       "editor": {
         "new_post": "Nuevo Artículo",
@@ -433,6 +460,28 @@
           "status_live": "Publicado",
           "status_draft": "Borrador"
         }
+      },
+      "errors": {
+        "NOT_FOUND": {
+          "title": "Artículo no encontrado",
+          "description": "El artículo que buscas no existe o fue eliminado."
+        },
+        "UNAUTHORIZED": {
+          "title": "Autenticación requerida",
+          "description": "Por favor, inicia sesión para continuar."
+        },
+        "FORBIDDEN": {
+          "title": "Acceso Denegado",
+          "description": "No tienes permiso para realizar esta acción."
+        },
+        "DATABASE_ERROR": {
+          "title": "Error de base de datos",
+          "description": "No pudimos completar la operación. Por favor, intenta de nuevo más tarde."
+        },
+        "VALIDATION_ERROR": {
+          "title": "Error de validación",
+          "description": "Por favor, revisa los datos e inténtalo de nuevo."
+        }
       }
     },
     "contact": {
@@ -503,6 +552,8 @@
       "title": "Editor",
       "writing": "Escribiendo...",
       "saved_locally": "Guardado localmente",
+      "characters": "Caracteres",
+      "words": "Palabras",
       "loading": "Cargando editor...",
       "placeholder": "Escribe '/' para comandos o comienza a escribir tu artículo...",
       "image_alt_placeholder": "Descripción de la imagen",

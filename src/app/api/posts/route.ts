@@ -1,7 +1,8 @@
+// app/api/posts/route.ts
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { getPublishedPosts } from '@/features/blog/services/posts-service'
-import { getHttpStatusFromError } from '@/utils/http-status'
+import { handleApiError } from '@/utils/http-status'
 
 const querySchema = z.object({
   limit: z.coerce.number().int().min(1).max(50).default(3),
@@ -18,15 +19,14 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const { limit } = parseResult.data
+  // Objeto de opciones en lugar de parámetros posicionales infinitos
+  const [err, res] = await getPublishedPosts({
+    limit: parseResult.data.limit,
+    page: 1,
+  })
 
-  const [err, res] = await getPublishedPosts(undefined, undefined, 1, limit)
-
-  if (err) {
-    const status = getHttpStatusFromError(err.reason)
-
-    return NextResponse.json({ success: false, error: err.reason }, { status })
-  }
+  // Manejo de error en 2 líneas
+  if (err) return handleApiError(err)
 
   return NextResponse.json({
     success: true,

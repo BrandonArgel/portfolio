@@ -20,9 +20,5 @@ export default async function NewPostPage() {
   const [, categories] = await getAllCategoriesAdmin()
   const categoriesArray = categories?.map((c) => c.name) ?? []
 
-  return (
-    <div className="container mx-auto px-4 py-6 max-w-7xl">
-      <BlogComposer existingCategories={categoriesArray} />
-    </div>
-  )
+  return <BlogComposer existingCategories={categoriesArray} />
 }

@@ -1,28 +1,24 @@
 'use client'
 
 import { Save } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import { useTranslations } from 'next-intl'
 import { useAction } from 'next-safe-action/hooks'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { sileo } from 'sileo'
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
 import { uploadImageAction } from '@/features/blog/actions/image.action'
-import { savePostAction } from '@/features/blog/actions/posts.action'
+import { savePostAction } from '@/features/blog/actions/post-actions'
 import { Editor } from '@/features/editor/components/editor'
-import { useLocalStorage } from '@/hooks/use-local-storage'
+import { TiptapEditor } from '@/features/editor/components/tiptap-editor'
 import { useMounted } from '@/hooks/use-mounted'
-import { Link, useRouter } from '@/i18n/navigation'
+import { useStoreHydration } from '@/hooks/use-store-hydration'
+import { useRouter } from '@/i18n/navigation'
 // import { useBlogErrors } from '../hooks/use-blog-errors'
 import { type BlogFrontmatter, defaultFrontmatter } from '../schemas/post.schema'
+import { blogDraftsActions, useBlogDraftsStore } from '../store/use-blog-drafts-store'
 import { BlogFrontmatterPanel } from './frontmatter-panel'
 
 interface BlogComposerProps {
@@ -40,26 +36,26 @@ export function BlogComposer({
 }: BlogComposerProps) {
   const t = useTranslations('features.blog.composer')
   const router = useRouter()
-  const mounted = useMounted()
 
-  // const { handleSaveError, handleUploadError } = useBlogErrors()
+  const draftId = initialId || 'new'
 
-  const storageKey = initialId ? `blog-${initialId}` : 'blog-new'
+  const isHydrated = useStoreHydration(useBlogDraftsStore)
 
-  const [frontmatter, setFrontmatter, removeFrontmatter] = useLocalStorage<BlogFrontmatter>(
-    `${storageKey}-frontmatter`,
-    initialFrontmatter || defaultFrontmatter,
-  )
+  const draft = useBlogDraftsStore((state) => state.drafts[draftId])
 
-  const [content, setContent, removeContent, isContentInitialized] = useLocalStorage<string>(
-    `${storageKey}-content`,
-    initialContent || '',
-  )
+  useEffect(() => {
+    if (isHydrated && !draft) {
+      blogDraftsActions.initDraft(draftId, initialFrontmatter, initialContent)
+    }
+  }, [isHydrated, draft, draftId, initialFrontmatter, initialContent])
+
+  const frontmatter = draft?.frontmatter || initialFrontmatter || defaultFrontmatter
+
+  const content = draft?.content ?? (initialContent || '')
 
   const clearDraft = useCallback(() => {
-    removeFrontmatter()
-    removeContent()
-  }, [removeFrontmatter, removeContent])
+    blogDraftsActions.clearDraft(draftId)
+  }, [draftId])
 
   const { execute: executeSave, isExecuting: isSaving } = useAction(savePostAction, {
     onSuccess: (res) => {
@@ -129,7 +125,7 @@ export function BlogComposer({
         sileo.error({ title: t('notifications.image_upload_error') })
         return undefined
       } catch (error) {
-        console.error('Error durante la carga:', error)
+        console.error('Error during the image upload:', error)
         sileo.error({ title: t('notifications.image_upload_error') })
         return undefined
       }
@@ -139,58 +135,44 @@ export function BlogComposer({
 
   const handleContentChange = useCallback(
     (markdown: string) => {
-      setContent(markdown)
+      blogDraftsActions.setContent(draftId, markdown)
     },
-    [setContent],
+    [draftId],
   )
 
-  const canEdit = mounted && isContentInitialized
+  const handleFrontmatterChange = useCallback(
+    (newFrontmatter: BlogFrontmatter) => {
+      blogDraftsActions.setFrontmatter(draftId, newFrontmatter)
+    },
+    [draftId],
+  )
 
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center justify-between pb-4">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink render={<Link href="/dashboard" />}>
-                {t('breadcrumb_dashboard')}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink render={<Link href="/dashboard/posts" />}>
-                {t('breadcrumb_posts')}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{initialId ? t('edit_post') : t('new_post')}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-
-        <Button onClick={handleSave} disabled={!canEdit || isSaving} className="gap-2">
-          {isSaving ? <Spinner /> : <Save className="size-4" />}
-          {isSaving ? t('saving') : t('save')}
-        </Button>
-      </div>
-
-      <BlogFrontmatterPanel
+    <div className="h-[calc(100dvh-56px)] h md:h-screen w-full flex flex-col gap-4">
+      {/* <BlogFrontmatterPanel
         data={frontmatter}
         onChange={setFrontmatter}
         existingCategories={existingCategories}
-      />
+      /> */}
+      <header className="bg-secondary-background p-4 flex items-center justify-between gap-4 border-b border-border">
+        <div>
+          <Input
+            placeholder="Insertar el título"
+            className="border-none focus-visible:ring-0 text-xl font-bold p-0 dark:bg-transparent"
+          />
+          Time
+        </div>
+        <div>Buttons</div>
+      </header>
 
-      {canEdit ? (
+      <div className="flex-1 min-h-0 w-full p-4">
         <Editor
-          key={storageKey}
+          draftId={draftId}
           initialContent={content}
           onChange={handleContentChange}
           onImageUpload={handleImageUpload}
         />
-      ) : (
-        <div className="min-h-150 w-full rounded-xl border border-border bg-background" />
-      )}
+      </div>
     </div>
   )
 }

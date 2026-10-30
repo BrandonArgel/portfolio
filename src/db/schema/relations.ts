@@ -1,11 +1,13 @@
 import { relations } from 'drizzle-orm'
 import { accounts, sessions, users } from './auth'
-import { categories, posts, postsToCategories } from './blog'
+import { categories, comments, posts, postsToCategories } from './blog'
 
 export const userRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   sessions: many(sessions),
-  posts: many(posts),
+  posts: many(posts, { relationName: 'post_author' }),
+  modifiedPosts: many(posts, { relationName: 'post_last_editor' }),
+  comments: many(comments),
 }))
 
 export const accountRelations = relations(accounts, ({ one }) => ({
@@ -18,7 +20,17 @@ export const sessionRelations = relations(sessions, ({ one }) => ({
 
 export const postsRelations = relations(posts, ({ many, one }) => ({
   postCategories: many(postsToCategories),
-  author: one(users, { fields: [posts.authorId], references: [users.id] }),
+  author: one(users, {
+    fields: [posts.authorId],
+    references: [users.id],
+    relationName: 'post_author',
+  }),
+  lastEditor: one(users, {
+    fields: [posts.lastModifiedBy],
+    references: [users.id],
+    relationName: 'post_last_editor',
+  }),
+  comments: many(comments),
 }))
 
 export const categoriesRelations = relations(categories, ({ many }) => ({
@@ -30,5 +42,24 @@ export const postsToCategoriesRelations = relations(postsToCategories, ({ one })
   category: one(categories, {
     fields: [postsToCategories.categoryId],
     references: [categories.id],
+  }),
+}))
+
+export const commentsRelations = relations(comments, ({ one, many }) => ({
+  post: one(posts, {
+    fields: [comments.postId],
+    references: [posts.id],
+  }),
+  author: one(users, {
+    fields: [comments.authorId],
+    references: [users.id],
+  }),
+  parent: one(comments, {
+    fields: [comments.parentId],
+    references: [comments.id],
+    relationName: 'comment_replies',
+  }),
+  replies: many(comments, {
+    relationName: 'comment_replies',
   }),
 }))
