@@ -37,6 +37,8 @@ type SidebarContextProps = {
   toggleSidebar: () => void
 }
 
+type ShortcutModifier = 'meta-or-ctrl' | 'ctrl' | 'meta' | 'alt' | 'shift' | 'none'
+
 const SidebarContext = React.createContext<SidebarContextProps | null>(null)
 
 function useSidebar() {
@@ -52,6 +54,9 @@ function SidebarProvider({
   defaultOpen = true,
   open: openProp,
   onOpenChange: setOpenProp,
+  shortcutKey = SIDEBAR_KEYBOARD_SHORTCUT,
+  openWithShortcut = true,
+  shortcutModifier = 'meta-or-ctrl',
   className,
   style,
   children,
@@ -60,12 +65,13 @@ function SidebarProvider({
   defaultOpen?: boolean
   open?: boolean
   onOpenChange?: (open: boolean) => void
+  shortcutKey?: string
+  openWithShortcut?: boolean
+  shortcutModifier?: ShortcutModifier
 }) {
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
 
-  // This is the internal state of the sidebar.
-  // We use openProp and setOpenProp for control from outside the component.
   const [_open, _setOpen] = React.useState(defaultOpen)
   const open = openProp ?? _open
   const setOpen = React.useCallback(
@@ -77,21 +83,49 @@ function SidebarProvider({
         _setOpen(openState)
       }
 
-      // This sets the cookie to keep the sidebar state.
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
     },
     [setOpenProp, open],
   )
 
-  // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(() => {
     return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
   }, [isMobile, setOpen])
 
-  // Adds a keyboard shortcut to toggle the sidebar.
+  // 2. Actualiza el useEffect con las nuevas dependencias y validaciones
   React.useEffect(() => {
+    // Si está deshabilitado o no hay tecla definida, no registramos el evento
+    if (!openWithShortcut || !shortcutKey) return
+
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
+      // Evita que el atajo se active si el usuario está escribiendo en un input o textarea
+      const target = event.target as HTMLElement
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(target?.tagName) || target?.isContentEditable) {
+        return
+      }
+
+      // Validamos qué comando/modificador se requiere
+      const isModifierMatch = (() => {
+        switch (shortcutModifier) {
+          case 'meta-or-ctrl':
+            return event.metaKey || event.ctrlKey
+          case 'ctrl':
+            return event.ctrlKey && !event.metaKey
+          case 'meta':
+            return event.metaKey && !event.ctrlKey
+          case 'alt':
+            return event.altKey
+          case 'shift':
+            return event.shiftKey
+          case 'none':
+            return !event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey
+          default:
+            return event.metaKey || event.ctrlKey
+        }
+      })()
+
+      // Comparamos en minúsculas para evitar fallos si CapsLock o Shift están activos
+      if (event.key.toLowerCase() === shortcutKey.toLowerCase() && isModifierMatch) {
         event.preventDefault()
         toggleSidebar()
       }
@@ -99,7 +133,7 @@ function SidebarProvider({
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [toggleSidebar])
+  }, [toggleSidebar, openWithShortcut, shortcutKey, shortcutModifier])
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
   // This makes it easier to style the sidebar with Tailwind classes.

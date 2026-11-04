@@ -1,6 +1,7 @@
 'use client'
 
 import type { Editor } from '@tiptap/core'
+import Color from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
 import { Mathematics } from '@tiptap/extension-mathematics'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -9,6 +10,7 @@ import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import TaskList from '@tiptap/extension-task-list'
+import { TextStyle } from '@tiptap/extension-text-style'
 import Youtube from '@tiptap/extension-youtube'
 import { Markdown } from '@tiptap/markdown'
 import { useEditor as useTiptapEditor } from '@tiptap/react'
@@ -98,9 +100,12 @@ export function useEditor({
           width: 2,
         },
       }),
+      TextStyle,
+      Color,
       Highlight.configure({
+        multicolor: true,
         HTMLAttributes: {
-          class: 'bg-primary/20 text-primary rounded-sm px-1',
+          class: 'rounded-sm px-1',
         },
       }),
       Placeholder.configure({
@@ -127,7 +132,6 @@ export function useEditor({
           image: t('commands.image'),
           video: t('commands.video'),
           table: t('commands.table'),
-          inlineMath: t('commands.inline_math'),
           blockMath: t('commands.block_math'),
         },
       }),
@@ -166,8 +170,19 @@ export function useEditor({
         HTMLAttributes: {
           class: 'w-full aspect-video rounded-lg border border-border shadow-sm my-6',
         },
+        modestBranding: true,
       }),
       Mathematics.configure({
+        inlineOptions: {
+          onClick: (_node, pos) => {
+            editorRef.current?.chain().focus().setNodeSelection(pos).run()
+          },
+        },
+        blockOptions: {
+          onClick: (_node, pos) => {
+            editorRef.current?.chain().focus().setNodeSelection(pos).run()
+          },
+        },
         katexOptions: {
           throwOnError: false,
         },

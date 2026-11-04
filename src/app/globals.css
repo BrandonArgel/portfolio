@@ -80,6 +80,27 @@
 
   --color-callout-gray: var(--callout-gray);
   --color-callout-gray-text: var(--callout-gray-text);
+
+  /* Editor Text & Highlight Palette */
+  --color-editor-text-gray: var(--editor-text-gray);
+  --color-editor-text-brown: var(--editor-text-brown);
+  --color-editor-text-orange: var(--editor-text-orange);
+  --color-editor-text-yellow: var(--editor-text-yellow);
+  --color-editor-text-green: var(--editor-text-green);
+  --color-editor-text-blue: var(--editor-text-blue);
+  --color-editor-text-purple: var(--editor-text-purple);
+  --color-editor-text-pink: var(--editor-text-pink);
+  --color-editor-text-red: var(--editor-text-red);
+
+  --color-editor-bg-gray: var(--editor-bg-gray);
+  --color-editor-bg-brown: var(--editor-bg-brown);
+  --color-editor-bg-orange: var(--editor-bg-orange);
+  --color-editor-bg-yellow: var(--editor-bg-yellow);
+  --color-editor-bg-green: var(--editor-bg-green);
+  --color-editor-bg-blue: var(--editor-bg-blue);
+  --color-editor-bg-purple: var(--editor-bg-purple);
+  --color-editor-bg-pink: var(--editor-bg-pink);
+  --color-editor-bg-red: var(--editor-bg-red);
 }
 
 :root {
@@ -138,6 +159,27 @@
   --callout-yellow-text: var(--color-amber-950);
   --callout-gray: var(--color-zinc-500);
   --callout-gray-text: var(--color-zinc-900);
+
+  /* Editor Text & Highlight Palette (Light Theme) */
+  --editor-text-gray: var(--color-zinc-600);
+  --editor-text-brown: oklch(0.48 0.085 55);
+  --editor-text-orange: var(--color-orange-600);
+  --editor-text-yellow: var(--color-amber-600);
+  --editor-text-green: var(--color-emerald-600);
+  --editor-text-blue: var(--color-blue-600);
+  --editor-text-purple: var(--color-purple-600);
+  --editor-text-pink: var(--color-pink-600);
+  --editor-text-red: var(--color-red-600);
+
+  --editor-bg-gray: var(--color-zinc-200);
+  --editor-bg-brown: oklch(0.92 0.03 60);
+  --editor-bg-orange: var(--color-orange-100);
+  --editor-bg-yellow: var(--color-amber-100);
+  --editor-bg-green: var(--color-emerald-100);
+  --editor-bg-blue: var(--color-blue-100);
+  --editor-bg-purple: var(--color-purple-100);
+  --editor-bg-pink: var(--color-pink-100);
+  --editor-bg-red: var(--color-red-100);
 }
 
 .dark {
@@ -189,6 +231,27 @@
   --callout-green-text: var(--color-emerald-200);
   --callout-yellow-text: var(--color-amber-200);
   --callout-gray-text: var(--color-zinc-200);
+
+  /* Editor Text & Highlight Palette (Dark Theme) */
+  --editor-text-gray: var(--color-zinc-400);
+  --editor-text-brown: oklch(0.74 0.08 58);
+  --editor-text-orange: var(--color-orange-400);
+  --editor-text-yellow: var(--color-amber-400);
+  --editor-text-green: var(--color-emerald-400);
+  --editor-text-blue: var(--color-blue-400);
+  --editor-text-purple: var(--color-purple-400);
+  --editor-text-pink: var(--color-pink-400);
+  --editor-text-red: var(--color-red-400);
+
+  --editor-bg-gray: oklch(0.3 0.01 264 / 75%);
+  --editor-bg-brown: oklch(0.32 0.05 55 / 75%);
+  --editor-bg-orange: oklch(0.34 0.09 50 / 70%);
+  --editor-bg-yellow: oklch(0.36 0.09 85 / 70%);
+  --editor-bg-green: oklch(0.32 0.08 160 / 70%);
+  --editor-bg-blue: oklch(0.32 0.09 255 / 70%);
+  --editor-bg-purple: oklch(0.32 0.1 300 / 70%);
+  --editor-bg-pink: oklch(0.32 0.1 345 / 70%);
+  --editor-bg-red: oklch(0.32 0.11 25 / 70%);
 }
 
 .typeset-docs {

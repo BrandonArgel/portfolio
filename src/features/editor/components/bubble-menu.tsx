@@ -8,14 +8,17 @@ import {
   Code,
   BetweenVerticalStart as ColumnInsertLeft,
   BetweenVerticalEnd as ColumnInsertRight,
+  Eraser,
   Highlighter,
   Italic,
   Link as LinkIcon,
   type LucideIcon,
   BetweenHorizontalEnd as RowInsertBottom,
   BetweenHorizontalStart as RowInsertTop,
+  Sigma,
   Strikethrough,
   Trash2,
+  Underline,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
@@ -37,6 +40,8 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { useIsMac } from '@/hooks/use-is-mac'
 import { cn } from '@/lib/utils'
+
+import { ColorPickerPopover } from './color-picker-popover'
 
 interface BubbleMenuProps {
   editor: Editor
@@ -99,10 +104,13 @@ export function BubbleMenu({ editor }: BubbleMenuProps) {
     selector: ({ editor }) => ({
       isBold: editor.isActive('bold'),
       isItalic: editor.isActive('italic'),
+      isUnderline: editor.isActive('underline'),
       isStrike: editor.isActive('strike'),
       isCode: editor.isActive('code'),
-      isHighlight: editor.isActive('highlight'),
+      isInlineMath: editor.isActive('inlineMath'),
       isLink: editor.isActive('link'),
+      activeTextColor: (editor.getAttributes('textStyle').color as string | undefined) ?? null,
+      activeHighlightColor: (editor.getAttributes('highlight').color as string | undefined) ?? null,
     }),
   })
 
@@ -110,14 +118,33 @@ export function BubbleMenu({ editor }: BubbleMenuProps) {
     const values: string[] = []
     if (activeStates.isBold) values.push('bold')
     if (activeStates.isItalic) values.push('italic')
+    if (activeStates.isUnderline) values.push('underline')
     if (activeStates.isStrike) values.push('strikethrough')
     if (activeStates.isCode) values.push('code')
-    if (activeStates.isHighlight) values.push('highlight')
+    if (activeStates.isInlineMath) values.push('inlineMath')
     if (activeStates.isLink) values.push('link')
     return values
   }, [activeStates])
 
   if (!editor) return null
+
+  const handleInlineMath = () => {
+    if (editor.isActive('inlineMath')) {
+      const latex = editor.getAttributes('inlineMath').latex as string | undefined
+      if (latex) {
+        editor.chain().focus().deleteSelection().insertContent(latex).run()
+      } else {
+        editor.chain().focus().deleteInlineMath().run()
+      }
+      return
+    }
+
+    const { from, to } = editor.state.selection
+    const selectedText = editor.state.doc.textBetween(from, to, ' ').trim()
+    if (!selectedText) return
+
+    editor.chain().focus().deleteSelection().insertInlineMath({ latex: selectedText }).run()
+  }
 
   const handleOpenLinkDialog = () => {
     const previousUrl = editor.getAttributes('link').href
@@ -170,7 +197,6 @@ export function BubbleMenu({ editor }: BubbleMenuProps) {
   return (
     <>
       <TooltipProvider delay={300}>
-        {/* Standard Text Formatting Bubble Menu */}
         <TiptapBubbleMenu
           editor={editor}
           pluginKey="textBubbleMenu"
@@ -178,11 +204,12 @@ export function BubbleMenu({ editor }: BubbleMenuProps) {
             return (
               editor.isEditable &&
               !editor.isActive('table') &&
+              !editor.isActive('blockMath') &&
               from !== to &&
               !editor.state.selection.empty
             )
           }}
-          className="flex items-center overflow-hidden rounded-md border border-border bg-background p-1 shadow-xl"
+          className="flex flex-col items-center gap-1 overflow-hidden rounded-md border border-border bg-background p-1 shadow-xl"
         >
           <ToggleGroup
             multiple
@@ -207,19 +234,19 @@ export function BubbleMenu({ editor }: BubbleMenuProps) {
               modKey={modKey}
             />
             <MenuToggleItem
+              value="underline"
+              icon={Underline}
+              action={() => editor.chain().focus().toggleUnderline().run()}
+              label={t('underline')}
+              shortcutKey="U"
+              modKey={modKey}
+            />
+            <MenuToggleItem
               value="strikethrough"
               icon={Strikethrough}
               action={() => editor.chain().focus().toggleStrike().run()}
               label={t('strikethrough')}
               shortcutKey="Shift+X"
-              modKey={modKey}
-            />
-            <MenuToggleItem
-              value="code"
-              icon={Code}
-              action={() => editor.chain().focus().toggleCode().run()}
-              label={t('inline_code')}
-              shortcutKey="E"
               modKey={modKey}
             />
             <MenuToggleItem
@@ -230,9 +257,23 @@ export function BubbleMenu({ editor }: BubbleMenuProps) {
               shortcutKey="Shift+H"
               modKey={modKey}
             />
-
-            <Separator orientation="vertical" />
-
+          </ToggleGroup>
+          <ToggleGroup>
+            <MenuToggleItem
+              value="code"
+              icon={Code}
+              action={() => editor.chain().focus().toggleCode().run()}
+              label={t('inline_code')}
+              shortcutKey="E"
+              modKey={modKey}
+            />
+            <MenuToggleItem
+              value="inlineMath"
+              icon={Sigma}
+              action={handleInlineMath}
+              label={t('inline_math')}
+              modKey={modKey}
+            />
             <MenuToggleItem
               value="link"
               icon={LinkIcon}
@@ -240,6 +281,19 @@ export function BubbleMenu({ editor }: BubbleMenuProps) {
               label={t('link')}
               shortcutKey="Shift+L"
               modKey={modKey}
+            />
+            <MenuToggleItem
+              value="clearFormat"
+              icon={Eraser}
+              action={() => editor.chain().focus().unsetAllMarks().run()}
+              label={t('clear_format')}
+              shortcutKey="Shift+C"
+              modKey={modKey}
+            />
+            <ColorPickerPopover
+              editor={editor}
+              activeTextColor={activeStates.activeTextColor}
+              activeHighlightColor={activeStates.activeHighlightColor}
             />
           </ToggleGroup>
         </TiptapBubbleMenu>

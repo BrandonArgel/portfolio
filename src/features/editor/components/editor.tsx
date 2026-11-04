@@ -30,7 +30,6 @@ export function Editor({ initialContent = '', onChange, onImageUpload }: EditorP
         onSavingChange={handleSavingChange}
       />
       <EditorDialogs />
-      <span className="sr-only">{t('title')}</span>
     </div>
   )
 }
