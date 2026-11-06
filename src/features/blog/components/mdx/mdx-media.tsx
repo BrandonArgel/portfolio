@@ -1,40 +1,25 @@
-import Image from 'next/image'
 import type React from 'react'
 
 import { cn } from '@/lib/utils'
 
-export function MdxImage({
-  src,
-  alt,
-  width,
-  height,
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<'img'>) {
+export function MdxImage({ src, alt, className, ...props }: React.ComponentPropsWithoutRef<'img'>) {
   if (typeof src !== 'string' || !src) return null
 
-  const isExternal = src.startsWith('http://') || src.startsWith('https://')
-
   return (
-    <figure className="my-8 overflow-hidden rounded-xl border border-border bg-muted/20 shadow-xs">
-      <div className="relative flex w-full justify-center overflow-hidden">
-        <Image
-          src={src}
-          alt={alt || 'Blog image'}
-          width={Number(width) || 1200}
-          height={Number(height) || 675}
-          className={cn(
-            'h-auto w-full object-cover transition-transform duration-500 hover:scale-[1.01]',
-            className,
-          )}
-          unoptimized={isExternal}
-          {...props}
-        />
-      </div>
+    <figure className="not-prose not-typeset my-8 flex flex-col items-center">
+      {/* biome-ignore lint/performance/noImgElement: Markdown images have dynamic unknown aspect ratios */}
+      <img
+        src={src}
+        alt={alt || 'Blog image'}
+        loading="lazy"
+        className={cn(
+          'block h-auto w-auto max-w-full max-h-[600px] object-contain rounded-lg border border-border shadow-sm',
+          className,
+        )}
+        {...props}
+      />
       {alt && (
-        <figcaption className="border-t border-border/40 bg-muted/40 px-4 py-2 text-center text-xs text-muted-foreground">
-          {alt}
-        </figcaption>
+        <figcaption className="mt-2.5 text-center text-xs text-muted-foreground">{alt}</figcaption>
       )}
     </figure>
   )
@@ -47,7 +32,7 @@ export function MdxIframe({
   ...props
 }: React.ComponentPropsWithoutRef<'iframe'>) {
   return (
-    <div className="not-prose my-6 aspect-video w-full overflow-hidden rounded-xl border border-border bg-muted/20 shadow-xs">
+    <div className="not-prose not-typeset my-6 mx-auto aspect-video w-full max-w-3xl overflow-hidden rounded-xl border border-border bg-muted/20 shadow-sm">
       <iframe
         src={src}
         title={title}
@@ -80,7 +65,7 @@ export function MdxYouTube({
   if (!videoId) return null
 
   return (
-    <div className="not-prose my-6 aspect-video w-full overflow-hidden rounded-xl border border-border bg-muted/20 shadow-xs">
+    <div className="not-prose not-typeset my-6 mx-auto aspect-video w-full max-w-3xl overflow-hidden rounded-xl border border-border bg-muted/20 shadow-sm">
       <iframe
         className="h-full w-full border-0"
         src={`https://www.youtube-nocookie.com/embed/${videoId}`}

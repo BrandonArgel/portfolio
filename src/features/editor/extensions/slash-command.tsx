@@ -54,7 +54,6 @@ export const SlashCommand = Extension.create({
         image: 'Image',
         video: 'Video',
         table: 'Table',
-        inlineMath: 'Inline Math',
         blockMath: 'Block Math',
       },
       suggestion: {
@@ -207,16 +206,6 @@ export const SlashCommand = Extension.create({
                   .deleteRange(range)
                   .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
                   .run()
-              },
-            },
-            {
-              title: dict.inlineMath,
-              icon: <Sigma className="size-4" />,
-              command: ({ editor, range }) => {
-                useEditorUI.getState().openMathDialog('', 'inline', ({ latex }) => {
-                  editor.chain().focus().deleteRange(range).run()
-                  editor.chain().focus().insertInlineMath({ latex }).run()
-                })
               },
             },
             {

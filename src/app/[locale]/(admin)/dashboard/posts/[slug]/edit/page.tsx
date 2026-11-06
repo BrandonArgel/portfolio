@@ -4,6 +4,7 @@ import { notFound, redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { BlogComposer } from '@/features/blog/components/blog-composer'
 import { getAllCategoriesAdmin, getPostBySlug } from '@/features/blog/services/posts-service'
+import type { Locale } from '@/i18n/routing'
 import { auth } from '@/lib/auth/auth'
 
 interface EditPostPageProps {
@@ -49,9 +50,10 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
     slug: post.slug,
     description: post.description || '',
     coverImage: post.coverImage || '',
-    locale: post.locale as 'en' | 'es',
+    locale: post.locale as Locale,
     translationGroupId: post.translationGroupId || '',
     published: post.published,
+    draft: post.draft,
     categories: post.categories.map((c) => c.name),
   }
 
@@ -59,8 +61,12 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
     <BlogComposer
       initialId={post.id}
       initialFrontmatter={initialFrontmatter}
-      initialContent={post.content}
+      initialContent={post.draftContent ?? post.content}
       existingCategories={categoriesArray}
+      initialUpdatedAt={post.updatedAt.toISOString()}
+      authorName={post.authorName}
+      lastEditorName={post.lastEditorName}
+      currentUserName={session.user.name}
     />
   )
 }

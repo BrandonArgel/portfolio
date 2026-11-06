@@ -22,7 +22,7 @@ export function MdxLi({ className, ...props }: React.ComponentPropsWithoutRef<'l
   return (
     <li
       className={cn(
-        'leading-7 [&.task-list-item]:flex [&.task-list-item]:items-start [&.task-list-item]:gap-2.5',
+        'leading-7 [&.task-list-item]:flex [&.task-list-item]:items-start [&.task-list-item]:gap-2.5 [&.task-list-item:has(input:checked)]:line-through [&.task-list-item:has(input:checked)]:text-muted-foreground [&.task-list-item:has(input:checked)]:opacity-70',
         className,
       )}
       {...props}

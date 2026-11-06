@@ -172,9 +172,11 @@ export interface AdminPostItem {
   slug: string
   coverImage: string | null
   published: boolean
+  draft: boolean
   locale: string
   authorId: string
   authorName: string
+  lastEditorName: string | null
   createdAt: Date
   updatedAt: Date
   categories: { id: string; name: string; slug: string }[]
@@ -252,6 +254,7 @@ export async function getAdminPosts(
         offset,
         with: {
           author: { columns: { name: true } },
+          lastEditor: { columns: { name: true } },
           postCategories: { with: { category: true } },
         },
       }),
@@ -270,9 +273,11 @@ export async function getAdminPosts(
       slug: post.slug,
       coverImage: post.coverImage,
       published: post.published,
+      draft: post.draft,
       locale: post.locale,
       authorId: post.authorId,
       authorName: post.author.name,
+      lastEditorName: post.lastEditor?.name ?? null,
       createdAt: post.createdAt,
       updatedAt: post.updatedAt,
       categories: post.postCategories.map((pc) => ({
@@ -371,6 +376,7 @@ export async function getPublishedPostBySlug(slug: string): Promise<Result<BlogP
 
 const postWithRelations = {
   author: { columns: { name: true } },
+  lastEditor: { columns: { name: true } },
   postCategories: { with: { category: true } },
 } as const
 
@@ -391,12 +397,16 @@ function mapDbPostToBlogPost(dbPost: DbPostWithRelations): BlogPost {
     slug: dbPost.slug,
     description: dbPost.description,
     content: dbPost.content,
+    draftContent: dbPost.draftContent,
     excerpt: extractExcerpt(dbPost.content),
     coverImage: dbPost.coverImage,
     locale: dbPost.locale,
     published: dbPost.published,
+    draft: dbPost.draft,
     authorId: dbPost.authorId,
     authorName: dbPost.author.name,
+    lastModifiedBy: dbPost.lastModifiedBy,
+    lastEditorName: dbPost.lastEditor?.name ?? null,
     translationGroupId: dbPost.translationGroupId ?? undefined,
     categories: mappedTags,
     readTimeMinutes: calculateReadTime(dbPost.content),

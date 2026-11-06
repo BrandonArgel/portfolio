@@ -29,9 +29,18 @@ export function SocialAuthButtons() {
         action={async () => {
           providerActions.setProvider(provider)
 
+          const rawCallbackUrl =
+            typeof window !== 'undefined'
+              ? new URLSearchParams(window.location.search).get('callbackUrl')
+              : null
+          const safeCallbackUrl =
+            rawCallbackUrl?.startsWith('/') && !rawCallbackUrl.startsWith('//')
+              ? rawCallbackUrl
+              : `/?loggedIn=social&provider=${provider}`
+
           const res = await signIn.social({
             provider,
-            callbackURL: `/?loggedIn=social&provider=${provider}`,
+            callbackURL: safeCallbackUrl,
           })
 
           if (res.error) {

@@ -45,11 +45,19 @@ export const blogDraftsActions = {
 
   setContent: (id: string, content: string) => {
     useBlogDraftsStore.setState((state) => {
-      const currentDraft = state.drafts[id] || { frontmatter: defaultFrontmatter, lastSaved: null }
+      const currentDraft = state.drafts[id] || {
+        frontmatter: defaultFrontmatter,
+        lastSaved: null,
+      }
       return {
         drafts: {
           ...state.drafts,
-          [id]: { ...currentDraft, content, lastSaved: Date.now() },
+          [id]: {
+            ...currentDraft,
+            frontmatter: { ...currentDraft.frontmatter, draft: true },
+            content,
+            lastSaved: Date.now(),
+          },
         },
       }
     })
@@ -65,6 +73,19 @@ export const blogDraftsActions = {
         },
       }
     })
+  },
+
+  resetDraft: (id: string, frontmatter: BlogFrontmatter, content: string) => {
+    useBlogDraftsStore.setState((state) => ({
+      drafts: {
+        ...state.drafts,
+        [id]: {
+          frontmatter,
+          content,
+          lastSaved: Date.now(),
+        },
+      },
+    }))
   },
 
   clearDraft: (id: string) => {

@@ -6,8 +6,6 @@ import { GripVertical } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { memo, useCallback, useState } from 'react'
 
-import { Spinner } from '@/components/ui/spinner'
-
 import { useEditor } from '../hooks/use-editor'
 import { BubbleMenu } from './bubble-menu'
 import { EditorDialogs } from './editor-dialogs'
@@ -46,7 +44,7 @@ export const TiptapEditor = memo(function TiptapEditor({
   if (!editor) return <EditorLoader text={t('loading')} />
 
   return (
-    <>
+    <div className="relative h-full w-full max-w-4xl flex-1 bg-secondary-background rounded-xl border border-border overflow-hidden shadow-sm">
       <DragHandle
         editor={editor}
         className="flex items-center justify-center size-5 mt-1 cursor-grab active:cursor-grabbing rounded-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors duration-150"
@@ -54,10 +52,10 @@ export const TiptapEditor = memo(function TiptapEditor({
         <GripVertical className="size-4" />
       </DragHandle>
       <EditorIndicators editor={editor} draftId={draftId} isSaving={isSaving} />
-      <EditorContent className="h-full w-full" editor={editor} />
+      <EditorContent className="w-full h-full overflow-y-auto scroll-smooth" editor={editor} />
       <BubbleMenu editor={editor} />
       <MathBubbleMenu editor={editor} />
       <EditorDialogs />
-    </>
+    </div>
   )
 })

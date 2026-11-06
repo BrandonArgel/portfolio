@@ -52,9 +52,29 @@ export function MathBubbleMenu({ editor }: MathBubbleMenuProps) {
     <TiptapBubbleMenu
       editor={editor}
       pluginKey="mathBubbleMenu"
-      shouldShow={({ editor }) => editor.isActive('inlineMath') || editor.isActive('blockMath')}
+      shouldShow={({ editor }) =>
+        editor.isEditable && (editor.isActive('inlineMath') || editor.isActive('blockMath'))
+      }
+      getReferencedVirtualElement={() => {
+        const { from } = editor.state.selection
+        const nodeDom = editor.view.nodeDOM(from)
+        if (!(nodeDom instanceof HTMLElement)) {
+          return null
+        }
+
+        const katexElement = nodeDom.querySelector<HTMLElement>('.katex')
+        const target = katexElement ?? nodeDom
+
+        return {
+          getBoundingClientRect: () => {
+            const nodeRect = nodeDom.getBoundingClientRect()
+            const targetRect = target.getBoundingClientRect()
+            return new DOMRect(targetRect.left, nodeRect.top, targetRect.width, nodeRect.height)
+          },
+        }
+      }}
       options={{
-        placement: 'bottom',
+        placement: isInlineMath ? 'top' : 'top-start',
         offset: 8,
       }}
       className="flex items-center gap-1.5 rounded-xl border border-border bg-background/95 p-1.5 shadow-xl backdrop-blur-sm animate-in fade-in zoom-in-95 duration-150"

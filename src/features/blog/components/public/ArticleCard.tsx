@@ -72,7 +72,7 @@ export async function ArticleCard({ post }: ArticleCardProps) {
 
           {/* Excerpt */}
           <p className="text-xs sm:text-sm text-muted-foreground line-clamp-4 leading-relaxed mt-2.5">
-            {post.excerpt}
+            {post.description}
           </p>
         </div>
 

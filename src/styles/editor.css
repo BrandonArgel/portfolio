@@ -23,3 +23,297 @@
 .tippy-box[data-theme~="notion"] > .tippy-content {
   padding: 0;
 }
+
+/* ============================================================================
+ * TanStack Highlight (@tanstack/highlight) Semantic Token & Layout Styles
+ * ============================================================================ */
+
+.th-code {
+  margin: 0;
+  overflow-x: auto;
+  padding: 1rem;
+  background-color: transparent;
+  color: var(--th-token);
+  font-family: var(--font-geist-mono, var(--font-mono, ui-monospace, monospace));
+  font-size: 0.875rem;
+  line-height: 1.625;
+  tab-size: 2;
+}
+
+.th-code > code {
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+/* Semantic syntax token classes */
+.th-token {
+  color: var(--th-token);
+}
+
+.th-attr {
+  color: var(--th-attr);
+}
+
+.th-code-inline {
+  color: var(--th-code-inline);
+}
+
+.th-command {
+  color: var(--th-command);
+}
+
+.th-comment {
+  color: var(--th-comment);
+  font-style: italic;
+}
+
+.th-deleted {
+  color: var(--th-deleted);
+}
+
+.th-function {
+  color: var(--th-function);
+}
+
+.th-heading {
+  color: var(--th-heading);
+  font-weight: 600;
+}
+
+.th-inserted {
+  color: var(--th-inserted);
+}
+
+.th-keyword {
+  color: var(--th-keyword);
+}
+
+.th-link {
+  color: var(--th-link);
+  text-decoration: underline;
+}
+
+.th-literal {
+  color: var(--th-literal);
+}
+
+.th-meta {
+  color: var(--th-meta);
+}
+
+.th-number {
+  color: var(--th-number);
+}
+
+.th-operator {
+  color: var(--th-operator);
+}
+
+.th-property {
+  color: var(--th-property);
+}
+
+.th-selector {
+  color: var(--th-selector);
+}
+
+.th-string {
+  color: var(--th-string);
+}
+
+.th-tag {
+  color: var(--th-tag);
+}
+
+.th-type {
+  color: var(--th-type);
+}
+
+.th-variable {
+  color: var(--th-variable);
+}
+
+/* Read-only / SSR line numbers & line highlights */
+.th-line {
+  display: inline-block;
+  min-width: 100%;
+  width: max-content;
+}
+
+.th-line--highlighted {
+  background-color: var(--th-line-highlight);
+}
+
+.th-code--line-numbers code {
+  counter-reset: th-line;
+}
+
+.th-code--line-numbers .th-line::before {
+  display: inline-block;
+  width: 2.25rem;
+  padding-right: 1rem;
+  color: var(--th-comment);
+  content: attr(data-line);
+  text-align: right;
+  user-select: none;
+  opacity: 0.65;
+}
+
+/* Editor NodeView non-editable gutter */
+.th-editor-gutter {
+  min-width: 1.75rem;
+  padding-right: 0.75rem;
+  border-right: 1px solid var(--code-border);
+  color: var(--th-comment);
+  opacity: 0.65;
+}
+
+/* ============================================================================
+ * Tiptap Table Styles (Grid Borders, Cell Selection & Column Resizing)
+ * ============================================================================ */
+
+.tiptap .tableWrapper {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.tiptap table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  overflow: hidden;
+  margin: 0;
+}
+
+.tiptap th,
+.tiptap td {
+  border: 1px solid var(--border);
+  box-sizing: border-box;
+  min-width: 1em;
+  padding: 0.5rem 0.75rem;
+  position: relative;
+  vertical-align: top;
+}
+
+.tiptap th {
+  background-color: color-mix(in oklab, var(--muted) 50%, transparent);
+  font-weight: 600;
+  text-align: left;
+}
+
+.tiptap th > p,
+.tiptap td > p {
+  margin: 0;
+}
+
+.tiptap .selectedCell::after {
+  background: color-mix(in oklab, var(--primary) 15%, transparent);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 2;
+}
+
+.tiptap .column-resize-handle {
+  background-color: var(--primary);
+  bottom: -2px;
+  pointer-events: none;
+  position: absolute;
+  right: -2px;
+  top: 0;
+  width: 4px;
+  z-index: 20;
+}
+
+.tiptap.resize-cursor {
+  cursor: col-resize;
+}
+
+/* ============================================================================
+ * Tiptap Mathematics Styles (Block & Inline Math)
+ * ============================================================================ */
+
+.tiptap [data-type="block-math"] {
+  margin: 1rem 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  background-color: color-mix(in oklab, var(--muted) 30%, transparent);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+  cursor: pointer;
+  overflow-x: auto;
+}
+
+.tiptap [data-type="block-math"]:hover {
+  background-color: color-mix(in oklab, var(--muted) 50%, transparent);
+  border-color: var(--border);
+}
+
+.tiptap [data-type="block-math"].ProseMirror-selectednode {
+  background-color: color-mix(in oklab, var(--muted) 55%, transparent);
+  border-color: color-mix(in oklab, var(--primary) 60%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary) 20%, transparent);
+  outline: none;
+}
+
+.tiptap [data-type="inline-math"] {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-sm);
+  padding: 0.0625rem 0.25rem;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.tiptap [data-type="inline-math"]:hover {
+  background-color: color-mix(in oklab, var(--muted) 60%, transparent);
+}
+
+.tiptap [data-type="inline-math"].ProseMirror-selectednode {
+  background-color: color-mix(in oklab, var(--primary) 15%, transparent);
+  box-shadow: 0 0 0 1.5px color-mix(in oklab, var(--primary) 60%, transparent);
+  outline: none;
+}
+
+/* ============================================================================
+ * Tiptap YouTube Video Embed Styles (16:9 Aspect Ratio without Pillarboxing)
+ * ============================================================================ */
+
+.tiptap div[data-youtube-video] {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  max-width: 48rem;
+  margin: 1.5rem auto;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  background-color: color-mix(in oklab, var(--muted) 20%, transparent);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.tiptap div[data-youtube-video].ProseMirror-selectednode {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--background),
+    0 0 0 4px color-mix(in oklab, var(--primary) 60%, transparent);
+}
+
+.tiptap div[data-youtube-video] > iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}

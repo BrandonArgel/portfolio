@@ -20,7 +20,16 @@ export function useAuthSuccess() {
 
     sileo.success({ title, description })
 
-    if (user.role === 'admin') {
+    const rawCallbackUrl =
+      typeof window !== 'undefined'
+        ? new URLSearchParams(window.location.search).get('callbackUrl')
+        : null
+    const safeCallbackUrl =
+      rawCallbackUrl?.startsWith('/') && !rawCallbackUrl.startsWith('//') ? rawCallbackUrl : null
+
+    if (safeCallbackUrl) {
+      router.push(safeCallbackUrl)
+    } else if (user.role === 'admin') {
       router.push('/dashboard')
     } else {
       router.push('/')

@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { normalizeEditorColor } from '@/features/editor/config/colors'
 import { cn } from '@/lib/utils'
 import { MdxCallout } from './mdx-callout'
 
@@ -110,6 +111,59 @@ export function MdxHr({ className, ...props }: React.ComponentPropsWithoutRef<'h
   return <hr className={cn('my-8 border-border/60', className)} {...props} />
 }
 
+const DEFAULT_HIGHLIGHT_BG = 'color-mix(in oklab, oklch(0.86 0.17 95) 40%, transparent)'
+
+export function MdxMark({
+  className,
+  style,
+  color,
+  ...props
+}: React.ComponentPropsWithoutRef<'mark'> & { 'data-color'?: string; color?: string }) {
+  const dataColor = props['data-color'] ?? color
+  const resolvedColor = normalizeEditorColor(dataColor, 'highlight')
+
+  return (
+    <mark
+      data-color={resolvedColor ?? undefined}
+      className={cn('rounded-sm px-1', className)}
+      style={{
+        backgroundColor: resolvedColor || DEFAULT_HIGHLIGHT_BG,
+        color: 'inherit',
+        ...style,
+      }}
+      {...props}
+    />
+  )
+}
+
+export function MdxSpan({
+  className,
+  style,
+  color,
+  ...props
+}: React.ComponentPropsWithoutRef<'span'> & { 'data-color'?: string; color?: string }) {
+  const dataColor = props['data-color'] ?? color
+  const resolvedColor = normalizeEditorColor(dataColor, 'text')
+  const isBlockMath = typeof className === 'string' && className.includes('katex-display')
+
+  return (
+    <span
+      data-color={resolvedColor ?? undefined}
+      className={cn(
+        isBlockMath &&
+          'my-4 block overflow-x-auto rounded-md bg-muted/30 px-3 py-2 text-left [&>.katex]:text-left',
+        className,
+      )}
+      style={resolvedColor ? { color: resolvedColor, ...style } : style}
+      {...props}
+    />
+  )
+}
+
+export function MdxU({ className, ...props }: React.ComponentPropsWithoutRef<'u'>) {
+  return <u className={cn('underline underline-offset-4', className)} {...props} />
+}
+
 function extractText(node: React.ReactNode): string {
   if (typeof node === 'string' || typeof node === 'number') {
     return String(node)
@@ -166,7 +220,7 @@ function stripCalloutMarker(node: React.ReactNode): React.ReactNode {
   return clean(node)
 }
 
-const CALLOUT_HEADER_REGEX = /^\s*\[!([a-zA-Z]+)\](?:\s*(.*))?/
+const CALLOUT_HEADER_REGEX = /^\s*\[!([a-zA-Z]+)\](?:[ \t]+([^\n]*))?/
 
 export function MdxBlockquote({
   children,

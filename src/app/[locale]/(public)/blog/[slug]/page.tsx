@@ -5,6 +5,7 @@ import { JsonLd } from '@/components/seo/json-ld'
 import { Section } from '@/components/ui/section'
 import { getBaseUrl, siteConfig } from '@/config/site'
 import { BlogPostContent } from '@/features/blog/components/blog-post-content'
+import { PostCommentsSection } from '@/features/blog/components/comments'
 import { EditPostButton } from '@/features/blog/components/public/EditPostButton'
 import { TranslationFallbackBanner } from '@/features/blog/components/public/TranslationFallbackBanner'
 import {
@@ -56,7 +57,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   return constructPageMetadata({
     locale,
     title: `${post.title} | ${siteConfig.name}`,
-    description: post.excerpt,
+    description: post.description,
     pathname,
     keywords: tags,
     type: 'article',
@@ -74,7 +75,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const t = await getTranslations('features.blog.reader')
 
   const [err, post] = await getPublishedPostBySlug(slug)
-  console.log({ post })
 
   if (err || !post) {
     if (err && err.reason !== 'NOT_FOUND') {
@@ -111,7 +111,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
-    description: post.excerpt,
+    description: post.description,
     datePublished: post.createdAt.toISOString(),
     dateModified: post.updatedAt.toISOString(),
     inLanguage: post.locale,
@@ -146,6 +146,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           post={post}
           action={<EditPostButton authorId={post.authorId} slug={post.slug} />}
         />
+        <PostCommentsSection postId={post.id} postAuthorId={post.authorId} postSlug={post.slug} />
       </Section>
     </>
   )

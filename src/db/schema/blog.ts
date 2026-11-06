@@ -5,6 +5,7 @@ import {
   primaryKey,
   sqliteTable,
   text,
+  uniqueIndex,
 } from 'drizzle-orm/sqlite-core'
 import { users } from './auth'
 import { baseColumns } from './common'
@@ -22,8 +23,9 @@ export const posts = sqliteTable(
     ...baseColumns,
     title: text('title').notNull(),
     description: text('description').notNull().default(''),
-    slug: text('slug').notNull().unique(),
-    content: text('content').notNull(),
+    slug: text('slug').notNull(),
+    content: text('content').notNull().default(''),
+    draftContent: text('draft_content'),
     coverImage: text('cover_image'),
     published: integer('published', { mode: 'boolean' }).default(false).notNull(),
     draft: integer('draft', { mode: 'boolean' }).default(true).notNull(),
@@ -36,7 +38,7 @@ export const posts = sqliteTable(
   },
   (t) => [
     index('idx_posts_translation_group').on(t.translationGroupId),
-    index('idx_posts_locale_slug').on(t.locale, t.slug),
+    uniqueIndex('idx_posts_locale_slug').on(t.locale, t.slug),
     index('idx_posts_author_id').on(t.authorId),
     index('idx_posts_last_modified_by').on(t.lastModifiedBy),
     index('idx_posts_locale_published_created_at').on(t.locale, t.published, t.createdAt),

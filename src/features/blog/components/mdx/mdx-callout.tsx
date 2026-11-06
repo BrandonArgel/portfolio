@@ -1,15 +1,4 @@
-import {
-  AlertOctagon,
-  AlertTriangle,
-  Bug,
-  CheckCircle2,
-  Flame,
-  Info,
-  List,
-  Pencil,
-  Quote,
-  XCircle,
-} from 'lucide-react'
+import { AlertTriangle, Bug, Check, Flame, Info, List, Pencil, Quote, X, Zap } from 'lucide-react'
 import type React from 'react'
 
 import { cn } from '@/lib/utils'
@@ -42,13 +31,13 @@ export const CALLOUT_STYLES: Record<string, CalloutConfig> = {
     defaultTitle: 'Note',
   },
   quote: {
-    container: 'border-callout-blue bg-callout-blue/10 text-callout-blue-text',
-    icon: <Quote className="size-5 shrink-0 text-callout-blue" />,
+    container: 'border-callout-gray bg-callout-gray/10 text-callout-gray-text',
+    icon: <Quote className="size-5 shrink-0 text-callout-gray" />,
     defaultTitle: 'Quote',
   },
   success: {
     container: 'border-callout-green bg-callout-green/10 text-callout-green-text',
-    icon: <CheckCircle2 className="size-5 shrink-0 text-callout-green" />,
+    icon: <Check className="size-5 shrink-0 text-callout-green" />,
     defaultTitle: 'Success',
   },
   warning: {
@@ -58,12 +47,12 @@ export const CALLOUT_STYLES: Record<string, CalloutConfig> = {
   },
   failure: {
     container: 'border-callout-red bg-callout-red/10 text-callout-red-text',
-    icon: <XCircle className="size-5 shrink-0 text-callout-red" />,
+    icon: <X className="size-5 shrink-0 text-callout-red" />,
     defaultTitle: 'Failure',
   },
   danger: {
     container: 'border-callout-red bg-callout-red/10 text-callout-red-text',
-    icon: <AlertOctagon className="size-5 shrink-0 text-callout-red" />,
+    icon: <Zap className="size-5 shrink-0 text-callout-red" />,
     defaultTitle: 'Danger',
   },
   bug: {
@@ -94,7 +83,7 @@ export function MdxCallout({ type = 'info', title, children, className }: MdxCal
     <section
       aria-label={displayTitle}
       className={cn(
-        'not-prose my-6 flex gap-3.5 rounded-r-xl border-l-4 p-4 text-sm shadow-xs transition-colors',
+        'not-prose not-typeset my-6 flex gap-3.5 rounded-r-xl border-l-4 p-4 text-sm shadow-xs transition-colors',
         config.container,
         className,
       )}
@@ -104,9 +93,7 @@ export function MdxCallout({ type = 'info', title, children, className }: MdxCal
       </div>
       <div className="min-w-0 flex-1 space-y-1.5 overflow-x-auto">
         {displayTitle && (
-          <p className="font-semibold leading-snug tracking-tight text-foreground">
-            {displayTitle}
-          </p>
+          <p className="text-sm font-bold uppercase tracking-widest opacity-80">{displayTitle}</p>
         )}
         <div className="leading-relaxed [&>p]:leading-relaxed [&>p:not(:first-child)]:mt-2">
           {children}

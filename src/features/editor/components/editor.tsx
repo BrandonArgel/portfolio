@@ -17,20 +17,13 @@ const DynamicTiptapEditor = dynamic(
   },
 )
 
-interface EditorLazyWrapperProps {
+interface LazyEditorWrapperProps {
   draftId: string
   initialContent: string
   onChange: (content: string) => void
   onImageUpload: (file: File) => Promise<string | undefined>
 }
 
-export const Editor = (props: EditorLazyWrapperProps) => {
-  return (
-    <div
-      className="relative h-full w-full max-w-none flex-1 bg-secondary-background rounded-xl border border-border overflow-hidden dev
-     shadow-sm flex items-center justify-center gap-3 text-muted-foreground"
-    >
-      <DynamicTiptapEditor {...props} />
-    </div>
-  )
+export const Editor = (props: LazyEditorWrapperProps) => {
+  return <DynamicTiptapEditor {...props} />
 }

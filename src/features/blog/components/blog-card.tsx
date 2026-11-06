@@ -75,7 +75,7 @@ export function BlogCard({ post, className }: BlogCardProps) {
 
         {/* Post Excerpt */}
         <p className="mb-6 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
-          {post.excerpt}
+          {post.description}
         </p>
       </div>
 
