@@ -8,30 +8,39 @@ import {
   SUPPORTED_OAUTH_PROVIDERS,
 } from '@/features/auth/config/o-auth-providers'
 import { useSocialErrors } from '@/features/auth/hooks/use-social-auth-errors'
-import { useLocalStorage } from '@/hooks/use-local-storage'
 import { useMounted } from '@/hooks/use-mounted'
 import { signIn } from '@/lib/auth/auth-client'
+import { providerActions, useProviderStore } from '../store/use-provider-store'
 
 export function SocialAuthButtons() {
   const t = useTranslations('features.auth')
   const { getSocialErrorMessage } = useSocialErrors()
-  const [lastUsed] = useLocalStorage<string | null>('last-used-provider', null)
+  const lastUsedProvider = useProviderStore((state) => state.provider)
   const mounted = useMounted()
 
   return SUPPORTED_OAUTH_PROVIDERS.map((provider) => {
     const Icon = SUPPORTED_OAUTH_PROVIDER_DETAILS[provider].Icon
-    const isLastUsed = lastUsed === provider
+    const isLastUsed = provider === lastUsedProvider
     const showLastUsed = mounted && isLastUsed
 
     return (
       <ActionButton
         key={provider}
         action={async () => {
-          window.localStorage.setItem('last-used-provider', JSON.stringify(provider))
+          providerActions.setProvider(provider)
+
+          const rawCallbackUrl =
+            typeof window !== 'undefined'
+              ? new URLSearchParams(window.location.search).get('callbackUrl')
+              : null
+          const safeCallbackUrl =
+            rawCallbackUrl?.startsWith('/') && !rawCallbackUrl.startsWith('//')
+              ? rawCallbackUrl
+              : `/?loggedIn=social&provider=${provider}`
 
           const res = await signIn.social({
             provider,
-            callbackURL: `/?loggedIn=social&provider=${provider}`,
+            callbackURL: safeCallbackUrl,
           })
 
           if (res.error) {

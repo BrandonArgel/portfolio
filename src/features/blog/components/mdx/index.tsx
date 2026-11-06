@@ -15,7 +15,10 @@ import {
   MdxH5,
   MdxH6,
   MdxHr,
+  MdxMark,
   MdxP,
+  MdxSpan,
+  MdxU,
 } from './mdx-typography'
 
 export const mdxComponents: MDXComponents = {
@@ -28,6 +31,12 @@ export const mdxComponents: MDXComponents = {
   p: MdxP,
   a: MdxA,
   hr: MdxHr,
+  mark: MdxMark,
+  span: MdxSpan,
+  u: MdxU,
+  MdxMark,
+  MdxSpan,
+  MdxU,
   blockquote: MdxBlockquote,
   ul: MdxUl,
   ol: MdxOl,
@@ -43,7 +52,9 @@ export const mdxComponents: MDXComponents = {
   iframe: MdxIframe,
   pre: MdxPre,
   code: MdxCode,
-  YouTube: (props: any) => <MdxYouTube url={props.src} id={props.id} {...props} />,
+  YouTube: (props: { src?: string; id?: string; url?: string; title?: string }) => (
+    <MdxYouTube url={props.src ?? props.url} id={props.id} title={props.title} />
+  ),
   Callout: MdxCallout,
 }
 
@@ -63,15 +74,18 @@ export {
   MdxImage,
   MdxInput,
   MdxLi,
+  MdxMark,
   MdxOl,
   MdxP,
   MdxPre,
+  MdxSpan,
   MdxTable,
   MdxTbody,
   MdxTd,
   MdxTh,
   MdxThead,
   MdxTr,
+  MdxU,
   MdxUl,
   MdxYouTube,
 }

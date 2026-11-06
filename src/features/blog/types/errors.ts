@@ -1,11 +1,8 @@
-export type SavePostError =
-  | { reason: 'SLUG_ALREADY_EXISTS' }
-  | { reason: 'VALIDATION_ERROR' }
-  | { reason: 'UNAUTHORIZED' }
-  | { reason: 'UNKNOWN_ERROR' }
+export type BlogError =
+  | { reason: 'NOT_FOUND'; identifier?: string }
+  | { reason: 'UNAUTHORIZED' | 'FORBIDDEN' }
+  | { reason: 'DATABASE_ERROR'; details?: unknown }
+  | { reason: 'VALIDATION_ERROR'; message: string }
 
-export type UploadImageError =
-  | { reason: 'PAYLOAD_TOO_LARGE' }
-  | { reason: 'INVALID_FILE_TYPE' }
-  | { reason: 'UPLOAD_FAILED' }
-  | { reason: 'UNKNOWN_ERROR' }
+/** Errors a read-only query can produce. Derived from `BlogError` to keep a single vocabulary. */
+export type PostQueryError = Extract<BlogError, { reason: 'NOT_FOUND' | 'DATABASE_ERROR' }>

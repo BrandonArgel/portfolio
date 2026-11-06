@@ -12,13 +12,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils'
 
 export function ImageComponent(props: NodeViewProps) {
-  const { node, selected: isSelected, updateAttributes, deleteNode } = props
+  const { editor, node, selected: isSelected, updateAttributes, deleteNode } = props
   const t = useTranslations('features.editor')
   const { src, alt } = node.attrs
   const [linkUrl, setLinkUrl] = useState('')
   const [altText, setAltText] = useState(alt || '')
   const [srcText, setSrcText] = useState(src || '')
   const [localUploading, setLocalUploading] = useState(false)
+  const [isToolbarFocused, setIsToolbarFocused] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -78,15 +79,24 @@ export function ImageComponent(props: NodeViewProps) {
   }
 
   const handleSrcCommit = () => {
-    if (srcText !== src) {
-      updateAttributes({ src: srcText })
+    const trimmed = srcText.trim()
+    if (trimmed && trimmed !== src) {
+      updateAttributes({ src: trimmed })
+    } else if (!trimmed) {
+      setSrcText(src || '')
     }
   }
+
+  const showToolbar = editor.isEditable && (isSelected || isToolbarFocused)
 
   // State 1: Empty src -> Tabs (Upload / Embed Link)
   if (!src) {
     return (
-      <NodeViewWrapper className="my-6 relative group" data-type="image" data-drag-handle>
+      <NodeViewWrapper
+        className="not-typeset not-prose my-6 relative group"
+        data-type="image"
+        data-drag-handle
+      >
         <Tabs
           defaultValue="upload"
           className="w-full relative border border-border rounded-xl shadow-sm bg-background p-2"
@@ -203,90 +213,106 @@ export function ImageComponent(props: NodeViewProps) {
 
   // State 2 & 3: Rendered image with floating toolbar when selected
   return (
-    <NodeViewWrapper className="my-6 relative group" data-type="image" data-drag-handle>
-      <div className="relative inline-block w-full text-center">
+    <NodeViewWrapper
+      className="not-typeset not-prose my-6 relative group flex flex-col items-center"
+      data-type="image"
+      data-drag-handle
+    >
+      <div className="relative inline-flex max-w-full justify-center">
         {/* biome-ignore lint/performance/noImgElement: Custom image component for the editor */}
         <img
           src={src}
           alt={alt || ''}
-          className={cn(
-            'rounded-lg max-w-full border border-border shadow-sm transition-all mx-auto cursor-pointer',
-            isSelected
-              ? 'ring-2 ring-primary/60 ring-offset-2'
-              : 'hover:ring-2 hover:ring-primary/40',
-          )}
+          className="block h-auto w-auto max-w-full max-h-150 object-contain rounded-lg shadow-sm transition-all cursor-pointer"
         />
+      </div>
 
-        {isSelected && (
-          <div
-            role="toolbar"
-            aria-label="Image actions"
-            contentEditable={false}
-            onMouseDown={stopInputPropagation}
-            onClick={stopInputPropagation}
-            onKeyDown={stopInputPropagation}
-            className="absolute top-4 right-4 z-10 flex items-center gap-2 p-2 bg-background/95 backdrop-blur-sm border border-border rounded-xl shadow-xl animate-in fade-in zoom-in-95 duration-150"
-          >
-            <div className="flex flex-col sm:flex-row gap-2">
-              <div className="flex items-center gap-2 px-2.5 py-1.5 bg-muted/40 rounded-lg border border-border/60">
-                <Link className="size-4 text-muted-foreground shrink-0" />
-                <input
-                  type="url"
-                  value={srcText}
-                  onChange={(e) => setSrcText(e.target.value)}
-                  onBlur={handleSrcCommit}
-                  onKeyDown={(e) => {
-                    stopInputPropagation(e)
-                    if (e.key === 'Enter') {
-                      e.preventDefault()
-                      handleSrcCommit()
-                    }
-                  }}
-                  onMouseDown={stopInputPropagation}
-                  placeholder={t('image_link_placeholder')}
-                  className="bg-transparent outline-none text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 w-36 sm:w-56 focus:outline-none"
-                />
-              </div>
-
-              <div className="flex items-center gap-2 px-2.5 py-1.5 bg-muted/40 rounded-lg border border-border/60">
-                <Text className="size-4 text-muted-foreground shrink-0" />
-                <input
-                  type="text"
-                  value={altText}
-                  onChange={(e) => setAltText(e.target.value)}
-                  onBlur={handleAltCommit}
-                  onKeyDown={(e) => {
-                    stopInputPropagation(e)
-                    if (e.key === 'Enter') {
-                      e.preventDefault()
-                      handleAltCommit()
-                    }
-                  }}
-                  onMouseDown={stopInputPropagation}
-                  placeholder={t('image_alt_placeholder')}
-                  className="bg-transparent outline-none text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 w-36 sm:w-56 focus:outline-none"
-                />
-              </div>
+      {showToolbar && (
+        <div
+          role="toolbar"
+          aria-label="Image actions"
+          data-image-toolbar
+          contentEditable={false}
+          onFocusCapture={() => setIsToolbarFocused(true)}
+          onBlurCapture={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+              setIsToolbarFocused(false)
+            }
+          }}
+          onMouseDown={stopInputPropagation}
+          onClick={stopInputPropagation}
+          onKeyDown={stopInputPropagation}
+          className="absolute top-3 left-1/2 -translate-x-1/2 z-20 flex max-w-[calc(100%-1.5rem)] items-center gap-2 rounded-lg border border-border bg-background/95 p-1.5 shadow-xl backdrop-blur-sm animate-in fade-in zoom-in-95 duration-150"
+        >
+          <div className="flex flex-col sm:flex-row gap-1.5">
+            <div className="flex items-center gap-2 px-2.5 py-1 bg-muted/40 rounded-md border border-border/60 focus-within:border-primary/60 focus-within:bg-background transition-colors">
+              <Link className="size-3.5 text-muted-foreground shrink-0" />
+              <input
+                type="url"
+                value={srcText}
+                onChange={(e) => setSrcText(e.target.value)}
+                onBlur={handleSrcCommit}
+                onKeyDown={(e) => {
+                  stopInputPropagation(e)
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    handleSrcCommit()
+                    editor.commands.focus()
+                  } else if (e.key === 'Escape') {
+                    e.preventDefault()
+                    setSrcText(src || '')
+                    editor.commands.focus()
+                  }
+                }}
+                onMouseDown={stopInputPropagation}
+                placeholder={t('image_link_placeholder')}
+                className="bg-transparent outline-none text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 w-36 sm:w-52 focus:outline-none"
+              />
             </div>
 
-            <div className="h-4 w-px bg-border shrink-0" />
-
-            <button
-              type="button"
-              onClick={(e) => {
-                stopInputPropagation(e)
-                deleteNode()
-              }}
-              onKeyDown={stopInputPropagation}
-              onMouseDown={stopInputPropagation}
-              className="flex items-center justify-center size-8 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer shrink-0"
-              aria-label="Delete image"
-            >
-              <Trash2 className="size-4" />
-            </button>
+            <div className="flex items-center gap-2 px-2.5 py-1 bg-muted/40 rounded-md border border-border/60 focus-within:border-primary/60 focus-within:bg-background transition-colors">
+              <Text className="size-3.5 text-muted-foreground shrink-0" />
+              <input
+                type="text"
+                value={altText}
+                onChange={(e) => setAltText(e.target.value)}
+                onBlur={handleAltCommit}
+                onKeyDown={(e) => {
+                  stopInputPropagation(e)
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    handleAltCommit()
+                    editor.commands.focus()
+                  } else if (e.key === 'Escape') {
+                    e.preventDefault()
+                    setAltText(alt || '')
+                    editor.commands.focus()
+                  }
+                }}
+                onMouseDown={stopInputPropagation}
+                placeholder={t('image_alt_placeholder')}
+                className="bg-transparent outline-none text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 w-36 sm:w-48 focus:outline-none"
+              />
+            </div>
           </div>
-        )}
-      </div>
+
+          <div className="h-4 w-px bg-border shrink-0" />
+
+          <button
+            type="button"
+            onClick={(e) => {
+              stopInputPropagation(e)
+              deleteNode()
+            }}
+            onKeyDown={stopInputPropagation}
+            onMouseDown={stopInputPropagation}
+            className="flex items-center justify-center size-7 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer shrink-0"
+            aria-label="Delete image"
+          >
+            <Trash2 className="size-4" />
+          </button>
+        </div>
+      )}
     </NodeViewWrapper>
   )
 }

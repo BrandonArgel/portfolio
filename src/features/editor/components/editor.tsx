@@ -1,36 +1,29 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useTranslations } from 'next-intl'
-import { useCallback, useState } from 'react'
-import { EditorDialogs } from './editor-dialogs'
-import { SaveIndicator } from './editor-save-indicator'
-import { TiptapEditor } from './tiptap-editor'
+import { EditorLoader } from './editor-loader'
 
-interface EditorProps {
-  initialContent?: string
-  onChange?: (content: string) => void
-  onImageUpload?: (file: File) => Promise<string | undefined>
+const DynamicEditorLoader = () => {
+  const t = useTranslations('features.editor')
+  return <EditorLoader text={t('loading')} />
 }
 
-export function Editor({ initialContent = '', onChange, onImageUpload }: EditorProps) {
-  const t = useTranslations('features.editor')
-  const [isSaving, setIsSaving] = useState(false)
+const DynamicTiptapEditor = dynamic(
+  () => import('@/features/editor/components/tiptap-editor').then((mod) => mod.TiptapEditor),
+  {
+    ssr: false,
+    loading: () => <DynamicEditorLoader />,
+  },
+)
 
-  const handleSavingChange = useCallback((saving: boolean) => {
-    setIsSaving(saving)
-  }, [])
+interface LazyEditorWrapperProps {
+  draftId: string
+  initialContent: string
+  onChange: (content: string) => void
+  onImageUpload: (file: File) => Promise<string | undefined>
+}
 
-  return (
-    <div className="relative w-full max-w-none flex-1 overflow-hidden rounded-xl border border-border bg-background shadow-sm flex flex-col">
-      <SaveIndicator isSaving={isSaving} />
-      <TiptapEditor
-        initialContent={initialContent}
-        onChange={onChange}
-        onImageUpload={onImageUpload}
-        onSavingChange={handleSavingChange}
-      />
-      <EditorDialogs />
-      <span className="sr-only">{t('title')}</span>
-    </div>
-  )
+export const Editor = (props: LazyEditorWrapperProps) => {
+  return <DynamicTiptapEditor {...props} />
 }

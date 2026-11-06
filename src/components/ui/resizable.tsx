@@ -17,28 +17,51 @@ function ResizablePanelGroup({
   orientation,
   autoSaveId,
   defaultLayout: defaultLayoutProp,
+  groupRef: groupRefProp,
   onLayoutChanged: onLayoutChangedProp,
   ...props
 }: ResizablePanelGroupProps) {
   const resolvedOrientation = orientation ?? direction
+  const internalGroupRef = ResizablePrimitive.useGroupRef()
 
-  const [defaultLayout] = React.useState<ResizablePrimitive.Layout | undefined>(() => {
-    if (defaultLayoutProp) return defaultLayoutProp
-    if (typeof window !== 'undefined' && autoSaveId) {
-      try {
-        const saved = localStorage.getItem(`react-resizable-panels:${autoSaveId}`)
-        if (saved) return JSON.parse(saved)
-      } catch {}
+  const setGroupRef = React.useCallback(
+    (instance: ResizablePrimitive.GroupImperativeHandle | null) => {
+      internalGroupRef.current = instance
+      if (!groupRefProp) return
+      if (typeof groupRefProp === 'function') {
+        groupRefProp(instance)
+      } else {
+        ;(
+          groupRefProp as React.MutableRefObject<ResizablePrimitive.GroupImperativeHandle | null>
+        ).current = instance
+      }
+    },
+    [groupRefProp, internalGroupRef],
+  )
+
+  React.useEffect(() => {
+    if (defaultLayoutProp || !autoSaveId) return
+    try {
+      const saved = window.localStorage.getItem(`react-resizable-panels:${autoSaveId}`)
+      if (!saved) return
+      const parsed = JSON.parse(saved) as ResizablePrimitive.Layout
+      if (parsed && typeof parsed === 'object') {
+        internalGroupRef.current?.setLayout(parsed)
+      }
+    } catch {
+      // Ignore storage or JSON errors
     }
-    return undefined
-  })
+  }, [autoSaveId, defaultLayoutProp, internalGroupRef])
 
   const handleLayoutChanged = React.useCallback(
     (layout: ResizablePrimitive.Layout, meta: ResizablePrimitive.LayoutChangedMeta) => {
       onLayoutChangedProp?.(layout, meta)
       if (autoSaveId && typeof window !== 'undefined') {
         try {
-          localStorage.setItem(`react-resizable-panels:${autoSaveId}`, JSON.stringify(layout))
+          window.localStorage.setItem(
+            `react-resizable-panels:${autoSaveId}`,
+            JSON.stringify(layout),
+          )
         } catch {}
       }
     },
@@ -49,7 +72,8 @@ function ResizablePanelGroup({
     <ResizablePrimitive.Group
       data-slot="resizable-panel-group"
       orientation={resolvedOrientation}
-      defaultLayout={defaultLayout}
+      defaultLayout={defaultLayoutProp}
+      groupRef={setGroupRef}
       onLayoutChanged={handleLayoutChanged}
       className={cn('flex h-full w-full aria-[orientation=vertical]:flex-col', className)}
       {...props}
@@ -57,8 +81,32 @@ function ResizablePanelGroup({
   )
 }
 
-function ResizablePanel({ ...props }: ResizablePrimitive.PanelProps) {
-  return <ResizablePrimitive.Panel data-slot="resizable-panel" {...props} />
+function formatPanelSize(size: number | string | undefined): number | string | undefined {
+  if (typeof size === 'number' && size >= 0 && size <= 100) {
+    return `${size}%`
+  }
+  return size
+}
+
+function ResizablePanel({
+  defaultSize,
+  minSize,
+  maxSize,
+  collapsedSize,
+  className,
+  ...props
+}: ResizablePrimitive.PanelProps) {
+  return (
+    <ResizablePrimitive.Panel
+      data-slot="resizable-panel"
+      defaultSize={formatPanelSize(defaultSize)}
+      minSize={formatPanelSize(minSize)}
+      maxSize={formatPanelSize(maxSize)}
+      collapsedSize={formatPanelSize(collapsedSize)}
+      className={cn('min-w-0', className)}
+      {...props}
+    />
+  )
 }
 
 function ResizableHandle({
@@ -82,4 +130,10 @@ function ResizableHandle({
   )
 }
 
+export {
+  type GroupImperativeHandle,
+  type PanelImperativeHandle,
+  useGroupRef,
+  usePanelRef,
+} from 'react-resizable-panels'
 export { ResizableHandle, ResizablePanel, ResizablePanelGroup }

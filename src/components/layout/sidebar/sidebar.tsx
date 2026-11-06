@@ -29,7 +29,7 @@ export function DashboardSidebar({
   return (
     <Sidebar collapsible={collapsible} {...props}>
       <SidebarHeader>
-        <SidebarBrand session={session} isAdmin={isAdmin} isEditor={isEditor} />
+        <SidebarBrand />
       </SidebarHeader>
       <SidebarContent>
         <SidebarNavMain isAdmin={isAdmin} />

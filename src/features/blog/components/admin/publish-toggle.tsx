@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { sileo } from 'sileo'
 import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
-import { togglePublishStatusAction } from '@/features/blog/actions/posts.action'
+import { togglePublishStatusAction } from '@/features/blog/actions/post-actions'
 import { checkAndHandleSessionRevoked } from '@/lib/auth-interceptor'
 
 interface PostPublishToggleProps {

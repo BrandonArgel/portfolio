@@ -344,16 +344,14 @@
       caption-side: bottom;
     }
 
-    /* Tables. Separators sit on cells, not tr:last-child: append-safe.
-       Bare tables stay real tables (keep their semantics) and wrap to fit. */
+    /* Tables. Full grid borders for clear column and row separation. */
     &:where(table) {
+      width: 100%;
       max-width: 100%;
       font-size: 1em;
       line-height: 1.5;
       font-variant-numeric: tabular-nums;
-      border-collapse: separate;
-      border-spacing: 0;
-      border-block-end: 1px solid var(--typeset-rule);
+      border-collapse: collapse;
       margin-block-start: var(--typeset-flow);
       margin-block-end: 0;
     }
@@ -372,23 +370,16 @@
       width: max-content;
       max-width: none;
     }
-    &:where(thead th) {
-      font-weight: 500;
-      text-align: start;
-      white-space: nowrap;
-      padding: 0.65em 1em;
-    }
-    &:where(:is(tbody, tfoot) :is(td, th)) {
-      padding: 0.75em 1em;
+    &:where(th, td) {
+      padding: 0.5rem 0.75rem;
       text-align: start;
       vertical-align: top;
-      border-block-start: 1px solid var(--typeset-rule);
+      border: 1px solid var(--typeset-rule);
     }
-    &:where(tbody th, tfoot th) {
-      font-weight: 500;
-    }
-    &:where(th:first-child, td:first-child) {
-      padding-inline-start: 0;
+    &:where(thead th, tr > th) {
+      background-color: color-mix(in oklab, var(--color-muted, currentColor) 50%, transparent);
+      font-weight: 600;
+      text-align: start;
     }
     &:where(th[align="center"], td[align="center"]) {
       text-align: center;

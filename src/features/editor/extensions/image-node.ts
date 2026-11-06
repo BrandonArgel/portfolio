@@ -100,7 +100,17 @@ export const ImageNode = Image.extend<CustomImageOptions>({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(ImageComponent)
+    return ReactNodeViewRenderer(ImageComponent, {
+      stopEvent: ({ event }) => {
+        const target = event.target
+        if (!(target instanceof HTMLElement)) {
+          return false
+        }
+        return Boolean(
+          target.closest('input, button, [role="toolbar"], [role="tablist"], [data-image-toolbar]'),
+        )
+      },
+    })
   },
 
   addInputRules() {

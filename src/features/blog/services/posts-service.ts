@@ -2,13 +2,11 @@ import { and, asc, count, desc, eq, inArray, like, or } from 'drizzle-orm'
 import { db } from '@/db'
 import { categories, posts, postsToCategories } from '@/db/schema'
 import { error, okay, type Result } from '@/utils/result'
-import type { BlogCategory, BlogPost, BlogPostCardItem } from '../types'
+import type { BlogCategory, BlogPost, BlogPostCardItem, PostQueryError } from '../types'
 import { calculateReadTime } from '../utils/calculate-read-time'
 import { extractExcerpt } from '../utils/extract-excerpt'
 
-export type PostError =
-  | { reason: 'DATABASE_ERROR'; details?: unknown }
-  | { reason: 'NOT_FOUND'; identifier?: string }
+export type PostError = PostQueryError
 
 function escapeLikePattern(input: string): string {
   return input.replace(/[%_\\]/g, '\\$&')
@@ -63,13 +61,21 @@ export interface PaginatedPosts {
   currentPage: number
 }
 
-export async function getPublishedPosts(
-  categorySlug?: string,
-  searchQuery?: string,
+export interface PublishedPostsOptions {
+  categorySlug?: string
+  searchQuery?: string
+  page?: number
+  limit?: number
+  sortBy?: string
+}
+
+export async function getPublishedPosts({
+  categorySlug,
+  searchQuery,
   page = 1,
   limit = 9,
-  sortBy?: string,
-): Promise<Result<PaginatedPosts, PostError>> {
+  sortBy,
+}: PublishedPostsOptions = {}): Promise<Result<PaginatedPosts, PostError>> {
   try {
     const safePage = Math.max(1, page)
     const offset = (safePage - 1) * limit
@@ -166,9 +172,11 @@ export interface AdminPostItem {
   slug: string
   coverImage: string | null
   published: boolean
+  draft: boolean
   locale: string
   authorId: string
   authorName: string
+  lastEditorName: string | null
   createdAt: Date
   updatedAt: Date
   categories: { id: string; name: string; slug: string }[]
@@ -246,6 +254,7 @@ export async function getAdminPosts(
         offset,
         with: {
           author: { columns: { name: true } },
+          lastEditor: { columns: { name: true } },
           postCategories: { with: { category: true } },
         },
       }),
@@ -264,9 +273,11 @@ export async function getAdminPosts(
       slug: post.slug,
       coverImage: post.coverImage,
       published: post.published,
+      draft: post.draft,
       locale: post.locale,
       authorId: post.authorId,
       authorName: post.author.name,
+      lastEditorName: post.lastEditor?.name ?? null,
       createdAt: post.createdAt,
       updatedAt: post.updatedAt,
       categories: post.postCategories.map((pc) => ({
@@ -365,6 +376,7 @@ export async function getPublishedPostBySlug(slug: string): Promise<Result<BlogP
 
 const postWithRelations = {
   author: { columns: { name: true } },
+  lastEditor: { columns: { name: true } },
   postCategories: { with: { category: true } },
 } as const
 
@@ -385,12 +397,16 @@ function mapDbPostToBlogPost(dbPost: DbPostWithRelations): BlogPost {
     slug: dbPost.slug,
     description: dbPost.description,
     content: dbPost.content,
+    draftContent: dbPost.draftContent,
     excerpt: extractExcerpt(dbPost.content),
     coverImage: dbPost.coverImage,
     locale: dbPost.locale,
     published: dbPost.published,
+    draft: dbPost.draft,
     authorId: dbPost.authorId,
     authorName: dbPost.author.name,
+    lastModifiedBy: dbPost.lastModifiedBy,
+    lastEditorName: dbPost.lastEditor?.name ?? null,
     translationGroupId: dbPost.translationGroupId ?? undefined,
     categories: mappedTags,
     readTimeMinutes: calculateReadTime(dbPost.content),

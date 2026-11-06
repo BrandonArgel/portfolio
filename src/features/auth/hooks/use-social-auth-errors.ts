@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl'
 
 export function useSocialErrors() {
   const t = useTranslations('features.auth.social')
-  const tGlobal = useTranslations('common')
+  const tGlobal = useTranslations('common.errors')
 
   const getSocialErrorMessage = (errorCode?: string) => {
     switch (errorCode) {
@@ -14,7 +14,7 @@ export function useSocialErrors() {
       case 'OAUTH_CREATE_USER_ERROR':
         return t('create_error')
       default:
-        return tGlobal('system_description')
+        return tGlobal('unknown_description')
     }
   }
 

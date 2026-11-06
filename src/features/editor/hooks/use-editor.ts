@@ -1,7 +1,6 @@
 'use client'
 
 import type { Editor } from '@tiptap/core'
-import Highlight from '@tiptap/extension-highlight'
 import { Mathematics } from '@tiptap/extension-mathematics'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Table } from '@tiptap/extension-table'
@@ -10,23 +9,24 @@ import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import TaskList from '@tiptap/extension-task-list'
 import Youtube from '@tiptap/extension-youtube'
+import { CharacterCount } from '@tiptap/extensions'
 import { Markdown } from '@tiptap/markdown'
 import { useEditor as useTiptapEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { common, createLowlight } from 'lowlight'
 import { useTranslations } from 'next-intl'
 import { useCallback, useMemo, useRef } from 'react'
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback'
+import { highlighter } from '@/lib/highlighter'
 import { cn } from '@/lib/utils'
 
 import { CalloutNode } from '../extensions/callout-node'
 import { CalloutTitleNode } from '../extensions/callout-title-node'
 import { CodeBlockNode } from '../extensions/code-block-node'
+import { HighlightMark } from '../extensions/highlight-mark'
 import { ImageNode } from '../extensions/image-node'
 import { SlashCommand } from '../extensions/slash-command'
 import { TaskItemNode } from '../extensions/task-item-node'
-
-const lowlight = createLowlight(common)
+import { ColorExtension, TextStyleMark } from '../extensions/text-style-mark'
 
 interface UseBlogEditorProps {
   initialContent?: string
@@ -98,9 +98,13 @@ export function useEditor({
           width: 2,
         },
       }),
-      Highlight.configure({
+      CharacterCount,
+      TextStyleMark,
+      ColorExtension,
+      HighlightMark.configure({
+        multicolor: true,
         HTMLAttributes: {
-          class: 'bg-primary/20 text-primary rounded-sm px-1',
+          class: 'rounded-sm px-1',
         },
       }),
       Placeholder.configure({
@@ -127,12 +131,11 @@ export function useEditor({
           image: t('commands.image'),
           video: t('commands.video'),
           table: t('commands.table'),
-          inlineMath: t('commands.inline_math'),
           blockMath: t('commands.block_math'),
         },
       }),
       CodeBlockNode.configure({
-        lowlight,
+        highlighter,
         defaultLanguage: 'plaintext',
       }),
       CalloutNode,
@@ -163,11 +166,23 @@ export function useEditor({
       TableCell,
       Youtube.configure({
         inline: false,
+        nocookie: true,
+        modestBranding: true,
         HTMLAttributes: {
-          class: 'w-full aspect-video rounded-lg border border-border shadow-sm my-6',
+          class: 'h-full w-full border-0',
         },
       }),
       Mathematics.configure({
+        inlineOptions: {
+          onClick: (_node, pos) => {
+            editorRef.current?.chain().focus().setNodeSelection(pos).run()
+          },
+        },
+        blockOptions: {
+          onClick: (_node, pos) => {
+            editorRef.current?.chain().focus().setNodeSelection(pos).run()
+          },
+        },
         katexOptions: {
           throwOnError: false,
         },
@@ -181,7 +196,7 @@ export function useEditor({
       attributes: {
         class: cn(
           'typeset typeset-docs prose-neutral dark:prose-invert',
-          'w-full max-w-none focus:outline-none overflow-y-auto p-8 sm:p-12 min-h-[600px] h-full scroll-smooth',
+          'w-full min-h-full max-w-none mx-auto focus:outline-none px-4 pt-4 md:px-8 md:pt-8 pb-8',
         ),
         spellcheck: 'false',
         autocomplete: 'off',

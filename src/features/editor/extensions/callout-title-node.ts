@@ -23,6 +23,8 @@ export const CalloutTitleNode = Node.create({
 
   defining: true,
 
+  isolating: true,
+
   parseHTML() {
     return [
       {

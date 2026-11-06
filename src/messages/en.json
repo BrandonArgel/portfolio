@@ -16,10 +16,10 @@
       "name": "John Doe"
     },
     "errors": {
-      "system_title": "System Error",
-      "system_description": "An error occurred while processing your request. Please try again later.",
-      "unexpected_title": "Unexpected Error",
-      "unexpected_description": "An unexpected error occurred. Please try again later."
+      "unknown_title": "Unknown error",
+      "unknown_description": "An unknown error occurred. Please try again.",
+      "unexpected_title": "Unexpected error",
+      "unexpected_description": "An unexpected error occurred. Please try again."
     },
     "labels": {
       "email": "Email",
@@ -238,16 +238,28 @@
         "forgot_password": "Forgot password?",
         "create_account": "Create new account",
         "welcome_back": "Welcome back{name, select, empty {} other {, {name}}}!",
-        "invalid_credentials_title": "Sign In Failed",
-        "invalid_credentials_description": "Invalid email or password. Please check your credentials.",
-        "forbidden_title": "Access Denied",
-        "forbidden_description": "You do not have permission to access this resource.",
-        "unverified_email_title": "Email Not Verified",
-        "unverified_email_description": "Please verify your email address before signing in. Check your inbox for the verification email.",
-        "banned_title": "Account Banned",
-        "banned_description": "Your account has been banned. Please contact support for more information.",
-        "rate_limited_title": "Too Many Attempts",
-        "rate_limited_description": "You have made too many sign-in attempts. Please wait a few minutes and try again."
+        "errors": {
+          "BANNED": {
+            "title": "Account Banned",
+            "description": "Your account has been banned. Please contact support for more information."
+          },
+          "FORBIDDEN": {
+            "title": "Access Denied",
+            "description": "You do not have permission to access this resource."
+          },
+          "INVALID_CREDENTIALS": {
+            "title": "Invalid credentials",
+            "description": "Invalid email or password. Please check your credentials."
+          },
+          "RATE_LIMITED": {
+            "title": "Too Many Attempts",
+            "description": "You have made too many sign-in attempts. Please wait a few minutes and try again."
+          },
+          "UNVERIFIED_EMAIL": {
+            "title": "Email Not Verified",
+            "description": "Please verify your email address before signing in. Check your inbox for the verification email."
+          }
+        }
       },
       "register": {
         "title": "Sign Up",
@@ -259,18 +271,32 @@
         "already_have_account": "I already have an account",
         "account_created_title": "Account created!",
         "account_created_description": "Welcome to the platform{name, select, empty {} other {, {name}}}.",
-        "email_in_use_title": "Email in use",
-        "email_in_use_description": "This email is already registered. Please log in.",
-        "invalid_password_title": "Invalid Password",
-        "invalid_password_description": "Please ensure your password meets all requirements.",
-        "partial_success_title": "Partial Success",
-        "partial_success_description": "Account created successfully, but please log in manually.",
-        "registration_failed_title": "Registration Failed",
-        "registration_failed_description": "An error occurred while creating your account. Please try again later.",
-        "rate_limited_title": "Too Many Attempts",
-        "rate_limited_description": "You have made too many sign-up attempts. Please wait a few minutes and try again.",
-        "forbidden_title": "Access Denied",
-        "forbidden_description": "You do not have permission to access this resource."
+        "errors": {
+          "AUTO_LOGIN_FAILED": {
+            "title": "Auto login failed",
+            "description": "Please log in manually."
+          },
+          "FORBIDDEN": {
+            "title": "Access Denied",
+            "description": "You do not have permission to access this resource."
+          },
+          "RATE_LIMITED": {
+            "title": "Too Many Attempts",
+            "description": "You have made too many sign-up attempts. Please wait a few minutes and try again."
+          },
+          "UNKNOWN_ERROR": {
+            "title": "System Error",
+            "description": "An error occurred while creating your account. Please try again later."
+          },
+          "USER_ALREADY_EXISTS": {
+            "title": "Email in use",
+            "description": "This email is already registered. Please log in."
+          },
+          "WEAK_PASSWORD": {
+            "title": "Invalid Password",
+            "description": "Please ensure your password meets all requirements."
+          }
+        }
       }
     },
     "blog": {
@@ -295,6 +321,7 @@
         "empty_bookmarked": "No bookmarked articles yet. Bookmark your favorite reads to find them here!",
         "empty_trending": "Check back soon for trending articles!",
         "all_articles": "All Articles",
+        "all_topics": "All topics",
         "showing_articles": "Showing {start}-{end} of {total} articles",
         "sort": {
           "latest": "Latest",
@@ -324,6 +351,47 @@
           "page": "Page {page}",
           "aria_page": "Go to page {page}",
           "aria_current": "Current page, page {page}"
+        },
+        "comments": {
+          "title": "Comments",
+          "count": "Comments ({count})",
+          "empty_title": "No comments yet",
+          "empty_description": "Be the first to share your thoughts or ask a question about this article.",
+          "placeholder": "Share your thoughts on this article...",
+          "reply_placeholder": "Write a reply to {name}...",
+          "edit_placeholder": "Update your comment...",
+          "submit": "Post Comment",
+          "submit_reply": "Post Reply",
+          "save": "Save Changes",
+          "cancel": "Cancel",
+          "reply": "Reply",
+          "edit": "Edit",
+          "delete": "Delete",
+          "edited": "(edited)",
+          "badge_author": "Author",
+          "badge_admin": "Admin",
+          "shortcut_hint": "Press {key} + Enter to submit",
+          "sign_in_title": "Join the conversation",
+          "sign_in_description": "Sign in to leave a comment, reply to other readers, and participate in the discussion.",
+          "sign_in_action": "Sign in to comment",
+          "create_account_action": "Create account",
+          "show_replies": "Show {count, plural, =1 {1 reply} other {# replies}}",
+          "hide_replies": "Hide {count, plural, =1 {1 reply} other {# replies}}",
+          "more_actions": "Comment actions",
+          "delete_dialog": {
+            "title": "Delete comment?",
+            "description": "This action cannot be undone. This comment and all of its nested replies will be permanently removed.",
+            "confirm": "Delete Comment",
+            "cancel": "Cancel"
+          },
+          "notifications": {
+            "created": "Comment posted",
+            "reply_created": "Reply posted",
+            "updated": "Comment updated",
+            "deleted": "Comment deleted",
+            "empty_error": "Please enter a comment before submitting.",
+            "error": "Could not complete your request. Please try again."
+          }
         }
       },
       "management": {
@@ -402,9 +470,29 @@
         "edit_post": "Edit Article",
         "save": "Save",
         "saving": "Saving...",
+        "status": {
+          "draft": "Draft",
+          "published": "Published",
+          "unpublished_changes": "Unpublished Changes"
+        },
+        "header": {
+          "last_updated": "Last Updated {timestamp}",
+          "just_now": "Just now",
+          "by_author": "By {name}",
+          "default_author": "Editor",
+          "syncing_draft": "Saving draft...",
+          "preview": "Preview",
+          "back_to_edit": "Back to Edit",
+          "preview_empty": "No content to preview yet. Switch back to Edit mode and start writing your article.",
+          "untitled_post": "Untitled Article",
+          "publish": "Publish",
+          "publish_changes": "Publish Changes",
+          "update": "Update"
+        },
         "notifications": {
           "post_updated": "Article updated successfully",
           "post_created": "Article created successfully",
+          "draft_discarded": "Unpublished draft changes discarded",
           "save_error": "Error saving article",
           "title_slug_required": "Title and slug are required",
           "uploading_image": "Uploading image...",
@@ -417,21 +505,59 @@
         },
         "frontmatter": {
           "title": "Article Metadata",
+          "sheet_description": "Configure SEO details, cover image, categories, and publication status.",
           "field_title": "Title",
-          "title_placeholder": "Title...",
+          "title_placeholder": "Untitled article...",
+          "field_slug": "URL Slug",
+          "slug_placeholder": "my-article-slug",
+          "sync_slug": "Sync from title",
           "field_description": "Description",
-          "description_placeholder": "SEO summary...",
+          "description_placeholder": "Write a brief SEO summary for search engines and social cards...",
           "field_cover_image": "Cover Image",
           "cover_image_placeholder": "https://...",
+          "upload_cover": "Click to upload cover image",
+          "upload_cover_hint": "PNG, JPG, WebP up to 5MB (16:9 recommended)",
+          "cover_attached": "Cover image attached",
+          "replace_cover": "Replace cover image",
+          "remove_cover": "Remove cover image",
           "field_categories": "Categories",
           "add_category_placeholder": "Add category...",
           "create_category": "Create \"{category}\"",
           "no_categories_found": "No categories found",
           "field_locale": "Locale",
           "select_locale_placeholder": "Select locale...",
+          "publication_status": "Publication Status",
           "field_published": "Published",
+          "published_hint": "Visible to public readers on the blog",
+          "unpublished_hint": "Hidden from the public blog",
+          "draft_overlay_label": "In-Progress Draft",
+          "draft_active_hint": "Edits are saved to draft overlay without affecting live content",
+          "draft_synced_hint": "Draft overlay is synced with live published content",
+          "discard_draft_changes": "Discard Unpublished Changes",
           "status_live": "Live",
           "status_draft": "Draft"
+        }
+      },
+      "errors": {
+        "NOT_FOUND": {
+          "title": "Article not found",
+          "description": "The article you are looking for does not exist or was removed."
+        },
+        "UNAUTHORIZED": {
+          "title": "Authentication required",
+          "description": "Please sign in to continue."
+        },
+        "FORBIDDEN": {
+          "title": "Access Denied",
+          "description": "You do not have permission to perform this action."
+        },
+        "DATABASE_ERROR": {
+          "title": "Database error",
+          "description": "We could not complete the operation. Please try again later."
+        },
+        "VALIDATION_ERROR": {
+          "title": "Validation error",
+          "description": "Please review the data and try again."
         }
       }
     },
@@ -503,6 +629,8 @@
       "title": "Editor",
       "writing": "Writing...",
       "saved_locally": "Saved locally",
+      "characters": "Characters",
+      "words": "Words",
       "loading": "Loading editor...",
       "placeholder": "Type '/' for commands or start writing your article...",
       "image_alt_placeholder": "Image description",
@@ -558,9 +686,28 @@
       "bubble_menu": {
         "bold": "Bold",
         "italic": "Italic",
+        "underline": "Underline",
         "strikethrough": "Strikethrough",
         "inline_code": "Inline Code",
+        "inline_math": "Inline Math",
         "highlight": "Highlight",
+        "color": "Color",
+        "clear_format": "Clear Format",
+        "colors": {
+          "recently_used": "Recently used",
+          "text_color": "Text color",
+          "background_color": "Background color",
+          "default": "Default",
+          "gray": "Gray",
+          "brown": "Brown",
+          "orange": "Orange",
+          "yellow": "Yellow",
+          "green": "Green",
+          "blue": "Blue",
+          "purple": "Purple",
+          "pink": "Pink",
+          "red": "Red"
+        },
         "link": "Link",
         "insert_link": "Insert Link",
         "link_description": "Enter the hyperlink URL. Leave blank to remove current link.",

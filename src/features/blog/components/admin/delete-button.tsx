@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
-import { deletePostAction } from '@/features/blog/actions/posts.action'
+import { deletePostAction } from '@/features/blog/actions/post-actions'
 import { checkAndHandleSessionRevoked } from '@/lib/auth-interceptor'
 
 export function DeletePostButton({ postId }: { postId: string }) {

@@ -2,60 +2,48 @@
 
 import { useTranslations } from 'next-intl'
 import { sileo } from 'sileo'
-import { useRouter } from '@/i18n/navigation'
 import type { RegisterError } from '../types/errors'
 
 export function useRegisterErrors() {
-  const t = useTranslations('features.auth.register')
-  const tGlobal = useTranslations('common')
-  const router = useRouter()
+  const t = useTranslations('features.auth.register.errors')
+  const tGlobal = useTranslations('common.errors')
 
   const handleRegisterError = (err: RegisterError) => {
-    switch (err.reason) {
-      case 'USER_ALREADY_EXISTS':
-        sileo.error({
-          title: t('email_in_use_title'),
-          description: t('email_in_use_description'),
-        })
-        break
-      case 'WEAK_PASSWORD':
-        sileo.error({
-          title: t('invalid_password_title'),
-          description: t('invalid_password_description'),
-        })
-        break
-      case 'AUTO_LOGIN_FAILED':
-        sileo.warning({
-          title: t('partial_success_title'),
-          description: t('partial_success_description'),
-        })
-        router.push('/login')
-        break
-      case 'RATE_LIMITED':
-        sileo.error({
-          title: t('rate_limited_title'),
-          description: t('rate_limited_description'),
-        })
-        break
-      case 'FORBIDDEN':
-        sileo.error({
-          title: t('forbidden_title'),
-          description: t('forbidden_description'),
-        })
-        break
-      case 'UNKNOWN_ERROR':
-        sileo.error({
-          title: t('registration_failed_title'),
-          description: t('registration_failed_description'),
-        })
-        break
-      default:
-        err satisfies never
-        sileo.error({
-          title: tGlobal('errors.system_title'),
-          description: tGlobal('errors.system_description'),
-        })
+    const errorMessages = {
+      USER_ALREADY_EXISTS: {
+        title: t('USER_ALREADY_EXISTS.title'),
+        description: t('USER_ALREADY_EXISTS.description'),
+      },
+      WEAK_PASSWORD: {
+        title: t('WEAK_PASSWORD.title'),
+        description: t('WEAK_PASSWORD.description'),
+      },
+      AUTO_LOGIN_FAILED: {
+        title: t('AUTO_LOGIN_FAILED.title'),
+        description: t('AUTO_LOGIN_FAILED.description'),
+      },
+      RATE_LIMITED: {
+        title: t('RATE_LIMITED.title'),
+        description: t('RATE_LIMITED.description'),
+      },
+      FORBIDDEN: {
+        title: t('FORBIDDEN.title'),
+        description: t('FORBIDDEN.description'),
+      },
+      UNKNOWN_ERROR: {
+        title: t('UNKNOWN_ERROR.title'),
+        description: t('UNKNOWN_ERROR.description'),
+      },
+    } satisfies Record<RegisterError['reason'], { title: string; description: string }>
+
+    const defaultErrorMessage = {
+      title: tGlobal('unexpected_title'),
+      description: tGlobal('unexpected_description'),
     }
+
+    const message = errorMessages[err.reason as keyof typeof errorMessages] || defaultErrorMessage
+
+    sileo.error(message)
   }
 
   return { handleRegisterError }

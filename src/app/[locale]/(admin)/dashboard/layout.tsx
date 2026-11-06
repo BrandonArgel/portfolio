@@ -1,9 +1,6 @@
-import { headers } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { DashboardSidebar } from '@/components/layout/sidebar'
-import { Separator } from '@/components/ui/separator'
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { SessionGuard } from '@/features/dashboard'
+import { DashboardResizableLayout, DashboardSidebar } from '@/components/layout/sidebar'
 import { auth } from '@/lib/auth/auth'
 
 interface DashboardLayoutProps {
@@ -13,6 +10,7 @@ interface DashboardLayoutProps {
 
 export default async function DashboardLayout({ children, params }: DashboardLayoutProps) {
   const { locale } = await params
+  const cookieStore = await cookies()
 
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -24,21 +22,20 @@ export default async function DashboardLayout({ children, params }: DashboardLay
     redirect(`/${locale}/login`)
   }
 
+  const sidebarState = cookieStore.get('sidebar_state')
+  const defaultOpen = sidebarState ? sidebarState.value === 'true' : true
+
   const isAdmin = session.user.role === 'admin'
   const isEditor = session.user.role === 'editor'
 
   return (
-    <SessionGuard>
-      <SidebarProvider>
-        <DashboardSidebar session={session} isAdmin={isAdmin} isEditor={isEditor} />
-        <SidebarInset>
-          <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border/60 bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-          </header>
-          <div className="flex-1 p-4 md:p-6">{children}</div>
-        </SidebarInset>
-      </SidebarProvider>
-    </SessionGuard>
+    <DashboardResizableLayout
+      defaultOpen={defaultOpen}
+      sidebar={
+        <DashboardSidebar resizable session={session} isAdmin={isAdmin} isEditor={isEditor} />
+      }
+    >
+      {children}
+    </DashboardResizableLayout>
   )
 }

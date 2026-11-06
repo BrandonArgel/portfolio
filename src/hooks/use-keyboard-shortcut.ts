@@ -4,6 +4,7 @@ import { useIsMac } from './use-is-mac'
 interface ShortcutOptions {
   ignoreInInputs?: boolean
   preventDefault?: boolean
+  enabled?: boolean
 }
 
 export function useKeyboardShortcut(
@@ -12,7 +13,7 @@ export function useKeyboardShortcut(
   options: ShortcutOptions = {},
 ) {
   const isMac = useIsMac()
-  const { ignoreInInputs = true, preventDefault = true } = options
+  const { ignoreInInputs = true, preventDefault = true, enabled = true } = options
 
   const callbackRef = useRef(callback)
 
@@ -21,6 +22,8 @@ export function useKeyboardShortcut(
   }, [callback])
 
   useEffect(() => {
+    if (!enabled) return
+
     const keys = shortcut
       .toLowerCase()
       .split('+')
@@ -51,7 +54,9 @@ export function useKeyboardShortcut(
       const isShiftMatch = e.shiftKey === requiredModifiers.shift
       const isAltMatch = e.altKey === requiredModifiers.alt
 
-      const isKeyMatch = e.key.toLowerCase() === mainKey
+      const isKeyMatch =
+        e.key.toLowerCase() === mainKey ||
+        (mainKey.length === 1 && e.code.toLowerCase() === `key${mainKey}`)
 
       if (isCtrlMatch && isMetaMatch && isShiftMatch && isAltMatch && isKeyMatch) {
         if (preventDefault) e.preventDefault()
@@ -61,5 +66,5 @@ export function useKeyboardShortcut(
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [shortcut, ignoreInInputs, preventDefault, isMac])
+  }, [shortcut, ignoreInInputs, preventDefault, enabled, isMac])
 }

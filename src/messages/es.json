@@ -16,10 +16,10 @@
       "name": "Nombre"
     },
     "errors": {
-      "system_title": "Error del Sistema",
-      "system_description": "Ocurrió un error al procesar tu solicitud. Por favor, intenta de nuevo más tarde.",
-      "unexpected_title": "Error Inesperado",
-      "unexpected_description": "Ocurrió un error inesperado. Por favor, intenta de nuevo más tarde."
+      "unknown_title": "Error desconocido",
+      "unknown_description": "Ocurrió un error desconocido. Por favor, intenta de nuevo.",
+      "unexpected_title": "Error inesperado",
+      "unexpected_description": "Ocurrió un error inesperado. Por favor, intenta de nuevo."
     },
     "labels": {
       "email": "Correo electrónico",
@@ -238,16 +238,28 @@
         "forgot_password": "¿Olvidaste tu contraseña?",
         "create_account": "Crear nueva cuenta",
         "welcome_back": "¡Bienvenido de nuevo{name, select, empty {} other {, {name}}}!",
-        "invalid_credentials_title": "Error al Iniciar Sesión",
-        "invalid_credentials_description": "Correo o contraseña inválidos. Por favor, verifica tus credenciales.",
-        "forbidden_title": "Acceso Denegado",
-        "forbidden_description": "No tienes permiso para acceder a este recurso.",
-        "unverified_email_title": "Correo No Verificado",
-        "unverified_email_description": "Por favor, verifica tu correo electrónico antes de iniciar sesión. Revisa tu bandeja de entrada.",
-        "banned_title": "Cuenta Baneada",
-        "banned_description": "Tu cuenta ha sido baneada. Por favor, contacta con soporte para más información.",
-        "rate_limited_title": "Demasiados Intentos",
-        "rate_limited_description": "Has realizado demasiados intentos de inicio de sesión. Por favor, espera unos minutos e inténtalo de nuevo."
+        "errors": {
+          "BANNED": {
+            "title": "Cuenta Baneada",
+            "description": "Tu cuenta ha sido baneada. Por favor, contacta con soporte para más información."
+          },
+          "FORBIDDEN": {
+            "title": "Acceso Denegado",
+            "description": "No tienes permiso para acceder a este recurso."
+          },
+          "INVALID_CREDENTIALS": {
+            "title": "Credenciales inválidas",
+            "description": "Correo o contraseña inválidos. Por favor, verifica tus credenciales."
+          },
+          "RATE_LIMITED": {
+            "title": "Demasiados Intentos",
+            "description": "Has realizado demasiados intentos de inicio de sesión. Por favor, espera unos minutos e inténtalo de nuevo."
+          },
+          "UNVERIFIED_EMAIL": {
+            "title": "Correo No Verificado",
+            "description": "Por favor, verifica tu correo electrónico antes de iniciar sesión. Revisa tu bandeja de entrada."
+          }
+        }
       },
       "register": {
         "title": "Registrarse",
@@ -259,18 +271,32 @@
         "already_have_account": "Ya tengo una cuenta",
         "account_created_title": "¡Cuenta creada!",
         "account_created_description": "Bienvenido a la plataforma{name, select, empty {} other {, {name}}}.",
-        "email_in_use_title": "Correo en uso",
-        "email_in_use_description": "Este correo ya está registrado. Por favor, inicia sesión.",
-        "invalid_password_title": "Contraseña Inválida",
-        "invalid_password_description": "Asegúrate de que tu contraseña cumpla con todos los requisitos.",
-        "partial_success_title": "Éxito Parcial",
-        "partial_success_description": "Cuenta creada exitosamente, pero por favor inicia sesión manualmente.",
-        "registration_failed_title": "Error al Registrarse",
-        "registration_failed_description": "Ocurrió un error al crear tu cuenta. Por favor, intenta de nuevo más tarde.",
-        "rate_limited_title": "Demasiados Intentos",
-        "rate_limited_description": "Has realizado demasiados intentos de registro. Por favor, espera unos minutos e inténtalo de nuevo.",
-        "forbidden_title": "Acceso Denegado",
-        "forbidden_description": "No tienes permiso para acceder a este recurso."
+        "errors": {
+          "AUTO_LOGIN_FAILED": {
+            "title": "Fallo en el inicio de sesión automático",
+            "description": "Por favor, inicia sesión manualmente."
+          },
+          "FORBIDDEN": {
+            "title": "Acceso Denegado",
+            "description": "No tienes permiso para acceder a este recurso."
+          },
+          "RATE_LIMITED": {
+            "title": "Demasiados Intentos",
+            "description": "Has realizado demasiados intentos de registro. Por favor, espera unos minutos e inténtalo de nuevo."
+          },
+          "UNKNOWN_ERROR": {
+            "title": "Error del Sistema",
+            "description": "Ocurrió un error al crear tu cuenta. Por favor, intenta de nuevo más tarde."
+          },
+          "USER_ALREADY_EXISTS": {
+            "title": "Correo en uso",
+            "description": "Este correo ya está registrado. Por favor, inicia sesión."
+          },
+          "WEAK_PASSWORD": {
+            "title": "Contraseña Inválida",
+            "description": "Asegúrate de que tu contraseña cumpla con todos los requisitos."
+          }
+        }
       }
     },
     "blog": {
@@ -295,6 +321,7 @@
         "empty_bookmarked": "Aún no tienes artículos guardados. ¡Guarda tus lecturas favoritas aquí!",
         "empty_trending": "¡Vuelve pronto para ver artículos en tendencia!",
         "all_articles": "Todos los Artículos",
+        "all_topics": "Todos los temas",
         "showing_articles": "Mostrando {start}-{end} de {total} artículos",
         "sort": {
           "latest": "Más reciente",
@@ -324,6 +351,47 @@
           "page": "Página {page}",
           "aria_page": "Ir a la página {page}",
           "aria_current": "Página actual, página {page}"
+        },
+        "comments": {
+          "title": "Comentarios",
+          "count": "Comentarios ({count})",
+          "empty_title": "Aún no hay comentarios",
+          "empty_description": "Sé el primero en compartir tu opinión o hacer una pregunta sobre este artículo.",
+          "placeholder": "Comparte tus ideas sobre este artículo...",
+          "reply_placeholder": "Escribe una respuesta para {name}...",
+          "edit_placeholder": "Actualiza tu comentario...",
+          "submit": "Publicar comentario",
+          "submit_reply": "Responder",
+          "save": "Guardar cambios",
+          "cancel": "Cancelar",
+          "reply": "Responder",
+          "edit": "Editar",
+          "delete": "Eliminar",
+          "edited": "(editado)",
+          "badge_author": "Autor",
+          "badge_admin": "Admin",
+          "shortcut_hint": "Presiona {key} + Enter para enviar",
+          "sign_in_title": "Únete a la conversación",
+          "sign_in_description": "Inicia sesión para dejar un comentario, responder a otros lectores y participar en la discusión.",
+          "sign_in_action": "Iniciar sesión para comentar",
+          "create_account_action": "Crear cuenta",
+          "show_replies": "Mostrar {count, plural, =1 {1 respuesta} other {# respuestas}}",
+          "hide_replies": "Ocultar {count, plural, =1 {1 respuesta} other {# respuestas}}",
+          "more_actions": "Acciones del comentario",
+          "delete_dialog": {
+            "title": "¿Eliminar comentario?",
+            "description": "Esta acción no se puede deshacer. Este comentario y todas sus respuestas anidadas se eliminarán permanentemente.",
+            "confirm": "Eliminar comentario",
+            "cancel": "Cancelar"
+          },
+          "notifications": {
+            "created": "Comentario publicado",
+            "reply_created": "Respuesta publicada",
+            "updated": "Comentario actualizado",
+            "deleted": "Comentario eliminado",
+            "empty_error": "Por favor escribe un comentario antes de enviar.",
+            "error": "No se pudo completar tu solicitud. Inténtalo de nuevo."
+          }
         }
       },
       "management": {
@@ -347,7 +415,10 @@
         "search_placeholder": "Buscar artículos...",
         "filter_locale": "Idioma",
         "filter_category": "Categoría",
-        "filter_all": "Todos",
+        "all_languages": "Todos los idiomas",
+        "all_categories": "Todas las categorías",
+        "filter_all_languages": "Todos los idiomas",
+        "filter_all_categories": "Todas las categorías",
         "reset_filters": "Restablecer",
         "showing_results": "Mostrando {from}–{to} de {total}",
         "no_results": "Ningún artículo coincide con tus filtros.",
@@ -356,10 +427,7 @@
         "prev_page": "Anterior",
         "next_page": "Siguiente",
         "dashboard": "Panel",
-        "all_languages": "Todos los idiomas",
-        "all_categories": "Todas las categorías",
-        "filter_all_languages": "Todos los idiomas",
-        "filter_all_categories": "Todas las categorías"
+        "filter_all": "Todos"
       },
       "editor": {
         "new_post": "Nuevo Artículo",
@@ -402,9 +470,29 @@
         "edit_post": "Editar Artículo",
         "save": "Guardar",
         "saving": "Guardando...",
+        "status": {
+          "draft": "Borrador",
+          "published": "Publicado",
+          "unpublished_changes": "Cambios sin publicar"
+        },
+        "header": {
+          "last_updated": "Última actualización {timestamp}",
+          "just_now": "Justo ahora",
+          "by_author": "Por {name}",
+          "default_author": "Editor",
+          "syncing_draft": "Guardando borrador...",
+          "preview": "Vista previa",
+          "back_to_edit": "Volver a editar",
+          "preview_empty": "Aún no hay contenido para previsualizar. Vuelve al modo de edición y comienza a escribir tu artículo.",
+          "untitled_post": "Artículo sin título",
+          "publish": "Publicar",
+          "publish_changes": "Publicar cambios",
+          "update": "Actualizar"
+        },
         "notifications": {
           "post_updated": "Artículo actualizado con éxito",
           "post_created": "Artículo creado con éxito",
+          "draft_discarded": "Cambios del borrador descartados",
           "save_error": "Error al guardar el artículo",
           "title_slug_required": "El título y el slug son obligatorios",
           "uploading_image": "Subiendo imagen...",
@@ -417,21 +505,59 @@
         },
         "frontmatter": {
           "title": "Metadatos del Artículo",
+          "sheet_description": "Configura detalles SEO, imagen de portada, categorías y estado de publicación.",
           "field_title": "Título",
-          "title_placeholder": "Título...",
+          "title_placeholder": "Artículo sin título...",
+          "field_slug": "Slug de URL",
+          "slug_placeholder": "slug-del-articulo",
+          "sync_slug": "Sincronizar con título",
           "field_description": "Descripción",
-          "description_placeholder": "Resumen SEO...",
+          "description_placeholder": "Escribe un breve resumen SEO para buscadores y redes sociales...",
           "field_cover_image": "Imagen de Portada",
           "cover_image_placeholder": "https://...",
+          "upload_cover": "Haz clic para subir imagen de portada",
+          "upload_cover_hint": "PNG, JPG, WebP hasta 5MB (16:9 recomendado)",
+          "cover_attached": "Imagen de portada adjunta",
+          "replace_cover": "Reemplazar imagen de portada",
+          "remove_cover": "Eliminar imagen de portada",
           "field_categories": "Categorías",
           "add_category_placeholder": "Añadir categoría...",
           "create_category": "Crear \"{category}\"",
           "no_categories_found": "No se encontraron categorías",
           "field_locale": "Idioma",
           "select_locale_placeholder": "Seleccionar idioma...",
+          "publication_status": "Estado de Publicación",
           "field_published": "Publicado",
+          "published_hint": "Visible para los lectores públicos en el blog",
+          "unpublished_hint": "Oculto del blog público",
+          "draft_overlay_label": "Borrador en curso",
+          "draft_active_hint": "Los cambios se guardan en el borrador sin afectar el contenido en vivo",
+          "draft_synced_hint": "El borrador está sincronizado con el contenido publicado",
+          "discard_draft_changes": "Descartar cambios sin publicar",
           "status_live": "Publicado",
           "status_draft": "Borrador"
+        }
+      },
+      "errors": {
+        "NOT_FOUND": {
+          "title": "Artículo no encontrado",
+          "description": "El artículo que buscas no existe o fue eliminado."
+        },
+        "UNAUTHORIZED": {
+          "title": "Autenticación requerida",
+          "description": "Por favor, inicia sesión para continuar."
+        },
+        "FORBIDDEN": {
+          "title": "Acceso Denegado",
+          "description": "No tienes permiso para realizar esta acción."
+        },
+        "DATABASE_ERROR": {
+          "title": "Error de base de datos",
+          "description": "No pudimos completar la operación. Por favor, intenta de nuevo más tarde."
+        },
+        "VALIDATION_ERROR": {
+          "title": "Error de validación",
+          "description": "Por favor, revisa los datos e inténtalo de nuevo."
         }
       }
     },
@@ -503,6 +629,8 @@
       "title": "Editor",
       "writing": "Escribiendo...",
       "saved_locally": "Guardado localmente",
+      "characters": "Caracteres",
+      "words": "Palabras",
       "loading": "Cargando editor...",
       "placeholder": "Escribe '/' para comandos o comienza a escribir tu artículo...",
       "image_alt_placeholder": "Descripción de la imagen",
@@ -558,9 +686,28 @@
       "bubble_menu": {
         "bold": "Negrita",
         "italic": "Cursiva",
+        "underline": "Subrayado",
         "strikethrough": "Tachado",
         "inline_code": "Código en línea",
+        "inline_math": "Fórmula en línea",
         "highlight": "Resaltar",
+        "color": "Color",
+        "clear_format": "Limpiar formato",
+        "colors": {
+          "recently_used": "Usado recientemente",
+          "text_color": "Color de texto",
+          "background_color": "Color de fondo",
+          "default": "Por defecto",
+          "gray": "Gris",
+          "brown": "Marrón",
+          "orange": "Naranja",
+          "yellow": "Amarillo",
+          "green": "Verde",
+          "blue": "Azul",
+          "purple": "Morado",
+          "pink": "Rosa",
+          "red": "Rojo"
+        },
         "link": "Enlace",
         "insert_link": "Insertar enlace",
         "link_description": "Escribe la URL del hipervínculo. Deja el campo vacío para quitar el enlace actual.",

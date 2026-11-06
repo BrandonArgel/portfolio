@@ -3,6 +3,7 @@
 import { mergeProps } from '@base-ui/react/merge-props'
 import { useRender } from '@base-ui/react/use-render'
 import { cva, type VariantProps } from 'class-variance-authority'
+import Cookies from 'js-cookie'
 import { PanelLeftIcon } from 'lucide-react'
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
@@ -17,11 +18,10 @@ import {
 } from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { useIsMobile } from '@/hooks/use-mobile'
+import { useIsMobile } from '@/hooks/use-is-mobile'
 import { cn } from '@/lib/utils'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
-const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = '16rem'
 const SIDEBAR_WIDTH_MOBILE = '18rem'
 const SIDEBAR_WIDTH_ICON = '3rem'
@@ -36,6 +36,8 @@ type SidebarContextProps = {
   isMobile: boolean
   toggleSidebar: () => void
 }
+
+type ShortcutModifier = 'meta-or-ctrl' | 'ctrl' | 'meta' | 'alt' | 'shift' | 'none'
 
 const SidebarContext = React.createContext<SidebarContextProps | null>(null)
 
@@ -52,6 +54,9 @@ function SidebarProvider({
   defaultOpen = true,
   open: openProp,
   onOpenChange: setOpenProp,
+  shortcutKey = SIDEBAR_KEYBOARD_SHORTCUT,
+  openWithShortcut = true,
+  shortcutModifier = 'meta-or-ctrl',
   className,
   style,
   children,
@@ -60,12 +65,13 @@ function SidebarProvider({
   defaultOpen?: boolean
   open?: boolean
   onOpenChange?: (open: boolean) => void
+  shortcutKey?: string
+  openWithShortcut?: boolean
+  shortcutModifier?: ShortcutModifier
 }) {
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
 
-  // This is the internal state of the sidebar.
-  // We use openProp and setOpenProp for control from outside the component.
   const [_open, _setOpen] = React.useState(defaultOpen)
   const open = openProp ?? _open
   const setOpen = React.useCallback(
@@ -77,21 +83,55 @@ function SidebarProvider({
         _setOpen(openState)
       }
 
-      // This sets the cookie to keep the sidebar state.
-      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+      Cookies.set(SIDEBAR_COOKIE_NAME, String(openState), {
+        expires: 7,
+        path: '/',
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+      })
     },
     [setOpenProp, open],
   )
 
-  // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(() => {
     return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
   }, [isMobile, setOpen])
 
-  // Adds a keyboard shortcut to toggle the sidebar.
+  // 2. Actualiza el useEffect con las nuevas dependencias y validaciones
   React.useEffect(() => {
+    // Si está deshabilitado o no hay tecla definida, no registramos el evento
+    if (!openWithShortcut || !shortcutKey) return
+
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
+      // Evita que el atajo se active si el usuario está escribiendo en un input o textarea
+      const target = event.target as HTMLElement
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(target?.tagName) || target?.isContentEditable) {
+        return
+      }
+
+      // Validamos qué comando/modificador se requiere
+      const isModifierMatch = (() => {
+        switch (shortcutModifier) {
+          case 'meta-or-ctrl':
+            return event.metaKey || event.ctrlKey
+          case 'ctrl':
+            return event.ctrlKey && !event.metaKey
+          case 'meta':
+            return event.metaKey && !event.ctrlKey
+          case 'alt':
+            return event.altKey
+          case 'shift':
+            return event.shiftKey
+          case 'none':
+            return !event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey
+          default:
+            return event.metaKey || event.ctrlKey
+        }
+      })()
+
+      // Comparamos en minúsculas para evitar fallos si CapsLock o Shift están activos
+      const targetKey = (shortcutKey.split('+').pop() || SIDEBAR_KEYBOARD_SHORTCUT).toLowerCase()
+      if (event.key.toLowerCase() === targetKey && isModifierMatch) {
         event.preventDefault()
         toggleSidebar()
       }
@@ -99,7 +139,7 @@ function SidebarProvider({
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [toggleSidebar])
+  }, [toggleSidebar, openWithShortcut, shortcutKey, shortcutModifier])
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
   // This makes it easier to style the sidebar with Tailwind classes.
@@ -145,6 +185,7 @@ function Sidebar({
   side = 'left',
   variant = 'sidebar',
   collapsible = 'offcanvas',
+  resizable = false,
   className,
   children,
   dir,
@@ -153,6 +194,7 @@ function Sidebar({
   side?: 'left' | 'right'
   variant?: 'sidebar' | 'floating' | 'inset'
   collapsible?: 'offcanvas' | 'icon' | 'none'
+  resizable?: boolean
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
 
@@ -197,6 +239,41 @@ function Sidebar({
     )
   }
 
+  if (resizable) {
+    return (
+      <div
+        className={cn(
+          'group peer hidden h-full w-full text-sidebar-foreground md:block',
+          className,
+        )}
+        data-state={state}
+        data-collapsible={state === 'collapsed' ? collapsible : ''}
+        data-variant={variant}
+        data-side={side}
+        data-resizable="true"
+        data-slot="sidebar"
+        {...props}
+      >
+        <div
+          data-slot="sidebar-container"
+          data-side={side}
+          className={cn(
+            'relative z-10 hidden h-full w-full min-w-(--sidebar-width-icon) md:flex',
+            variant === 'floating' || variant === 'inset' ? 'p-2' : '',
+          )}
+        >
+          <div
+            data-sidebar="sidebar"
+            data-slot="sidebar-inner"
+            className="flex size-full flex-col bg-sidebar group-data-[collapsible=icon]:items-center group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:ring-1 group-data-[variant=floating]:ring-sidebar-border"
+          >
+            {children}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div
       className="group peer hidden text-sidebar-foreground md:block"
@@ -222,7 +299,7 @@ function Sidebar({
         data-slot="sidebar-container"
         data-side={side}
         className={cn(
-          'fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear data-[side=left]:left-0 data-[side=left]:group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)] data-[side=right]:right-0 data-[side=right]:group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)] md:flex',
+          'fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear data-[side=left]:left-0 data-[side=left]:group-data-[collapsible=offcanvas]:-left-(--sidebar-width) data-[side=right]:right-0 data-[side=right]:group-data-[collapsible=offcanvas]:-right-(--sidebar-width) md:flex',
           // Adjust the padding for floating and inset variants.
           variant === 'floating' || variant === 'inset'
             ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]'
@@ -277,7 +354,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<'button'>) {
       onClick={toggleSidebar}
       title="Toggle Sidebar"
       className={cn(
-        'absolute inset-y-0 z-20 hidden w-4 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:start-1/2 after:w-[2px] hover:after:bg-sidebar-border sm:flex ltr:-translate-x-1/2 rtl:-translate-x-1/2',
+        'absolute inset-y-0 z-20 hidden w-4 transition-all ease-linear group-data-[resizable=true]:hidden group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:inset-s-1/2 after:w-0.5 hover:after:bg-sidebar-border sm:flex ltr:-translate-x-1/2 rtl:-translate-x-1/2',
         'in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize',
         '[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
         'group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full hover:group-data-[collapsible=offcanvas]:bg-sidebar',
@@ -319,7 +396,10 @@ function SidebarHeader({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="sidebar-header"
       data-sidebar="header"
-      className={cn('flex flex-col gap-2 p-2', className)}
+      className={cn(
+        'flex flex-col gap-2 p-2 group-data-[collapsible=icon]:items-center',
+        className,
+      )}
       {...props}
     />
   )
@@ -330,7 +410,10 @@ function SidebarFooter({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="sidebar-footer"
       data-sidebar="footer"
-      className={cn('flex flex-col gap-2 p-2', className)}
+      className={cn(
+        'flex flex-col gap-2 p-2 group-data-[collapsible=icon]:items-center',
+        className,
+      )}
       {...props}
     />
   )
@@ -353,7 +436,7 @@ function SidebarContent({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="sidebar-content"
       data-sidebar="content"
       className={cn(
-        'no-scrollbar flex min-h-0 flex-1 flex-col gap-0 overflow-auto group-data-[collapsible=icon]:overflow-hidden',
+        'no-scrollbar flex min-h-0 flex-1 flex-col gap-0 overflow-auto group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:overflow-hidden',
         className,
       )}
       {...props}
@@ -366,7 +449,10 @@ function SidebarGroup({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="sidebar-group"
       data-sidebar="group"
-      className={cn('relative flex w-full min-w-0 flex-col p-2', className)}
+      className={cn(
+        'relative flex w-full min-w-0 flex-col p-2 group-data-[collapsible=icon]:items-center',
+        className,
+      )}
       {...props}
     />
   )
@@ -436,7 +522,10 @@ function SidebarMenu({ className, ...props }: React.ComponentProps<'ul'>) {
     <ul
       data-slot="sidebar-menu"
       data-sidebar="menu"
-      className={cn('flex w-full min-w-0 flex-col gap-0', className)}
+      className={cn(
+        'flex w-full min-w-0 flex-col gap-0 group-data-[collapsible=icon]:items-center',
+        className,
+      )}
       {...props}
     />
   )

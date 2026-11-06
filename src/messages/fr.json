@@ -16,10 +16,10 @@
       "name": "Jean Dupont"
     },
     "errors": {
-      "system_title": "Erreur système",
-      "system_description": "Une erreur est survenue lors du traitement de votre demande. Veuillez réessayer plus tard.",
+      "unknown_title": "Erreur inconnue",
+      "unknown_description": "Une erreur inconnue est survenue. Veuillez réessayer.",
       "unexpected_title": "Erreur inattendue",
-      "unexpected_description": "Une erreur inattendue est survenue. Veuillez réessayer plus tard."
+      "unexpected_description": "Une erreur inattendue est survenue. Veuillez réessayer."
     },
     "labels": {
       "email": "E-mail",
@@ -238,16 +238,28 @@
         "forgot_password": "Mot de passe oublié ?",
         "create_account": "Créer un nouveau compte",
         "welcome_back": "Ravi de vous revoir{name, select, empty {} other {, {name}}} !",
-        "invalid_credentials_title": "Échec de la Connexion",
-        "invalid_credentials_description": "E-mail ou mot de passe invalide. Veuillez vérifier vos identifiants.",
-        "forbidden_title": "Accès Refusé",
-        "forbidden_description": "Vous n'avez pas l'autorisation d'accéder à cette ressource.",
-        "unverified_email_title": "E-mail Non Vérifié",
-        "unverified_email_description": "Veuillez vérifier votre adresse e-mail avant de vous connecter. Consultez votre boîte de réception.",
-        "banned_title": "Compte Banni",
-        "banned_description": "Votre compte a été banni. Veuillez contacter le support pour plus d'informations.",
-        "rate_limited_title": "Trop de Tentatives",
-        "rate_limited_description": "Vous avez effectué trop de tentatives de connexion. Veuillez patienter quelques minutes et réessayer."
+        "errors": {
+          "BANNED": {
+            "title": "Compte Banni",
+            "description": "Votre compte a été banni. Veuillez contacter le support pour plus d'informations."
+          },
+          "FORBIDDEN": {
+            "title": "Accès Refusé",
+            "description": "Vous n'avez pas l'autorisation d'accéder à cette ressource."
+          },
+          "INVALID_CREDENTIALS": {
+            "title": "Identifiants invalides",
+            "description": "E-mail ou mot de passe invalide. Veuillez vérifier vos identifiants."
+          },
+          "RATE_LIMITED": {
+            "title": "Trop de Tentatives",
+            "description": "Vous avez effectué trop de tentatives de connexion. Veuillez patienter quelques minutes et réessayer."
+          },
+          "UNVERIFIED_EMAIL": {
+            "title": "E-mail Non Vérifié",
+            "description": "Veuillez vérifier votre adresse e-mail avant de vous connecter. Consultez votre boîte de réception."
+          }
+        }
       },
       "register": {
         "title": "S'inscrire",
@@ -259,18 +271,32 @@
         "already_have_account": "J'ai déjà un compte",
         "account_created_title": "Compte créé !",
         "account_created_description": "Bienvenue sur la plateforme{name, select, empty {} other {, {name}}}.",
-        "email_in_use_title": "E-mail déjà utilisé",
-        "email_in_use_description": "Cet e-mail est déjà enregistré. Veuillez vous connecter.",
-        "invalid_password_title": "Mot de Passe Invalide",
-        "invalid_password_description": "Veuillez vous assurer que votre mot de passe respecte tous les critères.",
-        "partial_success_title": "Succès Partiel",
-        "partial_success_description": "Compte créé avec succès, mais veuillez vous connecter manuellement.",
-        "registration_failed_title": "Échec de l'Inscription",
-        "registration_failed_description": "Une erreur est survenue lors de la création de votre compte. Veuillez réessayer plus tard.",
-        "rate_limited_title": "Trop de Tentatives",
-        "rate_limited_description": "Vous avez effectué trop de tentatives d'inscription. Veuillez patienter quelques minutes et réessayer.",
-        "forbidden_title": "Accès Refusé",
-        "forbidden_description": "Vous n'avez pas la permission d'accéder à cette ressource."
+        "errors": {
+          "AUTO_LOGIN_FAILED": {
+            "title": "Échec de la connexion automatique",
+            "description": "Veuillez vous connecter manuellement."
+          },
+          "FORBIDDEN": {
+            "title": "Accès Refusé",
+            "description": "Vous n'avez pas la permission d'accéder à cette ressource."
+          },
+          "RATE_LIMITED": {
+            "title": "Trop de Tentatives",
+            "description": "Vous avez effectué trop de tentatives d'inscription. Veuillez patienter quelques minutes et réessayer."
+          },
+          "UNKNOWN_ERROR": {
+            "title": "Erreur système",
+            "description": "Une erreur est survenue lors de la création de votre compte. Veuillez réessayer plus tard."
+          },
+          "USER_ALREADY_EXISTS": {
+            "title": "E-mail déjà utilisé",
+            "description": "Cet e-mail est déjà enregistré. Veuillez vous connecter."
+          },
+          "WEAK_PASSWORD": {
+            "title": "Mot de Passe Invalide",
+            "description": "Veuillez vous assurer que votre mot de passe respecte tous les critères."
+          }
+        }
       }
     },
     "blog": {
@@ -295,6 +321,7 @@
         "empty_bookmarked": "Aucun article enregistré pour le moment. Enregistrez vos lectures préférées pour les retrouver ici !",
         "empty_trending": "Revenez bientôt pour découvrir les articles tendance !",
         "all_articles": "Tous les Articles",
+        "all_topics": "Tous les sujets",
         "showing_articles": "Affichage de {start}-{end} sur {total} articles",
         "sort": {
           "latest": "Plus récent",
@@ -324,6 +351,47 @@
           "page": "Page {page}",
           "aria_page": "Aller à la page {page}",
           "aria_current": "Page actuelle, page {page}"
+        },
+        "comments": {
+          "title": "Commentaires",
+          "count": "Commentaires ({count})",
+          "empty_title": "Aucun commentaire pour le moment",
+          "empty_description": "Soyez le premier à partager votre avis ou à poser une question sur cet article.",
+          "placeholder": "Partagez vos réflexions sur cet article...",
+          "reply_placeholder": "Écrire une réponse à {name}...",
+          "edit_placeholder": "Mettre à jour votre commentaire...",
+          "submit": "Publier le commentaire",
+          "submit_reply": "Publier la réponse",
+          "save": "Enregistrer",
+          "cancel": "Annuler",
+          "reply": "Répondre",
+          "edit": "Modifier",
+          "delete": "Supprimer",
+          "edited": "(modifié)",
+          "badge_author": "Auteur",
+          "badge_admin": "Admin",
+          "shortcut_hint": "Appuyez sur {key} + Entrée pour envoyer",
+          "sign_in_title": "Rejoignez la discussion",
+          "sign_in_description": "Connectez-vous pour laisser un commentaire, répondre aux autres lecteurs et participer à l'échange.",
+          "sign_in_action": "Se connecter pour commenter",
+          "create_account_action": "Créer un compte",
+          "show_replies": "Afficher {count, plural, =1 {1 réponse} other {# réponses}}",
+          "hide_replies": "Masquer {count, plural, =1 {1 réponse} other {# réponses}}",
+          "more_actions": "Actions du commentaire",
+          "delete_dialog": {
+            "title": "Supprimer le commentaire ?",
+            "description": "Cette action est irréversible. Ce commentaire et toutes ses réponses imbriquées seront définitivement supprimés.",
+            "confirm": "Supprimer le commentaire",
+            "cancel": "Annuler"
+          },
+          "notifications": {
+            "created": "Commentaire publié",
+            "reply_created": "Réponse publiée",
+            "updated": "Commentaire mis à jour",
+            "deleted": "Commentaire supprimé",
+            "empty_error": "Veuillez saisir un commentaire avant d'envoyer.",
+            "error": "Impossible de traiter votre demande. Veuillez réessayer."
+          }
         }
       },
       "management": {
@@ -347,7 +415,10 @@
         "search_placeholder": "Rechercher des articles...",
         "filter_locale": "Langue",
         "filter_category": "Catégorie",
-        "filter_all": "Tous",
+        "all_languages": "Toutes les langues",
+        "all_categories": "Toutes les catégories",
+        "filter_all_languages": "Toutes les langues",
+        "filter_all_categories": "Toutes les catégories",
         "reset_filters": "Réinitialiser",
         "showing_results": "Affichage {from}–{to} sur {total}",
         "no_results": "Aucun article ne correspond à vos filtres.",
@@ -356,10 +427,7 @@
         "prev_page": "Précédent",
         "next_page": "Suivant",
         "dashboard": "Tableau de bord",
-        "all_languages": "Toutes les langues",
-        "all_categories": "Toutes les catégories",
-        "filter_all_languages": "Toutes les langues",
-        "filter_all_categories": "Toutes les catégories"
+        "filter_all": "Tous"
       },
       "editor": {
         "new_post": "Nouvel Article",
@@ -402,9 +470,29 @@
         "edit_post": "Modifier l'Article",
         "save": "Enregistrer",
         "saving": "Enregistrement...",
+        "status": {
+          "draft": "Brouillon",
+          "published": "Publié",
+          "unpublished_changes": "Modifications non publiées"
+        },
+        "header": {
+          "last_updated": "Dernière mise à jour {timestamp}",
+          "just_now": "À l'instant",
+          "by_author": "Par {name}",
+          "default_author": "Éditeur",
+          "syncing_draft": "Enregistrement du brouillon...",
+          "preview": "Aperçu",
+          "back_to_edit": "Retour à l'édition",
+          "preview_empty": "Aucun contenu à prévisualiser pour le moment. Revenez au mode édition et commencez à rédiger votre article.",
+          "untitled_post": "Article sans titre",
+          "publish": "Publier",
+          "publish_changes": "Publier les modifications",
+          "update": "Mettre à jour"
+        },
         "notifications": {
           "post_updated": "Article mis à jour avec succès",
           "post_created": "Article créé avec succès",
+          "draft_discarded": "Modifications non publiées annulées",
           "save_error": "Erreur lors de l'enregistrement de l'article",
           "title_slug_required": "Le titre et le slug sont obligatoires",
           "uploading_image": "Téléversement de l'image...",
@@ -417,21 +505,59 @@
         },
         "frontmatter": {
           "title": "Métadonnées de l'Article",
+          "sheet_description": "Configurez les détails SEO, l'image de couverture, les catégories et le statut de publication.",
           "field_title": "Titre",
-          "title_placeholder": "Titre...",
+          "title_placeholder": "Article sans titre...",
+          "field_slug": "Slug d'URL",
+          "slug_placeholder": "slug-de-mon-article",
+          "sync_slug": "Synchroniser depuis le titre",
           "field_description": "Description",
-          "description_placeholder": "Résumé SEO...",
+          "description_placeholder": "Rédigez un bref résumé SEO pour les moteurs de recherche...",
           "field_cover_image": "Image de Couverture",
           "cover_image_placeholder": "https://...",
+          "upload_cover": "Cliquez pour téléverser une image de couverture",
+          "upload_cover_hint": "PNG, JPG, WebP jusqu'à 5 Mo (16:9 recommandé)",
+          "cover_attached": "Image de couverture jointe",
+          "replace_cover": "Remplacer l'image de couverture",
+          "remove_cover": "Supprimer l'image de couverture",
           "field_categories": "Catégories",
           "add_category_placeholder": "Ajouter une catégorie...",
           "create_category": "Créer \"{category}\"",
           "no_categories_found": "Aucune catégorie trouvée",
           "field_locale": "Langue",
           "select_locale_placeholder": "Sélectionner la langue...",
+          "publication_status": "Statut de Publication",
           "field_published": "Publié",
+          "published_hint": "Visible par les lecteurs publics sur le blog",
+          "unpublished_hint": "Masqué du blog public",
+          "draft_overlay_label": "Brouillon en cours",
+          "draft_active_hint": "Les modifications sont enregistrées dans le brouillon sans affecter l'article publié",
+          "draft_synced_hint": "Le brouillon est synchronisé avec le contenu publié",
+          "discard_draft_changes": "Annuler les modifications non publiées",
           "status_live": "En ligne",
           "status_draft": "Brouillon"
+        }
+      },
+      "errors": {
+        "NOT_FOUND": {
+          "title": "Article introuvable",
+          "description": "L'article que vous recherchez n'existe pas ou a été supprimé."
+        },
+        "UNAUTHORIZED": {
+          "title": "Authentification requise",
+          "description": "Veuillez vous connecter pour continuer."
+        },
+        "FORBIDDEN": {
+          "title": "Accès Refusé",
+          "description": "Vous n'avez pas la permission d'effectuer cette action."
+        },
+        "DATABASE_ERROR": {
+          "title": "Erreur de base de données",
+          "description": "Nous n'avons pas pu terminer l'opération. Veuillez réessayer plus tard."
+        },
+        "VALIDATION_ERROR": {
+          "title": "Erreur de validation",
+          "description": "Veuillez vérifier les données et réessayer."
         }
       }
     },
@@ -497,6 +623,133 @@
         "content_desc": "Créez et gérez vos articles dans plusieurs langues.",
         "access_title": "Accès et Sécurité",
         "access_desc": "Gérez les rôles (Admin, Éditeur, Utilisateur) et les permissions."
+      }
+    },
+    "editor": {
+      "title": "Éditeur",
+      "writing": "Écriture...",
+      "saved_locally": "Enregistré localement",
+      "characters": "Caractères",
+      "words": "Mots",
+      "loading": "Chargement de l'éditeur...",
+      "placeholder": "Tapez '/' pour les commandes ou commencez à rédiger votre article...",
+      "image_alt_placeholder": "Description de l'image",
+      "image_upload_prompt": "Cliquez pour téléverser une image ou glissez-déposez",
+      "image_uploading": "Téléversement de l'image...",
+      "image_upload_hint": "PNG, JPG, GIF, WebP jusqu'à 5 Mo",
+      "image_tab_upload": "Téléverser",
+      "image_tab_link": "Intégrer un lien",
+      "image_link_placeholder": "Collez l'URL d'une image...",
+      "image_embed_button": "Intégrer",
+      "image_link_hint": "Fonctionne avec tout lien direct vers une image",
+      "show_preview": "Afficher Aperçu",
+      "hide_preview": "Masquer Aperçu",
+      "toggle_preview": "Basculer le panneau d'aperçu",
+      "commands": {
+        "text": "Texte",
+        "h1": "Titre 1",
+        "h2": "Titre 2",
+        "h3": "Titre 3",
+        "h4": "Titre 4",
+        "h5": "Titre 5",
+        "h6": "Titre 6",
+        "bullet_list": "Liste à puces",
+        "ordered_list": "Liste numérotée",
+        "code_block": "Code",
+        "quote": "Citation",
+        "callout": "Encadré",
+        "divider": "Séparateur",
+        "horizontal_rule": "Ligne de séparation",
+        "image": "Image",
+        "video": "Vidéo",
+        "table": "Tableau",
+        "task_list": "Liste de tâches",
+        "bold": "Gras",
+        "italic": "Italique",
+        "strike": "Barré",
+        "code": "Code",
+        "underline": "Souligné",
+        "undo": "Annuler",
+        "redo": "Rétablir",
+        "clear_format": "Effacer le format",
+        "no_commands_found": "Aucune commande trouvée",
+        "inline_math": "Formule en ligne",
+        "block_math": "Bloc de formule"
+      },
+      "video_dialog": {
+        "title": "Insérer une vidéo YouTube",
+        "description": "Collez l'URL d'une vidéo YouTube pour l'intégrer dans votre article.",
+        "placeholder": "Collez une URL YouTube...",
+        "cancel": "Annuler",
+        "insert": "Insérer la vidéo"
+      },
+      "bubble_menu": {
+        "bold": "Gras",
+        "italic": "Italique",
+        "underline": "Souligné",
+        "strikethrough": "Barré",
+        "inline_code": "Code en ligne",
+        "inline_math": "Formule en ligne",
+        "highlight": "Surligner",
+        "color": "Couleur",
+        "clear_format": "Effacer le format",
+        "colors": {
+          "recently_used": "Récemment utilisé",
+          "text_color": "Couleur du texte",
+          "background_color": "Couleur d'arrière-plan",
+          "default": "Par défaut",
+          "gray": "Gris",
+          "brown": "Marron",
+          "orange": "Orange",
+          "yellow": "Jaune",
+          "green": "Vert",
+          "blue": "Bleu",
+          "purple": "Violet",
+          "pink": "Rose",
+          "red": "Rouge"
+        },
+        "link": "Lien",
+        "insert_link": "Insérer un lien",
+        "link_description": "Entrez l'URL du lien hypertexte. Laissez vide pour supprimer le lien actuel.",
+        "cancel": "Annuler",
+        "save": "Enregistrer",
+        "add_column_before": "Insérer une colonne à gauche",
+        "add_column_after": "Insérer une colonne à droite",
+        "delete_column": "Supprimer la colonne",
+        "add_row_before": "Insérer une ligne au-dessus",
+        "add_row_after": "Insérer une ligne en dessous",
+        "delete_row": "Supprimer la ligne",
+        "delete_table": "Supprimer le tableau"
+      },
+      "callout": {
+        "title": "Titre",
+        "change_type": "Changer le type",
+        "delete": "Supprimer",
+        "type": {
+          "tip": "Astuce",
+          "info": "Information",
+          "pencil": "Note",
+          "quote": "Citation",
+          "warning": "Avertissement",
+          "failure": "Échec",
+          "danger": "Danger",
+          "success": "Succès",
+          "bug": "Bogue",
+          "example": "Exemple"
+        }
+      },
+      "code_block": {
+        "auto": "Automatique (Texte brut)",
+        "plain_text": "Texte brut",
+        "copy": "Copier le code dans le presse-papiers",
+        "copied": "Code copié dans le presse-papiers",
+        "select_language": "Sélectionner le langage de programmation",
+        "actions": "Actions du bloc de code"
+      },
+      "math": {
+        "label": "Modifier la formule LaTeX",
+        "placeholder": "Saisissez du LaTeX...",
+        "hint": "Utilisez la syntaxe LaTeX, ex. x^2, \\frac{a}{b}, \\sum_{i=1}^{n}"
       }
     },
     "hero": {
@@ -698,112 +951,6 @@
         "admin": "Admin",
         "editor": "Éditeur",
         "user": "Utilisateur"
-      }
-    },
-    "editor": {
-      "title": "Éditeur",
-      "writing": "Écriture...",
-      "saved_locally": "Enregistré localement",
-      "loading": "Chargement de l'éditeur...",
-      "placeholder": "Tapez '/' pour les commandes ou commencez à rédiger votre article...",
-      "image_alt_placeholder": "Description de l'image",
-      "image_upload_prompt": "Cliquez pour téléverser une image ou glissez-déposez",
-      "image_uploading": "Téléversement de l'image...",
-      "image_upload_hint": "PNG, JPG, GIF, WebP jusqu'à 5 Mo",
-      "image_tab_upload": "Téléverser",
-      "image_tab_link": "Intégrer un lien",
-      "image_link_placeholder": "Collez l'URL d'une image...",
-      "image_embed_button": "Intégrer",
-      "image_link_hint": "Fonctionne avec tout lien direct vers une image",
-      "show_preview": "Afficher Aperçu",
-      "hide_preview": "Masquer Aperçu",
-      "toggle_preview": "Basculer le panneau d'aperçu",
-      "commands": {
-        "text": "Texte",
-        "h1": "Titre 1",
-        "h2": "Titre 2",
-        "h3": "Titre 3",
-        "h4": "Titre 4",
-        "h5": "Titre 5",
-        "h6": "Titre 6",
-        "bullet_list": "Liste à puces",
-        "ordered_list": "Liste numérotée",
-        "code_block": "Code",
-        "quote": "Citation",
-        "callout": "Encadré",
-        "divider": "Séparateur",
-        "horizontal_rule": "Ligne de séparation",
-        "image": "Image",
-        "video": "Vidéo",
-        "table": "Tableau",
-        "task_list": "Liste de tâches",
-        "bold": "Gras",
-        "italic": "Italique",
-        "strike": "Barré",
-        "code": "Code",
-        "underline": "Souligné",
-        "undo": "Annuler",
-        "redo": "Rétablir",
-        "clear_format": "Effacer le format",
-        "no_commands_found": "Aucune commande trouvée",
-        "inline_math": "Formule en ligne",
-        "block_math": "Bloc de formule"
-      },
-      "video_dialog": {
-        "title": "Insérer une vidéo YouTube",
-        "description": "Collez l'URL d'une vidéo YouTube pour l'intégrer dans votre article.",
-        "placeholder": "Collez une URL YouTube...",
-        "cancel": "Annuler",
-        "insert": "Insérer la vidéo"
-      },
-      "bubble_menu": {
-        "bold": "Gras",
-        "italic": "Italique",
-        "strikethrough": "Barré",
-        "inline_code": "Code en ligne",
-        "highlight": "Surligner",
-        "link": "Lien",
-        "insert_link": "Insérer un lien",
-        "link_description": "Entrez l'URL du lien hypertexte. Laissez vide pour supprimer le lien actuel.",
-        "cancel": "Annuler",
-        "save": "Enregistrer",
-        "add_column_before": "Insérer une colonne à gauche",
-        "add_column_after": "Insérer une colonne à droite",
-        "delete_column": "Supprimer la colonne",
-        "add_row_before": "Insérer une ligne au-dessus",
-        "add_row_after": "Insérer une ligne en dessous",
-        "delete_row": "Supprimer la ligne",
-        "delete_table": "Supprimer le tableau"
-      },
-      "callout": {
-        "title": "Titre",
-        "change_type": "Changer le type",
-        "delete": "Supprimer",
-        "type": {
-          "tip": "Astuce",
-          "info": "Information",
-          "pencil": "Note",
-          "quote": "Citation",
-          "warning": "Avertissement",
-          "failure": "Échec",
-          "danger": "Danger",
-          "success": "Succès",
-          "bug": "Bogue",
-          "example": "Exemple"
-        }
-      },
-      "code_block": {
-        "auto": "Automatique (Texte brut)",
-        "plain_text": "Texte brut",
-        "copy": "Copier le code dans le presse-papiers",
-        "copied": "Code copié dans le presse-papiers",
-        "select_language": "Sélectionner le langage de programmation",
-        "actions": "Actions du bloc de code"
-      },
-      "math": {
-        "label": "Modifier la formule LaTeX",
-        "placeholder": "Saisissez du LaTeX...",
-        "hint": "Utilisez la syntaxe LaTeX, ex. x^2, \\frac{a}{b}, \\sum_{i=1}^{n}"
       }
     }
   },

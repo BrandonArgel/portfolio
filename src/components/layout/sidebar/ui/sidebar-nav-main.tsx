@@ -14,7 +14,6 @@ import { useState } from 'react'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -41,7 +40,6 @@ export function SidebarNavMain({ isAdmin = false }: SidebarNavMainProps) {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>{t('title')}</SidebarGroupLabel>
       <SidebarMenu>
         {/* Overview */}
         <SidebarMenuItem>

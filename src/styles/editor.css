@@ -1,220 +1,319 @@
-/* ==========================================================================
-   Syntax Highlighting (WCAG Accessible Dual-Theme)
-   ========================================================================== */
-
-.hljs {
-  @apply text-foreground;
-  background: transparent;
+.tiptap p.is-empty {
+  position: relative;
 }
 
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-subst {
-  @apply text-purple-700 dark:text-purple-300 font-medium;
-}
-
-.hljs-string,
-.hljs-doctag,
-.hljs-regexp {
-  @apply text-emerald-700 dark:text-emerald-300;
-}
-
-.hljs-title,
-.hljs-title.function_,
-.hljs-title.class_,
-.hljs-section {
-  @apply text-blue-700 dark:text-blue-300 font-semibold;
-}
-
-.hljs-variable,
-.hljs-template-variable {
-  @apply text-rose-700 dark:text-rose-300;
-}
-
-.hljs-type,
-.hljs-attr,
-.hljs-attribute {
-  @apply text-cyan-800 dark:text-cyan-300;
-}
-
-.hljs-number,
-.hljs-literal {
-  @apply text-amber-700 dark:text-amber-300;
-}
-
-.hljs-comment,
-.hljs-quote {
-  @apply text-zinc-500 dark:text-zinc-400 italic;
-}
-
-.hljs-punctuation,
-.hljs-operator {
-  @apply text-zinc-700 dark:text-zinc-300;
-}
-
-.hljs-built_in,
-.hljs-symbol,
-.hljs-bullet {
-  @apply text-indigo-700 dark:text-indigo-300;
-}
-
-.hljs-meta,
-.hljs-meta .hljs-keyword,
-.hljs-meta .hljs-string {
-  @apply text-zinc-600 dark:text-zinc-400;
-}
-
-.hljs-deletion {
-  @apply text-red-700 bg-red-100/50 dark:text-red-300 dark:bg-red-950/40;
-}
-
-.hljs-addition {
-  @apply text-emerald-700 bg-emerald-100/50 dark:text-emerald-300 dark:bg-emerald-950/40;
-}
-
-.hljs-emphasis {
-  @apply italic;
-}
-
-.hljs-strong {
-  @apply font-bold;
-}
-
-/* ==========================================================================
-   Tiptap Editor Enhancements: Gapcursor, Drag Handle & Dragging States
-   ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   ProseMirror Gapcursor
-   -------------------------------------------------------------------------- */
-.ProseMirror-gapcursor {
-  display: none;
+.tiptap p.is-empty::before {
+  color: var(--color-muted-foreground);
+  content: attr(data-placeholder);
   pointer-events: none;
   position: absolute;
-}
-
-.ProseMirror-gapcursor::after {
-  content: "";
-  display: block;
-  position: absolute;
-  top: -2px;
-  width: 100%;
+  left: 0;
   max-width: 100%;
-  border-top: 2px solid var(--color-primary, currentColor);
-  animation: ProseMirror-cursor-blink 1.1s steps(2, start) infinite;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-@keyframes ProseMirror-cursor-blink {
-  to {
-    visibility: hidden;
-  }
+.tippy-box[data-theme~="notion"] {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
 }
 
-.ProseMirror-focused .ProseMirror-gapcursor {
-  display: block;
+.tippy-box[data-theme~="notion"] > .tippy-content {
+  padding: 0;
 }
 
-/* --------------------------------------------------------------------------
-   ProseMirror Dragging States
-   -------------------------------------------------------------------------- */
-.ProseMirror.dragging {
-  cursor: grabbing;
-}
+/* ============================================================================
+ * TanStack Highlight (@tanstack/highlight) Semantic Token & Layout Styles
+ * ============================================================================ */
 
-/* --------------------------------------------------------------------------
-   ProseMirror Tables & Cell Selection
-   -------------------------------------------------------------------------- */
-.ProseMirror .tableWrapper {
+.th-code {
+  margin: 0;
   overflow-x: auto;
-  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: transparent;
+  color: var(--th-token);
+  font-family: var(--font-geist-mono, var(--font-mono, ui-monospace, monospace));
+  font-size: 0.875rem;
+  line-height: 1.625;
+  tab-size: 2;
 }
 
-.ProseMirror table {
+.th-code > code {
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+/* Semantic syntax token classes */
+.th-token {
+  color: var(--th-token);
+}
+
+.th-attr {
+  color: var(--th-attr);
+}
+
+.th-code-inline {
+  color: var(--th-code-inline);
+}
+
+.th-command {
+  color: var(--th-command);
+}
+
+.th-comment {
+  color: var(--th-comment);
+  font-style: italic;
+}
+
+.th-deleted {
+  color: var(--th-deleted);
+}
+
+.th-function {
+  color: var(--th-function);
+}
+
+.th-heading {
+  color: var(--th-heading);
+  font-weight: 600;
+}
+
+.th-inserted {
+  color: var(--th-inserted);
+}
+
+.th-keyword {
+  color: var(--th-keyword);
+}
+
+.th-link {
+  color: var(--th-link);
+  text-decoration: underline;
+}
+
+.th-literal {
+  color: var(--th-literal);
+}
+
+.th-meta {
+  color: var(--th-meta);
+}
+
+.th-number {
+  color: var(--th-number);
+}
+
+.th-operator {
+  color: var(--th-operator);
+}
+
+.th-property {
+  color: var(--th-property);
+}
+
+.th-selector {
+  color: var(--th-selector);
+}
+
+.th-string {
+  color: var(--th-string);
+}
+
+.th-tag {
+  color: var(--th-tag);
+}
+
+.th-type {
+  color: var(--th-type);
+}
+
+.th-variable {
+  color: var(--th-variable);
+}
+
+/* Read-only / SSR line numbers & line highlights */
+.th-line {
+  display: inline-block;
+  min-width: 100%;
+  width: max-content;
+}
+
+.th-line--highlighted {
+  background-color: var(--th-line-highlight);
+}
+
+.th-code--line-numbers code {
+  counter-reset: th-line;
+}
+
+.th-code--line-numbers .th-line::before {
+  display: inline-block;
+  width: 2.25rem;
+  padding-right: 1rem;
+  color: var(--th-comment);
+  content: attr(data-line);
+  text-align: right;
+  user-select: none;
+  opacity: 0.65;
+}
+
+/* Editor NodeView non-editable gutter */
+.th-editor-gutter {
+  min-width: 1.75rem;
+  padding-right: 0.75rem;
+  border-right: 1px solid var(--code-border);
+  color: var(--th-comment);
+  opacity: 0.65;
+}
+
+/* ============================================================================
+ * Tiptap Table Styles (Grid Borders, Cell Selection & Column Resizing)
+ * ============================================================================ */
+
+.tiptap .tableWrapper {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.tiptap table {
+  width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  width: 100%;
-  margin: 0;
   overflow: hidden;
-  border-radius: 0.5rem;
-  border: 1px solid var(--color-border);
+  margin: 0;
 }
 
-.ProseMirror table td,
-.ProseMirror table th {
-  min-width: 100px;
-  border: 1px solid var(--color-border);
-  padding: 0.5rem 0.75rem;
-  vertical-align: top;
+.tiptap th,
+.tiptap td {
+  border: 1px solid var(--border);
   box-sizing: border-box;
+  min-width: 1em;
+  padding: 0.5rem 0.75rem;
   position: relative;
+  vertical-align: top;
+}
+
+.tiptap th {
+  background-color: color-mix(in oklab, var(--muted) 50%, transparent);
+  font-weight: 600;
   text-align: left;
 }
 
-.ProseMirror table th {
-  font-weight: 600;
-  background-color: var(--color-muted);
+.tiptap th > p,
+.tiptap td > p {
+  margin: 0;
 }
 
-.ProseMirror table .selectedCell:after {
-  z-index: 2;
-  position: absolute;
+.tiptap .selectedCell::after {
+  background: color-mix(in oklab, var(--primary) 15%, transparent);
   content: "";
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+  inset: 0;
   pointer-events: none;
+  position: absolute;
+  z-index: 2;
 }
 
-.ProseMirror table .column-resize-handle {
+.tiptap .column-resize-handle {
+  background-color: var(--primary);
+  bottom: -2px;
+  pointer-events: none;
   position: absolute;
   right: -2px;
   top: 0;
-  bottom: -2px;
   width: 4px;
-  background-color: var(--color-primary);
-  pointer-events: none;
+  z-index: 20;
 }
 
-/* --------------------------------------------------------------------------
-   Task List Strikethrough (Checked State)
-   -------------------------------------------------------------------------- */
-li[data-checked="true"] > div:last-child,
-li.task-item-wrapper[data-checked="true"] [data-node-view-content],
-ul[data-type="taskList"] li[data-checked="true"] > div:last-child,
-ul[data-type="taskList"] li[data-checked="true"] [data-node-view-content] {
-  text-decoration: line-through;
-  opacity: 0.7;
+.tiptap.resize-cursor {
+  cursor: col-resize;
 }
 
-/* --------------------------------------------------------------------------
-   Mathematics Extension (Inline & Block Math)
-   -------------------------------------------------------------------------- */
-.tiptap-mathematics-editor {
-  @apply inline rounded-md bg-muted/60 px-1.5 py-0.5 font-mono text-sm text-foreground outline-none ring-1 ring-border transition-colors;
+/* ============================================================================
+ * Tiptap Mathematics Styles (Block & Inline Math)
+ * ============================================================================ */
+
+.tiptap [data-type="block-math"] {
+  margin: 1rem 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  background-color: color-mix(in oklab, var(--muted) 30%, transparent);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+  cursor: pointer;
+  overflow-x: auto;
 }
 
-.tiptap-mathematics-editor:focus {
-  @apply ring-2 ring-primary/50 bg-muted;
+.tiptap [data-type="block-math"]:hover {
+  background-color: color-mix(in oklab, var(--muted) 50%, transparent);
+  border-color: var(--border);
 }
 
-.tiptap-mathematics-render {
-  @apply inline cursor-pointer rounded-sm px-1 py-0.5 transition-colors hover:bg-muted/50;
+.tiptap [data-type="block-math"].ProseMirror-selectednode {
+  background-color: color-mix(in oklab, var(--muted) 55%, transparent);
+  border-color: color-mix(in oklab, var(--primary) 60%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary) 20%, transparent);
+  outline: none;
 }
 
-.tiptap-mathematics-render.ProseMirror-selectednode {
-  @apply bg-primary/10 ring-1 ring-primary/30;
+.tiptap [data-type="inline-math"] {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-sm);
+  padding: 0.0625rem 0.25rem;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-[data-type="blockMath"] {
-  @apply my-4 flex items-center justify-center rounded-lg border border-border bg-muted/20 px-4 py-6;
+.tiptap [data-type="inline-math"]:hover {
+  background-color: color-mix(in oklab, var(--muted) 60%, transparent);
 }
 
-[data-type="blockMath"] .tiptap-mathematics-editor {
-  @apply block w-full text-center text-base;
+.tiptap [data-type="inline-math"].ProseMirror-selectednode {
+  background-color: color-mix(in oklab, var(--primary) 15%, transparent);
+  box-shadow: 0 0 0 1.5px color-mix(in oklab, var(--primary) 60%, transparent);
+  outline: none;
 }
 
-[data-type="blockMath"] .tiptap-mathematics-render {
-  @apply block text-center;
+/* ============================================================================
+ * Tiptap YouTube Video Embed Styles (16:9 Aspect Ratio without Pillarboxing)
+ * ============================================================================ */
+
+.tiptap div[data-youtube-video] {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  max-width: 48rem;
+  margin: 1.5rem auto;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  background-color: color-mix(in oklab, var(--muted) 20%, transparent);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.tiptap div[data-youtube-video].ProseMirror-selectednode {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--background),
+    0 0 0 4px color-mix(in oklab, var(--primary) 60%, transparent);
+}
+
+.tiptap div[data-youtube-video] > iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }

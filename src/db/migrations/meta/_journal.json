@@ -15,6 +15,27 @@
       "when": 1789307478469,
       "tag": "0001_rare_fixer",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1791051954539,
+      "tag": "0002_wandering_scrambler",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1791415014624,
+      "tag": "0003_sleepy_robin_chapel",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1793824266219,
+      "tag": "0004_true_photon",
+      "breakpoints": true
     }
   ]
 }

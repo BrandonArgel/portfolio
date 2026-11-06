@@ -15,7 +15,7 @@ interface RecentPostsSectionProps {
 export async function RecentPostsSection({ limit = 3, className }: RecentPostsSectionProps) {
   const t = await getTranslations('features.blog.reader')
 
-  const [err, res] = await getPublishedPosts(undefined, undefined, 1, limit)
+  const [err, res] = await getPublishedPosts({ limit })
   const posts = res?.posts ?? []
 
   return (

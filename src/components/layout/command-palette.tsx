@@ -39,7 +39,7 @@ export function CommandPalette() {
 
   // Global toggle shortcuts
   useKeyboardShortcut('t', () => toggleTheme())
-  useKeyboardShortcut('ctrl+k', () => setOpen((prev) => !prev))
+  useKeyboardShortcut('mod+k', () => setOpen((prev) => !prev))
 
   const toggleTheme = () => {
     const nextTheme = resolvedTheme === 'dark' ? 'light' : 'dark'
