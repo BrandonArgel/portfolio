@@ -12,6 +12,7 @@ interface BlogFeedProps {
   activeCategoryName?: string
   currentPage?: number
   limit?: number
+  isAuthenticated?: boolean
   children?: React.ReactNode
 }
 
@@ -21,6 +22,7 @@ export async function BlogFeed({
   activeCategoryName,
   currentPage = 1,
   limit = 9,
+  isAuthenticated = false,
   children,
 }: BlogFeedProps) {
   const t = await getTranslations('features.blog.reader')
@@ -54,7 +56,7 @@ export async function BlogFeed({
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {posts.map((post) => (
-              <ArticleCard key={post.id} post={post} />
+              <ArticleCard key={post.id} post={post} isAuthenticated={isAuthenticated} />
             ))}
           </div>
 

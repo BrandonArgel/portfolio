@@ -15,7 +15,6 @@ import {
   Upload,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useAction } from 'next-safe-action/hooks'
 import { useRef, useState } from 'react'
 import { sileo } from 'sileo'
 import { z } from 'zod'
@@ -50,11 +49,12 @@ import { Separator } from '@/components/ui/separator'
 import { Spinner } from '@/components/ui/spinner'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
+import { IMAGE_INPUT_ACCEPT } from '@/config/image-upload'
 import { LOCALE_META } from '@/config/locale'
-import { uploadImageAction } from '@/features/blog/actions/image.action'
 import type { Locale } from '@/i18n/routing'
 import { cn } from '@/lib/utils'
 import { generateSlug } from '@/utils/string-utils'
+import { useImageUpload } from '../hooks/use-image-upload'
 import { type BlogFrontmatter, BlogFrontmatterSchema } from '../schemas/post.schema'
 
 export interface PostMetadataFormProps {
@@ -143,38 +143,20 @@ export function PostMetadataForm({
     }
   }
 
-  const { execute: executeUploadCover, isExecuting: isUploadingCover } = useAction(
-    uploadImageAction,
-    {
-      onSuccess: (res) => {
-        if (res.data?.success && res.data.url) {
-          updateField('coverImage', res.data.url)
-          sileo.success({ title: t('notifications.cover_uploaded') })
-        }
-      },
-      onError: ({ error }) => {
-        sileo.error({
-          title: t('notifications.cover_upload_error'),
-          description: error.serverError?.description,
-        })
-      },
-    },
-  )
+  const { upload: uploadCover, isUploading: isUploadingCover } = useImageUpload({
+    context: 'cover',
+  })
 
-  const handleCoverUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (!file) return
-    if (!file.type.startsWith('image/')) {
-      sileo.error({
-        title: t('notifications.invalid_file_title'),
-        description: t('notifications.invalid_file_description'),
-      })
-      return
-    }
-    const formData = new FormData()
-    formData.append('file', file)
-    executeUploadCover({ formData })
     e.target.value = ''
+    if (!file) return
+
+    const url = await uploadCover(file)
+    if (url) {
+      updateField('coverImage', url)
+      sileo.success({ title: t('notifications.cover_uploaded') })
+    }
   }
 
   const hasUnpublishedChanges = data.published && data.draft
@@ -262,7 +244,7 @@ export function PostMetadataForm({
         <input
           ref={fileInputRef}
           type="file"
-          accept="image/*"
+          accept={IMAGE_INPUT_ACCEPT}
           className="hidden"
           onChange={handleCoverUpload}
         />

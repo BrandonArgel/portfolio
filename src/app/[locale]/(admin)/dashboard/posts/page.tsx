@@ -1,4 +1,4 @@
-import { Edit3, FileText, PlusCircle } from 'lucide-react'
+import { Edit3, FileText, PlusCircle, Tags } from 'lucide-react'
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
@@ -128,7 +128,7 @@ export default async function DashboardPostsPage({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-4">
       <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <Breadcrumb>
           <BreadcrumbList>
@@ -142,14 +142,26 @@ export default async function DashboardPostsPage({
           </BreadcrumbList>
         </Breadcrumb>
 
-        <LinkButton
-          href={'/dashboard/posts/new'}
-          size="sm"
-          className="gap-2 cursor-pointer shadow-xs w-fit"
-        >
-          <PlusCircle className="size-4" />
-          <span>{t('new_article')}</span>
-        </LinkButton>
+        <div className="flex flex-wrap items-center gap-2">
+          <LinkButton
+            href={'/dashboard/categories'}
+            variant="outline"
+            size="sm"
+            className="gap-2 cursor-pointer shadow-xs w-fit"
+          >
+            <Tags className="size-4" />
+            <span>{t('manage_categories')}</span>
+          </LinkButton>
+
+          <LinkButton
+            href={'/dashboard/posts/new'}
+            size="sm"
+            className="gap-2 cursor-pointer shadow-xs w-fit"
+          >
+            <PlusCircle className="size-4" />
+            <span>{t('new_article')}</span>
+          </LinkButton>
+        </div>
       </header>
 
       {/* Toolbar: Search + Filters */}

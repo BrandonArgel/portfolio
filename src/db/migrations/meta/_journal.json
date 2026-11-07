@@ -36,6 +36,13 @@
       "when": 1793824266219,
       "tag": "0004_true_photon",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1794076140252,
+      "tag": "0005_complete_zombie",
+      "breakpoints": true
     }
   ]
 }

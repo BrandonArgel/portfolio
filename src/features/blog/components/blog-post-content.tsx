@@ -4,21 +4,37 @@ import { getFormatter, getTranslations } from 'next-intl/server'
 import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/ui/button'
 import type { BlogPost } from '../types'
+import { BookmarkPostButton } from './public/BookmarkPostButton'
 import { MdxContentServer } from './public/MdxContentServer'
+import { SharePostMenu } from './public/SharePostMenu'
 
 interface BlogPostContentProps {
   post: BlogPost
+  isBookmarked?: boolean
+  isAuthenticated?: boolean
   action?: React.ReactNode
 }
 
-export async function BlogPostContent({ post, action }: BlogPostContentProps) {
+export async function BlogPostContent({
+  post,
+  isBookmarked = false,
+  isAuthenticated = false,
+  action,
+}: BlogPostContentProps) {
   const [t, format] = await Promise.all([getTranslations('features.blog.reader'), getFormatter()])
 
   const formattedDate = format.dateTime(post.createdAt, 'short')
 
+  const postSummary = {
+    id: post.id,
+    title: post.title,
+    slug: post.slug,
+    description: post.description,
+  }
+
   return (
     <article className="w-full">
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
         <LinkButton
           href="/blog"
           variant="ghost"
@@ -28,16 +44,24 @@ export async function BlogPostContent({ post, action }: BlogPostContentProps) {
           {t('back_to_blog')}
         </LinkButton>
 
-        {action}
+        <div className="flex flex-wrap items-center gap-2">
+          <SharePostMenu post={postSummary} location="post_page" variant="button" />
+          <BookmarkPostButton
+            post={postSummary}
+            initialBookmarked={isBookmarked}
+            isAuthenticated={isAuthenticated}
+            location="post_page"
+            variant="button"
+          />
+          {action}
+        </div>
       </div>
 
       <header className="mb-10 flex flex-col items-start gap-6 border-b border-border pb-10">
         {post.categories && post.categories.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {post.categories.map((category) => (
-              <Badge key={category.id} variant="secondary">
-                {category.name}
-              </Badge>
+              <Badge key={category.id}>{category.name}</Badge>
             ))}
           </div>
         )}
@@ -80,7 +104,29 @@ export async function BlogPostContent({ post, action }: BlogPostContentProps) {
           </div>
         )}
       </header>
+
       <MdxContentServer content={post.content} />
+
+      <footer className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
+        <div className="flex flex-wrap gap-2">
+          {post.categories?.map((category) => (
+            <Badge key={category.id} variant="outline" className="text-xs">
+              {category.name}
+            </Badge>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <SharePostMenu post={postSummary} location="post_page" variant="button" />
+          <BookmarkPostButton
+            post={postSummary}
+            initialBookmarked={isBookmarked}
+            isAuthenticated={isAuthenticated}
+            location="post_page"
+            variant="button"
+          />
+        </div>
+      </footer>
     </article>
   )
 }
