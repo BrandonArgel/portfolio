@@ -242,34 +242,23 @@ function Sidebar({
   if (resizable) {
     return (
       <div
-        className={cn(
-          'group peer hidden h-full w-full text-sidebar-foreground md:block',
-          className,
-        )}
+        data-slot="sidebar"
+        data-sidebar="sidebar"
         data-state={state}
         data-collapsible={state === 'collapsed' ? collapsible : ''}
         data-variant={variant}
         data-side={side}
         data-resizable="true"
-        data-slot="sidebar"
+        className={cn(
+          'group peer relative hidden h-full w-full min-w-12 flex-col overflow-hidden bg-sidebar text-sidebar-foreground data-[collapsible=icon]:items-center md:flex',
+          variant === 'floating' || variant === 'inset'
+            ? 'p-2 data-[variant=floating]:rounded-lg data-[variant=floating]:shadow-sm data-[variant=floating]:ring-1 data-[variant=floating]:ring-sidebar-border'
+            : '',
+          className,
+        )}
         {...props}
       >
-        <div
-          data-slot="sidebar-container"
-          data-side={side}
-          className={cn(
-            'relative z-10 hidden h-full w-full min-w-(--sidebar-width-icon) md:flex',
-            variant === 'floating' || variant === 'inset' ? 'p-2' : '',
-          )}
-        >
-          <div
-            data-sidebar="sidebar"
-            data-slot="sidebar-inner"
-            className="flex size-full flex-col bg-sidebar group-data-[collapsible=icon]:items-center group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:ring-1 group-data-[variant=floating]:ring-sidebar-border"
-          >
-            {children}
-          </div>
-        </div>
+        {children}
       </div>
     )
   }
@@ -397,7 +386,7 @@ function SidebarHeader({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="sidebar-header"
       data-sidebar="header"
       className={cn(
-        'flex flex-col gap-2 p-2 group-data-[collapsible=icon]:items-center',
+        'flex w-full flex-col gap-2 p-2 group-data-[collapsible=icon]:items-center',
         className,
       )}
       {...props}
@@ -411,7 +400,7 @@ function SidebarFooter({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="sidebar-footer"
       data-sidebar="footer"
       className={cn(
-        'flex flex-col gap-2 p-2 group-data-[collapsible=icon]:items-center',
+        'flex w-full flex-col gap-2 p-2 group-data-[collapsible=icon]:items-center',
         className,
       )}
       {...props}
@@ -436,7 +425,7 @@ function SidebarContent({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="sidebar-content"
       data-sidebar="content"
       className={cn(
-        'no-scrollbar flex min-h-0 flex-1 flex-col gap-0 overflow-auto group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:overflow-hidden',
+        'no-scrollbar flex min-h-0 w-full flex-1 flex-col gap-0 overflow-auto group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:overflow-hidden',
         className,
       )}
       {...props}
@@ -536,14 +525,17 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<'li'>) {
     <li
       data-slot="sidebar-menu-item"
       data-sidebar="menu-item"
-      className={cn('group/menu-item relative', className)}
+      className={cn(
+        'group/menu-item relative group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center',
+        className,
+      )}
       {...props}
     />
   )
 }
 
 const sidebarMenuButtonVariants = cva(
-  'peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate',
+  'peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate group-data-[collapsible=icon]:[&>span]:hidden',
   {
     variants: {
       variant: {
@@ -611,7 +603,9 @@ function SidebarMenuButton({
       <TooltipContent
         side="right"
         align="center"
+        sideOffset={10}
         hidden={state !== 'collapsed' || isMobile}
+        className="pointer-events-none"
         {...tooltip}
       />
     </Tooltip>

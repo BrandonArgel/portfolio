@@ -20,7 +20,7 @@ export function MdxH2({ className, ...props }: React.ComponentPropsWithoutRef<'h
   return (
     <h2
       className={cn(
-        'mt-10 mb-4 scroll-m-20 border-b border-border/50 pb-2 text-3xl font-bold tracking-tight text-foreground first:mt-0 transition-colors',
+        'mt-10 mb-4 scroll-m-20 pb-2 text-3xl font-bold tracking-tight text-foreground first:mt-0 transition-colors',
         className,
       )}
       {...props}

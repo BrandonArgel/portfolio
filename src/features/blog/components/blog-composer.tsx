@@ -12,7 +12,6 @@ import {
   ResizablePanelGroup,
   usePanelRef,
 } from '@/components/ui/resizable'
-import { uploadImageAction } from '@/features/blog/actions/image.action'
 import { discardDraftChangesAction, savePostAction } from '@/features/blog/actions/post-actions'
 import { Editor } from '@/features/editor/components/editor'
 import { useIsMobile } from '@/hooks/use-is-mobile'
@@ -20,6 +19,7 @@ import { useStoreHydration } from '@/hooks/use-store-hydration'
 import { useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import { generateSlug } from '@/utils/string-utils'
+import { useImageUpload } from '../hooks/use-image-upload'
 import { type BlogFrontmatter, defaultFrontmatter } from '../schemas/post.schema'
 import { blogDraftsActions, useBlogDraftsStore } from '../store/use-blog-drafts-store'
 import { BlogPostPreview } from './blog-post-preview'
@@ -273,36 +273,19 @@ export function BlogComposer({
     executeDiscardDraft({ postId })
   }, [executeDiscardDraft, postId])
 
-  const { executeAsync: executeUpload } = useAction(uploadImageAction)
+  const { upload: uploadInlineImage } = useImageUpload({ context: 'inline' })
 
   const handleImageUpload = useCallback(
     async (file: File) => {
-      const formData = new FormData()
-      formData.append('file', file)
       sileo.info({ title: t('notifications.uploading_image') })
-
-      try {
-        const result = await executeUpload({ formData })
-
-        if (result?.serverError || result?.validationErrors) {
-          sileo.error({ title: t('notifications.image_upload_error') })
-          return undefined
-        }
-
-        if (result?.data?.success && result.data.url) {
-          sileo.success({ title: t('notifications.image_inserted') })
-          return result.data.url
-        }
-
-        sileo.error({ title: t('notifications.image_upload_error') })
-        return undefined
-      } catch (error) {
-        console.error('Error during the image upload:', error)
-        sileo.error({ title: t('notifications.image_upload_error') })
-        return undefined
+      const url = await uploadInlineImage(file)
+      if (url) {
+        sileo.success({ title: t('notifications.image_inserted') })
+        return url
       }
+      return undefined
     },
-    [executeUpload, t],
+    [t, uploadInlineImage],
   )
 
   const handleContentChange = useCallback(

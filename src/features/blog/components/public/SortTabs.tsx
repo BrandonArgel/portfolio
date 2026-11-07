@@ -3,6 +3,7 @@
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { usePathname, useRouter } from '@/i18n/navigation'
+import { type BlogSortOption, track } from '@/lib/analytics/events'
 import { cn } from '@/lib/utils'
 
 export function SortTabs() {
@@ -13,14 +14,16 @@ export function SortTabs() {
 
   const activeSort = searchParams.get('sort') || 'latest'
 
-  const tabs = [
+  const tabs: { id: BlogSortOption; label: string }[] = [
     { id: 'latest', label: t('sort.latest') },
     { id: 'oldest', label: t('sort.oldest') },
     { id: 'popular', label: t('sort.popular') },
     { id: 'reading_time', label: t('sort.reading_time') },
   ]
 
-  const handleSelect = (sortId: string) => {
+  const handleSelect = (sortId: BlogSortOption) => {
+    track('Blog_Sort_Changed', { sortBy: sortId })
+
     const params = new URLSearchParams(searchParams.toString())
     params.delete('page')
     if (sortId === 'latest') {

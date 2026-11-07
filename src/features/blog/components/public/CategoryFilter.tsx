@@ -3,6 +3,7 @@
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { usePathname, useRouter } from '@/i18n/navigation'
+import { track } from '@/lib/analytics/events'
 import { cn } from '@/lib/utils'
 import type { BlogCategory } from '../../types'
 
@@ -25,12 +26,15 @@ export function CategoryFilter({
   const currentCategory = searchParams.get('category') || 'all'
 
   const handleSelect = (slug: string) => {
+    const normalizedSlug = !slug || slug === 'all' ? 'all' : slug
+    track('Blog_Category_Filtered', { categorySlug: normalizedSlug })
+
     const params = new URLSearchParams(searchParams.toString())
     params.delete('page')
-    if (!slug || slug === 'all') {
+    if (normalizedSlug === 'all') {
       params.delete('category')
     } else {
-      params.set('category', slug)
+      params.set('category', normalizedSlug)
     }
     const query = params.toString() ? `?${params.toString()}` : ''
     router.push(`${pathname}${query}`, { scroll: false })

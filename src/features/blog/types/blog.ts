@@ -5,6 +5,18 @@ export interface BlogCategory {
   postCount?: number
 }
 
+export interface AdminCategoryItem {
+  id: string
+  name: string
+  slug: string
+  description: string
+  totalPosts: number
+  publishedPosts: number
+  draftPosts: number
+  createdAt: Date
+  updatedAt: Date
+}
+
 export interface BlogPost {
   id: string
   title: string
@@ -40,6 +52,21 @@ export interface BlogPostCardItem {
   publishedAt: Date
   coverBadge?: string
   domainWatermark?: string
+  isBookmarked?: boolean
+}
+
+export interface BookmarkedPostSummary {
+  id: string
+  title: string
+  slug: string
+  description?: string
+}
+
+export interface ToggleBookmarkResult {
+  bookmarked: boolean
+  postId: string
+  slug: string
+  locale: string
 }
 
 export interface CommentAuthor {

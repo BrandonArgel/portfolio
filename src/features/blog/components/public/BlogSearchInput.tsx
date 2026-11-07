@@ -3,26 +3,56 @@
 import { Search, X } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { usePathname, useRouter } from '@/i18n/navigation'
+import { track } from '@/lib/analytics/events'
 
-export function BlogSearchInput() {
+interface BlogSearchInputProps {
+  resultsCount?: number
+}
+
+export function BlogSearchInput({ resultsCount = 0 }: BlogSearchInputProps) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
   const t = useTranslations('features.blog.reader')
 
-  const initialQuery = searchParams.get('q') || ''
-  const [query, setQuery] = useState(initialQuery)
+  const activeQuery = searchParams.get('q') || ''
+  const [query, setQuery] = useState(activeQuery)
+  const pendingSearchQueryRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    setQuery(activeQuery)
+  }, [activeQuery])
+
+  useEffect(() => {
+    if (pendingSearchQueryRef.current !== null && activeQuery === pendingSearchQueryRef.current) {
+      track('Blog_Search_Performed', {
+        queryLength: activeQuery.length,
+        resultsCount,
+      })
+      pendingSearchQueryRef.current = null
+    }
+  }, [activeQuery, resultsCount])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    const trimmed = query.trim()
     const params = new URLSearchParams(searchParams.toString())
     params.delete('page')
-    if (query.trim()) {
-      params.set('q', query.trim())
+    if (trimmed) {
+      params.set('q', trimmed)
+      if (trimmed === activeQuery) {
+        track('Blog_Search_Performed', {
+          queryLength: trimmed.length,
+          resultsCount,
+        })
+      } else {
+        pendingSearchQueryRef.current = trimmed
+      }
     } else {
       params.delete('q')
+      pendingSearchQueryRef.current = null
     }
     const queryString = params.toString() ? `?${params.toString()}` : ''
     router.push(`${pathname}${queryString}`, { scroll: false })

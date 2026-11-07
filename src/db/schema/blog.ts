@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm'
 import {
   type AnySQLiteColumn,
   index,
@@ -81,5 +82,26 @@ export const comments = sqliteTable(
     index('idx_comments_author_id').on(t.authorId),
     index('idx_comments_parent_id').on(t.parentId),
     index('idx_comments_post_created_at').on(t.postId, t.createdAt),
+  ],
+)
+
+export const postBookmarks = sqliteTable(
+  'post_bookmarks',
+  {
+    userId: text('userId')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    postId: text('postId')
+      .notNull()
+      .references(() => posts.id, { onDelete: 'cascade' }),
+    createdAt: integer('createdAt', { mode: 'timestamp' })
+      .default(sql`(unixepoch())`)
+      .$defaultFn(() => new Date())
+      .notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.userId, t.postId] }),
+    index('idx_post_bookmarks_post_id').on(t.postId),
+    index('idx_post_bookmarks_user_created_at').on(t.userId, t.createdAt),
   ],
 )

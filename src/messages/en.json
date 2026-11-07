@@ -110,6 +110,7 @@
         "overview": "Overview",
         "posts": "Articles",
         "new_post": "New Article",
+        "categories": "Categories",
         "users": "User Management",
         "back_to_site": "Back to site",
         "nav": {
@@ -332,11 +333,23 @@
         "actions": {
           "share": "Share article",
           "bookmark": "Bookmark article",
+          "bookmarked_label": "Bookmarked",
           "link_copied": "Link copied to clipboard",
           "link_copy_error": "Could not copy link",
           "bookmarked": "Article bookmarked",
           "bookmark_removed": "Bookmark removed",
-          "edit": "Edit article"
+          "edit": "Edit article",
+          "share_menu": {
+            "label": "Share article",
+            "copy_link": "Copy link",
+            "copied": "Copied!",
+            "whatsapp": "Share on WhatsApp",
+            "x": "Share on X",
+            "linkedin": "Share on LinkedIn",
+            "instagram_or_native": "Instagram / More...",
+            "instagram_copied_title": "Link copied for Instagram",
+            "instagram_copied_hint": "Paste it into your Instagram Story, bio, or direct message."
+          }
         },
         "no_results": "No articles found matching your filters.",
         "empty_posts": "No articles published yet.",
@@ -423,11 +436,122 @@
         "showing_results": "Showing {from}–{to} of {total}",
         "no_results": "No articles match your filters.",
         "new_article": "New Article",
+        "manage_categories": "Manage Categories",
         "edit": "Edit",
         "prev_page": "Previous",
         "next_page": "Next",
         "dashboard": "Dashboard",
         "filter_all": "All"
+      },
+      "categories": {
+        "title": "Categories",
+        "search_placeholder": "Search categories...",
+        "showing_count": "Showing {shown} of {total} categories",
+        "filters": {
+          "all": "All ({count})",
+          "unused": "Unused ({count})"
+        },
+        "badges": {
+          "articles_count": "{count, plural, =1 {1 article} other {# articles}}",
+          "unused": "Unused (0)",
+          "breakdown": "({published} published • {drafts} draft)"
+        },
+        "actions": {
+          "new_category": "New Category",
+          "clean_unused": "Clean Unused ({count})",
+          "edit": "Edit",
+          "merge": "Merge",
+          "delete": "Delete",
+          "cancel": "Cancel",
+          "create": "Create Category",
+          "save_changes": "Save Changes"
+        },
+        "form": {
+          "create_title": "Create Category",
+          "create_description": "Add a new category to organize your blog articles.",
+          "edit_title": "Edit Category",
+          "edit_description": "Rename or update this category. All linked articles will update automatically.",
+          "name_label": "Name",
+          "name_placeholder": "e.g. Architecture",
+          "slug_label": "URL Slug",
+          "slug_placeholder": "architecture",
+          "sync_slug": "Sync from name",
+          "description_label": "Description (optional)",
+          "description_placeholder": "Brief description of articles in this category..."
+        },
+        "merge": {
+          "title": "Merge Category",
+          "description": "Move {count, plural, =0 {all} =1 {1 article} other {# articles}} from \"{source}\" into another category and delete \"{source}\".",
+          "target_label": "Target Category",
+          "select_placeholder": "Select target category...",
+          "confirm_button": "Merge Categories"
+        },
+        "delete_dialog": {
+          "title": "Delete \"{name}\"?",
+          "description_used": "This category is currently used by {count, plural, =1 {1 article} other {# articles}}. Deleting it will remove this tag from {count, plural, =1 {that article} other {those articles}}.",
+          "description_unused": "This category is not used by any articles and will be permanently deleted."
+        },
+        "clean_dialog": {
+          "title": "Clean unused categories?",
+          "description": "This will permanently delete {count, plural, =1 {1 orphaned category} other {# orphaned categories}} that have 0 associated articles.",
+          "confirm": "Delete {count, plural, =1 {1 Category} other {# Categories}}"
+        },
+        "empty": {
+          "no_categories_title": "No categories yet",
+          "no_categories_description": "Create your first category to organize your blog articles.",
+          "no_results_title": "No matching categories",
+          "no_results_description": "No categories match your current search or filter."
+        },
+        "notifications": {
+          "created_title": "Category created",
+          "created_description": "\"{name}\" has been created.",
+          "updated_title": "Category updated",
+          "updated_description": "\"{name}\" has been updated across all linked articles.",
+          "deleted_title": "Category deleted",
+          "deleted_description": "\"{name}\" was removed.",
+          "merged_title": "Categories merged",
+          "merged_description": "Merged \"{source}\" into \"{target}\" ({count, plural, =1 {1 article} other {# articles}} updated).",
+          "cleaned_title": "Unused categories cleaned",
+          "cleaned_description": "Deleted {count, plural, =1 {1 unused category} other {# unused categories}}."
+        },
+        "errors": {
+          "CATEGORY_NOT_FOUND": {
+            "title": "Category not found",
+            "description": "The category you are trying to modify no longer exists."
+          },
+          "TARGET_CATEGORY_NOT_FOUND": {
+            "title": "Target category not found",
+            "description": "The destination category for the merge no longer exists."
+          },
+          "DUPLICATE_CATEGORY_NAME": {
+            "title": "Duplicate category name",
+            "description": "A category named \"{name}\" already exists."
+          },
+          "DUPLICATE_CATEGORY_SLUG": {
+            "title": "Duplicate category slug",
+            "description": "The slug \"/{slug}\" is already used by another category."
+          },
+          "SAME_CATEGORY_MERGE": {
+            "title": "Invalid merge target",
+            "description": "Please choose a different category to merge into."
+          },
+          "UNAUTHORIZED": {
+            "title": "Authentication required",
+            "description": "Please sign in again to manage categories."
+          },
+          "FORBIDDEN": {
+            "title": "Access denied",
+            "description": "You do not have permission to manage categories."
+          },
+          "VALIDATION_ERROR": {
+            "title": "Validation error",
+            "description": "Please provide a valid category name and slug."
+          },
+          "DATABASE_ERROR": {
+            "title": "Database error",
+            "description": "Could not complete the category operation. Please try again."
+          }
+        }
       },
       "editor": {
         "new_post": "New Article",
@@ -497,11 +621,7 @@
           "title_slug_required": "Title and slug are required",
           "uploading_image": "Uploading image...",
           "image_inserted": "Image inserted successfully",
-          "image_upload_error": "Error uploading image",
-          "cover_uploaded": "Cover image uploaded successfully",
-          "cover_upload_error": "Error uploading cover image",
-          "invalid_file_title": "Invalid file",
-          "invalid_file_description": "Only image files can be uploaded."
+          "cover_uploaded": "Cover image uploaded successfully"
         },
         "frontmatter": {
           "title": "Article Metadata",
@@ -516,7 +636,7 @@
           "field_cover_image": "Cover Image",
           "cover_image_placeholder": "https://...",
           "upload_cover": "Click to upload cover image",
-          "upload_cover_hint": "PNG, JPG, WebP up to 5MB (16:9 recommended)",
+          "upload_cover_hint": "PNG, JPG, WebP up to 4MB (16:9 recommended)",
           "cover_attached": "Cover image attached",
           "replace_cover": "Replace cover image",
           "remove_cover": "Remove cover image",
@@ -558,7 +678,72 @@
         "VALIDATION_ERROR": {
           "title": "Validation error",
           "description": "Please review the data and try again."
+        },
+        "image_upload": {
+          "NO_FILE": {
+            "title": "No image selected",
+            "description": "Choose an image file to upload."
+          },
+          "EMPTY_FILE": {
+            "title": "Empty file",
+            "description": "The selected file is empty. Choose a different image."
+          },
+          "INVALID_FILE_TYPE": {
+            "title": "Unsupported file type",
+            "description": "Only JPEG, PNG, WebP, GIF and SVG images can be uploaded. Received: {received}."
+          },
+          "UNSUPPORTED_FORMAT": {
+            "title": "Format not supported",
+            "description": "{format} images can't be uploaded. Convert the image to JPEG or PNG and try again."
+          },
+          "FILE_TOO_LARGE": {
+            "title": "Image too large",
+            "description": "The maximum size is {maxSize}, but this image is {actualSize}."
+          },
+          "IMAGE_PROCESSING_FAILED": {
+            "title": "Couldn't process the image",
+            "description": "We couldn't optimize this image. Try a smaller one or a different file."
+          },
+          "OFFLINE": {
+            "title": "You're offline",
+            "description": "Reconnect to the internet and try again."
+          },
+          "NETWORK_ERROR": {
+            "title": "Connection problem",
+            "description": "We couldn't reach the server. Check your connection and try again."
+          },
+          "TIMEOUT": {
+            "title": "Upload timed out",
+            "description": "The upload took too long. Check your connection and try again."
+          },
+          "PAYLOAD_TOO_LARGE": {
+            "title": "Image too large for the server",
+            "description": "This image exceeds the server upload limit. Try a smaller image."
+          },
+          "RATE_LIMITED": {
+            "title": "Too many uploads",
+            "description": "Please wait a moment before uploading again."
+          },
+          "UNAUTHORIZED": {
+            "title": "Session expired",
+            "description": "Sign in again to upload images."
+          },
+          "FORBIDDEN": {
+            "title": "Upload not allowed",
+            "description": "Your account isn't allowed to upload images."
+          },
+          "STORAGE_ERROR": {
+            "title": "Storage error",
+            "description": "We couldn't save the image. Please try again in a moment."
+          }
         }
+      },
+      "og": {
+        "written_by": "Written by",
+        "read_on_blog": "Read on the blog",
+        "min_read": "{minutes} min read",
+        "tagline": "Full Stack & Architecture",
+        "default_title": "Engineering Blog & Architecture"
       }
     },
     "contact": {
@@ -636,7 +821,7 @@
       "image_alt_placeholder": "Image description",
       "image_upload_prompt": "Click to upload an image, or drag and drop",
       "image_uploading": "Uploading image...",
-      "image_upload_hint": "PNG, JPG, GIF, WebP up to 5MB",
+      "image_upload_hint": "PNG, JPG, GIF, WebP up to 4MB",
       "image_tab_upload": "Upload",
       "image_tab_link": "Embed Link",
       "image_link_placeholder": "Paste an image URL...",

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { IMAGE_INPUT_ACCEPT } from '@/config/image-upload'
 import { cn } from '@/lib/utils'
 
 export function ImageComponent(props: NodeViewProps) {
@@ -143,7 +144,7 @@ export function ImageComponent(props: NodeViewProps) {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/*"
+                accept={IMAGE_INPUT_ACCEPT}
                 className="hidden"
                 onChange={handleFileChange}
               />

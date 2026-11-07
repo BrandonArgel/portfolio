@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import { getTranslations } from 'next-intl/server'
 import { Section } from '@/components/ui/section'
 import {
@@ -7,11 +8,13 @@ import {
   BlogPagination,
   BlogSidebar,
 } from '@/features/blog/components/public'
+import { getUserBookmarkedPosts } from '@/features/blog/services/bookmarks-service'
 import {
   countTotalPublishedPosts,
   getAllCategories,
   getPublishedPosts,
 } from '@/features/blog/services/posts-service'
+import { auth } from '@/lib/auth/auth'
 import { constructPageMetadata } from '@/lib/seo'
 
 interface BlogPageProps {
@@ -46,7 +49,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
   const currentPage = Math.max(1, Number(resolvedParams?.page) || 1)
   const limit = 9
 
-  const [[postsErr, paginatedData], [categoriesErr, categoriesData], totalPublishedCount] =
+  const [[postsErr, paginatedData], [categoriesErr, categoriesData], totalPublishedCount, session] =
     await Promise.all([
       getPublishedPosts({
         categorySlug,
@@ -57,9 +60,26 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
       }),
       getAllCategories(locale),
       countTotalPublishedPosts(locale),
+      auth.api.getSession({ headers: await headers() }),
     ])
 
-  const posts = postsErr || !paginatedData ? [] : [...paginatedData.posts]
+  const userId = session?.user?.id
+  const isAuthenticated = Boolean(userId)
+
+  const [bookmarksErr, userBookmarksData] = userId
+    ? await getUserBookmarkedPosts(userId)
+    : [null, []]
+
+  const bookmarkedPosts = bookmarksErr || !userBookmarksData ? [] : userBookmarksData
+  const bookmarkedPostIds = new Set(bookmarkedPosts.map((item) => item.id))
+
+  const posts =
+    postsErr || !paginatedData
+      ? []
+      : paginatedData.posts.map((post) => ({
+          ...post,
+          isBookmarked: bookmarkedPostIds.has(post.id),
+        }))
   const totalCount = paginatedData?.total ?? 0
   const totalPages = paginatedData?.totalPages ?? 1
   const categories = categoriesErr ? [] : categoriesData
@@ -87,7 +107,6 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
 
   // Real posts for widgets
   const trendingPosts = posts.slice(0, 2)
-  const bookmarkedPosts = posts.slice(0, 1)
 
   // Determine active category name if filtered
   const activeCategory = categories.find((c) => c.slug === categorySlug)
@@ -101,7 +120,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
       className="my-10 sm:my-16"
       containerClassName="flex flex-col group/anim"
     >
-      <BlogHeader />
+      <BlogHeader resultsCount={totalCount} />
 
       <div className="flex flex-col lg:flex-row gap-8 items-start w-full">
         <BlogSidebar
@@ -110,6 +129,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
           categoryCounts={categoryCounts}
           bookmarkedPosts={bookmarkedPosts}
           trendingPosts={trendingPosts}
+          isAuthenticated={isAuthenticated}
         />
 
         <BlogFeed
@@ -118,6 +138,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
           activeCategoryName={activeCategoryName}
           currentPage={currentPage}
           limit={limit}
+          isAuthenticated={isAuthenticated}
         >
           {totalPages > 1 && <BlogPagination currentPage={currentPage} totalPages={totalPages} />}
         </BlogFeed>

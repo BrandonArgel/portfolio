@@ -7,6 +7,7 @@ import {
   FileText,
   LayoutDashboard,
   PlusCircle,
+  Tags,
   Users,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -33,7 +34,11 @@ export function SidebarNavMain({ isAdmin = false }: SidebarNavMainProps) {
   const pathname = usePathname()
 
   const isOverviewActive = pathname === '/dashboard'
-  const isPostsRoute = pathname === '/dashboard/posts' || pathname.startsWith('/dashboard/posts/')
+  const isPostsRoute =
+    pathname === '/dashboard/posts' ||
+    pathname.startsWith('/dashboard/posts/') ||
+    pathname === '/dashboard/categories' ||
+    pathname.startsWith('/dashboard/categories/')
   const isUsersActive = pathname === '/dashboard/users' || pathname.startsWith('/dashboard/users/')
 
   const [isContentOpen, setIsContentOpen] = useState<boolean>(true)
@@ -64,7 +69,7 @@ export function SidebarNavMain({ isAdmin = false }: SidebarNavMainProps) {
               render={
                 <SidebarMenuButton tooltip={t('nav.content')} isActive={isPostsRoute}>
                   <BookOpen className="size-4" />
-                  <span>{t('nav.content')}</span>
+                  <span className="truncate">{t('nav.content')}</span>
                   <ChevronRight
                     className={cn(
                       'ml-auto size-4 transition-transform duration-200 group-data-[collapsible=icon]:hidden',
@@ -74,7 +79,7 @@ export function SidebarNavMain({ isAdmin = false }: SidebarNavMainProps) {
                 </SidebarMenuButton>
               }
             />
-            <CollapsibleContent>
+            <CollapsibleContent className="group-data-[collapsible=icon]:hidden">
               <SidebarMenuSub>
                 <SidebarMenuSubItem>
                   <SidebarMenuSubButton
@@ -92,6 +97,18 @@ export function SidebarNavMain({ isAdmin = false }: SidebarNavMainProps) {
                   >
                     <PlusCircle className="size-4" />
                     <span>{t('new_post')}</span>
+                  </SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton
+                    render={<Link href="/dashboard/categories" />}
+                    isActive={
+                      pathname === '/dashboard/categories' ||
+                      pathname.startsWith('/dashboard/categories/')
+                    }
+                  >
+                    <Tags className="size-4" />
+                    <span>{t('categories')}</span>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               </SidebarMenuSub>

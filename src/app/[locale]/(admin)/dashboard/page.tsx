@@ -47,7 +47,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
   const totalUsers = totalUsersResult?.value ?? 0
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-4">
       {/* Welcome header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

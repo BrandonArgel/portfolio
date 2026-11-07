@@ -1,4 +1,5 @@
 import { and, asc, count, desc, eq, inArray, like, or } from 'drizzle-orm'
+import { cache } from 'react'
 import { db } from '@/db'
 import { categories, posts, postsToCategories } from '@/db/schema'
 import { error, okay, type Result } from '@/utils/result'
@@ -354,23 +355,41 @@ export async function getPostBySlug(slug: string): Promise<Result<BlogPost, Post
   }
 }
 
-export async function getPublishedPostBySlug(slug: string): Promise<Result<BlogPost, PostError>> {
-  try {
-    const dbPost = await db.query.posts.findFirst({
-      where: and(eq(posts.slug, slug), eq(posts.published, true)),
-      with: postWithRelations,
-    })
+/**
+ * Fetches a published post by slug. When `locale` is given, the post written in that locale is
+ * preferred (slugs are only unique per locale), falling back to any published post with that slug.
+ * Wrapped in React `cache` so `generateMetadata`, the page and OG routes share a single query.
+ */
+export const getPublishedPostBySlug = cache(
+  async (slug: string, locale?: string): Promise<Result<BlogPost, PostError>> => {
+    try {
+      const baseCondition = and(eq(posts.slug, slug), eq(posts.published, true))
 
-    if (!dbPost) {
-      return error({ reason: 'NOT_FOUND', identifier: slug })
+      const localizedPost = locale
+        ? await db.query.posts.findFirst({
+            where: and(baseCondition, eq(posts.locale, locale)),
+            with: postWithRelations,
+          })
+        : undefined
+
+      const dbPost =
+        localizedPost ??
+        (await db.query.posts.findFirst({
+          where: baseCondition,
+          with: postWithRelations,
+        }))
+
+      if (!dbPost) {
+        return error({ reason: 'NOT_FOUND', identifier: slug })
+      }
+
+      return okay(mapDbPostToBlogPost(dbPost))
+    } catch (err) {
+      console.error(`Error fetching published post by slug ${slug}:`, err)
+      return error({ reason: 'DATABASE_ERROR', details: err })
     }
-
-    return okay(mapDbPostToBlogPost(dbPost))
-  } catch (err) {
-    console.error(`Error fetching published post by slug ${slug}:`, err)
-    return error({ reason: 'DATABASE_ERROR', details: err })
-  }
-}
+  },
+)
 
 // ── Shared helpers ──────────────────────────────────────────────
 
