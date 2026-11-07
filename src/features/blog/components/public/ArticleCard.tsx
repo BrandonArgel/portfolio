@@ -7,9 +7,10 @@ import { ArticleCardActions } from './ArticleCardActions'
 
 interface ArticleCardProps {
   post: BlogPostCardItem
+  isAuthenticated?: boolean
 }
 
-export async function ArticleCard({ post }: ArticleCardProps) {
+export async function ArticleCard({ post, isAuthenticated = false }: ArticleCardProps) {
   const [t, format] = await Promise.all([getTranslations('features.blog.reader'), getFormatter()])
 
   const postDate = post.publishedAt instanceof Date ? post.publishedAt : new Date(post.publishedAt)
@@ -91,7 +92,17 @@ export async function ArticleCard({ post }: ArticleCardProps) {
             </span>
           </div>
 
-          <ArticleCardActions slug={post.slug} title={post.title} />
+          <ArticleCardActions
+            post={{
+              id: post.id,
+              title: post.title,
+              slug: post.slug,
+              description: post.description,
+            }}
+            initialBookmarked={Boolean(post.isBookmarked)}
+            isAuthenticated={isAuthenticated}
+            location="card"
+          />
         </div>
       </div>
     </article>

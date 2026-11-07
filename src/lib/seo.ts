@@ -33,12 +33,26 @@ export function getAlternateLanguages(
   return languages
 }
 
+const OPEN_GRAPH_LOCALES: Record<Locale, string> = {
+  en: 'en_US',
+  es: 'es_ES',
+  fr: 'fr_FR',
+}
+
+/** Open Graph expects `language_TERRITORY` (e.g. `en_US`), not a bare language code. */
+export function toOpenGraphLocale(locale: string): string {
+  return OPEN_GRAPH_LOCALES[locale as Locale] ?? locale
+}
+
 export interface PageMetadataParams {
   locale: string
   title: string
   description: string
   pathname?: string
   image?: string
+  imageAlt?: string
+  imageWidth?: number
+  imageHeight?: number
   keywords?: string[]
   type?: 'website' | 'article' | 'profile'
   publishedTime?: string
@@ -47,6 +61,8 @@ export interface PageMetadataParams {
   tags?: string[]
   noIndex?: boolean
   customSlugs?: Partial<Record<Locale, string>>
+  /** Explicit hreflang map. When provided it replaces the one derived from `pathname`/`customSlugs`. */
+  languages?: Record<string, string>
 }
 
 export function constructPageMetadata({
@@ -63,12 +79,21 @@ export function constructPageMetadata({
   tags,
   noIndex = false,
   customSlugs,
+  languages: languagesOverride,
+  imageAlt,
+  imageWidth = 1200,
+  imageHeight = 630,
 }: PageMetadataParams): Metadata {
   const baseUrl = getBaseUrl()
   const cleanPath = pathname.startsWith('/') ? pathname : pathname ? `/${pathname}` : ''
   const currentUrl = `${baseUrl}/${locale}${cleanPath}`
   const ogImage = image || siteConfig.ogImage
-  const languages = getAlternateLanguages(cleanPath, customSlugs)
+  const languages = languagesOverride ?? getAlternateLanguages(cleanPath, customSlugs)
+  const ogLocale = toOpenGraphLocale(locale)
+  const alternateOgLocales = Object.keys(languages)
+    .filter((code) => code !== 'x-default' && code !== locale)
+    .map(toOpenGraphLocale)
+  const resolvedImageAlt = imageAlt ?? title
 
   const authorList =
     authors && authors.length > 0
@@ -98,14 +123,15 @@ export function constructPageMetadata({
       description,
       url: currentUrl,
       siteName: siteConfig.name,
-      locale,
+      locale: ogLocale,
+      alternateLocale: alternateOgLocales,
       type,
       images: [
         {
           url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: title,
+          width: imageWidth,
+          height: imageHeight,
+          alt: resolvedImageAlt,
         },
       ],
       ...(type === 'article' && {
@@ -119,7 +145,7 @@ export function constructPageMetadata({
       card: 'summary_large_image',
       title,
       description,
-      images: [ogImage],
+      images: [{ url: ogImage, alt: resolvedImageAlt }],
       creator: siteConfig.author.handle,
     },
     robots: noIndex

@@ -2,58 +2,48 @@
 
 import { put } from '@vercel/blob'
 import { z } from 'zod'
-import { ActionError, authActionClient } from '@/lib/safe-action'
-
-const MAX_FILE_SIZE = 1024 * 1024
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml']
+import { authActionClient } from '@/lib/safe-action'
+import { error, okay } from '@/utils/result'
+import type { UploadImageActionResult } from '../types'
+import { buildImagePathname } from '../utils/build-image-pathname'
+import { resolveImageMimeType } from '../utils/image-mime'
+import { validateImageFile } from '../utils/validate-image-file'
 
 const uploadImageSchema = z.object({
   formData: z.instanceof(FormData),
 })
 
+/**
+ * Uploads a blog image to Vercel Blob.
+ *
+ * Expected failures (invalid/oversized file, storage outage) are returned as values using the
+ * shared `Result` tuple so the client can show a precise, translated message. Authentication
+ * failures are still raised by `authActionClient` and mapped on the client.
+ */
 export const uploadImageAction = authActionClient
   .inputSchema(uploadImageSchema)
-  .action(async ({ parsedInput }) => {
-    const file = parsedInput.formData.get('file')
+  .action(async ({ parsedInput }): Promise<UploadImageActionResult> => {
+    const entry = parsedInput.formData.get('file')
+    const candidate = entry instanceof File ? entry : null
 
-    if (!file || !(file instanceof File)) {
-      throw new ActionError(
-        'Invalid file',
-        'No valid image file was provided in the upload request.',
-      )
-    }
+    const [validationError, file] = validateImageFile(candidate)
 
-    if (!ALLOWED_TYPES.includes(file.type)) {
-      throw new ActionError(
-        'Invalid file type',
-        `Only JPEG, PNG, GIF, WebP, and SVG images are allowed. Received: ${file.type}`,
-      )
-    }
-
-    if (file.size > MAX_FILE_SIZE) {
-      throw new ActionError(
-        'File too large',
-        `Maximum file size is 1 MB. Uploaded file is ${(file.size / (1024 * 1024)).toFixed(1)} MB.`,
-      )
+    if (validationError) {
+      // The client validates first, so reaching this means a bypassed/stale client.
+      return error(validationError)
     }
 
     try {
-      // Generate a unique path under blog-images/
-      const timestamp = Date.now()
-      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
-      const pathname = `blog-images/${timestamp}-${safeName}`
-
-      const blob = await put(pathname, file, {
+      const blob = await put(buildImagePathname(file), file, {
         access: 'public',
-        addRandomSuffix: false,
+        addRandomSuffix: true,
+        contentType: resolveImageMimeType(file) ?? undefined,
       })
 
-      return { success: true, url: blob.url }
-    } catch (error) {
-      console.error('Error uploading image to Vercel Blob:', error)
-      throw new ActionError(
-        'Upload failed',
-        error instanceof Error ? error.message : 'An unexpected error occurred during upload.',
-      )
+      return okay({ url: blob.url })
+    } catch (thrown) {
+      // Details stay on the server: never leak storage errors to the user.
+      console.error('Error uploading image to Vercel Blob:', thrown)
+      return error({ reason: 'STORAGE_ERROR' })
     }
   })

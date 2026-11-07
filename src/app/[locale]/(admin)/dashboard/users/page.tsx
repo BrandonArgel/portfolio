@@ -96,7 +96,7 @@ export default async function UsersPage({ params, searchParams }: UsersPageProps
   const usersList = usersData.users
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <Breadcrumb>
           <BreadcrumbList>

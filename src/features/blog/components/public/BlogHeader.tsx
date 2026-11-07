@@ -5,7 +5,11 @@ import { PingDot } from '@/components/ui/ping-dot'
 import { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/section'
 import { BlogSearchInput } from './BlogSearchInput'
 
-export async function BlogHeader() {
+interface BlogHeaderProps {
+  resultsCount?: number
+}
+
+export async function BlogHeader({ resultsCount = 0 }: BlogHeaderProps) {
   const t = await getTranslations('features.blog.reader')
 
   return (
@@ -22,7 +26,7 @@ export async function BlogHeader() {
 
       {/* Search Bar */}
       <div className="w-full mt-4">
-        <BlogSearchInput />
+        <BlogSearchInput resultsCount={resultsCount} />
       </div>
     </SectionHeader>
   )

@@ -9,6 +9,7 @@ interface BlogSidebarProps {
   categoryCounts?: Record<string, number>
   bookmarkedPosts?: BlogPostCardItem[]
   trendingPosts?: BlogPostCardItem[]
+  isAuthenticated?: boolean
 }
 
 export function BlogSidebar({
@@ -17,6 +18,7 @@ export function BlogSidebar({
   categoryCounts = {},
   bookmarkedPosts = [],
   trendingPosts = [],
+  isAuthenticated = false,
 }: BlogSidebarProps) {
   return (
     <aside className="w-full lg:w-72 shrink-0 space-y-5 lg:sticky lg:top-24">
@@ -25,7 +27,7 @@ export function BlogSidebar({
         totalCount={totalCount}
         categoryCounts={categoryCounts}
       />
-      <BookmarkedWidget posts={bookmarkedPosts} />
+      <BookmarkedWidget posts={bookmarkedPosts} isAuthenticated={isAuthenticated} />
       <TrendingWidget posts={trendingPosts} />
     </aside>
   )

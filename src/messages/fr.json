@@ -110,6 +110,7 @@
         "overview": "Aperçu",
         "posts": "Articles",
         "new_post": "Nouvel Article",
+        "categories": "Catégories",
         "users": "Gestion des Utilisateurs",
         "back_to_site": "Retour au site",
         "nav": {
@@ -332,11 +333,23 @@
         "actions": {
           "share": "Partager l'article",
           "bookmark": "Enregistrer l'article",
+          "bookmarked_label": "Enregistré",
           "link_copied": "Lien copié dans le presse-papiers",
           "link_copy_error": "Impossible de copier le lien",
           "bookmarked": "Article enregistré",
           "bookmark_removed": "Article retiré des enregistrements",
-          "edit": "Modifier l'article"
+          "edit": "Modifier l'article",
+          "share_menu": {
+            "label": "Partager l'article",
+            "copy_link": "Copier le lien",
+            "copied": "Copié !",
+            "whatsapp": "Partager sur WhatsApp",
+            "x": "Partager sur X",
+            "linkedin": "Partager sur LinkedIn",
+            "instagram_or_native": "Instagram / Plus...",
+            "instagram_copied_title": "Lien copié pour Instagram",
+            "instagram_copied_hint": "Collez-le dans votre Story Instagram, votre bio ou un message direct."
+          }
         },
         "no_results": "Aucun article ne correspond à vos filtres.",
         "empty_posts": "Aucun article publié pour le moment.",
@@ -423,11 +436,122 @@
         "showing_results": "Affichage {from}–{to} sur {total}",
         "no_results": "Aucun article ne correspond à vos filtres.",
         "new_article": "Nouvel Article",
+        "manage_categories": "Gérer les Catégories",
         "edit": "Modifier",
         "prev_page": "Précédent",
         "next_page": "Suivant",
         "dashboard": "Tableau de bord",
         "filter_all": "Tous"
+      },
+      "categories": {
+        "title": "Catégories",
+        "search_placeholder": "Rechercher des catégories...",
+        "showing_count": "Affichage de {shown} sur {total} catégories",
+        "filters": {
+          "all": "Toutes ({count})",
+          "unused": "Inutilisées ({count})"
+        },
+        "badges": {
+          "articles_count": "{count, plural, =1 {1 article} other {# articles}}",
+          "unused": "Inutilisée (0)",
+          "breakdown": "({published} publiés • {drafts} brouillons)"
+        },
+        "actions": {
+          "new_category": "Nouvelle Catégorie",
+          "clean_unused": "Nettoyer inutilisées ({count})",
+          "edit": "Modifier",
+          "merge": "Fusionner",
+          "delete": "Supprimer",
+          "cancel": "Annuler",
+          "create": "Créer la Catégorie",
+          "save_changes": "Enregistrer"
+        },
+        "form": {
+          "create_title": "Créer une Catégorie",
+          "create_description": "Ajoutez une nouvelle catégorie pour organiser vos articles de blog.",
+          "edit_title": "Modifier la Catégorie",
+          "edit_description": "Renommez ou mettez à jour cette catégorie. Tous les articles liés seront mis à jour automatiquement.",
+          "name_label": "Nom",
+          "name_placeholder": "ex. Architecture",
+          "slug_label": "Slug d'URL",
+          "slug_placeholder": "architecture",
+          "sync_slug": "Synchroniser depuis le nom",
+          "description_label": "Description (optionnel)",
+          "description_placeholder": "Brève description des articles de cette catégorie..."
+        },
+        "merge": {
+          "title": "Fusionner la Catégorie",
+          "description": "Déplacer {count, plural, =0 {tous les articles} =1 {1 article} other {# articles}} de \"{source}\" vers une autre catégorie et supprimer \"{source}\".",
+          "target_label": "Catégorie cible",
+          "select_placeholder": "Sélectionner la catégorie cible...",
+          "confirm_button": "Fusionner les Catégories"
+        },
+        "delete_dialog": {
+          "title": "Supprimer \"{name}\" ?",
+          "description_used": "Cette catégorie est actuellement utilisée par {count, plural, =1 {1 article} other {# articles}}. Sa suppression retirera ce tag de {count, plural, =1 {cet article} other {ces articles}}.",
+          "description_unused": "Cette catégorie n'est utilisée par aucun article et sera définitivement supprimée."
+        },
+        "clean_dialog": {
+          "title": "Nettoyer les catégories inutilisées ?",
+          "description": "Cela supprimera définitivement {count, plural, =1 {1 catégorie orpheline} other {# catégories orphelines}} ayant 0 article associé.",
+          "confirm": "Supprimer {count, plural, =1 {1 Catégorie} other {# Catégories}}"
+        },
+        "empty": {
+          "no_categories_title": "Aucune catégorie pour le moment",
+          "no_categories_description": "Créez votre première catégorie pour organiser vos articles de blog.",
+          "no_results_title": "Aucune catégorie correspondante",
+          "no_results_description": "Aucune catégorie ne correspond à votre recherche ou filtre actuel."
+        },
+        "notifications": {
+          "created_title": "Catégorie créée",
+          "created_description": "\"{name}\" a été créée.",
+          "updated_title": "Catégorie mise à jour",
+          "updated_description": "\"{name}\" a été mise à jour sur tous les articles liés.",
+          "deleted_title": "Catégorie supprimée",
+          "deleted_description": "\"{name}\" a été supprimée.",
+          "merged_title": "Catégories fusionnées",
+          "merged_description": "Fusion de \"{source}\" dans \"{target}\" ({count, plural, =1 {1 article mis à jour} other {# articles mis à jour}}).",
+          "cleaned_title": "Catégories inutilisées nettoyées",
+          "cleaned_description": "{count, plural, =1 {1 catégorie inutilisée supprimée} other {# catégories inutilisées supprimées}}."
+        },
+        "errors": {
+          "CATEGORY_NOT_FOUND": {
+            "title": "Catégorie introuvable",
+            "description": "La catégorie que vous essayez de modifier n'existe plus."
+          },
+          "TARGET_CATEGORY_NOT_FOUND": {
+            "title": "Catégorie cible introuvable",
+            "description": "La catégorie de destination pour la fusion n'existe plus."
+          },
+          "DUPLICATE_CATEGORY_NAME": {
+            "title": "Nom de catégorie en double",
+            "description": "Une catégorie nommée \"{name}\" existe déjà."
+          },
+          "DUPLICATE_CATEGORY_SLUG": {
+            "title": "Slug de catégorie en double",
+            "description": "Le slug \"/{slug}\" est déjà utilisé par une autre catégorie."
+          },
+          "SAME_CATEGORY_MERGE": {
+            "title": "Cible de fusion invalide",
+            "description": "Veuillez choisir une catégorie différente pour la fusion."
+          },
+          "UNAUTHORIZED": {
+            "title": "Authentification requise",
+            "description": "Veuillez vous reconnecter pour gérer les catégories."
+          },
+          "FORBIDDEN": {
+            "title": "Accès refusé",
+            "description": "Vous n'avez pas la permission de gérer les catégories."
+          },
+          "VALIDATION_ERROR": {
+            "title": "Erreur de validation",
+            "description": "Veuillez fournir un nom et un slug de catégorie valides."
+          },
+          "DATABASE_ERROR": {
+            "title": "Erreur de base de données",
+            "description": "Impossible de terminer l'opération. Veuillez réessayer."
+          }
+        }
       },
       "editor": {
         "new_post": "Nouvel Article",
@@ -497,11 +621,7 @@
           "title_slug_required": "Le titre et le slug sont obligatoires",
           "uploading_image": "Téléversement de l'image...",
           "image_inserted": "Image insérée avec succès",
-          "image_upload_error": "Erreur lors du téléversement de l'image",
-          "cover_uploaded": "Image de couverture téléversée avec succès",
-          "cover_upload_error": "Erreur lors du téléversement de l'image de couverture",
-          "invalid_file_title": "Fichier non valide",
-          "invalid_file_description": "Seuls les fichiers image peuvent être téléversés."
+          "cover_uploaded": "Image de couverture téléversée avec succès"
         },
         "frontmatter": {
           "title": "Métadonnées de l'Article",
@@ -516,7 +636,7 @@
           "field_cover_image": "Image de Couverture",
           "cover_image_placeholder": "https://...",
           "upload_cover": "Cliquez pour téléverser une image de couverture",
-          "upload_cover_hint": "PNG, JPG, WebP jusqu'à 5 Mo (16:9 recommandé)",
+          "upload_cover_hint": "PNG, JPG, WebP jusqu'à 4 Mo (16:9 recommandé)",
           "cover_attached": "Image de couverture jointe",
           "replace_cover": "Remplacer l'image de couverture",
           "remove_cover": "Supprimer l'image de couverture",
@@ -558,7 +678,72 @@
         "VALIDATION_ERROR": {
           "title": "Erreur de validation",
           "description": "Veuillez vérifier les données et réessayer."
+        },
+        "image_upload": {
+          "NO_FILE": {
+            "title": "Aucune image sélectionnée",
+            "description": "Choisissez un fichier image à téléverser."
+          },
+          "EMPTY_FILE": {
+            "title": "Fichier vide",
+            "description": "Le fichier sélectionné est vide. Choisissez une autre image."
+          },
+          "INVALID_FILE_TYPE": {
+            "title": "Type de fichier non pris en charge",
+            "description": "Seules les images JPEG, PNG, WebP, GIF et SVG peuvent être téléversées. Reçu : {received}."
+          },
+          "UNSUPPORTED_FORMAT": {
+            "title": "Format non pris en charge",
+            "description": "Les images {format} ne peuvent pas être téléversées. Convertissez l'image en JPEG ou PNG et réessayez."
+          },
+          "FILE_TOO_LARGE": {
+            "title": "Image trop volumineuse",
+            "description": "La taille maximale est de {maxSize}, mais cette image fait {actualSize}."
+          },
+          "IMAGE_PROCESSING_FAILED": {
+            "title": "Impossible de traiter l'image",
+            "description": "Nous n'avons pas pu optimiser cette image. Essayez-en une plus petite ou un autre fichier."
+          },
+          "OFFLINE": {
+            "title": "Vous êtes hors ligne",
+            "description": "Reconnectez-vous à internet et réessayez."
+          },
+          "NETWORK_ERROR": {
+            "title": "Problème de connexion",
+            "description": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez."
+          },
+          "TIMEOUT": {
+            "title": "Délai de téléversement dépassé",
+            "description": "Le téléversement a pris trop de temps. Vérifiez votre connexion et réessayez."
+          },
+          "PAYLOAD_TOO_LARGE": {
+            "title": "Image trop volumineuse pour le serveur",
+            "description": "Cette image dépasse la limite de téléversement du serveur. Essayez une image plus petite."
+          },
+          "RATE_LIMITED": {
+            "title": "Trop de téléversements",
+            "description": "Veuillez patienter un instant avant de téléverser à nouveau."
+          },
+          "UNAUTHORIZED": {
+            "title": "Session expirée",
+            "description": "Reconnectez-vous pour téléverser des images."
+          },
+          "FORBIDDEN": {
+            "title": "Téléversement non autorisé",
+            "description": "Votre compte n'est pas autorisé à téléverser des images."
+          },
+          "STORAGE_ERROR": {
+            "title": "Erreur de stockage",
+            "description": "Nous n'avons pas pu enregistrer l'image. Réessayez dans un instant."
+          }
         }
+      },
+      "og": {
+        "written_by": "Écrit par",
+        "read_on_blog": "À lire sur le blog",
+        "min_read": "{minutes} min de lecture",
+        "tagline": "Full Stack et Architecture",
+        "default_title": "Blog d'ingénierie et d'architecture"
       }
     },
     "contact": {
@@ -636,7 +821,7 @@
       "image_alt_placeholder": "Description de l'image",
       "image_upload_prompt": "Cliquez pour téléverser une image ou glissez-déposez",
       "image_uploading": "Téléversement de l'image...",
-      "image_upload_hint": "PNG, JPG, GIF, WebP jusqu'à 5 Mo",
+      "image_upload_hint": "PNG, JPG, GIF, WebP jusqu'à 4 Mo",
       "image_tab_upload": "Téléverser",
       "image_tab_link": "Intégrer un lien",
       "image_link_placeholder": "Collez l'URL d'une image...",

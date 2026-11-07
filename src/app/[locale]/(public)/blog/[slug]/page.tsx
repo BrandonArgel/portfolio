@@ -1,20 +1,30 @@
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { JsonLd } from '@/components/seo/json-ld'
 import { Section } from '@/components/ui/section'
-import { getBaseUrl, siteConfig } from '@/config/site'
+import { siteConfig } from '@/config/site'
 import { BlogPostContent } from '@/features/blog/components/blog-post-content'
 import { PostCommentsSection } from '@/features/blog/components/comments'
 import { EditPostButton } from '@/features/blog/components/public/EditPostButton'
 import { TranslationFallbackBanner } from '@/features/blog/components/public/TranslationFallbackBanner'
+import { isPostBookmarkedByUser } from '@/features/blog/services/bookmarks-service'
 import {
   getPostTranslationFallback,
   getPostTranslationsByGroupId,
   getPublishedPostBySlug,
 } from '@/features/blog/services/posts-service'
+import {
+  buildBlogPostingJsonLd,
+  buildPostLanguageAlternates,
+  buildSeoDescription,
+  resolvePostOgImage,
+  stripMarkdown,
+} from '@/features/blog/utils/post-seo'
 import { redirect } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
+import { auth } from '@/lib/auth/auth'
 import { constructPageMetadata } from '@/lib/seo'
 
 interface BlogPostPageProps {
@@ -28,44 +38,42 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const { slug, locale } = await params
   const t = await getTranslations({ locale, namespace: 'features.blog.reader' })
 
-  const [err, post] = await getPublishedPostBySlug(slug)
+  const [err, post] = await getPublishedPostBySlug(slug, locale)
 
   if (err || !post) {
     return {
-      title: `${t('post_not_found')} | ${siteConfig.name}`,
+      title: t('post_not_found'),
       robots: { index: false, follow: false },
     }
   }
 
-  // If the post belongs to a translation group, discover all localized sibling slugs
-  let customSlugs: Partial<Record<Locale, string>> | undefined
+  const siblings = post.translationGroupId
+    ? await getPostTranslationsByGroupId(post.translationGroupId)
+    : []
 
-  if (post.translationGroupId) {
-    const siblings = await getPostTranslationsByGroupId(post.translationGroupId)
-    if (siblings.length > 0) {
-      customSlugs = {}
-      for (const item of siblings) {
-        customSlugs[item.locale as Locale] = `blog/${item.slug}`
-      }
-    }
-  }
-
-  const tags = post.categories.map((category) => category.name)
+  const categoryNames = post.categories.map((category) => category.name)
   const authorName = post.authorName || siteConfig.author.name
-  const pathname = `/blog/${post.slug}`
+  const description = buildSeoDescription(post.description, post.content)
+  const ogImage = resolvePostOgImage(post)
 
+  // The canonical URL always points to the post's own locale so the same article served under
+  // another locale (with the fallback banner) is not indexed as duplicate content.
   return constructPageMetadata({
-    locale,
-    title: `${post.title} | ${siteConfig.name}`,
-    description: post.description,
-    pathname,
-    keywords: tags,
+    locale: post.locale,
+    title: post.title,
+    description,
+    pathname: `/blog/${post.slug}`,
+    languages: buildPostLanguageAlternates({ locale: post.locale, slug: post.slug }, siblings),
+    image: ogImage.url,
+    imageAlt: ogImage.alt,
+    imageWidth: ogImage.width,
+    imageHeight: ogImage.height,
+    keywords: categoryNames,
     type: 'article',
     publishedTime: post.createdAt.toISOString(),
     modifiedTime: post.updatedAt.toISOString(),
     authors: [authorName],
-    tags,
-    customSlugs,
+    tags: categoryNames,
   })
 }
 
@@ -74,7 +82,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const activeLocale = locale as Locale
   const t = await getTranslations('features.blog.reader')
 
-  const [err, post] = await getPublishedPostBySlug(slug)
+  const [[err, post], session] = await Promise.all([
+    getPublishedPostBySlug(slug, locale),
+    auth.api.getSession({ headers: await headers() }),
+  ])
 
   if (err || !post) {
     if (err && err.reason !== 'NOT_FOUND') {
@@ -88,6 +99,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
     return notFound()
   }
+
+  const userId = session?.user?.id
+  const isAuthenticated = Boolean(userId)
+  const isBookmarked = userId ? await isPostBookmarkedByUser(userId, post.id) : false
 
   let showFallbackBanner = false
 
@@ -103,35 +118,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     showFallbackBanner = true
   }
 
-  const baseUrl = getBaseUrl()
-  const postUrl = `${baseUrl}/${post.locale}/blog/${post.slug}`
   const authorName = post.authorName || siteConfig.author.name
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: post.description,
-    datePublished: post.createdAt.toISOString(),
-    dateModified: post.updatedAt.toISOString(),
-    inLanguage: post.locale,
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': postUrl,
-    },
-    url: postUrl,
-    author: {
-      '@type': 'Person',
-      name: authorName,
-      url: siteConfig.author.url,
-    },
-    publisher: {
-      '@type': 'Person',
-      name: siteConfig.name,
-      url: siteConfig.url,
-    },
-    keywords: post.categories.map((category) => category.name).join(', '),
-  }
+  const jsonLd = buildBlogPostingJsonLd({
+    title: post.title,
+    description: buildSeoDescription(post.description, post.content),
+    slug: post.slug,
+    locale: post.locale,
+    authorName,
+    categoryNames: post.categories.map((category) => category.name),
+    imageUrl: resolvePostOgImage(post).url,
+    createdAt: post.createdAt,
+    updatedAt: post.updatedAt,
+    wordCount: stripMarkdown(post.content).split(' ').filter(Boolean).length,
+  })
 
   return (
     <>
@@ -144,6 +144,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         )}
         <BlogPostContent
           post={post}
+          isBookmarked={isBookmarked}
+          isAuthenticated={isAuthenticated}
           action={<EditPostButton authorId={post.authorId} slug={post.slug} />}
         />
         <PostCommentsSection postId={post.id} postAuthorId={post.authorId} postSlug={post.slug} />

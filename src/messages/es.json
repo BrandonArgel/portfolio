@@ -110,6 +110,7 @@
         "overview": "Resumen",
         "posts": "Artículos",
         "new_post": "Nuevo Artículo",
+        "categories": "Categorías",
         "users": "Gestión de Usuarios",
         "back_to_site": "Volver al sitio",
         "nav": {
@@ -332,11 +333,23 @@
         "actions": {
           "share": "Compartir artículo",
           "bookmark": "Guardar artículo",
+          "bookmarked_label": "Guardado",
           "link_copied": "Enlace copiado al portapapeles",
           "link_copy_error": "No se pudo copiar el enlace",
           "bookmarked": "Artículo guardado",
           "bookmark_removed": "Artículo eliminado de guardados",
-          "edit": "Editar artículo"
+          "edit": "Editar artículo",
+          "share_menu": {
+            "label": "Compartir artículo",
+            "copy_link": "Copiar enlace",
+            "copied": "¡Copiado!",
+            "whatsapp": "Compartir en WhatsApp",
+            "x": "Compartir en X",
+            "linkedin": "Compartir en LinkedIn",
+            "instagram_or_native": "Instagram / Más...",
+            "instagram_copied_title": "Enlace copiado para Instagram",
+            "instagram_copied_hint": "Pégalo en tu historia de Instagram, biografía o mensaje directo."
+          }
         },
         "no_results": "No se encontraron artículos con esos filtros.",
         "empty_posts": "No hay artículos publicados aún.",
@@ -423,11 +436,122 @@
         "showing_results": "Mostrando {from}–{to} de {total}",
         "no_results": "Ningún artículo coincide con tus filtros.",
         "new_article": "Nuevo Artículo",
+        "manage_categories": "Gestionar Categorías",
         "edit": "Editar",
         "prev_page": "Anterior",
         "next_page": "Siguiente",
         "dashboard": "Panel",
         "filter_all": "Todos"
+      },
+      "categories": {
+        "title": "Categorías",
+        "search_placeholder": "Buscar categorías...",
+        "showing_count": "Mostrando {shown} de {total} categorías",
+        "filters": {
+          "all": "Todas ({count})",
+          "unused": "Sin uso ({count})"
+        },
+        "badges": {
+          "articles_count": "{count, plural, =1 {1 artículo} other {# artículos}}",
+          "unused": "Sin uso (0)",
+          "breakdown": "({published} publicados • {drafts} borradores)"
+        },
+        "actions": {
+          "new_category": "Nueva Categoría",
+          "clean_unused": "Limpiar sin uso ({count})",
+          "edit": "Editar",
+          "merge": "Fusionar",
+          "delete": "Eliminar",
+          "cancel": "Cancelar",
+          "create": "Crear Categoría",
+          "save_changes": "Guardar Cambios"
+        },
+        "form": {
+          "create_title": "Crear Categoría",
+          "create_description": "Agrega una nueva categoría para organizar tus artículos del blog.",
+          "edit_title": "Editar Categoría",
+          "edit_description": "Renombra o actualiza esta categoría. Todos los artículos vinculados se actualizarán automáticamente.",
+          "name_label": "Nombre",
+          "name_placeholder": "p. ej., Arquitectura",
+          "slug_label": "Slug de URL",
+          "slug_placeholder": "arquitectura",
+          "sync_slug": "Sincronizar desde el nombre",
+          "description_label": "Descripción (opcional)",
+          "description_placeholder": "Breve descripción de los artículos en esta categoría..."
+        },
+        "merge": {
+          "title": "Fusionar Categoría",
+          "description": "Mover {count, plural, =0 {todos los artículos} =1 {1 artículo} other {# artículos}} de \"{source}\" a otra categoría y eliminar \"{source}\".",
+          "target_label": "Categoría de destino",
+          "select_placeholder": "Seleccionar categoría de destino...",
+          "confirm_button": "Fusionar Categorías"
+        },
+        "delete_dialog": {
+          "title": "¿Eliminar \"{name}\"?",
+          "description_used": "Esta categoría se usa actualmente en {count, plural, =1 {1 artículo} other {# artículos}}. Al eliminarla, se quitará esta etiqueta de {count, plural, =1 {ese artículo} other {esos artículos}}.",
+          "description_unused": "Esta categoría no es utilizada por ningún artículo y se eliminará permanentemente."
+        },
+        "clean_dialog": {
+          "title": "¿Limpiar categorías sin uso?",
+          "description": "Esto eliminará permanentemente {count, plural, =1 {1 categoría huérfana} other {# categorías huérfanas}} con 0 artículos asociados.",
+          "confirm": "Eliminar {count, plural, =1 {1 Categoría} other {# Categorías}}"
+        },
+        "empty": {
+          "no_categories_title": "Aún no hay categorías",
+          "no_categories_description": "Crea tu primera categoría para organizar los artículos del blog.",
+          "no_results_title": "No se encontraron categorías",
+          "no_results_description": "Ninguna categoría coincide con tu búsqueda o filtro actual."
+        },
+        "notifications": {
+          "created_title": "Categoría creada",
+          "created_description": "Se ha creado \"{name}\".",
+          "updated_title": "Categoría actualizada",
+          "updated_description": "\"{name}\" se actualizó en todos los artículos vinculados.",
+          "deleted_title": "Categoría eliminada",
+          "deleted_description": "Se eliminó \"{name}\".",
+          "merged_title": "Categorías fusionadas",
+          "merged_description": "Se fusionó \"{source}\" en \"{target}\" ({count, plural, =1 {1 artículo actualizado} other {# artículos actualizados}}).",
+          "cleaned_title": "Categorías sin uso eliminadas",
+          "cleaned_description": "Se eliminaron {count, plural, =1 {1 categoría sin uso} other {# categorías sin uso}}."
+        },
+        "errors": {
+          "CATEGORY_NOT_FOUND": {
+            "title": "Categoría no encontrada",
+            "description": "La categoría que intentas modificar ya no existe."
+          },
+          "TARGET_CATEGORY_NOT_FOUND": {
+            "title": "Categoría de destino no encontrada",
+            "description": "La categoría de destino para la fusión ya no existe."
+          },
+          "DUPLICATE_CATEGORY_NAME": {
+            "title": "Nombre de categoría duplicado",
+            "description": "Ya existe una categoría llamada \"{name}\"."
+          },
+          "DUPLICATE_CATEGORY_SLUG": {
+            "title": "Slug de categoría duplicado",
+            "description": "El slug \"/{slug}\" ya está en uso por otra categoría."
+          },
+          "SAME_CATEGORY_MERGE": {
+            "title": "Destino de fusión inválido",
+            "description": "Por favor, elige una categoría diferente para fusionar."
+          },
+          "UNAUTHORIZED": {
+            "title": "Autenticación requerida",
+            "description": "Inicia sesión nuevamente para gestionar las categorías."
+          },
+          "FORBIDDEN": {
+            "title": "Acceso denegado",
+            "description": "No tienes permisos para gestionar categorías."
+          },
+          "VALIDATION_ERROR": {
+            "title": "Error de validación",
+            "description": "Proporciona un nombre y slug de categoría válidos."
+          },
+          "DATABASE_ERROR": {
+            "title": "Error de base de datos",
+            "description": "No se pudo completar la operación. Inténtalo de nuevo."
+          }
+        }
       },
       "editor": {
         "new_post": "Nuevo Artículo",
@@ -497,11 +621,7 @@
           "title_slug_required": "El título y el slug son obligatorios",
           "uploading_image": "Subiendo imagen...",
           "image_inserted": "Imagen insertada con éxito",
-          "image_upload_error": "Error al subir la imagen",
-          "cover_uploaded": "Imagen de portada subida con éxito",
-          "cover_upload_error": "Error al subir la imagen de portada",
-          "invalid_file_title": "Archivo no válido",
-          "invalid_file_description": "Solo se pueden subir archivos de imagen."
+          "cover_uploaded": "Imagen de portada subida con éxito"
         },
         "frontmatter": {
           "title": "Metadatos del Artículo",
@@ -516,7 +636,7 @@
           "field_cover_image": "Imagen de Portada",
           "cover_image_placeholder": "https://...",
           "upload_cover": "Haz clic para subir imagen de portada",
-          "upload_cover_hint": "PNG, JPG, WebP hasta 5MB (16:9 recomendado)",
+          "upload_cover_hint": "PNG, JPG, WebP hasta 4MB (16:9 recomendado)",
           "cover_attached": "Imagen de portada adjunta",
           "replace_cover": "Reemplazar imagen de portada",
           "remove_cover": "Eliminar imagen de portada",
@@ -558,7 +678,72 @@
         "VALIDATION_ERROR": {
           "title": "Error de validación",
           "description": "Por favor, revisa los datos e inténtalo de nuevo."
+        },
+        "image_upload": {
+          "NO_FILE": {
+            "title": "Ninguna imagen seleccionada",
+            "description": "Elige un archivo de imagen para subir."
+          },
+          "EMPTY_FILE": {
+            "title": "Archivo vacío",
+            "description": "El archivo seleccionado está vacío. Elige otra imagen."
+          },
+          "INVALID_FILE_TYPE": {
+            "title": "Tipo de archivo no compatible",
+            "description": "Solo se pueden subir imágenes JPEG, PNG, WebP, GIF y SVG. Recibido: {received}."
+          },
+          "UNSUPPORTED_FORMAT": {
+            "title": "Formato no compatible",
+            "description": "No se pueden subir imágenes {format}. Convierte la imagen a JPEG o PNG e inténtalo de nuevo."
+          },
+          "FILE_TOO_LARGE": {
+            "title": "Imagen demasiado grande",
+            "description": "El tamaño máximo es {maxSize}, pero esta imagen pesa {actualSize}."
+          },
+          "IMAGE_PROCESSING_FAILED": {
+            "title": "No se pudo procesar la imagen",
+            "description": "No pudimos optimizar esta imagen. Prueba con una más pequeña o con otro archivo."
+          },
+          "OFFLINE": {
+            "title": "Sin conexión",
+            "description": "Vuelve a conectarte a internet e inténtalo de nuevo."
+          },
+          "NETWORK_ERROR": {
+            "title": "Problema de conexión",
+            "description": "No pudimos comunicarnos con el servidor. Revisa tu conexión e inténtalo de nuevo."
+          },
+          "TIMEOUT": {
+            "title": "Tiempo de espera agotado",
+            "description": "La subida tardó demasiado. Revisa tu conexión e inténtalo de nuevo."
+          },
+          "PAYLOAD_TOO_LARGE": {
+            "title": "Imagen demasiado grande para el servidor",
+            "description": "Esta imagen supera el límite de subida del servidor. Prueba con una imagen más pequeña."
+          },
+          "RATE_LIMITED": {
+            "title": "Demasiadas subidas",
+            "description": "Espera un momento antes de volver a subir una imagen."
+          },
+          "UNAUTHORIZED": {
+            "title": "Sesión expirada",
+            "description": "Inicia sesión de nuevo para subir imágenes."
+          },
+          "FORBIDDEN": {
+            "title": "Subida no permitida",
+            "description": "Tu cuenta no tiene permiso para subir imágenes."
+          },
+          "STORAGE_ERROR": {
+            "title": "Error de almacenamiento",
+            "description": "No pudimos guardar la imagen. Inténtalo de nuevo en un momento."
+          }
         }
+      },
+      "og": {
+        "written_by": "Escrito por",
+        "read_on_blog": "Lee en el blog",
+        "min_read": "{minutes} min de lectura",
+        "tagline": "Full Stack y Arquitectura",
+        "default_title": "Blog de Ingeniería y Arquitectura"
       }
     },
     "contact": {
@@ -636,7 +821,7 @@
       "image_alt_placeholder": "Descripción de la imagen",
       "image_upload_prompt": "Haz clic para subir una imagen o arrastra y suelta",
       "image_uploading": "Subiendo imagen...",
-      "image_upload_hint": "PNG, JPG, GIF, WebP hasta 5MB",
+      "image_upload_hint": "PNG, JPG, GIF, WebP hasta 4MB",
       "image_tab_upload": "Subir",
       "image_tab_link": "Insertar enlace",
       "image_link_placeholder": "Pega la URL de una imagen...",

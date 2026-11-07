@@ -1,6 +1,11 @@
 import type { MetadataRoute } from 'next'
 import { getBaseUrl } from '@/config/site'
 import { getAllPublishedPostsForSitemap } from '@/features/blog/services/posts-service'
+import {
+  buildPostLanguageAlternates,
+  buildPostUrl,
+  type PostTranslationRef,
+} from '@/features/blog/utils/post-seo'
 import { routing } from '@/i18n/routing'
 
 const STATIC_ROUTES = [
@@ -41,45 +46,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const publishedPosts = await getAllPublishedPostsForSitemap()
 
-  const translationGroupMap = new Map<string, Map<string, string>>()
+  const translationsByGroup = new Map<string, PostTranslationRef[]>()
 
   for (const post of publishedPosts) {
-    if (post.translationGroupId) {
-      if (!translationGroupMap.has(post.translationGroupId)) {
-        translationGroupMap.set(post.translationGroupId, new Map())
-      }
-      translationGroupMap.get(post.translationGroupId)?.set(post.locale, post.slug)
-    }
+    if (!post.translationGroupId) continue
+
+    const group = translationsByGroup.get(post.translationGroupId) ?? []
+    group.push({ locale: post.locale, slug: post.slug })
+    translationsByGroup.set(post.translationGroupId, group)
   }
 
   for (const post of publishedPosts) {
-    const alternateLanguages: Record<string, string> = {}
-
-    if (post.translationGroupId && translationGroupMap.has(post.translationGroupId)) {
-      const groupLocales = translationGroupMap.get(post.translationGroupId)
-      if (groupLocales) {
-        for (const loc of routing.locales) {
-          const slugToUse = groupLocales.get(loc) || post.slug
-          alternateLanguages[loc] = `${baseUrl}/${loc}/blog/${slugToUse}`
-        }
-
-        const defaultSlug = groupLocales.get(defaultLocale) || post.slug
-        alternateLanguages['x-default'] = `${baseUrl}/${defaultLocale}/blog/${defaultSlug}`
-      }
-    } else {
-      for (const loc of routing.locales) {
-        alternateLanguages[loc] = `${baseUrl}/${loc}/blog/${post.slug}`
-      }
-      alternateLanguages['x-default'] = `${baseUrl}/${defaultLocale}/blog/${post.slug}`
-    }
+    const translations = post.translationGroupId
+      ? (translationsByGroup.get(post.translationGroupId) ?? [])
+      : []
 
     sitemapEntries.push({
-      url: `${baseUrl}/${post.locale}/blog/${post.slug}`,
-      lastModified: post.updatedAt || post.createdAt || new Date(),
+      url: buildPostUrl(post.locale, post.slug, baseUrl),
+      lastModified: post.updatedAt || post.createdAt,
       changeFrequency: 'weekly',
       priority: 0.8,
       alternates: {
-        languages: alternateLanguages,
+        languages: buildPostLanguageAlternates(
+          { locale: post.locale, slug: post.slug },
+          translations,
+          baseUrl,
+        ),
       },
     })
   }
