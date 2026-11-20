@@ -1,8 +1,7 @@
 import { Pencil } from 'lucide-react'
-import { headers } from 'next/headers'
 import { getTranslations } from 'next-intl/server'
 import { LinkButton } from '@/components/ui/button'
-import { auth } from '@/lib/auth/auth'
+import { getOptionalSession } from '@/lib/auth/get-optional-session'
 import { cn } from '@/lib/utils'
 
 interface EditPostButtonProps {
@@ -12,9 +11,7 @@ interface EditPostButtonProps {
 }
 
 export async function EditPostButton({ authorId, slug, className }: EditPostButtonProps) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const session = await getOptionalSession()
 
   const canEdit = session?.user?.id === authorId || session?.user?.role === 'admin'
 

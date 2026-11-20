@@ -1,20 +1,35 @@
-import { useEffect, useState } from 'react'
+'use client'
+
+import { useSyncExternalStore } from 'react'
 import type { StoreApi, UseBoundStore } from 'zustand'
 
-export function useStoreHydration<T>(store: UseBoundStore<StoreApi<T>> & { persist: any }) {
-  const [hydrated, setHydrated] = useState(() => store.persist.hasHydrated())
+interface PersistApi {
+  hasHydrated: () => boolean
+  onFinishHydration: (listener: () => void) => () => void
+}
 
-  useEffect(() => {
-    const unsubFinishHydration = store.persist.onFinishHydration(() => {
-      setHydrated(true)
-    })
+type PersistedStore<T> = UseBoundStore<StoreApi<T>> & {
+  persist?: PersistApi
+}
 
-    setHydrated(store.persist.hasHydrated())
+const EMPTY_UNSUBSCRIBE = () => {}
+const getServerHydrationSnapshot = () => false
 
-    return () => {
-      unsubFinishHydration()
-    }
-  }, [store])
+export function subscribeStoreHydration<T>(
+  store: PersistedStore<T>,
+  onStoreChange: () => void,
+): () => void {
+  return store.persist?.onFinishHydration(onStoreChange) ?? EMPTY_UNSUBSCRIBE
+}
 
-  return hydrated
+export function getStoreHydrationSnapshot<T>(store: PersistedStore<T>): boolean {
+  return store.persist?.hasHydrated() ?? false
+}
+
+export function useStoreHydration<T>(store: PersistedStore<T>): boolean {
+  return useSyncExternalStore(
+    (onStoreChange) => subscribeStoreHydration(store, onStoreChange),
+    () => getStoreHydrationSnapshot(store),
+    getServerHydrationSnapshot,
+  )
 }

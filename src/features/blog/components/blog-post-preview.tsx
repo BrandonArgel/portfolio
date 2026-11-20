@@ -100,9 +100,7 @@ export function BlogPostPreview({
             {frontmatter.categories && frontmatter.categories.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {frontmatter.categories.map((category) => (
-                  <Badge key={category} variant="secondary">
-                    {category}
-                  </Badge>
+                  <Badge key={category}>{category}</Badge>
                 ))}
               </div>
             )}

@@ -1,8 +1,7 @@
-import { headers } from 'next/headers'
 import { getTranslations } from 'next-intl/server'
 import { getPostComments } from '@/features/blog/services/comments-service'
 import type { CommentAuthor } from '@/features/blog/types'
-import { auth } from '@/lib/auth/auth'
+import { getOptionalSession } from '@/lib/auth/get-optional-session'
 import { assertNever } from '@/utils/result'
 import { CommentsThreadClient } from './comments-thread-client'
 
@@ -19,9 +18,7 @@ export async function PostCommentsSection({
 }: PostCommentsSectionProps) {
   const [[err, commentsData], session] = await Promise.all([
     getPostComments(postId),
-    auth.api.getSession({
-      headers: await headers(),
-    }),
+    getOptionalSession(),
   ])
 
   if (err || !commentsData) {
