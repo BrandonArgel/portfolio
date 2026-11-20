@@ -142,7 +142,7 @@ export function BlogPostPreview({
                 <img
                   src={frontmatter.coverImage}
                   alt={displayTitle}
-                  className="h-full w-full object-cover"
+                  className="h-auto w-full object-cover"
                 />
               </div>
             )}

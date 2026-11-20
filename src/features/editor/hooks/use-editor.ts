@@ -7,7 +7,6 @@ import { Table } from '@tiptap/extension-table'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
-import TaskList from '@tiptap/extension-task-list'
 import Youtube from '@tiptap/extension-youtube'
 import { CharacterCount } from '@tiptap/extensions'
 import { Markdown } from '@tiptap/markdown'
@@ -26,6 +25,7 @@ import { HighlightMark } from '../extensions/highlight-mark'
 import { ImageNode } from '../extensions/image-node'
 import { SlashCommand } from '../extensions/slash-command'
 import { TaskItemNode } from '../extensions/task-item-node'
+import { TaskListNode } from '../extensions/task-list-node'
 import { ColorExtension, TextStyleMark } from '../extensions/text-style-mark'
 
 interface UseBlogEditorProps {
@@ -150,11 +150,7 @@ export function useEditor({
           gfm: true,
         },
       }),
-      TaskList.configure({
-        HTMLAttributes: {
-          class: 'list-none p-0 m-0',
-        },
-      }),
+      TaskListNode,
       TaskItemNode.configure({
         nested: false,
       }),

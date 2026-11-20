@@ -92,14 +92,15 @@ export async function BlogPostContent({
         </div>
 
         {post.coverImage && (
-          <div className="relative aspect-video sm:aspect-21/9 w-full overflow-hidden rounded-2xl border border-border shadow-md mt-2">
+          <div className="mt-2 w-full overflow-hidden rounded-2xl border border-border shadow-md">
             <Image
               src={post.coverImage}
               alt={post.title}
-              fill
+              width={1200}
+              height={630}
               priority
               sizes="(max-width: 1200px) 100vw, 1200px"
-              className="object-cover"
+              className="h-auto w-full"
             />
           </div>
         )}
