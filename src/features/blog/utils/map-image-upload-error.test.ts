@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { mapActionFailure, mapThrownError } from './map-image-upload-error'
+import { mapThrownError } from './map-image-upload-error'
 
 const online = { isOnline: true }
 
@@ -45,43 +45,5 @@ describe('mapThrownError', () => {
     })
     expect(mapThrownError(undefined, online)).toEqual({ reason: 'UNKNOWN_ERROR' })
     expect(mapThrownError(42, online)).toEqual({ reason: 'UNKNOWN_ERROR' })
-  })
-})
-
-describe('mapActionFailure', () => {
-  test('maps a missing session to UNAUTHORIZED', () => {
-    expect(
-      mapActionFailure({
-        serverError: {
-          title: 'SESSION_REVOKED',
-          description: 'Your session is invalid or expired.',
-        },
-      }),
-    ).toEqual({ reason: 'UNAUTHORIZED' })
-  })
-
-  test('maps a banned account to FORBIDDEN', () => {
-    expect(
-      mapActionFailure({
-        serverError: { title: 'SESSION_REVOKED', description: 'Your account has been suspended.' },
-      }),
-    ).toEqual({ reason: 'FORBIDDEN' })
-  })
-
-  test('maps insufficient permissions to FORBIDDEN', () => {
-    expect(mapActionFailure({ serverError: { title: 'Insufficient Permissions' } })).toEqual({
-      reason: 'FORBIDDEN',
-    })
-  })
-
-  test('maps unknown server errors and validation errors to UNKNOWN_ERROR', () => {
-    expect(
-      mapActionFailure({
-        serverError: { title: 'Something went wrong while executing the operation.' },
-      }),
-    ).toEqual({ reason: 'UNKNOWN_ERROR' })
-    expect(mapActionFailure({ validationErrors: { formErrors: ['bad'] } })).toEqual({
-      reason: 'UNKNOWN_ERROR',
-    })
   })
 })

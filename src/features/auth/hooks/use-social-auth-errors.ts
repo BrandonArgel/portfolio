@@ -1,22 +1,32 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { sileo } from 'sileo'
+import { translateErrorReason } from '@/hooks/use-domain-error-toast'
+import { assertNever } from '@/utils/result'
+import type { SocialAuthError } from '../types/errors'
 
-export function useSocialErrors() {
-  const t = useTranslations('features.auth.social')
+export function useSocialAuthErrors() {
+  const t = useTranslations('features.auth.social.errors')
   const tGlobal = useTranslations('common.errors')
 
-  const getSocialErrorMessage = (errorCode?: string) => {
-    switch (errorCode) {
+  const handleSocialAuthError = (err: SocialAuthError) => {
+    switch (err.reason) {
       case 'OAUTH_CALLBACK_ERROR':
       case 'ACCESS_DENIED':
-        return t('access_denied')
       case 'OAUTH_CREATE_USER_ERROR':
-        return t('create_error')
+        sileo.error(translateErrorReason(t, err.reason))
+        return
+      case 'UNKNOWN_ERROR':
+        sileo.error({
+          title: tGlobal('unknown_title'),
+          description: tGlobal('unknown_description'),
+        })
+        return
       default:
-        return tGlobal('unknown_description')
+        return assertNever(err)
     }
   }
 
-  return { getSocialErrorMessage }
+  return { handleSocialAuthError }
 }

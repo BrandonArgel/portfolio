@@ -2,7 +2,6 @@
 
 import { Settings2, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useAction } from 'next-safe-action/hooks'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { sileo } from 'sileo'
 import { Button } from '@/components/ui/button'
@@ -20,7 +19,14 @@ import { useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import { generateSlug } from '@/utils/string-utils'
 import { useImageUpload } from '../hooks/use-image-upload'
-import { type BlogFrontmatter, defaultFrontmatter } from '../schemas/post.schema'
+import { usePostErrors } from '../hooks/use-post-errors'
+import {
+  type BlogFrontmatter,
+  defaultFrontmatter,
+  type SavePostInput,
+  validateSavePostInput,
+} from '../schemas/post-schema'
+import type { SavePostResult } from '../services/posts-mutation-service'
 import { blogDraftsActions, useBlogDraftsStore } from '../store/use-blog-drafts-store'
 import { BlogPostPreview } from './blog-post-preview'
 import { EditorHeader } from './editor-header'
@@ -54,9 +60,13 @@ export function BlogComposer({
   const router = useRouter()
   const isMobile = useIsMobile()
   const metadataPanelRef = usePanelRef()
+  const { handlePostError } = usePostErrors()
 
   const draftId = initialId || 'new'
   const [postId, setPostId] = useState<string | undefined>(initialId)
+  const [isSaving, setIsSaving] = useState(false)
+  const [isAutoSaving, setIsAutoSaving] = useState(false)
+  const [isDiscardingDraft, setIsDiscardingDraft] = useState(false)
   const [isMetadataSheetOpen, setIsMetadataSheetOpen] = useState(false)
   const [isRightPanelCollapsed, setIsRightPanelCollapsed] = useState(false)
   const [isPreviewMode, setIsPreviewMode] = useState(false)
@@ -67,6 +77,10 @@ export function BlogComposer({
     lastEditorName,
   )
   const [editorResetKey, setEditorResetKey] = useState(0)
+
+  const currentRouteSlugRef = useRef<string | undefined>(
+    initialId ? initialFrontmatter?.slug : undefined,
+  )
 
   const isHydrated = useStoreHydration(useBlogDraftsStore)
   const draft = useBlogDraftsStore((state) => state.drafts[draftId])
@@ -86,77 +100,110 @@ export function BlogComposer({
     blogDraftsActions.clearDraft(draftId)
   }, [draftId])
 
-  // Manual Publish / Update / Unpublish Action
-  const { execute: executeSave, isExecuting: isSaving } = useAction(savePostAction, {
-    onSuccess: (res) => {
-      if (!res.data?.success) {
-        return
-      }
+  const openMetadataInspector = useCallback(() => {
+    if (isMobile) {
+      setIsMetadataSheetOpen(true)
+    } else if (metadataPanelRef.current?.isCollapsed()) {
+      metadataPanelRef.current.expand()
+    }
+  }, [isMobile, metadataPanelRef])
 
-      setPostId(res.data.postId)
-      setServerUpdatedAt(res.data.updatedAt)
-      setServerLastEditor(res.data.lastEditorName)
+  const syncSavedPostResult = useCallback(
+    (result: SavePostResult, currentFrontmatter: BlogFrontmatter, isManualSave: boolean) => {
+      setPostId(result.post.id)
+      setServerUpdatedAt(result.updatedAt)
+      setServerLastEditor(result.lastEditorName)
 
       const updatedFrontmatter: BlogFrontmatter = {
-        ...frontmatter,
-        published: res.data.published,
-        draft: res.data.draft,
+        ...currentFrontmatter,
+        title: result.post.title,
+        slug: result.post.slug,
+        published: result.published,
+        draft: result.draft,
       }
       blogDraftsActions.setFrontmatter(draftId, updatedFrontmatter)
       lastSyncedTimestampRef.current = Date.now()
 
-      sileo.success({
-        title: postId ? t('notifications.post_updated') : t('notifications.post_created'),
-      })
+      const routeSlug = currentRouteSlugRef.current
+      const didRouteSlugChange =
+        result.slugChanged || (Boolean(routeSlug) && result.post.slug !== routeSlug)
 
-      if (!initialId && res.data.slug) {
+      if (!initialId && !routeSlug && isManualSave) {
         clearDraft()
-        router.push(`/dashboard/posts/${res.data.slug}/edit`)
+        currentRouteSlugRef.current = result.post.slug
+        router.replace(`/dashboard/posts/${result.post.slug}/edit`)
+        return
+      }
+
+      if (didRouteSlugChange) {
+        currentRouteSlugRef.current = result.post.slug
+        router.replace(`/dashboard/posts/${result.post.slug}/edit`)
       }
     },
-    onError: ({ error }) => {
-      sileo.error({
-        title: t('notifications.save_error'),
-        description: error.serverError?.description,
-      })
-    },
-  })
+    [clearDraft, draftId, initialId, router],
+  )
 
-  // Silent 15-second DB Auto-Save Action
-  const { execute: executeAutoSave, isExecuting: isAutoSaving } = useAction(savePostAction, {
-    onSuccess: (res) => {
-      if (!res.data?.success) return
-      setPostId(res.data.postId)
-      setServerUpdatedAt(res.data.updatedAt)
-      setServerLastEditor(res.data.lastEditorName)
-    },
-  })
-
-  // Discard Unpublished Draft Changes Action
-  const { execute: executeDiscardDraft, isExecuting: isDiscardingDraft } = useAction(
-    discardDraftChangesAction,
-    {
-      onSuccess: (res) => {
-        if (!res.data?.success) return
-        const restoredFrontmatter: BlogFrontmatter = {
-          ...frontmatter,
-          published: res.data.published,
-          draft: false,
+  const executeSave = useCallback(
+    async (input: SavePostInput) => {
+      const [validationErr, validatedInput] = validateSavePostInput(input)
+      if (validationErr) {
+        handlePostError(validationErr)
+        if (
+          validationErr.reason === 'TITLE_REQUIRED' ||
+          validationErr.reason === 'SLUG_REQUIRED' ||
+          validationErr.reason === 'INVALID_SLUG_FORMAT'
+        ) {
+          openMetadataInspector()
         }
-        blogDraftsActions.resetDraft(draftId, restoredFrontmatter, res.data.content)
-        lastSyncedTimestampRef.current = Date.now()
-        setServerUpdatedAt(res.data.updatedAt)
-        setServerLastEditor(res.data.lastEditorName)
-        setEditorResetKey((prev) => prev + 1)
-        sileo.success({ title: t('notifications.draft_discarded') })
-      },
-      onError: ({ error }) => {
-        sileo.error({
-          title: t('notifications.save_error'),
-          description: error.serverError?.description,
+        return
+      }
+
+      const hadPostId = Boolean(postId)
+      setIsSaving(true)
+
+      try {
+        const [saveErr, result] = await savePostAction(validatedInput)
+        if (saveErr) {
+          handlePostError(saveErr)
+          if (
+            saveErr.reason === 'DUPLICATE_POST_SLUG' ||
+            saveErr.reason === 'TITLE_REQUIRED' ||
+            saveErr.reason === 'SLUG_REQUIRED' ||
+            saveErr.reason === 'INVALID_SLUG_FORMAT'
+          ) {
+            openMetadataInspector()
+          }
+          return
+        }
+
+        sileo.success({
+          title: hadPostId ? t('notifications.post_updated') : t('notifications.post_created'),
         })
-      },
+
+        syncSavedPostResult(result, frontmatter, true)
+      } finally {
+        setIsSaving(false)
+      }
     },
+    [frontmatter, handlePostError, openMetadataInspector, postId, syncSavedPostResult, t],
+  )
+
+  const executeAutoSave = useCallback(
+    async (input: SavePostInput) => {
+      const [validationErr, validatedInput] = validateSavePostInput(input)
+      if (validationErr) return
+
+      setIsAutoSaving(true)
+      try {
+        const [saveErr, result] = await savePostAction(validatedInput)
+        if (saveErr) return
+
+        syncSavedPostResult(result, frontmatter, false)
+      } finally {
+        setIsAutoSaving(false)
+      }
+    },
+    [frontmatter, syncSavedPostResult],
   )
 
   // 15-Second Auto-Save Timer for in-progress draft edits
@@ -168,7 +215,7 @@ export function BlogComposer({
 
     const timer = window.setTimeout(() => {
       lastSyncedTimestampRef.current = lastSaved
-      executeAutoSave({
+      void executeAutoSave({
         id: postId,
         title: frontmatter.title,
         slug: frontmatter.slug,
@@ -187,14 +234,6 @@ export function BlogComposer({
     return () => window.clearTimeout(timer)
   }, [content, draft?.lastSaved, executeAutoSave, frontmatter, postId])
 
-  const openMetadataInspector = useCallback(() => {
-    if (isMobile) {
-      setIsMetadataSheetOpen(true)
-    } else if (metadataPanelRef.current?.isCollapsed()) {
-      metadataPanelRef.current.expand()
-    }
-  }, [isMobile, metadataPanelRef])
-
   const handleToggleMetadata = useCallback(() => {
     if (isMobile) {
       setIsMetadataSheetOpen((prev) => !prev)
@@ -212,13 +251,7 @@ export function BlogComposer({
   }, [isMobile, metadataPanelRef])
 
   const handlePublish = useCallback(() => {
-    if (!frontmatter.title.trim() || !frontmatter.slug.trim()) {
-      sileo.error({ title: t('notifications.title_slug_required') })
-      openMetadataInspector()
-      return
-    }
-
-    executeSave({
+    void executeSave({
       id: postId,
       title: frontmatter.title,
       slug: frontmatter.slug,
@@ -232,7 +265,7 @@ export function BlogComposer({
       content,
       coverImage: frontmatter.coverImage || null,
     })
-  }, [content, executeSave, frontmatter, openMetadataInspector, postId, t])
+  }, [content, executeSave, frontmatter, postId])
 
   const handleTogglePublish = useCallback(
     (nextPublished: boolean) => {
@@ -245,12 +278,7 @@ export function BlogComposer({
         return
       }
 
-      if (!frontmatter.title.trim() || !frontmatter.slug.trim()) {
-        sileo.error({ title: t('notifications.title_slug_required') })
-        return
-      }
-
-      executeSave({
+      void executeSave({
         id: postId,
         title: frontmatter.title,
         slug: frontmatter.slug,
@@ -265,13 +293,35 @@ export function BlogComposer({
         coverImage: frontmatter.coverImage || null,
       })
     },
-    [content, draftId, executeSave, frontmatter, postId, t],
+    [content, draftId, executeSave, frontmatter, postId],
   )
 
-  const handleDiscardDraft = useCallback(() => {
+  const handleDiscardDraft = useCallback(async () => {
     if (!postId) return
-    executeDiscardDraft({ postId })
-  }, [executeDiscardDraft, postId])
+
+    setIsDiscardingDraft(true)
+    try {
+      const [discardErr, result] = await discardDraftChangesAction({ postId })
+      if (discardErr) {
+        handlePostError(discardErr)
+        return
+      }
+
+      const restoredFrontmatter: BlogFrontmatter = {
+        ...frontmatter,
+        published: result.published,
+        draft: false,
+      }
+      blogDraftsActions.resetDraft(draftId, restoredFrontmatter, result.content)
+      lastSyncedTimestampRef.current = Date.now()
+      setServerUpdatedAt(result.updatedAt)
+      setServerLastEditor(result.lastEditorName)
+      setEditorResetKey((prev) => prev + 1)
+      sileo.success({ title: t('notifications.draft_discarded') })
+    } finally {
+      setIsDiscardingDraft(false)
+    }
+  }, [draftId, frontmatter, handlePostError, postId, t])
 
   const { upload: uploadInlineImage } = useImageUpload({ context: 'inline' })
 
@@ -304,17 +354,22 @@ export function BlogComposer({
 
   const handleTitleChange = useCallback(
     (newTitle: string) => {
-      const currentGeneratedSlug = generateSlug(frontmatter.title)
-      const shouldUpdateSlug = !frontmatter.slug || frontmatter.slug === currentGeneratedSlug
+      const currentGeneratedSlug = generateSlug(frontmatter.title).replace(/^-+|-+$/g, '')
+      // Once a post has been created in the DB (`Boolean(postId)`), typing in the Header Title input
+      // ONLY updates `title` and never silently mutates `slug`.
+      const shouldAutoSyncSlug =
+        !postId && (!frontmatter.slug || frontmatter.slug === currentGeneratedSlug)
 
       handleFrontmatterChange({
         ...frontmatter,
         title: newTitle,
-        slug: shouldUpdateSlug ? generateSlug(newTitle) : frontmatter.slug,
+        slug: shouldAutoSyncSlug
+          ? generateSlug(newTitle).replace(/^-+|-+$/g, '')
+          : frontmatter.slug,
         draft: true,
       })
     },
-    [frontmatter, handleFrontmatterChange],
+    [frontmatter, handleFrontmatterChange, postId],
   )
 
   const handleTogglePreview = useCallback(() => {
@@ -324,11 +379,15 @@ export function BlogComposer({
   const editorDisplayName =
     serverLastEditor || authorName || currentUserName || t('header.default_author')
   const lastUpdatedAt = draft?.lastSaved || serverUpdatedAt || null
+  const isExistingPost = Boolean(postId)
 
   // Mobile Layout (< 768px): Full-width editor + Slide-over Sheet
   if (isMobile) {
     return (
-      <div className="h-[calc(100dvh-3.5rem)] w-full flex flex-col overflow-hidden">
+      <div
+        data-slot="blog-composer"
+        className="flex-1 min-h-0 w-full flex flex-col overflow-hidden"
+      >
         <EditorHeader
           title={frontmatter.title}
           onTitleChange={handleTitleChange}
@@ -345,8 +404,13 @@ export function BlogComposer({
           onToggleMetadata={handleToggleMetadata}
         />
 
-        <div className="flex-1 min-h-0 w-full p-3 flex justify-center overflow-hidden">
-          <div className={cn('h-full w-full flex justify-center', isPreviewMode && 'hidden')}>
+        <div className="flex-1 min-h-0 w-full p-3 flex flex-col overflow-hidden">
+          <div
+            className={cn(
+              'flex-1 min-h-0 w-full flex justify-center overflow-hidden',
+              isPreviewMode && 'hidden',
+            )}
+          >
             <Editor
               key={`${draftId}-${editorResetKey}`}
               draftId={draftId}
@@ -371,6 +435,7 @@ export function BlogComposer({
           data={frontmatter}
           onChange={handleFrontmatterChange}
           existingCategories={existingCategories}
+          isExistingPost={isExistingPost}
           onTogglePublish={handleTogglePublish}
           onDiscardDraft={postId ? handleDiscardDraft : undefined}
           isDiscardingDraft={isDiscardingDraft}
@@ -381,13 +446,13 @@ export function BlogComposer({
 
   // Tablet & Desktop Layout (>= 768px): Split Resizable Studio Layout
   return (
-    <div className="h-dvh w-full overflow-hidden">
-      <ResizablePanelGroup direction="horizontal" className="h-full w-full">
+    <div data-slot="blog-composer" className="flex-1 min-h-0 w-full flex flex-col overflow-hidden">
+      <ResizablePanelGroup direction="horizontal" className="flex-1 min-h-0 w-full overflow-hidden">
         {/* Left Panel: Main Editor Area */}
         <ResizablePanel
           defaultSize={72}
           minSize={50}
-          className="flex h-full flex-col overflow-hidden"
+          className="flex h-full min-h-0 flex-col overflow-hidden"
         >
           <EditorHeader
             title={frontmatter.title}
@@ -405,8 +470,13 @@ export function BlogComposer({
             onToggleMetadata={handleToggleMetadata}
           />
 
-          <div className="flex-1 min-h-0 w-full p-4 flex justify-center overflow-hidden">
-            <div className={cn('h-full w-full flex justify-center', isPreviewMode && 'hidden')}>
+          <div className="flex-1 min-h-0 w-full p-4 flex flex-col overflow-hidden">
+            <div
+              className={cn(
+                'flex-1 min-h-0 w-full flex justify-center overflow-hidden',
+                isPreviewMode && 'hidden',
+              )}
+            >
               <Editor
                 key={`${draftId}-${editorResetKey}`}
                 draftId={draftId}
@@ -439,9 +509,9 @@ export function BlogComposer({
           onResize={(panelSize) => {
             setIsRightPanelCollapsed(panelSize.asPercentage === 0)
           }}
-          className="h-full overflow-hidden"
+          className="h-full min-h-0 overflow-hidden"
         >
-          <aside className="flex h-full w-full flex-col bg-secondary-background/50 overflow-hidden">
+          <aside className="flex h-full min-h-0 w-full flex-col bg-secondary-background/50 overflow-hidden">
             <div className="bg-secondary-background px-5 py-3.5 border-b border-border flex items-center justify-between gap-2 shrink-0">
               <div className="flex items-center gap-2 min-w-0">
                 <Settings2 className="size-4 text-muted-foreground shrink-0" />
@@ -471,6 +541,7 @@ export function BlogComposer({
                 data={frontmatter}
                 onChange={handleFrontmatterChange}
                 existingCategories={existingCategories}
+                isExistingPost={isExistingPost}
                 onTogglePublish={handleTogglePublish}
                 onDiscardDraft={postId ? handleDiscardDraft : undefined}
                 isDiscardingDraft={isDiscardingDraft}

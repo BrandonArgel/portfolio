@@ -9,8 +9,9 @@ import { ActionButton } from '@/components/ui/action-button'
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Textarea } from '@/components/ui/textarea'
 import { ControlledInput } from '@/features/auth/components/controlled-input'
-import { sendContactMessageAction } from '@/features/contact/actions/contact.action'
-import { type ContactMessageForm, contactMessageSchema } from '../schemas/contact.schema'
+import { sendContactMessageAction } from '@/features/contact/actions/contact-action'
+import { useContactErrors } from '../hooks/use-contact-errors'
+import { type ContactMessageForm, contactMessageSchema } from '../schemas/contact-schema'
 
 interface ContactFormProps {
   className?: string
@@ -18,6 +19,7 @@ interface ContactFormProps {
 
 export function ContactForm({ className }: ContactFormProps) {
   const t = useTranslations('features.contact')
+  const { handleContactError } = useContactErrors()
 
   const {
     control,
@@ -36,30 +38,20 @@ export function ContactForm({ className }: ContactFormProps) {
 
   async function handleSendMessage(data: ContactMessageForm) {
     try {
-      const result = await sendContactMessageAction(data)
+      const [err] = await sendContactMessageAction(data)
 
-      if (result?.data?.success) {
-        sileo.success({
-          title: t('notifications.success_title'),
-          description: t('notifications.success_description'),
-        })
-        reset()
-      } else {
-        const errorInfo = result?.serverError
-        sileo.error({
-          title:
-            (typeof errorInfo === 'object' ? errorInfo?.title : errorInfo) ||
-            t('notifications.error_title'),
-          description:
-            (typeof errorInfo === 'object' ? errorInfo?.description : undefined) ||
-            t('notifications.error_description'),
-        })
+      if (err) {
+        handleContactError(err)
+        return
       }
-    } catch (_error) {
-      sileo.error({
-        title: t('notifications.error_title'),
-        description: t('notifications.error_description'),
+
+      sileo.success({
+        title: t('notifications.success_title'),
+        description: t('notifications.success_description'),
       })
+      reset()
+    } catch {
+      handleContactError({ reason: 'UNKNOWN_ERROR' })
     }
   }
 

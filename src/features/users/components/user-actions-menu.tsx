@@ -2,8 +2,7 @@
 
 import { Ban, Copy, MoreHorizontal, UserCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useAction } from 'next-safe-action/hooks'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { sileo } from 'sileo'
 import { Button } from '@/components/ui/button'
 import {
@@ -14,8 +13,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Spinner } from '@/components/ui/spinner'
-import { unbanUserAction } from '@/features/users/actions/users.action'
-import { checkAndHandleSessionRevoked } from '@/lib/auth-interceptor'
+import { unbanUserAction } from '@/features/users/actions/users-action'
+import { useUserErrors } from '../hooks/use-user-errors'
 import { BanUserDialog } from './ban-user-dialog'
 
 interface UserActionsMenuProps {
@@ -34,25 +33,9 @@ export function UserActionsMenu({
   isSelf,
 }: UserActionsMenuProps) {
   const t = useTranslations('features.users.management')
+  const { handleUserError } = useUserErrors()
   const [banDialogOpen, setBanDialogOpen] = useState(false)
-
-  const { execute: executeUnban, isExecuting: isUnbanning } = useAction(unbanUserAction, {
-    onSuccess: (res) => {
-      if (res.data?.success) {
-        sileo.success({
-          title: t('user_unbanned_success'),
-          description: userName || userEmail,
-        })
-      }
-    },
-    onError: ({ error }) => {
-      if (checkAndHandleSessionRevoked(error)) return
-      sileo.error({
-        title: error.serverError?.title || 'Error',
-        description: error.serverError?.description,
-      })
-    },
-  })
+  const [isUnbanning, startUnbanTransition] = useTransition()
 
   const handleCopyId = async () => {
     try {
@@ -63,14 +46,25 @@ export function UserActionsMenu({
       })
     } catch {
       sileo.error({
-        title: 'Error copying ID',
+        title: t('copy_id_error'),
       })
     }
   }
 
   const handleUnban = () => {
     if (isSelf || isUnbanning) return
-    executeUnban({ userId })
+    startUnbanTransition(async () => {
+      const [err] = await unbanUserAction({ userId })
+      if (err) {
+        handleUserError(err)
+        return
+      }
+
+      sileo.success({
+        title: t('user_unbanned_success'),
+        description: userName || userEmail,
+      })
+    })
   }
 
   return (

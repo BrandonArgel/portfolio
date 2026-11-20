@@ -1,14 +1,14 @@
-import { count, eq } from 'drizzle-orm'
 import { FileText, PlusCircle, ShieldCheck, Users } from 'lucide-react'
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { getTranslations } from 'next-intl/server'
+import { DashboardErrorState } from '@/components/shared/dashboard-error-state'
 import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { db } from '@/db'
-import { posts, users } from '@/db/schema'
+import { getDashboardStats } from '@/features/shared/services/dashboard-stats-service'
 import { auth } from '@/lib/auth/auth'
+import { assertNever } from '@/utils/result'
 
 interface DashboardPageProps {
   params: Promise<{ locale: string }>
@@ -32,19 +32,27 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
   const t = await getTranslations({ locale, namespace: 'features.dashboard' })
   const isAdmin = session?.user.role === 'admin'
 
-  const [totalPostsResult] = await db.select({ value: count() }).from(posts)
-  const [publishedPostsResult] = await db
-    .select({ value: count() })
-    .from(posts)
-    .where(eq(posts.published, true))
-  const [totalUsersResult] = isAdmin
-    ? await db.select({ value: count() }).from(users)
-    : [{ value: 0 }]
+  const [statsErr, stats] = await getDashboardStats(isAdmin)
 
-  const totalPosts = totalPostsResult?.value ?? 0
-  const publishedPosts = publishedPostsResult?.value ?? 0
-  const draftPosts = totalPosts - publishedPosts
-  const totalUsers = totalUsersResult?.value ?? 0
+  if (statsErr || !stats) {
+    if (statsErr) {
+      switch (statsErr.reason) {
+        case 'DATABASE_ERROR':
+          break
+        default:
+          return assertNever(statsErr.reason)
+      }
+    }
+
+    return (
+      <DashboardErrorState
+        title={t('error_loading')}
+        description={t('error_loading_description')}
+      />
+    )
+  }
+
+  const { totalPosts, publishedPosts, draftPosts, totalUsers } = stats
 
   return (
     <div className="space-y-4 p-4">

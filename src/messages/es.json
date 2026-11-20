@@ -21,6 +21,14 @@
       "unexpected_title": "Error inesperado",
       "unexpected_description": "Ocurrió un error inesperado. Por favor, intenta de nuevo."
     },
+    "not_found": {
+      "badge": "Error 404",
+      "title": "Página no encontrada",
+      "description": "Lo sentimos, la página que buscas no existe, fue movida o ya no está disponible.",
+      "back_home": "Volver al Inicio",
+      "browse_blog": "Explorar el Blog",
+      "contact": "Contáctame"
+    },
     "labels": {
       "email": "Correo electrónico",
       "password": "Contraseña",
@@ -231,8 +239,20 @@
     "auth": {
       "last_used": "Usado previamente",
       "social": {
-        "access_denied": "Acceso denegado",
-        "create_error": "Error al crear cuenta"
+        "errors": {
+          "OAUTH_CALLBACK_ERROR": {
+            "title": "Error en la autenticación",
+            "description": "No se pudo completar el inicio de sesión con el proveedor. Inténtalo de nuevo."
+          },
+          "ACCESS_DENIED": {
+            "title": "Acceso denegado",
+            "description": "La autenticación fue cancelada o rechazada por el proveedor."
+          },
+          "OAUTH_CREATE_USER_ERROR": {
+            "title": "No se pudo crear la cuenta",
+            "description": "No fue posible registrar tu cuenta con este proveedor."
+          }
+        }
       },
       "login": {
         "title": "Iniciar Sesión",
@@ -404,7 +424,38 @@
             "deleted": "Comentario eliminado",
             "empty_error": "Por favor escribe un comentario antes de enviar.",
             "error": "No se pudo completar tu solicitud. Inténtalo de nuevo."
-          }
+          },
+          "errors": {
+            "POST_NOT_FOUND": {
+              "title": "Artículo no encontrado",
+              "description": "El artículo en el que intentas comentar ya no está disponible."
+            },
+            "PARENT_COMMENT_NOT_FOUND": {
+              "title": "Comentario no disponible",
+              "description": "El comentario al que estás respondiendo ya no existe."
+            },
+            "COMMENT_NOT_FOUND": {
+              "title": "Comentario no encontrado",
+              "description": "Este comentario ya no existe."
+            },
+            "UNAUTHORIZED": {
+              "title": "Inicia sesión",
+              "description": "Debes iniciar sesión para participar en los comentarios."
+            },
+            "FORBIDDEN": {
+              "title": "Permiso denegado",
+              "description": "No tienes permiso para modificar este comentario."
+            },
+            "VALIDATION_ERROR": {
+              "title": "Comentario inválido",
+              "description": "Revisa el contenido de tu comentario e inténtalo de nuevo."
+            },
+            "DATABASE_ERROR": {
+              "title": "Error al guardar",
+              "description": "Ocurrió un error de base de datos al procesar tu comentario."
+            }
+          },
+          "error_loading": "No se pudieron cargar los comentarios en este momento. Recarga la página para intentarlo de nuevo."
         }
       },
       "management": {
@@ -441,7 +492,65 @@
         "prev_page": "Anterior",
         "next_page": "Siguiente",
         "dashboard": "Panel",
-        "filter_all": "Todos"
+        "filter_all": "Todos",
+        "error_loading": "No se pudieron cargar los artículos",
+        "error_loading_description": "Ocurrió un error en la base de datos al cargar los artículos. Inténtalo de nuevo."
+      },
+      "posts": {
+        "errors": {
+          "VALIDATION_ERROR": {
+            "title": "Error de validación",
+            "description": "Revisa los detalles del artículo e inténtalo de nuevo."
+          },
+          "TITLE_REQUIRED": {
+            "title": "Título obligatorio",
+            "description": "Ingresa un título para tu artículo."
+          },
+          "SLUG_REQUIRED": {
+            "title": "Slug de URL obligatorio",
+            "description": "Proporciona un slug de URL para tu artículo."
+          },
+          "INVALID_SLUG_FORMAT": {
+            "title": "Slug de URL inválido",
+            "description": "El slug solo puede contener letras minúsculas, números y guiones simples."
+          },
+          "CONTENT_REQUIRED": {
+            "title": "Contenido obligatorio",
+            "description": "Escribe contenido en el artículo antes de publicarlo."
+          },
+          "DUPLICATE_POST_SLUG": {
+            "title": "Slug de URL duplicado",
+            "description": "Ya existe un artículo con el slug \"/{slug}\" en este idioma."
+          },
+          "DUPLICATE_POST_TITLE": {
+            "title": "Título duplicado",
+            "description": "Ya existe un artículo titulado \"{title}\"."
+          },
+          "POST_NOT_FOUND": {
+            "title": "Artículo no encontrado",
+            "description": "El artículo que intentas modificar ya no existe."
+          },
+          "NO_DRAFT_TO_DISCARD": {
+            "title": "Sin cambios en borrador",
+            "description": "No hay cambios sin publicar para descartar."
+          },
+          "UNAUTHORIZED": {
+            "title": "Autenticación requerida",
+            "description": "Inicia sesión nuevamente para gestionar artículos."
+          },
+          "FORBIDDEN": {
+            "title": "Acceso denegado",
+            "description": "No tienes permiso para modificar este artículo."
+          },
+          "DATABASE_ERROR": {
+            "title": "Error de base de datos",
+            "description": "No pudimos guardar tus cambios en este momento. Inténtalo de nuevo."
+          },
+          "UNKNOWN_ERROR": {
+            "title": "Error inesperado",
+            "description": "Ocurrió un error inesperado al procesar el artículo."
+          }
+        }
       },
       "categories": {
         "title": "Categorías",
@@ -551,7 +660,9 @@
             "title": "Error de base de datos",
             "description": "No se pudo completar la operación. Inténtalo de nuevo."
           }
-        }
+        },
+        "error_loading": "No se pudieron cargar las categorías",
+        "error_loading_description": "Ocurrió un error en la base de datos al cargar las categorías. Inténtalo de nuevo."
       },
       "editor": {
         "new_post": "Nuevo Artículo",
@@ -585,7 +696,9 @@
           "image_uploaded": "Imagen subida correctamente",
           "image_upload_error": "Error al subir la imagen",
           "cover_uploaded": "Imagen de portada actualizada con éxito"
-        }
+        },
+        "error_loading": "No se pudo cargar el editor",
+        "error_loading_description": "Ocurrió un error en la base de datos al cargar este artículo. Inténtalo de nuevo."
       },
       "composer": {
         "breadcrumb_dashboard": "Panel",
@@ -784,6 +897,20 @@
         "success_description": "¡Gracias por contactarme! Te responderé lo antes posible.",
         "error_title": "Error al Enviar Mensaje",
         "error_description": "Ocurrió un error al enviar tu mensaje. Por favor intenta de nuevo o envíame un correo directo."
+      },
+      "errors": {
+        "VALIDATION_ERROR": {
+          "title": "Formulario inválido",
+          "description": "Por favor revisa los campos de nombre, correo, asunto y mensaje."
+        },
+        "DELIVERY_FAILED": {
+          "title": "Error al enviar mensaje",
+          "description": "No pudimos entregar tu mensaje en este momento. Inténtalo más tarde."
+        },
+        "UNKNOWN_ERROR": {
+          "title": "Error inesperado",
+          "description": "Ocurrió un error inesperado al enviar tu mensaje."
+        }
       }
     },
     "dashboard": {
@@ -808,7 +935,9 @@
         "content_desc": "Crea y administra tus artículos en múltiples idiomas.",
         "access_title": "Acceso y Seguridad",
         "access_desc": "Administra roles (Admin, Editor, Usuario) y permisos de cuenta."
-      }
+      },
+      "error_loading": "No se pudo cargar el panel",
+      "error_loading_description": "Ocurrió un error de base de datos al obtener las estadísticas. Inténtalo de nuevo."
     },
     "editor": {
       "title": "Editor",
@@ -1124,12 +1253,44 @@
         "role_updated_title": "Rol actualizado",
         "role_updated_desc": "El rol de {name} ha sido actualizado a {role}",
         "role_update_error": "Error al actualizar el rol",
-        "no_users": "No hay usuarios registrados aún."
+        "no_users": "No hay usuarios registrados aún.",
+        "error_loading": "No se pudieron cargar los usuarios en este momento. Inténtalo de nuevo.",
+        "copy_id_error": "No se pudo copiar el ID al portapapeles."
       },
       "roles": {
         "admin": "Admin",
         "editor": "Editor",
         "user": "Usuario"
+      },
+      "errors": {
+        "USER_NOT_FOUND": {
+          "title": "Usuario no encontrado",
+          "description": "No se pudo encontrar al usuario solicitado."
+        },
+        "CANNOT_DEMOTE_SELF": {
+          "title": "Acción no permitida",
+          "description": "No puedes revocar tus propios privilegios de administrador."
+        },
+        "CANNOT_BAN_SELF": {
+          "title": "Acción no permitida",
+          "description": "No puedes suspender tu propia cuenta."
+        },
+        "UNAUTHORIZED": {
+          "title": "Sesión requerida",
+          "description": "Tu sesión ha expirado. Inicia sesión nuevamente."
+        },
+        "FORBIDDEN": {
+          "title": "Permisos insuficientes",
+          "description": "Solo los administradores pueden realizar esta acción."
+        },
+        "VALIDATION_ERROR": {
+          "title": "Datos inválidos",
+          "description": "Verifica los datos enviados e inténtalo de nuevo."
+        },
+        "DATABASE_ERROR": {
+          "title": "Error de base de datos",
+          "description": "No se pudieron guardar los cambios del usuario. Inténtalo más tarde."
+        }
       }
     }
   },

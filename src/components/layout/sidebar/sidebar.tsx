@@ -41,5 +41,3 @@ export function DashboardSidebar({
     </Sidebar>
   )
 }
-
-export { DashboardSidebar as Sidebar }

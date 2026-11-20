@@ -1,7 +1,7 @@
 import { UPLOAD_TIMEOUT_MS } from '@/config/image-upload'
 import { error, okay, type Result } from '@/utils/result'
 import type { ImageUploadError, UploadTransport } from '../types'
-import { mapActionFailure, mapThrownError } from '../utils/map-image-upload-error'
+import { mapThrownError } from '../utils/map-image-upload-error'
 import { prepareImageFile } from '../utils/prepare-image-file'
 import { validateImageFormat, validateImageSize } from '../utils/validate-image-file'
 
@@ -89,14 +89,10 @@ export async function uploadImageService(
     return error({ reason: 'UNKNOWN_ERROR' })
   }
 
-  if (response.data) {
-    const [actionError, uploaded] = response.data
-    if (actionError) {
-      return error(actionError)
-    }
-
-    return okay(uploaded.url)
+  const [actionError, uploaded] = response
+  if (actionError) {
+    return error(actionError)
   }
 
-  return error(mapActionFailure(response))
+  return okay(uploaded.url)
 }

@@ -259,10 +259,10 @@ export function DashboardResizableLayout({
       open={open}
       onOpenChange={handleOpenChange}
       openWithShortcut
-      className={cn(!isMobile && 'h-dvh overflow-hidden')}
+      className="h-dvh max-h-dvh min-h-0 flex flex-col overflow-hidden"
     >
       {!isMounted ? (
-        <div className="flex h-dvh w-full overflow-hidden">
+        <div className="flex flex-1 min-h-0 w-full overflow-hidden">
           <div
             className={cn(
               'hidden h-full shrink-0 overflow-hidden border-r border-sidebar-border md:block',
@@ -271,7 +271,7 @@ export function DashboardResizableLayout({
           >
             {sidebar}
           </div>
-          <SidebarInset className="h-full min-w-0 flex-1 overflow-y-auto">
+          <SidebarInset className="flex-1 min-h-0 min-w-0 overflow-y-auto has-data-[slot=blog-composer]:overflow-hidden">
             <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border/60 bg-background/95 px-4 backdrop-blur supports-backdrop-filter:bg-background/60 md:hidden">
               <SidebarTrigger />
             </header>
@@ -281,7 +281,7 @@ export function DashboardResizableLayout({
       ) : isMobile ? (
         <>
           {sidebar}
-          <SidebarInset>
+          <SidebarInset className="flex-1 min-h-0 min-w-0 overflow-y-auto has-data-[slot=blog-composer]:overflow-hidden">
             <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border/60 bg-background/95 px-4 backdrop-blur supports-backdrop-filter:bg-background/60 md:hidden">
               <SidebarTrigger />
             </header>
@@ -293,7 +293,7 @@ export function DashboardResizableLayout({
           direction="horizontal"
           onLayoutChanged={handleLayoutChanged}
           className={cn(
-            'h-dvh w-full overflow-hidden [&_[data-panel]#dashboard-sidebar-panel]:min-w-12!',
+            'flex-1 min-h-0 w-full overflow-hidden [&_[data-panel]#dashboard-sidebar-panel]:min-w-12!',
             isAnimatingToggle &&
               '[&_[data-panel]]:transition-[flex-grow] [&_[data-panel]]:duration-200 [&_[data-panel]]:ease-in-out',
           )}
@@ -308,7 +308,7 @@ export function DashboardResizableLayout({
             collapsedSize={SIDEBAR_COLLAPSED_SIZE}
             groupResizeBehavior="preserve-pixel-size"
             onResize={handleSidebarResize}
-            className="flex h-full w-full min-w-12 flex-col overflow-hidden"
+            className="flex h-full min-h-0 w-full min-w-12 flex-col overflow-hidden"
           >
             {sidebar}
           </ResizablePanel>
@@ -322,9 +322,9 @@ export function DashboardResizableLayout({
           <ResizablePanel
             id="dashboard-main-panel"
             minSize={MAIN_PANEL_MIN_SIZE}
-            className="flex h-full min-w-0 flex-1 flex-col overflow-hidden"
+            className="flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden"
           >
-            <SidebarInset className="h-full min-w-0 flex-1 overflow-y-auto">
+            <SidebarInset className="flex-1 min-h-0 min-w-0 overflow-y-auto has-data-[slot=blog-composer]:overflow-hidden">
               {children}
             </SidebarInset>
           </ResizablePanel>

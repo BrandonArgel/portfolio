@@ -5,6 +5,7 @@ import { siteConfig } from '@/config/site'
 import { getPublishedPostBySlug } from '@/features/blog/services/posts-service'
 import { OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH, truncateText } from '@/features/blog/utils/post-seo'
 import { LOCALES, type Locale, routing } from '@/i18n/routing'
+import { assertNever } from '@/utils/result'
 
 export const runtime = 'nodejs'
 
@@ -43,10 +44,19 @@ export async function GET(request: NextRequest) {
 
   const [err, post] = await getPublishedPostBySlug(slug, locale)
 
-  if (err || !post) {
-    return new Response('Post not found', {
-      status: err?.reason === 'DATABASE_ERROR' ? 500 : 404,
-    })
+  if (err) {
+    switch (err.reason) {
+      case 'POST_NOT_FOUND':
+        return new Response('Post not found', { status: 404 })
+      case 'DATABASE_ERROR':
+        return new Response('Internal server error', { status: 500 })
+      default:
+        return assertNever(err)
+    }
+  }
+
+  if (!post) {
+    return new Response('Post not found', { status: 404 })
   }
 
   const t = await getTranslations({ locale: post.locale, namespace: 'features.blog.og' })

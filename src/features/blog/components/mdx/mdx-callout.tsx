@@ -3,13 +3,13 @@ import type React from 'react'
 
 import { cn } from '@/lib/utils'
 
-export interface CalloutConfig {
+interface CalloutConfig {
   container: string
   icon: React.ReactNode
   defaultTitle: string
 }
 
-export const CALLOUT_STYLES: Record<string, CalloutConfig> = {
+const CALLOUT_STYLES: Record<string, CalloutConfig> = {
   tip: {
     container: 'border-callout-cyan bg-callout-cyan/10 text-callout-cyan-text',
     icon: <Flame className="size-5 shrink-0 text-callout-cyan" />,

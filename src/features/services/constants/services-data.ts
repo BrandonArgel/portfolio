@@ -1,7 +1,7 @@
 import { Cloud, Database, Globe, Layers, Server, Zap } from 'lucide-react'
 import type { ServiceCategoryTab, ServiceColor, ServiceDefinition } from '../types'
 
-export const COLOR_SEQUENCE: readonly ServiceColor[] = [
+const COLOR_SEQUENCE: readonly ServiceColor[] = [
   'blue',
   'purple',
   'emerald',

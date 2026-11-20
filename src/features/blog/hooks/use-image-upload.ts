@@ -2,13 +2,13 @@
 
 import { useCallback, useState } from 'react'
 import { track } from '@/lib/analytics/events'
-import { uploadImageAction } from '../actions/image.action'
+import { uploadImageAction } from '../actions/image-action'
 import { uploadImageService } from '../services/image-upload-service'
 import type { ImageUploadContext, UploadTransport } from '../types'
 import { useImageUploadErrors } from './use-image-upload-errors'
 
 /** Binds the transport abstraction to the real server action. */
-const uploadTransport: UploadTransport = (formData) => uploadImageAction({ formData })
+const uploadTransport: UploadTransport = (formData) => uploadImageAction(formData)
 
 export interface UseImageUploadOptions {
   /** Where the upload was started from (telemetry only). */

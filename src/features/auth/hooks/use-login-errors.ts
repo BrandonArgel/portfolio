@@ -2,6 +2,8 @@
 
 import { useTranslations } from 'next-intl'
 import { sileo } from 'sileo'
+import { translateErrorReason } from '@/hooks/use-domain-error-toast'
+import { assertNever } from '@/utils/result'
 import type { LoginError } from '../types/errors'
 
 export function useLoginErrors() {
@@ -9,41 +11,23 @@ export function useLoginErrors() {
   const tGlobal = useTranslations('common.errors')
 
   const handleLoginError = (error: LoginError) => {
-    const errorMessages = {
-      INVALID_CREDENTIALS: {
-        title: t('INVALID_CREDENTIALS.title'),
-        description: t('INVALID_CREDENTIALS.description'),
-      },
-      FORBIDDEN: {
-        title: t('FORBIDDEN.title'),
-        description: t('FORBIDDEN.description'),
-      },
-      UNVERIFIED_EMAIL: {
-        title: t('UNVERIFIED_EMAIL.title'),
-        description: t('UNVERIFIED_EMAIL.description'),
-      },
-      BANNED: {
-        title: t('BANNED.title'),
-        description: t('BANNED.description'),
-      },
-      RATE_LIMITED: {
-        title: t('RATE_LIMITED.title'),
-        description: t('RATE_LIMITED.description'),
-      },
-      UNKNOWN_ERROR: {
-        title: tGlobal('unknown_title'),
-        description: tGlobal('unknown_description'),
-      },
-    } satisfies Record<LoginError['reason'], { title: string; description: string }>
-
-    const defaultErrorMessage = {
-      title: tGlobal('unexpected_title'),
-      description: tGlobal('unexpected_description'),
+    switch (error.reason) {
+      case 'INVALID_CREDENTIALS':
+      case 'FORBIDDEN':
+      case 'UNVERIFIED_EMAIL':
+      case 'BANNED':
+      case 'RATE_LIMITED':
+        sileo.error(translateErrorReason(t, error.reason))
+        return
+      case 'UNKNOWN_ERROR':
+        sileo.error({
+          title: tGlobal('unknown_title'),
+          description: tGlobal('unknown_description'),
+        })
+        return
+      default:
+        return assertNever(error)
     }
-
-    const message = errorMessages[error.reason as keyof typeof errorMessages] || defaultErrorMessage
-
-    sileo.error(message)
   }
 
   return { handleLoginError }

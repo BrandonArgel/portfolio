@@ -44,7 +44,7 @@ export const TiptapEditor = memo(function TiptapEditor({
   if (!editor) return <EditorLoader text={t('loading')} />
 
   return (
-    <div className="relative h-full w-full max-w-4xl flex-1 bg-secondary-background rounded-xl border border-border overflow-hidden shadow-sm">
+    <div className="relative flex flex-col h-full min-h-0 w-full max-w-4xl flex-1 bg-secondary-background rounded-xl border border-border overflow-hidden shadow-sm">
       <DragHandle
         editor={editor}
         className="flex items-center justify-center size-5 mt-1 cursor-grab active:cursor-grabbing rounded-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors duration-150"
@@ -52,7 +52,10 @@ export const TiptapEditor = memo(function TiptapEditor({
         <GripVertical className="size-4" />
       </DragHandle>
       <EditorIndicators editor={editor} draftId={draftId} isSaving={isSaving} />
-      <EditorContent className="w-full h-full overflow-y-auto scroll-smooth" editor={editor} />
+      <EditorContent
+        className="w-full flex-1 min-h-0 overflow-y-auto scroll-smooth"
+        editor={editor}
+      />
       <BubbleMenu editor={editor} />
       <MathBubbleMenu editor={editor} />
       <EditorDialogs />

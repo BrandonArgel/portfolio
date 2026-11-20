@@ -21,6 +21,14 @@
       "unexpected_title": "Unexpected error",
       "unexpected_description": "An unexpected error occurred. Please try again."
     },
+    "not_found": {
+      "badge": "Error 404",
+      "title": "Page not found",
+      "description": "Sorry, the page you are looking for doesn't exist, was moved, or is no longer available.",
+      "back_home": "Back to Home",
+      "browse_blog": "Explore Blog",
+      "contact": "Contact Me"
+    },
     "labels": {
       "email": "Email",
       "password": "Password",
@@ -231,8 +239,20 @@
     "auth": {
       "last_used": "Last used",
       "social": {
-        "access_denied": "Social access denied",
-        "create_error": "Social create error"
+        "errors": {
+          "OAUTH_CALLBACK_ERROR": {
+            "title": "Authentication callback failed",
+            "description": "The sign-in callback could not be completed. Please try again."
+          },
+          "ACCESS_DENIED": {
+            "title": "Access denied",
+            "description": "Authentication was cancelled or denied by the provider."
+          },
+          "OAUTH_CREATE_USER_ERROR": {
+            "title": "Could not create account",
+            "description": "We were unable to create your account with this provider."
+          }
+        }
       },
       "login": {
         "title": "Sign In",
@@ -404,7 +424,38 @@
             "deleted": "Comment deleted",
             "empty_error": "Please enter a comment before submitting.",
             "error": "Could not complete your request. Please try again."
-          }
+          },
+          "errors": {
+            "POST_NOT_FOUND": {
+              "title": "Article not found",
+              "description": "The article you are trying to comment on is unavailable."
+            },
+            "PARENT_COMMENT_NOT_FOUND": {
+              "title": "Comment unavailable",
+              "description": "The comment you are replying to no longer exists."
+            },
+            "COMMENT_NOT_FOUND": {
+              "title": "Comment not found",
+              "description": "This comment no longer exists."
+            },
+            "UNAUTHORIZED": {
+              "title": "Sign in required",
+              "description": "Please sign in to participate in the discussion."
+            },
+            "FORBIDDEN": {
+              "title": "Permission denied",
+              "description": "You do not have permission to modify this comment."
+            },
+            "VALIDATION_ERROR": {
+              "title": "Invalid comment",
+              "description": "Please check your comment content and try again."
+            },
+            "DATABASE_ERROR": {
+              "title": "Could not save comment",
+              "description": "A database error occurred while processing your comment."
+            }
+          },
+          "error_loading": "Unable to load comments right now. Please refresh to try again."
         }
       },
       "management": {
@@ -441,7 +492,65 @@
         "prev_page": "Previous",
         "next_page": "Next",
         "dashboard": "Dashboard",
-        "filter_all": "All"
+        "filter_all": "All",
+        "error_loading": "Unable to load articles",
+        "error_loading_description": "A database error occurred while loading your articles. Please try again."
+      },
+      "posts": {
+        "errors": {
+          "VALIDATION_ERROR": {
+            "title": "Validation error",
+            "description": "Please review the article details and try again."
+          },
+          "TITLE_REQUIRED": {
+            "title": "Title required",
+            "description": "Please enter a title for your article."
+          },
+          "SLUG_REQUIRED": {
+            "title": "URL slug required",
+            "description": "Please provide a URL slug for your article."
+          },
+          "INVALID_SLUG_FORMAT": {
+            "title": "Invalid URL slug",
+            "description": "The slug must use lowercase letters, numbers, and single hyphens only."
+          },
+          "CONTENT_REQUIRED": {
+            "title": "Content required",
+            "description": "Write some content before publishing this article."
+          },
+          "DUPLICATE_POST_SLUG": {
+            "title": "Duplicate URL slug",
+            "description": "An article with the slug \"/{slug}\" already exists in this language."
+          },
+          "DUPLICATE_POST_TITLE": {
+            "title": "Duplicate article title",
+            "description": "An article titled \"{title}\" already exists."
+          },
+          "POST_NOT_FOUND": {
+            "title": "Article not found",
+            "description": "The article you are trying to modify no longer exists."
+          },
+          "NO_DRAFT_TO_DISCARD": {
+            "title": "No draft changes",
+            "description": "There are no unpublished draft changes to discard."
+          },
+          "UNAUTHORIZED": {
+            "title": "Authentication required",
+            "description": "Please sign in again to manage articles."
+          },
+          "FORBIDDEN": {
+            "title": "Access denied",
+            "description": "You do not have permission to modify this article."
+          },
+          "DATABASE_ERROR": {
+            "title": "Database error",
+            "description": "Could not save your changes right now. Please try again."
+          },
+          "UNKNOWN_ERROR": {
+            "title": "Unexpected error",
+            "description": "An unexpected error occurred while processing the article."
+          }
+        }
       },
       "categories": {
         "title": "Categories",
@@ -551,7 +660,9 @@
             "title": "Database error",
             "description": "Could not complete the category operation. Please try again."
           }
-        }
+        },
+        "error_loading": "Unable to load categories",
+        "error_loading_description": "A database error occurred while loading categories. Please try again."
       },
       "editor": {
         "new_post": "New Article",
@@ -585,7 +696,9 @@
           "image_uploaded": "Image uploaded successfully",
           "image_upload_error": "Failed to upload image",
           "cover_uploaded": "Cover image updated successfully"
-        }
+        },
+        "error_loading": "Unable to load editor",
+        "error_loading_description": "A database error occurred while loading this article. Please try again."
       },
       "composer": {
         "breadcrumb_dashboard": "Dashboard",
@@ -784,6 +897,20 @@
         "success_description": "Thank you for reaching out! I will get back to you as soon as possible.",
         "error_title": "Error Sending Message",
         "error_description": "Something went wrong while sending your message. Please try again or email me directly."
+      },
+      "errors": {
+        "VALIDATION_ERROR": {
+          "title": "Invalid form data",
+          "description": "Please check your name, email, subject, and message fields."
+        },
+        "DELIVERY_FAILED": {
+          "title": "Error sending message",
+          "description": "Your message could not be delivered right now. Please try again later."
+        },
+        "UNKNOWN_ERROR": {
+          "title": "Unexpected error",
+          "description": "An unexpected error occurred while sending your message."
+        }
       }
     },
     "dashboard": {
@@ -808,7 +935,9 @@
         "content_desc": "Create and manage your articles across multiple languages.",
         "access_title": "Access & Security",
         "access_desc": "Manage roles (Admin, Editor, User) and account permissions."
-      }
+      },
+      "error_loading": "Unable to load dashboard",
+      "error_loading_description": "A database error occurred while loading dashboard statistics. Please try again."
     },
     "editor": {
       "title": "Editor",
@@ -1124,12 +1253,44 @@
         "role_updated_title": "Role updated",
         "role_updated_desc": "Role for {name} updated to {role}",
         "role_update_error": "Failed to update role",
-        "no_users": "No users registered yet."
+        "no_users": "No users registered yet.",
+        "error_loading": "Unable to load users right now. Please try again.",
+        "copy_id_error": "Could not copy user ID to clipboard."
       },
       "roles": {
         "admin": "Admin",
         "editor": "Editor",
         "user": "User"
+      },
+      "errors": {
+        "USER_NOT_FOUND": {
+          "title": "User not found",
+          "description": "The requested user could not be found."
+        },
+        "CANNOT_DEMOTE_SELF": {
+          "title": "Action not allowed",
+          "description": "You cannot revoke your own administrator privileges."
+        },
+        "CANNOT_BAN_SELF": {
+          "title": "Action not allowed",
+          "description": "You cannot suspend your own account."
+        },
+        "UNAUTHORIZED": {
+          "title": "Authentication required",
+          "description": "Your session has expired. Please sign in again."
+        },
+        "FORBIDDEN": {
+          "title": "Insufficient permissions",
+          "description": "Only administrators can perform this action."
+        },
+        "VALIDATION_ERROR": {
+          "title": "Invalid input",
+          "description": "Please verify the submitted fields and try again."
+        },
+        "DATABASE_ERROR": {
+          "title": "Database error",
+          "description": "Unable to save user changes right now. Please try again."
+        }
       }
     }
   },

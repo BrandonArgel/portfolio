@@ -1,22 +1,43 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { useState } from 'react'
 import { ActionButton } from '@/components/ui/action-button'
 import { Badge } from '@/components/ui/badge'
 import {
   SUPPORTED_OAUTH_PROVIDER_DETAILS,
   SUPPORTED_OAUTH_PROVIDERS,
-} from '@/features/auth/config/o-auth-providers'
-import { useSocialErrors } from '@/features/auth/hooks/use-social-auth-errors'
+  type SupportedOAuthProvider,
+} from '@/config/o-auth-providers'
+import { useSocialAuthErrors } from '@/features/auth/hooks/use-social-auth-errors'
+import { socialAuthService } from '@/features/auth/services/social-auth-service'
+import { getSafeCallbackUrlFromLocation } from '@/features/auth/utils/callback-url'
 import { useMounted } from '@/hooks/use-mounted'
-import { signIn } from '@/lib/auth/auth-client'
 import { providerActions, useProviderStore } from '../store/use-provider-store'
 
 export function SocialAuthButtons() {
   const t = useTranslations('features.auth')
-  const { getSocialErrorMessage } = useSocialErrors()
+  const { handleSocialAuthError } = useSocialAuthErrors()
   const lastUsedProvider = useProviderStore((state) => state.provider)
   const mounted = useMounted()
+  const [pendingProvider, setPendingProvider] = useState<SupportedOAuthProvider | null>(null)
+
+  const handleSocialSignIn = async (provider: SupportedOAuthProvider) => {
+    setPendingProvider(provider)
+    try {
+      providerActions.setProvider(provider)
+
+      const safeCallbackUrl =
+        getSafeCallbackUrlFromLocation() ?? `/?loggedIn=social&provider=${provider}`
+
+      const [err] = await socialAuthService(provider, safeCallbackUrl)
+      if (err) {
+        handleSocialAuthError(err)
+      }
+    } finally {
+      setPendingProvider(null)
+    }
+  }
 
   return SUPPORTED_OAUTH_PROVIDERS.map((provider) => {
     const Icon = SUPPORTED_OAUTH_PROVIDER_DETAILS[provider].Icon
@@ -26,30 +47,11 @@ export function SocialAuthButtons() {
     return (
       <ActionButton
         key={provider}
-        action={async () => {
-          providerActions.setProvider(provider)
-
-          const rawCallbackUrl =
-            typeof window !== 'undefined'
-              ? new URLSearchParams(window.location.search).get('callbackUrl')
-              : null
-          const safeCallbackUrl =
-            rawCallbackUrl?.startsWith('/') && !rawCallbackUrl.startsWith('//')
-              ? rawCallbackUrl
-              : `/?loggedIn=social&provider=${provider}`
-
-          const res = await signIn.social({
-            provider,
-            callbackURL: safeCallbackUrl,
-          })
-
-          if (res.error) {
-            return { error: true, message: getSocialErrorMessage(res.error.code) }
-          }
-        }}
+        onClick={() => handleSocialSignIn(provider)}
+        isLoading={pendingProvider === provider}
         variant="outline"
         className="relative w-full"
-        disabled={!mounted}
+        disabled={!mounted || pendingProvider !== null}
       >
         <Icon />
         {SUPPORTED_OAUTH_PROVIDER_DETAILS[provider].name}

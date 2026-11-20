@@ -33,5 +33,3 @@ export const siteConfig = {
     email: 'mailto:contact@brandonargel.com',
   },
 } as const
-
-export type SiteConfig = typeof siteConfig

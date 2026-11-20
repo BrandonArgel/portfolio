@@ -55,12 +55,13 @@ import type { Locale } from '@/i18n/routing'
 import { cn } from '@/lib/utils'
 import { generateSlug } from '@/utils/string-utils'
 import { useImageUpload } from '../hooks/use-image-upload'
-import { type BlogFrontmatter, BlogFrontmatterSchema } from '../schemas/post.schema'
+import { type BlogFrontmatter, BlogFrontmatterSchema } from '../schemas/post-schema'
 
 export interface PostMetadataFormProps {
   data: BlogFrontmatter
   onChange: (newData: BlogFrontmatter) => void
   existingCategories?: string[]
+  isExistingPost?: boolean
   onTogglePublish?: (published: boolean) => void
   onDiscardDraft?: () => void
   isDiscardingDraft?: boolean
@@ -72,6 +73,7 @@ export function PostMetadataForm({
   data,
   onChange,
   existingCategories = [],
+  isExistingPost = false,
   onTogglePublish,
   onDiscardDraft,
   isDiscardingDraft = false,
@@ -107,10 +109,10 @@ export function PostMetadataForm({
       ...(markDraft ? { draft: true } : {}),
     }
 
-    if (key === 'title') {
+    if (key === 'title' && !isExistingPost) {
       const currentGeneratedSlug = generateSlug(data.title)
       if (!data.slug || data.slug === currentGeneratedSlug) {
-        newData.slug = generateSlug(value as string)
+        newData.slug = generateSlug(value as string).replace(/^-+|-+$/g, '')
       }
     }
 
@@ -121,7 +123,7 @@ export function PostMetadataForm({
     if (!data.title) return
     onChange({
       ...data,
-      slug: generateSlug(data.title),
+      slug: generateSlug(data.title).replace(/^-+|-+$/g, ''),
       draft: true,
     })
   }
@@ -206,6 +208,7 @@ export function PostMetadataForm({
               id={`${idPrefix}-slug`}
               value={data.slug}
               onChange={(e) => updateField('slug', generateSlug(e.target.value))}
+              onBlur={() => updateField('slug', data.slug.replace(/^-+|-+$/g, ''), false)}
               placeholder={t('frontmatter.slug_placeholder')}
               className="flex-1 font-mono text-xs"
               aria-invalid={Boolean(errors.slug)}

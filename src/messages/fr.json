@@ -21,6 +21,14 @@
       "unexpected_title": "Erreur inattendue",
       "unexpected_description": "Une erreur inattendue est survenue. Veuillez réessayer."
     },
+    "not_found": {
+      "badge": "Erreur 404",
+      "title": "Page introuvable",
+      "description": "Désolé, la page que vous recherchez n'existe pas, a été déplacée ou n'est plus disponible.",
+      "back_home": "Retour à l'accueil",
+      "browse_blog": "Explorer le Blog",
+      "contact": "Me contacter"
+    },
     "labels": {
       "email": "E-mail",
       "password": "Mot de passe",
@@ -231,8 +239,20 @@
     "auth": {
       "last_used": "Utilisé précédemment",
       "social": {
-        "access_denied": "Accès refusé",
-        "create_error": "Erreur de création"
+        "errors": {
+          "OAUTH_CALLBACK_ERROR": {
+            "title": "Échec de la connexion",
+            "description": "Le retour d'authentification avec le fournisseur a échoué. Veuillez réessayer."
+          },
+          "ACCESS_DENIED": {
+            "title": "Accès refusé",
+            "description": "L'authentification a été annulée ou refusée par le fournisseur."
+          },
+          "OAUTH_CREATE_USER_ERROR": {
+            "title": "Impossible de créer le compte",
+            "description": "Nous n'avons pas pu créer votre compte avec ce fournisseur."
+          }
+        }
       },
       "login": {
         "title": "Se Connecter",
@@ -404,7 +424,38 @@
             "deleted": "Commentaire supprimé",
             "empty_error": "Veuillez saisir un commentaire avant d'envoyer.",
             "error": "Impossible de traiter votre demande. Veuillez réessayer."
-          }
+          },
+          "errors": {
+            "POST_NOT_FOUND": {
+              "title": "Article introuvable",
+              "description": "L'article que vous souhaitez commenter n'est plus disponible."
+            },
+            "PARENT_COMMENT_NOT_FOUND": {
+              "title": "Commentaire indisponible",
+              "description": "Le commentaire auquel vous répondez n'existe plus."
+            },
+            "COMMENT_NOT_FOUND": {
+              "title": "Commentaire introuvable",
+              "description": "Ce commentaire n'existe plus."
+            },
+            "UNAUTHORIZED": {
+              "title": "Connexion requise",
+              "description": "Veuillez vous connecter pour participer à la discussion."
+            },
+            "FORBIDDEN": {
+              "title": "Accès refusé",
+              "description": "Vous n'avez pas la permission de modifier ce commentaire."
+            },
+            "VALIDATION_ERROR": {
+              "title": "Commentaire invalide",
+              "description": "Veuillez vérifier le contenu de votre commentaire et réessayer."
+            },
+            "DATABASE_ERROR": {
+              "title": "Échec de l'enregistrement",
+              "description": "Une erreur de base de données s'est produite lors du traitement de votre commentaire."
+            }
+          },
+          "error_loading": "Impossible de charger les commentaires pour le moment. Veuillez actualiser la page."
         }
       },
       "management": {
@@ -441,7 +492,65 @@
         "prev_page": "Précédent",
         "next_page": "Suivant",
         "dashboard": "Tableau de bord",
-        "filter_all": "Tous"
+        "filter_all": "Tous",
+        "error_loading": "Impossible de charger les articles",
+        "error_loading_description": "Une erreur de base de données est survenue lors du chargement des articles. Veuillez réessayer."
+      },
+      "posts": {
+        "errors": {
+          "VALIDATION_ERROR": {
+            "title": "Erreur de validation",
+            "description": "Veuillez vérifier les détails de l'article et réessayer."
+          },
+          "TITLE_REQUIRED": {
+            "title": "Titre requis",
+            "description": "Veuillez saisir un titre pour votre article."
+          },
+          "SLUG_REQUIRED": {
+            "title": "Slug d'URL requis",
+            "description": "Veuillez fournir un slug d'URL pour votre article."
+          },
+          "INVALID_SLUG_FORMAT": {
+            "title": "Slug d'URL invalide",
+            "description": "Le slug doit uniquement contenir des lettres minuscules, des chiffres et des tirets simples."
+          },
+          "CONTENT_REQUIRED": {
+            "title": "Contenu requis",
+            "description": "Rédigez du contenu avant de publier cet article."
+          },
+          "DUPLICATE_POST_SLUG": {
+            "title": "Slug d'URL en double",
+            "description": "Un article avec le slug \"/{slug}\" existe déjà dans cette langue."
+          },
+          "DUPLICATE_POST_TITLE": {
+            "title": "Titre d'article en double",
+            "description": "Un article intitulé \"{title}\" existe déjà."
+          },
+          "POST_NOT_FOUND": {
+            "title": "Article introuvable",
+            "description": "L'article que vous essayez de modifier n'existe plus."
+          },
+          "NO_DRAFT_TO_DISCARD": {
+            "title": "Aucun brouillon à annuler",
+            "description": "Il n'y a aucune modification non publiée à annuler."
+          },
+          "UNAUTHORIZED": {
+            "title": "Authentification requise",
+            "description": "Veuillez vous reconnecter pour gérer les articles."
+          },
+          "FORBIDDEN": {
+            "title": "Accès refusé",
+            "description": "Vous n'avez pas la permission de modifier cet article."
+          },
+          "DATABASE_ERROR": {
+            "title": "Erreur de base de données",
+            "description": "Impossible d'enregistrer vos modifications pour le moment. Veuillez réessayer."
+          },
+          "UNKNOWN_ERROR": {
+            "title": "Erreur inattendue",
+            "description": "Une erreur inattendue est survenue lors du traitement de l'article."
+          }
+        }
       },
       "categories": {
         "title": "Catégories",
@@ -551,7 +660,9 @@
             "title": "Erreur de base de données",
             "description": "Impossible de terminer l'opération. Veuillez réessayer."
           }
-        }
+        },
+        "error_loading": "Impossible de charger les catégories",
+        "error_loading_description": "Une erreur de base de données est survenue lors du chargement des catégories. Veuillez réessayer."
       },
       "editor": {
         "new_post": "Nouvel Article",
@@ -585,7 +696,9 @@
           "image_uploaded": "Image téléversée avec succès",
           "image_upload_error": "Échec du téléversement de l'image",
           "cover_uploaded": "Image de couverture mise à jour avec succès"
-        }
+        },
+        "error_loading": "Impossible de charger l'éditeur",
+        "error_loading_description": "Une erreur de base de données est survenue lors du chargement de cet article. Veuillez réessayer."
       },
       "composer": {
         "breadcrumb_dashboard": "Tableau de bord",
@@ -784,6 +897,20 @@
         "success_description": "Merci pour votre message ! Je vous répondrai dans les plus brefs délais.",
         "error_title": "Erreur lors de l'Envoi du Message",
         "error_description": "Une erreur est survenue lors de l'envoi de votre message. Veuillez réessayer ou m'envoyer un e-mail directement."
+      },
+      "errors": {
+        "VALIDATION_ERROR": {
+          "title": "Formulaire invalide",
+          "description": "Veuillez vérifier votre nom, e-mail, sujet et message."
+        },
+        "DELIVERY_FAILED": {
+          "title": "Erreur d'envoi",
+          "description": "Votre message n'a pas pu être envoyé pour le moment. Veuillez réessayer plus tard."
+        },
+        "UNKNOWN_ERROR": {
+          "title": "Erreur inattendue",
+          "description": "Une erreur inattendue est survenue lors de l'envoi de votre message."
+        }
       }
     },
     "dashboard": {
@@ -808,7 +935,9 @@
         "content_desc": "Créez et gérez vos articles dans plusieurs langues.",
         "access_title": "Accès et Sécurité",
         "access_desc": "Gérez les rôles (Admin, Éditeur, Utilisateur) et les permissions."
-      }
+      },
+      "error_loading": "Impossible de charger le tableau de bord",
+      "error_loading_description": "Une erreur de base de données est survenue lors du chargement des statistiques. Veuillez réessayer."
     },
     "editor": {
       "title": "Éditeur",
@@ -1130,12 +1259,44 @@
         "role_updated_title": "Rôle mis à jour",
         "role_updated_desc": "Le rôle de {name} a été mis à jour en {role}",
         "role_update_error": "Échec de la mise à jour du rôle",
-        "no_users": "Aucun utilisateur enregistré pour le moment."
+        "no_users": "Aucun utilisateur enregistré pour le moment.",
+        "error_loading": "Impossible de charger les utilisateurs pour le moment. Veuillez réessayer.",
+        "copy_id_error": "Impossible de copier l'identifiant dans le presse-papiers."
       },
       "roles": {
         "admin": "Admin",
         "editor": "Éditeur",
         "user": "Utilisateur"
+      },
+      "errors": {
+        "USER_NOT_FOUND": {
+          "title": "Utilisateur introuvable",
+          "description": "L'utilisateur demandé est introuvable."
+        },
+        "CANNOT_DEMOTE_SELF": {
+          "title": "Action non autorisée",
+          "description": "Vous ne pouvez pas révoquer vos propres privilèges d'administrateur."
+        },
+        "CANNOT_BAN_SELF": {
+          "title": "Action non autorisée",
+          "description": "Vous ne pouvez pas suspendre votre propre compte."
+        },
+        "UNAUTHORIZED": {
+          "title": "Authentification requise",
+          "description": "Votre session a expiré. Veuillez vous reconnecter."
+        },
+        "FORBIDDEN": {
+          "title": "Permissions insuffisantes",
+          "description": "Seuls les administrateurs peuvent effectuer cette action."
+        },
+        "VALIDATION_ERROR": {
+          "title": "Données invalides",
+          "description": "Veuillez vérifier les champs saisis et réessayer."
+        },
+        "DATABASE_ERROR": {
+          "title": "Erreur de base de données",
+          "description": "Impossible d'enregistrer les modifications de l'utilisateur."
+        }
       }
     }
   },

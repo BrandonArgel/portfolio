@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { getFormatter, getTranslations } from 'next-intl/server'
+import { AdminPagination } from '@/components/shared/admin-pagination'
+import { DashboardErrorState } from '@/components/shared/dashboard-error-state'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -21,7 +23,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { AdminPagination } from '@/features/blog/components/admin/admin-pagination'
 import {
   getAdminUsers,
   UserActionsMenu,
@@ -34,6 +35,7 @@ import {
 import { Link } from '@/i18n/navigation'
 import { auth } from '@/lib/auth/auth'
 import { getInitials } from '@/utils/get-initials'
+import { assertNever } from '@/utils/result'
 
 interface UsersPageProps {
   params: Promise<{ locale: string }>
@@ -84,13 +86,16 @@ export default async function UsersPage({ params, searchParams }: UsersPageProps
   const [usersError, usersData] = usersResult
 
   if (usersError || !usersData) {
-    return (
-      <div className="space-y-4">
-        <div className="py-12 text-center text-sm text-destructive">
-          Error loading users. Please try again.
-        </div>
-      </div>
-    )
+    if (usersError) {
+      switch (usersError.reason) {
+        case 'DATABASE_ERROR':
+          break
+        default:
+          return assertNever(usersError.reason)
+      }
+    }
+
+    return <DashboardErrorState title={t('error_loading')} />
   }
 
   const usersList = usersData.users

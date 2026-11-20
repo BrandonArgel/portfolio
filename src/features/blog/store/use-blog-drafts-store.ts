@@ -1,7 +1,7 @@
 import { del, get, set } from 'idb-keyval'
 import { create } from 'zustand'
 import { createJSONStorage, persist, type StateStorage } from 'zustand/middleware'
-import { type BlogFrontmatter, defaultFrontmatter } from '../schemas/post.schema'
+import { type BlogFrontmatter, defaultFrontmatter } from '../schemas/post-schema'
 
 const idbStorage: StateStorage = {
   getItem: async (name) => (await get(name)) || null,
