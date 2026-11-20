@@ -361,6 +361,7 @@
           "bookmarked": "Article enregistré",
           "bookmark_removed": "Article retiré des enregistrements",
           "edit": "Modifier l'article",
+          "dismiss": "Dismiss",
           "share_menu": {
             "label": "Partager l'article",
             "copy_link": "Copier le lien",

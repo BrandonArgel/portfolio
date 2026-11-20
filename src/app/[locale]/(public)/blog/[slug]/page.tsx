@@ -131,9 +131,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <PostViewTracker postId={post.id} />
       <Section withGlow containerClassName="max-w-4xl">
         {showFallbackBanner && (
-          <div className="mb-6">
-            <TranslationFallbackBanner originalLocale={post.locale} />
-          </div>
+          <TranslationFallbackBanner originalLocale={post.locale} className="mb-6" />
         )}
         <BlogPostContent
           post={post}

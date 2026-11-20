@@ -361,6 +361,7 @@
           "bookmarked": "Article bookmarked",
           "bookmark_removed": "Bookmark removed",
           "edit": "Edit article",
+          "dismiss": "Dismiss",
           "share_menu": {
             "label": "Share article",
             "copy_link": "Copy link",
