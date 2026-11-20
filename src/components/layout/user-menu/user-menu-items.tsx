@@ -70,6 +70,8 @@ export function UserMenuItems({
       )}
 
       <DropdownMenuGroup>
+        <ThemeSubMenu />
+        <LocaleSubMenu />
         {user && (
           <DropdownMenuItem render={<Link href="/account" />} className="gap-2 cursor-pointer">
             <User className="size-4 text-muted-foreground" />
@@ -83,9 +85,6 @@ export function UserMenuItems({
             <span>{tGlobal('labels.dashboard')}</span>
           </DropdownMenuItem>
         )}
-
-        <ThemeSubMenu />
-        <LocaleSubMenu />
       </DropdownMenuGroup>
 
       <DropdownMenuSeparator />
