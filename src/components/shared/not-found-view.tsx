@@ -19,7 +19,7 @@ export function NotFoundView({ badge, title, description, actions }: NotFoundVie
       <div className="relative flex max-w-2xl flex-col items-center gap-6">
         <span
           aria-hidden="true"
-          className="select-none bg-linear-to-b from-primary/25 via-primary/10 to-transparent bg-clip-text text-[7rem] leading-none font-extrabold tracking-tighter text-transparent sm:text-[9.5rem]"
+          className="select-none bg-linear-to-b from-primary via-primary/40 to-transparent bg-clip-text text-[7rem] leading-none font-extrabold tracking-tighter text-transparent sm:text-[9.5rem]"
         >
           404
         </span>

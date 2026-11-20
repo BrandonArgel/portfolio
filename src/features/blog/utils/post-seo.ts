@@ -1,5 +1,7 @@
+import type { Metadata } from 'next'
 import { getBaseUrl, siteConfig } from '@/config/site'
 import { LOCALES, type Locale, routing } from '@/i18n/routing'
+import { constructPageMetadata } from '@/lib/seo'
 
 /** Recommended size of the social preview card (Open Graph / X / WhatsApp / LinkedIn). */
 export const OG_IMAGE_WIDTH = 1200
@@ -83,9 +85,13 @@ export function buildPostUrl(locale: string, slug: string, baseUrl: string = get
   return `${baseUrl}${buildPostPath(locale, slug)}`
 }
 
-function isUsableOgCoverImage(coverImage: string | null | undefined): coverImage is string {
-  if (!coverImage?.trim()) return false
-  return !UNSUPPORTED_OG_IMAGE_EXTENSIONS.test(coverImage)
+function isHttpUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url)
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+  } catch {
+    return false
+  }
 }
 
 export interface PostOgImageInput {
@@ -112,13 +118,17 @@ export function resolvePostOgImage(
   baseUrl: string = getBaseUrl(),
 ): ResolvedOgImage {
   const alt = post.title
+  const trimmedCover = post.coverImage?.trim()
 
-  if (isUsableOgCoverImage(post.coverImage)) {
-    return {
-      url: toAbsoluteUrl(post.coverImage, baseUrl),
-      width: OG_IMAGE_WIDTH,
-      height: OG_IMAGE_HEIGHT,
-      alt,
+  if (trimmedCover && !UNSUPPORTED_OG_IMAGE_EXTENSIONS.test(trimmedCover)) {
+    const resolvedCover = toAbsoluteUrl(trimmedCover, baseUrl)
+    if (isHttpUrl(resolvedCover)) {
+      return {
+        url: resolvedCover,
+        width: OG_IMAGE_WIDTH,
+        height: OG_IMAGE_HEIGHT,
+        alt,
+      }
     }
   }
 
@@ -134,6 +144,56 @@ export function resolvePostOgImage(
     height: OG_IMAGE_HEIGHT,
     alt,
   }
+}
+
+export interface BlogPostMetadataInput {
+  title: string
+  slug: string
+  locale: string
+  description?: string | null
+  content: string
+  coverImage?: string | null
+  authorName?: string | null
+  translationGroupId?: string | null
+  categories: readonly { name: string }[]
+  createdAt: Date
+  updatedAt: Date
+}
+
+export function buildBlogPostMetadata(
+  post: BlogPostMetadataInput,
+  siblings: readonly PostTranslationRef[] = [],
+  baseUrl: string = getBaseUrl(),
+): Metadata {
+  const categoryNames = post.categories.map((category) => category.name)
+  const authorName = post.authorName || siteConfig.author.name
+  const description = buildSeoDescription(post.description, post.content)
+  const ogImage = resolvePostOgImage(post, baseUrl)
+
+  // The canonical URL always points to the post's own locale so the same article served under
+  // another locale (with the fallback banner) is not indexed as duplicate content.
+  return constructPageMetadata({
+    locale: post.locale,
+    title: post.title,
+    description,
+    pathname: `/blog/${post.slug}`,
+    baseUrl,
+    languages: buildPostLanguageAlternates(
+      { locale: post.locale, slug: post.slug },
+      siblings,
+      baseUrl,
+    ),
+    image: ogImage.url,
+    imageAlt: ogImage.alt,
+    imageWidth: ogImage.width,
+    imageHeight: ogImage.height,
+    keywords: categoryNames,
+    type: 'article',
+    publishedTime: post.createdAt.toISOString(),
+    modifiedTime: post.updatedAt.toISOString(),
+    authors: [authorName],
+    tags: categoryNames,
+  })
 }
 
 // ── Translations / hreflang ─────────────────────────────────────

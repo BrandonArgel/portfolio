@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
+import { hasLocale } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
 import { JsonLd } from '@/components/seo/json-ld'
 import { Section } from '@/components/ui/section'
@@ -17,15 +17,14 @@ import {
 } from '@/features/blog/services/posts-service'
 import {
   buildBlogPostingJsonLd,
-  buildPostLanguageAlternates,
+  buildBlogPostMetadata,
   buildSeoDescription,
   resolvePostOgImage,
   stripMarkdown,
 } from '@/features/blog/utils/post-seo'
 import { redirect } from '@/i18n/navigation'
-import type { Locale } from '@/i18n/routing'
-import { auth } from '@/lib/auth/auth'
-import { constructPageMetadata } from '@/lib/seo'
+import { type Locale, routing } from '@/i18n/routing'
+import { getOptionalSession } from '@/lib/auth/get-optional-session'
 import { assertNever } from '@/utils/result'
 
 interface BlogPostPageProps {
@@ -37,9 +36,10 @@ interface BlogPostPageProps {
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug, locale } = await params
-  const t = await getTranslations({ locale, namespace: 'features.blog.reader' })
+  const safeLocale = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale
+  const t = await getTranslations({ locale: safeLocale, namespace: 'features.blog.reader' })
 
-  const [err, post] = await getPublishedPostBySlug(slug, locale)
+  const [err, post] = await getPublishedPostBySlug(slug, safeLocale)
 
   if (err || !post) {
     return {
@@ -52,30 +52,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     ? await getPostTranslationsByGroupId(post.translationGroupId)
     : []
 
-  const categoryNames = post.categories.map((category) => category.name)
-  const authorName = post.authorName || siteConfig.author.name
-  const description = buildSeoDescription(post.description, post.content)
-  const ogImage = resolvePostOgImage(post)
-
-  // The canonical URL always points to the post's own locale so the same article served under
-  // another locale (with the fallback banner) is not indexed as duplicate content.
-  return constructPageMetadata({
-    locale: post.locale,
-    title: post.title,
-    description,
-    pathname: `/blog/${post.slug}`,
-    languages: buildPostLanguageAlternates({ locale: post.locale, slug: post.slug }, siblings),
-    image: ogImage.url,
-    imageAlt: ogImage.alt,
-    imageWidth: ogImage.width,
-    imageHeight: ogImage.height,
-    keywords: categoryNames,
-    type: 'article',
-    publishedTime: post.createdAt.toISOString(),
-    modifiedTime: post.updatedAt.toISOString(),
-    authors: [authorName],
-    tags: categoryNames,
-  })
+  return buildBlogPostMetadata(post, siblings)
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
@@ -85,7 +62,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   const [[err, post], session] = await Promise.all([
     getPublishedPostBySlug(slug, locale),
-    auth.api.getSession({ headers: await headers() }),
+    getOptionalSession(),
   ])
 
   if (err) {

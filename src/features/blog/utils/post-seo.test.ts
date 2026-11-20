@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import {
   buildBlogPostingJsonLd,
+  buildBlogPostMetadata,
   buildPostLanguageAlternates,
   buildSeoDescription,
   resolvePostOgImage,
@@ -84,6 +85,127 @@ describe('resolvePostOgImage', () => {
   test('falls back to /api/og for formats social crawlers do not render', () => {
     const { url } = resolvePostOgImage({ ...post, coverImage: 'https://x.y/a.svg' }, BASE)
     expect(url.startsWith(`${BASE}/api/og?`)).toBe(true)
+  })
+
+  test('trims whitespace around cover URLs and rejects non-HTTP schemes', () => {
+    expect(resolvePostOgImage({ ...post, coverImage: '  /uploads/clean.webp  ' }, BASE).url).toBe(
+      `${BASE}/uploads/clean.webp`,
+    )
+
+    const { url } = resolvePostOgImage({ ...post, coverImage: 'data:image/png;base64,abc' }, BASE)
+    expect(url).toBe(`${BASE}/api/og?slug=hello&locale=es&v=${post.updatedAt.getTime()}`)
+  })
+})
+
+describe('buildBlogPostMetadata', () => {
+  const basePost = {
+    title: 'Production Architecture Notes',
+    slug: 'production-architecture-notes',
+    locale: 'en',
+    content: '# Heading\n\nDetailed walkthrough of resilient server rendering and caching.',
+    authorName: 'Brandon Argel',
+    categories: [{ name: 'Architecture' }, { name: 'Next.js' }],
+    createdAt: new Date('2026-01-10T00:00:00Z'),
+    updatedAt: new Date('2026-02-15T00:00:00Z'),
+  }
+
+  test('builds complete article Open Graph and Twitter metadata when coverImage is set', () => {
+    const metadata = buildBlogPostMetadata(
+      {
+        ...basePost,
+        description: 'A clear architectural summary.',
+        coverImage: '/uploads/cover.png',
+      },
+      [{ locale: 'es', slug: 'notas-de-arquitectura' }],
+      BASE,
+    )
+
+    const og = metadata.openGraph as
+      | {
+          title?: string
+          description?: string
+          url?: string
+          type?: string
+          images?: Array<{ url: string; width?: number; height?: number; alt?: string }>
+        }
+      | undefined
+    const twitter = metadata.twitter as
+      | {
+          card?: string
+          title?: string
+          description?: string
+          images?: Array<{ url: string; alt?: string }>
+        }
+      | undefined
+
+    expect(metadata.alternates?.canonical).toBe(`${BASE}/en/blog/production-architecture-notes`)
+    expect(metadata.alternates?.languages).toEqual({
+      en: `${BASE}/en/blog/production-architecture-notes`,
+      es: `${BASE}/es/blog/notas-de-arquitectura`,
+      'x-default': `${BASE}/en/blog/production-architecture-notes`,
+    })
+    expect(og?.title).toBe('Production Architecture Notes')
+    expect(og?.description).toBe('A clear architectural summary.')
+    expect(og?.url).toBe(`${BASE}/en/blog/production-architecture-notes`)
+    expect(og?.type).toBe('article')
+    expect(og?.images).toEqual([
+      {
+        url: `${BASE}/uploads/cover.png`,
+        width: 1200,
+        height: 630,
+        alt: 'Production Architecture Notes',
+      },
+    ])
+    expect(twitter?.card).toBe('summary_large_image')
+    expect(twitter?.images).toEqual([
+      {
+        url: `${BASE}/uploads/cover.png`,
+        alt: 'Production Architecture Notes',
+      },
+    ])
+  })
+
+  test('falls back to excerpt description and absolute /api/og URL when coverImage is missing', () => {
+    const metadata = buildBlogPostMetadata(
+      {
+        ...basePost,
+        description: null,
+        coverImage: null,
+      },
+      [],
+      BASE,
+    )
+
+    const expectedOgImage = `${BASE}/api/og?slug=production-architecture-notes&locale=en&v=${basePost.updatedAt.getTime()}`
+    const og = metadata.openGraph as
+      | {
+          description?: string
+          images?: Array<{ url: string; width?: number; height?: number; alt?: string }>
+        }
+      | undefined
+    const twitter = metadata.twitter as
+      | {
+          images?: Array<{ url: string; alt?: string }>
+        }
+      | undefined
+
+    expect(og?.description).toBe(
+      'Heading Detailed walkthrough of resilient server rendering and caching.',
+    )
+    expect(og?.images).toEqual([
+      {
+        url: expectedOgImage,
+        width: 1200,
+        height: 630,
+        alt: 'Production Architecture Notes',
+      },
+    ])
+    expect(twitter?.images).toEqual([
+      {
+        url: expectedOgImage,
+        alt: 'Production Architecture Notes',
+      },
+    ])
   })
 })
 

@@ -46,4 +46,30 @@ describe('preprocessMdxContent', () => {
     expect(output).toContain('`:::youtube{id="x"}:::`')
     expect(output).toContain('<mark>leave me alone</mark> ++not-u++')
   })
+
+  test('preserves <Checklist> blocks and transforms inline marks inside task items without escaping', () => {
+    const input = [
+      '<Checklist>',
+      '',
+      '- [ ] Verify **bold**, `inline <Checklist>` and ==important== items',
+      '- [x] Confirm step works cleanly',
+      '',
+      '</Checklist>',
+      '',
+      '<Checklist disabled>',
+      '- [x] Read-only item',
+      '</Checklist>',
+    ].join('\n')
+
+    const output = preprocessMdxContent(input)
+
+    expect(output).toContain('<Checklist>')
+    expect(output).toContain('</Checklist>')
+    expect(output).toContain('<Checklist disabled>')
+    expect(output).not.toContain('&lt;Checklist')
+    expect(output).toContain(
+      '- [ ] Verify **bold**, `inline <Checklist>` and <MdxMark>important</MdxMark> items',
+    )
+    expect(output).toContain('- [x] Read-only item')
+  })
 })

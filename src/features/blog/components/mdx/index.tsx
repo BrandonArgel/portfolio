@@ -1,6 +1,7 @@
 import type { MDXRemoteProps } from 'next-mdx-remote/rsc'
 
 import { MdxCallout } from './mdx-callout'
+import { Checklist } from './mdx-checklist'
 import { MdxCode, MdxPre } from './mdx-code-block'
 import { MdxInput, MdxLi, MdxOl, MdxUl } from './mdx-lists'
 import { MdxIframe, MdxImage, MdxYouTube } from './mdx-media'
@@ -56,4 +57,5 @@ export const mdxComponents: NonNullable<MDXRemoteProps['components']> = {
     <MdxYouTube url={props.src ?? props.url} id={props.id} title={props.title} />
   ),
   Callout: MdxCallout,
+  Checklist,
 }

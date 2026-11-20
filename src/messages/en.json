@@ -1052,6 +1052,11 @@
           "example": "Example"
         }
       },
+      "task_list": {
+        "interactive": "Interactive checklist",
+        "read_only": "Read-only list",
+        "toggle_interactive": "Toggle interactive checklist for readers"
+      },
       "code_block": {
         "auto": "Auto (Plain Text)",
         "plain_text": "Plain Text",
