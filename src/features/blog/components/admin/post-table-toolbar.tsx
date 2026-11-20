@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { LOCALE_META } from '@/config/locale'
+import { ADMIN_POST_SORT_OPTIONS, type AdminPostSort } from '@/features/blog/constants/blog'
 import { useUrlTableFilters } from '@/hooks/use-url-table-filters'
 
 interface PostTableToolbarProps {
@@ -20,6 +21,7 @@ interface PostTableToolbarProps {
   initialSearch?: string
   initialLocale?: string
   initialCategory?: string
+  initialSort?: AdminPostSort
 }
 
 export function PostTableToolbar({
@@ -27,6 +29,7 @@ export function PostTableToolbar({
   initialSearch = '',
   initialLocale = '',
   initialCategory = '',
+  initialSort = 'latest',
 }: PostTableToolbarProps) {
   const t = useTranslations('features.blog.management')
 
@@ -35,8 +38,9 @@ export function PostTableToolbar({
       q: initialSearch,
       locale: initialLocale,
       category: initialCategory,
+      sort: initialSort === 'latest' ? '' : initialSort,
     }),
-    [initialSearch, initialLocale, initialCategory],
+    [initialSearch, initialLocale, initialCategory, initialSort],
   )
 
   const { searchValue, setSearchValue, isPending, pushParams, handleReset } = useUrlTableFilters({
@@ -52,7 +56,20 @@ export function PostTableToolbar({
     pushParams({ category: value || '' })
   }
 
-  const hasActiveFilters = initialSearch || initialLocale || initialCategory
+  const handleSortChange = (value: string | null) => {
+    pushParams({ sort: value && value !== 'latest' ? value : '' })
+  }
+
+  const sortLabels: Record<AdminPostSort, string> = {
+    latest: t('sort_latest'),
+    oldest: t('sort_oldest'),
+    views_desc: t('sort_most_viewed'),
+    views_asc: t('sort_least_viewed'),
+  }
+
+  const hasActiveFilters = Boolean(
+    initialSearch || initialLocale || initialCategory || initialSort !== 'latest',
+  )
 
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
@@ -98,6 +115,20 @@ export function PostTableToolbar({
           </SelectContent>
         </Select>
       )}
+
+      {/* Sort Order */}
+      <Select value={initialSort} onValueChange={handleSortChange}>
+        <SelectTrigger className="w-full sm:w-44" size="sm">
+          <SelectValue>{sortLabels[initialSort]}</SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          {ADMIN_POST_SORT_OPTIONS.map((option) => (
+            <SelectItem key={option} value={option}>
+              {sortLabels[option]}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
 
       {/* Reset Button */}
       {hasActiveFilters && (

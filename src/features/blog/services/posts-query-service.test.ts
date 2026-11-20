@@ -123,7 +123,7 @@ describe('posts-query-service', () => {
     expect(await findPublishedPostMeta('p3', ctx.db)).toBeNull()
   })
 
-  test('getAdminPosts scopes non-admin editors to their own posts', async () => {
+  test('getAdminPosts scopes non-admin editors to their own posts and sorts by views', async () => {
     const editorA = await seedTestUser(ctx.db, { id: 'ed-a', role: 'editor' })
     const editorB = await seedTestUser(ctx.db, { id: 'ed-b', role: 'editor' })
 
@@ -133,6 +133,7 @@ describe('posts-query-service', () => {
       title: '100% Admin Post A',
       slug: 'post-a',
       published: false,
+      viewsCount: 12,
     })
     await seedTestPost(ctx.db, {
       id: 'pb',
@@ -140,13 +141,30 @@ describe('posts-query-service', () => {
       title: '100x Admin Post B',
       slug: 'post-b',
       published: true,
+      viewsCount: 85,
     })
 
     const [, ownOnly] = await getAdminPosts({ userId: editorA.id, isAdmin: false }, ctx.db)
     expect(ownOnly?.posts.map((p) => p.id)).toEqual(['pa'])
+    expect(ownOnly?.posts[0]?.viewsCount).toBe(12)
 
     const [, allForAdmin] = await getAdminPosts({ userId: editorA.id, isAdmin: true }, ctx.db)
     expect(allForAdmin?.totalCount).toBe(2)
+
+    const [, mostViewed] = await getAdminPosts(
+      { userId: editorA.id, isAdmin: true, sort: 'views_desc' },
+      ctx.db,
+    )
+    expect(mostViewed?.posts.map((p) => [p.id, p.viewsCount])).toEqual([
+      ['pb', 85],
+      ['pa', 12],
+    ])
+
+    const [, leastViewed] = await getAdminPosts(
+      { userId: editorA.id, isAdmin: true, sort: 'views_asc' },
+      ctx.db,
+    )
+    expect(leastViewed?.posts.map((p) => p.id)).toEqual(['pa', 'pb'])
 
     const [percentErr, percentOnly] = await getAdminPosts(
       { userId: editorA.id, isAdmin: true, search: '100%' },
@@ -164,7 +182,11 @@ describe('posts-query-service', () => {
   })
 
   test('getPostBySlug, getPublishedPostBySlug, and translation/sitemap queries resolve locale variants', async () => {
-    const author = await seedTestUser(ctx.db, { id: 'ed-1', role: 'editor' })
+    const author = await seedTestUser(ctx.db, {
+      id: 'ed-1',
+      role: 'editor',
+      image: 'https://example.com/avatar.png',
+    })
     const groupId = crypto.randomUUID()
 
     await seedTestPost(ctx.db, {
@@ -181,6 +203,7 @@ describe('posts-query-service', () => {
       slug: 'shared-slug',
       locale: 'es',
       published: true,
+      viewsCount: 72,
       translationGroupId: groupId,
     })
     await seedTestPost(ctx.db, {
@@ -204,6 +227,13 @@ describe('posts-query-service', () => {
     const [esErr, esPost] = await getPublishedPostBySlug('shared-slug', 'es', ctx.db)
     expect(esErr).toBeNull()
     expect(esPost?.id).toBe('es-post')
+    expect(esPost?.authorImage).toBe('https://example.com/avatar.png')
+    expect(esPost?.viewsCount).toBe(72)
+
+    const [bySlugErr, bySlugPost] = await getPostBySlug('shared-slug', ctx.db)
+    expect(bySlugErr).toBeNull()
+    expect(bySlugPost?.authorImage).toBe('https://example.com/avatar.png')
+    expect(typeof bySlugPost?.viewsCount).toBe('number')
 
     const [fallbackErr, frFallback] = await getPublishedPostBySlug('shared-slug', 'fr', ctx.db)
     expect(fallbackErr).toBeNull()

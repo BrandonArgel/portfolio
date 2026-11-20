@@ -21,8 +21,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { CALLOUT_TYPES, type CalloutType, isCalloutType } from '@/lib/markdown-regex'
 import { cn } from '@/lib/utils'
-import { CALLOUT_TYPES, type CalloutType, isCalloutType } from '../config/callout'
 
 const CALLOUT_CONFIG: Record<
   CalloutType,
@@ -36,6 +36,10 @@ const CALLOUT_CONFIG: Record<
     icon: <Flame className="size-5 text-callout-cyan" />,
   },
   info: {
+    container: 'border-callout-blue bg-callout-blue/10 text-callout-blue-text',
+    icon: <Info className="size-5 text-callout-blue" />,
+  },
+  note: {
     container: 'border-callout-blue bg-callout-blue/10 text-callout-blue-text',
     icon: <Info className="size-5 text-callout-blue" />,
   },

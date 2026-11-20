@@ -5,6 +5,7 @@ import remarkMath from 'remark-math'
 import remarkUnwrapImages from 'remark-unwrap-images'
 
 import { preprocessMdxContent } from '../../utils/preprocess-mdx'
+import { rehypeCodeMeta } from '../../utils/rehype-code-meta'
 import { mdxComponents } from '../mdx'
 
 interface MdxContentServerProps {
@@ -22,7 +23,7 @@ export function MdxContentServer({ content }: MdxContentServerProps) {
         options={{
           mdxOptions: {
             remarkPlugins: [remarkGfm, remarkUnwrapImages, remarkMath],
-            rehypePlugins: [rehypeKatex],
+            rehypePlugins: [rehypeCodeMeta, rehypeKatex],
           },
         }}
       />

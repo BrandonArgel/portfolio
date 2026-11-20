@@ -4,6 +4,11 @@ import { error, okay, type Result } from '@/utils/result'
 import type { PostError } from '../types/errors'
 
 const POST_SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+const HTTP_URL_REGEX = /^https?:\/\//i
+
+const optionalHttpUrlSchema = z
+  .url('Must be a valid URL')
+  .refine((val) => HTTP_URL_REGEX.test(val), 'Must be an HTTP/HTTPS URL')
 
 export function isValidPostSlug(slug: string): boolean {
   return POST_SLUG_REGEX.test(slug.trim())
@@ -18,6 +23,8 @@ export const BlogFrontmatterSchema = z.object({
     .regex(POST_SLUG_REGEX, 'Slug must be lowercase kebab-case'),
   description: z.string().default(''),
   coverImage: z.url('Must be a valid URL').optional().or(z.literal('')),
+  coverImageAlt: z.string().max(200).default(''),
+  canonicalUrl: optionalHttpUrlSchema.optional().or(z.literal('')).default(''),
   locale: z.enum(LOCALES).default('en'),
   translationGroupId: z.uuid('Must be a valid UUID').optional().or(z.literal('')),
   published: z.boolean().default(false),
@@ -32,6 +39,8 @@ export const defaultFrontmatter: BlogFrontmatter = {
   slug: '',
   description: '',
   coverImage: '',
+  coverImageAlt: '',
+  canonicalUrl: '',
   locale: 'en',
   translationGroupId: '',
   published: false,
@@ -58,6 +67,8 @@ const draftPostSchema = z.object({
   intent: postIntentSchema.default('save_draft'),
   categories: z.array(z.string()).default([]),
   coverImage: z.string().nullable().optional(),
+  coverImageAlt: z.string().trim().max(200).nullable().optional(),
+  canonicalUrl: optionalHttpUrlSchema.nullable().optional(),
 })
 
 /**
@@ -85,6 +96,8 @@ const savePostSchema = z.object({
   intent: postIntentSchema.default('publish'),
   categories: z.array(z.string()).default([]),
   coverImage: z.string().nullable().optional(),
+  coverImageAlt: z.string().nullable().optional(),
+  canonicalUrl: z.string().nullable().optional(),
 })
 
 export const discardDraftChangesSchema = z.object({
@@ -125,6 +138,8 @@ export function validateSavePostInput(rawInput: unknown): Result<SavePostInput, 
   const trimmedTitle = data.title.trim()
   const trimmedSlug = data.slug.trim()
   const trimmedContent = data.content.trim()
+  const normalizedCoverImageAlt = data.coverImageAlt?.trim() || null
+  const normalizedCanonicalUrl = data.canonicalUrl?.trim() || null
 
   if (!trimmedTitle) {
     return error({ reason: 'TITLE_REQUIRED' })
@@ -147,6 +162,8 @@ export function validateSavePostInput(rawInput: unknown): Result<SavePostInput, 
       ...data,
       title: trimmedTitle,
       slug: trimmedSlug,
+      coverImageAlt: normalizedCoverImageAlt,
+      canonicalUrl: normalizedCanonicalUrl,
     })
 
     if (!publishParsed.success) {
@@ -169,6 +186,8 @@ export function validateSavePostInput(rawInput: unknown): Result<SavePostInput, 
     ...data,
     title: trimmedTitle,
     slug: trimmedSlug,
+    coverImageAlt: normalizedCoverImageAlt,
+    canonicalUrl: normalizedCanonicalUrl,
   })
 
   if (!draftParsed.success) {

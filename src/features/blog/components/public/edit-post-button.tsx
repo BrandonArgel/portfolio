@@ -25,11 +25,12 @@ export async function EditPostButton({ authorId, slug, className }: EditPostButt
     <LinkButton
       href={`/dashboard/posts/${slug}/edit`}
       variant="outline"
-      size="sm"
-      className={cn('gap-1.5 text-xs font-medium border-border hover:bg-muted', className)}
+      size="icon"
+      aria-label={t('actions.edit')}
+      title={t('actions.edit')}
+      className={cn('border-border bg-card hover:bg-muted', className)}
     >
-      <Pencil className="size-3.5 text-muted-foreground" />
-      <span>{t('actions.edit')}</span>
+      <Pencil className="size-4 text-muted-foreground" />
     </LinkButton>
   )
 }

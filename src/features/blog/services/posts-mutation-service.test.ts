@@ -39,6 +39,9 @@ describe('posts-mutation-service', () => {
         published: true,
         draft: false,
         categories: ['TypeScript', 'Next.js'],
+        coverImage: 'https://cdn.example.com/cover.webp',
+        coverImageAlt: '  Clean architecture cover  ',
+        canonicalUrl: 'https://example.com/original/first-article',
       },
       actor,
       ctx.db,
@@ -51,6 +54,10 @@ describe('posts-mutation-service', () => {
       slugChanged: false,
       published: true,
       draft: false,
+      post: {
+        coverImageAlt: 'Clean architecture cover',
+        canonicalUrl: 'https://example.com/original/first-article',
+      },
     })
     if (!created) throw new Error('Expected created post')
 
@@ -141,6 +148,8 @@ describe('posts-mutation-service', () => {
     const dbRow = await ctx.db.query.posts.findFirst({ where: eq(posts.id, created.postId) })
     expect(dbRow?.content).toBe('Live body content')
     expect(dbRow?.draftContent).toBe('Unpublished draft body')
+    expect(dbRow?.coverImageAlt).toBeNull()
+    expect(dbRow?.canonicalUrl).toBeNull()
 
     // Discard draft restores live content
     const [discardErr, discarded] = await discardPostDraft(created.postId, actor, ctx.db)

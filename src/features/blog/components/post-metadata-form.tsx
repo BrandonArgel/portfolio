@@ -57,6 +57,26 @@ import { generateSlug } from '@/utils/string-utils'
 import { useImageUpload } from '../hooks/use-image-upload'
 import { type BlogFrontmatter, BlogFrontmatterSchema } from '../schemas/post-schema'
 
+const SEO_TITLE_MIN = 50
+const SEO_TITLE_MAX = 60
+const SEO_DESCRIPTION_MIN = 120
+const SEO_DESCRIPTION_MAX = 160
+
+type SeoLengthStatus = 'empty' | 'short' | 'optimal' | 'long'
+
+function getSeoLengthStatus(length: number, min: number, max: number): SeoLengthStatus {
+  if (length === 0) return 'empty'
+  if (length < min) return 'short'
+  if (length <= max) return 'optimal'
+  return 'long'
+}
+
+function getSeoLengthColorClass(status: SeoLengthStatus): string {
+  if (status === 'optimal') return 'text-emerald-600 dark:text-emerald-400'
+  if (status === 'long') return 'text-amber-600 dark:text-amber-400'
+  return 'text-muted-foreground'
+}
+
 export interface PostMetadataFormProps {
   data: BlogFrontmatter
   onChange: (newData: BlogFrontmatter) => void
@@ -162,10 +182,18 @@ export function PostMetadataForm({
   }
 
   const hasUnpublishedChanges = data.published && data.draft
+  const titleLength = data.title.trim().length
+  const titleSeoStatus = getSeoLengthStatus(titleLength, SEO_TITLE_MIN, SEO_TITLE_MAX)
+  const descriptionLength = data.description.trim().length
+  const descriptionSeoStatus = getSeoLengthStatus(
+    descriptionLength,
+    SEO_DESCRIPTION_MIN,
+    SEO_DESCRIPTION_MAX,
+  )
 
   return (
     <div className={cn('space-y-6', className)}>
-      {/* 1. TITLE & SLUG */}
+      {/* 1. TITLE, SLUG & CANONICAL URL */}
       <div className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor={`${idPrefix}-title`} className="text-xs font-medium text-foreground">
@@ -179,6 +207,30 @@ export function PostMetadataForm({
             placeholder={t('frontmatter.title_placeholder')}
             aria-invalid={Boolean(errors.title)}
           />
+          <div
+            className={cn(
+              'flex items-center justify-between gap-2 text-[11px]',
+              getSeoLengthColorClass(titleSeoStatus),
+            )}
+          >
+            <span>
+              {titleSeoStatus === 'optimal'
+                ? t('frontmatter.seo_counter_optimal')
+                : titleSeoStatus === 'long'
+                  ? t('frontmatter.seo_counter_long', { max: SEO_TITLE_MAX })
+                  : t('frontmatter.seo_counter_short', {
+                      min: SEO_TITLE_MIN,
+                      max: SEO_TITLE_MAX,
+                    })}
+            </span>
+            <span className="tabular-nums shrink-0">
+              {t('frontmatter.seo_counter_range', {
+                count: titleLength,
+                min: SEO_TITLE_MIN,
+                max: SEO_TITLE_MAX,
+              })}
+            </span>
+          </div>
         </div>
 
         <div className="space-y-2">
@@ -215,6 +267,33 @@ export function PostMetadataForm({
             />
           </div>
         </div>
+
+        <div className="space-y-2">
+          <Label
+            htmlFor={`${idPrefix}-canonical-url`}
+            className="text-xs font-medium text-foreground"
+          >
+            <Link2 className="size-3.5 text-muted-foreground" />
+            {t('frontmatter.field_canonical_url')}
+          </Label>
+          <Input
+            id={`${idPrefix}-canonical-url`}
+            type="url"
+            value={data.canonicalUrl || ''}
+            onChange={(e) => updateField('canonicalUrl', e.target.value)}
+            onBlur={() => updateField('canonicalUrl', (data.canonicalUrl || '').trim(), false)}
+            placeholder={t('frontmatter.canonical_url_placeholder')}
+            className="font-mono text-xs"
+            aria-invalid={Boolean(errors.canonicalUrl)}
+          />
+          {errors.canonicalUrl ? (
+            <p className="text-[11px] text-destructive">{t('frontmatter.canonical_url_invalid')}</p>
+          ) : (
+            <p className="text-[11px] text-muted-foreground">
+              {t('frontmatter.canonical_url_hint')}
+            </p>
+          )}
+        </div>
       </div>
 
       <Separator />
@@ -233,6 +312,30 @@ export function PostMetadataForm({
           placeholder={t('frontmatter.description_placeholder')}
           className="resize-none text-sm"
         />
+        <div
+          className={cn(
+            'flex items-center justify-between gap-2 text-[11px]',
+            getSeoLengthColorClass(descriptionSeoStatus),
+          )}
+        >
+          <span>
+            {descriptionSeoStatus === 'optimal'
+              ? t('frontmatter.seo_counter_optimal')
+              : descriptionSeoStatus === 'long'
+                ? t('frontmatter.seo_counter_long', { max: SEO_DESCRIPTION_MAX })
+                : t('frontmatter.seo_counter_short', {
+                    min: SEO_DESCRIPTION_MIN,
+                    max: SEO_DESCRIPTION_MAX,
+                  })}
+          </span>
+          <span className="tabular-nums shrink-0">
+            {t('frontmatter.seo_counter_range', {
+              count: descriptionLength,
+              min: SEO_DESCRIPTION_MIN,
+              max: SEO_DESCRIPTION_MAX,
+            })}
+          </span>
+        </div>
       </div>
 
       <Separator />
@@ -258,7 +361,7 @@ export function PostMetadataForm({
               {/* biome-ignore lint/performance/noImgElement: Dynamic cover preview */}
               <img
                 src={data.coverImage}
-                alt={data.title || 'Cover preview'}
+                alt={data.coverImageAlt || data.title || 'Cover preview'}
                 className="h-full w-full object-cover"
               />
             </div>
@@ -322,6 +425,27 @@ export function PostMetadataForm({
           placeholder={t('frontmatter.cover_image_placeholder')}
           className="text-xs"
         />
+
+        <div className="space-y-1.5 pt-1">
+          <Label
+            htmlFor={`${idPrefix}-cover-image-alt`}
+            className="text-xs font-medium text-foreground"
+          >
+            {t('frontmatter.field_cover_image_alt')}
+          </Label>
+          <Input
+            id={`${idPrefix}-cover-image-alt`}
+            value={data.coverImageAlt || ''}
+            onChange={(e) => updateField('coverImageAlt', e.target.value)}
+            placeholder={t('frontmatter.cover_image_alt_placeholder')}
+            maxLength={200}
+            className="text-xs"
+            aria-invalid={Boolean(errors.coverImageAlt)}
+          />
+          <p className="text-[11px] text-muted-foreground">
+            {t('frontmatter.cover_image_alt_hint')}
+          </p>
+        </div>
       </div>
 
       <Separator />

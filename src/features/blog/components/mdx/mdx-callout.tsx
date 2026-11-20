@@ -1,6 +1,7 @@
 import { AlertTriangle, Bug, Check, Flame, Info, List, Pencil, Quote, X, Zap } from 'lucide-react'
 import type React from 'react'
 
+import { type CalloutType, normalizeCalloutType } from '@/lib/markdown-regex'
 import { cn } from '@/lib/utils'
 
 interface CalloutConfig {
@@ -9,7 +10,7 @@ interface CalloutConfig {
   defaultTitle: string
 }
 
-const CALLOUT_STYLES: Record<string, CalloutConfig> = {
+const CALLOUT_STYLES: Record<CalloutType, CalloutConfig> = {
   tip: {
     container: 'border-callout-cyan bg-callout-cyan/10 text-callout-cyan-text',
     icon: <Flame className="size-5 shrink-0 text-callout-cyan" />,
@@ -75,8 +76,8 @@ export interface MdxCalloutProps {
 }
 
 export function MdxCallout({ type = 'info', title, children, className }: MdxCalloutProps) {
-  const normalizedType = type.toLowerCase()
-  const config = CALLOUT_STYLES[normalizedType] || CALLOUT_STYLES.info
+  const normalizedType = normalizeCalloutType(type.toLowerCase())
+  const config = CALLOUT_STYLES[normalizedType]
   const displayTitle = title || config.defaultTitle
 
   return (

@@ -79,6 +79,8 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
     slug: post.slug,
     description: post.description || '',
     coverImage: post.coverImage || '',
+    coverImageAlt: post.coverImageAlt || '',
+    canonicalUrl: post.canonicalUrl || '',
     locale: post.locale as Locale,
     translationGroupId: post.translationGroupId || '',
     published: post.published,

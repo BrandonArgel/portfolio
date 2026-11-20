@@ -118,6 +118,8 @@ export function BlogComposer({
         ...currentFrontmatter,
         title: result.post.title,
         slug: result.post.slug,
+        coverImageAlt: result.post.coverImageAlt ?? currentFrontmatter.coverImageAlt,
+        canonicalUrl: result.post.canonicalUrl ?? currentFrontmatter.canonicalUrl,
         published: result.published,
         draft: result.draft,
       }
@@ -151,7 +153,9 @@ export function BlogComposer({
         if (
           validationErr.reason === 'TITLE_REQUIRED' ||
           validationErr.reason === 'SLUG_REQUIRED' ||
-          validationErr.reason === 'INVALID_SLUG_FORMAT'
+          validationErr.reason === 'INVALID_SLUG_FORMAT' ||
+          (validationErr.reason === 'VALIDATION_ERROR' &&
+            (validationErr.field === 'canonicalUrl' || validationErr.field === 'coverImageAlt'))
         ) {
           openMetadataInspector()
         }
@@ -228,6 +232,8 @@ export function BlogComposer({
         categories: frontmatter.categories,
         content,
         coverImage: frontmatter.coverImage || null,
+        coverImageAlt: frontmatter.coverImageAlt || null,
+        canonicalUrl: frontmatter.canonicalUrl || null,
       })
     }, AUTO_SAVE_INTERVAL_MS)
 
@@ -264,6 +270,8 @@ export function BlogComposer({
       categories: frontmatter.categories,
       content,
       coverImage: frontmatter.coverImage || null,
+      coverImageAlt: frontmatter.coverImageAlt || null,
+      canonicalUrl: frontmatter.canonicalUrl || null,
     })
   }, [content, executeSave, frontmatter, postId])
 
@@ -291,6 +299,8 @@ export function BlogComposer({
         categories: frontmatter.categories,
         content,
         coverImage: frontmatter.coverImage || null,
+        coverImageAlt: frontmatter.coverImageAlt || null,
+        canonicalUrl: frontmatter.canonicalUrl || null,
       })
     },
     [content, draftId, executeSave, frontmatter, postId],

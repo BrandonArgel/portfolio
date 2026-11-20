@@ -3,9 +3,13 @@ import * as dotenv from 'dotenv'
 import { drizzle } from 'drizzle-orm/libsql'
 import * as schema from './schema/index'
 
+if (typeof window !== 'undefined') {
+  throw new Error('src/db/index.ts cannot be imported in a client bundle.')
+}
+
 const isTest = process.env.NODE_ENV === 'test'
 
-if (!isTest) {
+if (typeof window === 'undefined' && !process.env.NEXT_RUNTIME && !isTest) {
   dotenv.config({ path: '.env.local' })
 }
 

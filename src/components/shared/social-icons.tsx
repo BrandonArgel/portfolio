@@ -10,6 +10,7 @@ import {
   YouTubeIcon,
 } from '@/assets/icons/social'
 import { LinkButton } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 
 const SOCIAL_LINKS: {
@@ -44,21 +45,26 @@ export function SocialLinks({ className }: SocialLinksProps) {
         const label = t(`${id}.label`)
 
         return (
-          <LinkButton
-            key={id}
-            variant="outline"
-            href={href}
-            target={isEmail ? '_self' : '_blank'}
-            rel={isEmail ? undefined : 'noopener noreferrer'}
-            aria-label={label}
-            title={label}
-            className={cn(
-              'flex size-8.5 items-center justify-center rounded-full border border-border/70 bg-card/60 text-muted-foreground transition-all duration-200 hover:scale-110 hover:border-primary/40! hover:bg-primary/10 hover:text-primary hover:shadow-md',
-            )}
-          >
-            <Icon className="size-4 transition-transform duration-200 group-hover:scale-110" />
-            <span className="sr-only">{label}</span>
-          </LinkButton>
+          <Tooltip key={id}>
+            <TooltipTrigger
+              render={
+                <LinkButton
+                  variant="outline"
+                  href={href}
+                  target={isEmail ? '_self' : '_blank'}
+                  rel={isEmail ? undefined : 'noopener noreferrer'}
+                  aria-label={label}
+                  className={cn(
+                    'flex size-8.5 items-center justify-center rounded-full border border-border/70 bg-card/60 text-muted-foreground transition-all duration-200 hover:scale-110 hover:border-primary/40! hover:bg-primary/10 hover:text-primary hover:shadow-md',
+                  )}
+                >
+                  <Icon className="size-4 transition-transform duration-200 group-hover:scale-110" />
+                  <span className="sr-only">{label}</span>
+                </LinkButton>
+              }
+            />
+            <TooltipContent side="bottom">{label}</TooltipContent>
+          </Tooltip>
         )
       })}
     </div>

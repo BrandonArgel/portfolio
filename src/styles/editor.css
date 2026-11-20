@@ -139,38 +139,124 @@
 }
 
 /* Read-only / SSR line numbers & line highlights */
+.th-code:has(.th-line) {
+  padding-inline: 0;
+}
+
+:where(.th-code-container) .th-code > code {
+  display: block;
+  min-width: max-content;
+}
+
 .th-line {
   display: inline-block;
   min-width: 100%;
   width: max-content;
+  padding-inline: 1rem;
+  border-left: 2px solid transparent;
 }
 
 .th-line--highlighted {
   background-color: var(--th-line-highlight);
+  border-left-color: var(--th-line-highlight-border);
+}
+
+.th-line--inserted {
+  background-color: var(--th-line-added);
+  border-left-color: var(--th-line-added-border);
+}
+
+.th-line--deleted {
+  background-color: var(--th-line-removed);
+  border-left-color: var(--th-line-removed-border);
 }
 
 .th-code--line-numbers code {
-  counter-reset: th-line;
+  counter-reset: th-line calc(var(--th-start-line, 1) - 1);
+}
+
+.th-code--line-numbers .th-line {
+  counter-increment: th-line;
+  padding-left: 0.75rem;
 }
 
 .th-code--line-numbers .th-line::before {
   display: inline-block;
-  width: 2.25rem;
+  width: 2.5rem;
   padding-right: 1rem;
   color: var(--th-comment);
-  content: attr(data-line);
+  content: counter(th-line);
   text-align: right;
   user-select: none;
   opacity: 0.65;
 }
 
-/* Editor NodeView non-editable gutter */
+.th-code--line-numbers .th-line--inserted::before {
+  content: "+ " counter(th-line);
+  color: var(--th-inserted);
+  opacity: 0.95;
+}
+
+.th-code--line-numbers .th-line--deleted::before {
+  content: "- " counter(th-line);
+  color: var(--th-deleted);
+  opacity: 0.95;
+}
+
+.th-line--inserted:not(.th-code--line-numbers .th-line)::before {
+  content: "+";
+  display: inline-block;
+  width: 1.25rem;
+  color: var(--th-inserted);
+  user-select: none;
+}
+
+.th-line--deleted:not(.th-code--line-numbers .th-line)::before {
+  content: "-";
+  display: inline-block;
+  width: 1.25rem;
+  color: var(--th-deleted);
+  user-select: none;
+}
+
+/* Editor NodeView non-editable gutter & live row highlights */
 .th-editor-gutter {
-  min-width: 1.75rem;
-  padding-right: 0.75rem;
+  min-width: 2.75rem;
   border-right: 1px solid var(--code-border);
   color: var(--th-comment);
-  opacity: 0.65;
+}
+
+.th-editor-row--highlighted {
+  background-color: var(--th-line-highlight);
+  box-shadow: inset 2px 0 0 var(--th-line-highlight-border);
+}
+
+.th-editor-row--inserted {
+  background-color: var(--th-line-added);
+  box-shadow: inset 2px 0 0 var(--th-line-added-border);
+}
+
+.th-editor-row--deleted {
+  background-color: var(--th-line-removed);
+  box-shadow: inset 2px 0 0 var(--th-line-removed-border);
+}
+
+.th-editor-gutter-line--highlighted {
+  background-color: var(--th-line-highlight);
+  color: var(--th-line-highlight-border);
+  opacity: 1;
+}
+
+.th-editor-gutter-line--inserted {
+  background-color: var(--th-line-added);
+  color: var(--th-inserted);
+  opacity: 1;
+}
+
+.th-editor-gutter-line--deleted {
+  background-color: var(--th-line-removed);
+  color: var(--th-deleted);
+  opacity: 1;
 }
 
 /* ============================================================================

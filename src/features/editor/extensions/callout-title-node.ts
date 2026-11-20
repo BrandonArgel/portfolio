@@ -51,9 +51,10 @@ export const CalloutTitleNode = Node.create({
           return false
         }
 
-        // Find the depth of the calloutTitle node
         const titleDepth = $from.depth
-        // The position right after the end of the calloutTitle node
+        const calloutDepth = titleDepth - 1
+        const calloutNode = $from.node(calloutDepth)
+        const titleIndex = $from.index(calloutDepth)
         const after = $from.after(titleDepth)
 
         const paragraphType = editor.state.schema.nodes.paragraph
@@ -61,9 +62,17 @@ export const CalloutTitleNode = Node.create({
           return false
         }
 
-        const tr = editor.state.tr.insert(after, paragraphType.create())
-        // Place cursor inside the new paragraph (+1 to enter the node)
-        tr.setSelection(TextSelection.create(tr.doc, after + 1))
+        const nextNode =
+          titleIndex + 1 < calloutNode.childCount ? calloutNode.child(titleIndex + 1) : null
+
+        const tr = editor.state.tr
+        if (nextNode && nextNode.type === paragraphType && nextNode.content.size === 0) {
+          tr.setSelection(TextSelection.create(tr.doc, after + 1))
+        } else {
+          tr.insert(after, paragraphType.create())
+          tr.setSelection(TextSelection.create(tr.doc, after + 1))
+        }
+
         editor.view.dispatch(tr)
         return true
       },

@@ -1,6 +1,6 @@
 import { relations } from 'drizzle-orm'
 import { accounts, sessions, users } from './auth'
-import { categories, comments, postBookmarks, posts, postsToCategories } from './blog'
+import { categories, comments, postBookmarks, postLikes, posts, postsToCategories } from './blog'
 
 export const userRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
@@ -9,6 +9,7 @@ export const userRelations = relations(users, ({ many }) => ({
   modifiedPosts: many(posts, { relationName: 'post_last_editor' }),
   comments: many(comments),
   bookmarks: many(postBookmarks),
+  likes: many(postLikes),
 }))
 
 export const accountRelations = relations(accounts, ({ one }) => ({
@@ -33,6 +34,7 @@ export const postsRelations = relations(posts, ({ many, one }) => ({
   }),
   comments: many(comments),
   bookmarks: many(postBookmarks),
+  likes: many(postLikes),
 }))
 
 export const categoriesRelations = relations(categories, ({ many }) => ({
@@ -73,6 +75,17 @@ export const postBookmarksRelations = relations(postBookmarks, ({ one }) => ({
   }),
   post: one(posts, {
     fields: [postBookmarks.postId],
+    references: [posts.id],
+  }),
+}))
+
+export const postLikesRelations = relations(postLikes, ({ one }) => ({
+  user: one(users, {
+    fields: [postLikes.userId],
+    references: [users.id],
+  }),
+  post: one(posts, {
+    fields: [postLikes.postId],
     references: [posts.id],
   }),
 }))

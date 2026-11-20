@@ -4,6 +4,7 @@ import { type AppDatabase, db } from '@/db'
 import { categories, posts, postsToCategories } from '@/db/schema'
 import { likeContains, withDatabaseError } from '@/db/utils'
 import { error, okay, type Result } from '@/utils/result'
+import type { AdminPostSort } from '../constants/blog'
 import type {
   BlogCategory,
   BlogPost,
@@ -193,6 +194,7 @@ export interface AdminPostItem {
   coverImage: string | null
   published: boolean
   draft: boolean
+  viewsCount: number
   locale: string
   authorId: string
   authorName: string
@@ -215,6 +217,7 @@ export interface AdminPostsParams {
   search?: string
   locale?: string
   categoryId?: string
+  sort?: AdminPostSort
   userId?: string
   isAdmin?: boolean
 }
@@ -224,7 +227,16 @@ export function getAdminPosts(
   database: AppDatabase = db,
 ): Promise<Result<PaginatedAdminPosts, DatabaseError>> {
   return withDatabaseError('Error fetching admin posts', async () => {
-    const { page = 1, limit = 10, search, locale, categoryId, userId, isAdmin } = params
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      locale,
+      categoryId,
+      sort = 'latest',
+      userId,
+      isAdmin,
+    } = params
     const safePage = Math.max(1, page)
     const offset = (safePage - 1) * limit
 
@@ -266,10 +278,19 @@ export function getAdminPosts(
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined
 
+    const orderByClause =
+      sort === 'oldest'
+        ? [asc(posts.createdAt)]
+        : sort === 'views_desc'
+          ? [desc(posts.viewsCount), desc(posts.createdAt)]
+          : sort === 'views_asc'
+            ? [asc(posts.viewsCount), desc(posts.createdAt)]
+            : [desc(posts.createdAt)]
+
     const [dbPosts, [countResult]] = await Promise.all([
       database.query.posts.findMany({
         where: whereClause,
-        orderBy: [desc(posts.createdAt)],
+        orderBy: orderByClause,
         limit,
         offset,
         with: {
@@ -294,6 +315,7 @@ export function getAdminPosts(
       coverImage: post.coverImage,
       published: post.published,
       draft: post.draft,
+      viewsCount: post.viewsCount,
       locale: post.locale,
       authorId: post.authorId,
       authorName: post.author.name,
@@ -409,7 +431,7 @@ export const getPublishedPostBySlug = cache(
 // ── Shared helpers ──────────────────────────────────────────────
 
 const postWithRelations = {
-  author: { columns: { name: true } },
+  author: { columns: { name: true, image: true, emailVerified: true } },
   lastEditor: { columns: { name: true } },
   postCategories: { with: { category: true } },
 } as const
@@ -445,16 +467,21 @@ function mapDbPostToBlogPost(dbPost: DbPostWithRelations): BlogPost {
     draftContent: dbPost.draftContent,
     excerpt: extractExcerpt(dbPost.content),
     coverImage: dbPost.coverImage,
+    coverImageAlt: dbPost.coverImageAlt,
+    canonicalUrl: dbPost.canonicalUrl,
     locale: dbPost.locale,
     published: dbPost.published,
     draft: dbPost.draft,
     authorId: dbPost.authorId,
     authorName: dbPost.author.name,
+    authorImage: dbPost.author.image,
+    authorEmailVerified: Boolean(dbPost.author.emailVerified),
     lastModifiedBy: dbPost.lastModifiedBy,
     lastEditorName: dbPost.lastEditor?.name ?? null,
     translationGroupId: dbPost.translationGroupId ?? undefined,
     categories: mappedTags,
     readTimeMinutes: calculateReadTime(dbPost.content),
+    viewsCount: dbPost.viewsCount,
     createdAt: dbPost.createdAt,
     updatedAt: dbPost.updatedAt,
   }

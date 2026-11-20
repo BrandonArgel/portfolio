@@ -7,7 +7,7 @@ import { constructPageMetadata } from '@/lib/seo'
 export const OG_IMAGE_WIDTH = 1200
 export const OG_IMAGE_HEIGHT = 630
 
-const SEO_DESCRIPTION_MAX_LENGTH = 160
+export const SEO_DESCRIPTION_MAX_LENGTH = 155
 
 /** Formats that social crawlers do not render reliably as link-preview images. */
 const UNSUPPORTED_OG_IMAGE_EXTENSIONS = /\.(svg|gif|avif|heic|heif)(?:$|[?#])/i
@@ -99,6 +99,7 @@ export interface PostOgImageInput {
   slug: string
   locale: string
   coverImage?: string | null
+  coverImageAlt?: string | null
   updatedAt: Date
 }
 
@@ -117,7 +118,7 @@ export function resolvePostOgImage(
   post: PostOgImageInput,
   baseUrl: string = getBaseUrl(),
 ): ResolvedOgImage {
-  const alt = post.title
+  const alt = post.coverImageAlt?.trim() || post.title
   const trimmedCover = post.coverImage?.trim()
 
   if (trimmedCover && !UNSUPPORTED_OG_IMAGE_EXTENSIONS.test(trimmedCover)) {
@@ -150,9 +151,12 @@ export interface BlogPostMetadataInput {
   title: string
   slug: string
   locale: string
+  requestedLocale?: string
   description?: string | null
   content: string
   coverImage?: string | null
+  coverImageAlt?: string | null
+  canonicalUrl?: string | null
   authorName?: string | null
   translationGroupId?: string | null
   categories: readonly { name: string }[]
@@ -169,10 +173,16 @@ export function buildBlogPostMetadata(
   const authorName = post.authorName || siteConfig.author.name
   const description = buildSeoDescription(post.description, post.content)
   const ogImage = resolvePostOgImage(post, baseUrl)
+  const trimmedCanonical = post.canonicalUrl?.trim()
+  const customCanonicalUrl =
+    trimmedCanonical && isHttpUrl(trimmedCanonical) ? trimmedCanonical : undefined
+  const nativePostUrl = buildPostUrl(post.locale, post.slug, baseUrl)
+  const resolvedCanonical = customCanonicalUrl ?? nativePostUrl
+  const isLocaleFallback = Boolean(post.requestedLocale && post.requestedLocale !== post.locale)
 
-  // The canonical URL always points to the post's own locale so the same article served under
-  // another locale (with the fallback banner) is not indexed as duplicate content.
-  return constructPageMetadata({
+  // The canonical URL points to the post's custom canonical URL (when set) or its native locale URL
+  // so an article served under a fallback locale is never indexed as duplicate content.
+  const baseMetadata = constructPageMetadata({
     locale: post.locale,
     title: post.title,
     description,
@@ -194,6 +204,24 @@ export function buildBlogPostMetadata(
     authors: [authorName],
     tags: categoryNames,
   })
+
+  return {
+    ...baseMetadata,
+    alternates: {
+      ...baseMetadata.alternates,
+      canonical: resolvedCanonical,
+    },
+    ...(isLocaleFallback && {
+      robots: {
+        index: false,
+        follow: true,
+        googleBot: {
+          index: false,
+          follow: true,
+        },
+      },
+    }),
+  }
 }
 
 // ── Translations / hreflang ─────────────────────────────────────
@@ -246,6 +274,8 @@ export interface BlogPostingJsonLdInput {
   slug: string
   locale: string
   authorName: string
+  authorImage?: string | null
+  canonicalUrl?: string | null
   categoryNames: readonly string[]
   imageUrl: string
   createdAt: Date
@@ -257,11 +287,22 @@ export function buildBlogPostingJsonLd(
   input: BlogPostingJsonLdInput,
   baseUrl: string = getBaseUrl(),
 ): Record<string, unknown> {
-  const postUrl = buildPostUrl(input.locale, input.slug, baseUrl)
+  const trimmedCanonical = input.canonicalUrl?.trim()
+  const postUrl =
+    trimmedCanonical && isHttpUrl(trimmedCanonical)
+      ? trimmedCanonical
+      : buildPostUrl(input.locale, input.slug, baseUrl)
+  const trimmedAuthorImage = input.authorImage?.trim()
+  const authorImageUrl = trimmedAuthorImage ? toAbsoluteUrl(trimmedAuthorImage, baseUrl) : undefined
+  const authorSameAs = [
+    siteConfig.links.github,
+    siteConfig.links.linkedin,
+    siteConfig.links.youtube,
+  ].filter(Boolean)
 
   return {
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
+    '@type': 'TechArticle',
     headline: truncateText(input.title, 110),
     description: input.description,
     image: [input.imageUrl],
@@ -277,6 +318,8 @@ export function buildBlogPostingJsonLd(
       '@type': 'Person',
       name: input.authorName,
       url: siteConfig.author.url,
+      ...(authorImageUrl ? { image: authorImageUrl } : {}),
+      sameAs: authorSameAs,
     },
     publisher: {
       '@type': 'Organization',
