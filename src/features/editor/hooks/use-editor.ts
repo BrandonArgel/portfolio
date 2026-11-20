@@ -20,13 +20,16 @@ import { cn } from '@/lib/utils'
 
 import { CalloutNode } from '../extensions/callout-node'
 import { CalloutTitleNode } from '../extensions/callout-title-node'
+import { ChartNode } from '../extensions/chart-node'
 import { CodeBlockNode } from '../extensions/code-block-node'
 import { HighlightMark } from '../extensions/highlight-mark'
 import { ImageNode } from '../extensions/image-node'
+import { MarkdownPaste } from '../extensions/markdown-paste'
 import { SlashCommand } from '../extensions/slash-command'
 import { TaskItemNode } from '../extensions/task-item-node'
 import { TaskListNode } from '../extensions/task-list-node'
 import { ColorExtension, TextStyleMark } from '../extensions/text-style-mark'
+import { UnderlineMark } from '../extensions/underline-mark'
 
 interface UseBlogEditorProps {
   initialContent?: string
@@ -86,6 +89,7 @@ export function useEditor({
           },
         },
         codeBlock: false,
+        underline: false,
         link: {
           openOnClick: false,
           HTMLAttributes: {
@@ -99,8 +103,10 @@ export function useEditor({
         },
       }),
       CharacterCount,
+      UnderlineMark,
       TextStyleMark,
       ColorExtension,
+      MarkdownPaste,
       HighlightMark.configure({
         multicolor: true,
         HTMLAttributes: {
@@ -131,9 +137,11 @@ export function useEditor({
           image: t('commands.image'),
           video: t('commands.video'),
           table: t('commands.table'),
+          chart: t('commands.chart'),
           blockMath: t('commands.block_math'),
         },
       }),
+      ChartNode,
       CodeBlockNode.configure({
         highlighter,
         defaultLanguage: 'plaintext',

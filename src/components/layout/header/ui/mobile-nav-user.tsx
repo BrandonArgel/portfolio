@@ -6,6 +6,7 @@ import { useUserSession } from '@/components/layout/user-menu/use-user-session'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/ui/spinner'
 import { AuthButtons } from '@/features/auth/components/auth-buttons'
@@ -91,6 +92,8 @@ export function MobileNavUser({ onNavigate }: { onNavigate: () => void }) {
           <span>{tGlobal('labels.dashboard')}</span>
         </Link>
       )}
+
+      <Separator className="my-4" />
 
       <Button
         variant="destructive"

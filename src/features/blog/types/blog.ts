@@ -26,16 +26,21 @@ export interface BlogPost {
   draftContent?: string | null
   excerpt: string
   coverImage?: string | null
+  coverImageAlt?: string | null
+  canonicalUrl?: string | null
   published: boolean
   draft: boolean
   locale: string
   translationGroupId?: string
   authorId: string
   authorName?: string
+  authorImage?: string | null
+  authorEmailVerified?: boolean
   lastModifiedBy?: string | null
   lastEditorName?: string | null
   categories: BlogCategory[]
   readTimeMinutes: number
+  viewsCount: number
   createdAt: Date
   updatedAt: Date
 }
@@ -67,6 +72,19 @@ export interface ToggleBookmarkResult {
   postId: string
   slug: string
   locale: string
+}
+
+export interface ToggleLikeResult {
+  liked: boolean
+  likesCount: number
+  postId: string
+  slug: string
+  locale: string
+}
+
+export interface PostLikeStatus {
+  likesCount: number
+  isLiked: boolean
 }
 
 export interface CommentAuthor {

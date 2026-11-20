@@ -61,6 +61,22 @@ describe('BlogFrontmatterSchema', () => {
         translationGroupId: 'not-a-uuid',
       }).success,
     ).toBe(false)
+
+    expect(
+      BlogFrontmatterSchema.safeParse({
+        title: 'Title',
+        slug: 'title',
+        canonicalUrl: 'ftp://invalid-scheme.example.com',
+      }).success,
+    ).toBe(false)
+
+    const validSeoFields = BlogFrontmatterSchema.safeParse({
+      title: 'Title',
+      slug: 'title',
+      coverImageAlt: 'Descriptive cover alt',
+      canonicalUrl: 'https://example.com/canonical-post',
+    })
+    expect(validSeoFields.success).toBe(true)
   })
 })
 
@@ -116,6 +132,47 @@ describe('validateSavePostInput', () => {
       expect(data?.title).toBe('My Post')
       expect(data?.slug).toBe('my-post')
       expect(data?.content).toBe('  keep formatting\n')
+    }
+  })
+
+  test('normalizes coverImageAlt and canonicalUrl and rejects invalid canonical URLs', () => {
+    const [validErr, validData] = validateSavePostInput({
+      title: 'SEO Article',
+      slug: 'seo-article',
+      content: 'Body',
+      intent: 'publish',
+      coverImageAlt: '  Diagram of request flow  ',
+      canonicalUrl: '  https://example.com/original  ',
+    })
+
+    expect(validErr).toBeNull()
+    expect(validData?.coverImageAlt).toBe('Diagram of request flow')
+    expect(validData?.canonicalUrl).toBe('https://example.com/original')
+
+    const [blankErr, blankData] = validateSavePostInput({
+      title: 'SEO Article',
+      slug: 'seo-article',
+      content: 'Body',
+      intent: 'save_draft',
+      coverImageAlt: '   ',
+      canonicalUrl: '',
+    })
+
+    expect(blankErr).toBeNull()
+    expect(blankData?.coverImageAlt).toBeNull()
+    expect(blankData?.canonicalUrl).toBeNull()
+
+    const [invalidCanonicalErr] = validateSavePostInput({
+      title: 'SEO Article',
+      slug: 'seo-article',
+      content: 'Body',
+      intent: 'publish',
+      canonicalUrl: 'not-a-valid-url',
+    })
+
+    expect(invalidCanonicalErr?.reason).toBe('VALIDATION_ERROR')
+    if (invalidCanonicalErr?.reason === 'VALIDATION_ERROR') {
+      expect(invalidCanonicalErr.field).toBe('canonicalUrl')
     }
   })
 })

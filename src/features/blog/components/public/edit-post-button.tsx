@@ -1,6 +1,7 @@
 import { Pencil } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { LinkButton } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { getOptionalSession } from '@/lib/auth/get-optional-session'
 import { cn } from '@/lib/utils'
 
@@ -22,14 +23,20 @@ export async function EditPostButton({ authorId, slug, className }: EditPostButt
   const t = await getTranslations('features.blog.reader')
 
   return (
-    <LinkButton
-      href={`/dashboard/posts/${slug}/edit`}
-      variant="outline"
-      size="sm"
-      className={cn('gap-1.5 text-xs font-medium border-border hover:bg-muted', className)}
-    >
-      <Pencil className="size-3.5 text-muted-foreground" />
-      <span>{t('actions.edit')}</span>
-    </LinkButton>
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <LinkButton
+            href={`/dashboard/posts/${slug}/edit`}
+            variant="outline"
+            size="icon"
+            className={cn('border-border bg-card hover:bg-muted', className)}
+          >
+            <Pencil className="size-4 text-muted-foreground" />
+          </LinkButton>
+        }
+      />
+      <TooltipContent side="bottom">{t('actions.edit')}</TooltipContent>
+    </Tooltip>
   )
 }

@@ -2,6 +2,7 @@ import { getStyleProperty, type MarkdownToken } from '@tiptap/core'
 import Color, { type ColorOptions } from '@tiptap/extension-color'
 import { TextStyle, type TextStyleOptions } from '@tiptap/extension-text-style'
 
+import { SPAN_TAG_PREFIX, SPAN_TAG_START } from '@/lib/markdown-regex'
 import { extractColorFromAttrs, matchBalancedHtmlTag, normalizeEditorColor } from '../config/colors'
 
 interface TextStyleMarkdownToken extends MarkdownToken {
@@ -55,10 +56,10 @@ export const TextStyleMark = TextStyle.extend<TextStyleOptions>({
     name: 'textStyle',
     level: 'inline',
 
-    start: (src: string) => src.search(/<span\b/i),
+    start: (src: string) => src.search(SPAN_TAG_START),
 
     tokenize(src, _tokens, lexer) {
-      if (!/^<span\b/i.test(src)) return undefined
+      if (!SPAN_TAG_PREFIX.test(src)) return undefined
 
       const matched = matchBalancedHtmlTag(src, 'span')
       if (!matched) return undefined

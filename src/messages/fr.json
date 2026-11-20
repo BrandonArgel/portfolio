@@ -321,6 +321,8 @@
       }
     },
     "blog": {
+      "author_subtitle": "Ingénieur logiciel & Développeur Frontend",
+      "verified_author": "Auteur vérifié",
       "reader": {
         "badge": "Blog & Articles",
         "title_line1": "Perspectives sur",
@@ -359,6 +361,7 @@
           "bookmarked": "Article enregistré",
           "bookmark_removed": "Article retiré des enregistrements",
           "edit": "Modifier l'article",
+          "dismiss": "Dismiss",
           "share_menu": {
             "label": "Partager l'article",
             "copy_link": "Copier le lien",
@@ -377,6 +380,7 @@
         "error_loading_article": "Erreur lors du chargement de l'article",
         "error_loading_article_description": "Un problème de connexion est survenu. Veuillez réessayer plus tard.",
         "post_not_found": "Article introuvable",
+        "views_count": "{count, plural, =1 {{formattedCount} vue} other {{formattedCount} vues}}",
         "fallbackWarning": "Cet article n'est pas encore disponible dans votre langue. Affichage de la version {originalLocale, select, en {anglaise} es {espagnole} fr {française} other {originale}}.",
         "pagination": {
           "previous": "Précédent",
@@ -458,6 +462,34 @@
           "error_loading": "Impossible de charger les commentaires pour le moment. Veuillez actualiser la page."
         }
       },
+      "like": {
+        "tooltip_like": "Aimer cet article",
+        "tooltip_unlike": "Retirer la mention J'aime",
+        "aria_like": "Aimer cet article ({count, plural, =0 {0 J'aime} =1 {1 J'aime} other {# J'aime}})",
+        "aria_unlike": "Retirer J'aime ({count, plural, =0 {0 J'aime} =1 {1 J'aime} other {# J'aime}})",
+        "errors": {
+          "NOT_FOUND": {
+            "title": "Article introuvable",
+            "description": "L'article que vous souhaitez aimer n'existe plus."
+          },
+          "UNAUTHORIZED": {
+            "title": "Connectez-vous pour aimer les articles",
+            "description": "Connectez-vous ou créez un compte pour aimer cet article."
+          },
+          "FORBIDDEN": {
+            "title": "Action refusée",
+            "description": "Vous n'avez pas l'autorisation d'aimer cet article."
+          },
+          "VALIDATION_ERROR": {
+            "title": "Requête invalide",
+            "description": "Impossible de valider l'identifiant de l'article."
+          },
+          "DATABASE_ERROR": {
+            "title": "Impossible de mettre à jour",
+            "description": "Une erreur de base de données s'est produite. Veuillez réessayer."
+          }
+        }
+      },
       "management": {
         "title": "Mes Articles",
         "session_as": "Connecté en tant que : {name} ({role})",
@@ -493,6 +525,11 @@
         "next_page": "Suivant",
         "dashboard": "Tableau de bord",
         "filter_all": "Tous",
+        "views_count": "{count, plural, =1 {{formattedCount} vue} other {{formattedCount} vues}}",
+        "sort_latest": "Plus récents",
+        "sort_oldest": "Plus anciens",
+        "sort_most_viewed": "Les plus vus",
+        "sort_least_viewed": "Les moins vus",
         "error_loading": "Impossible de charger les articles",
         "error_loading_description": "Une erreur de base de données est survenue lors du chargement des articles. Veuillez réessayer."
       },
@@ -753,6 +790,17 @@
           "cover_attached": "Image de couverture jointe",
           "replace_cover": "Remplacer l'image de couverture",
           "remove_cover": "Supprimer l'image de couverture",
+          "field_cover_image_alt": "Texte Alternatif de Couverture (Alt)",
+          "cover_image_alt_placeholder": "Décrivez l'image de couverture pour les lecteurs d'écran et le SEO...",
+          "cover_image_alt_hint": "Utilise le titre de l'article par défaut si laissé vide.",
+          "field_canonical_url": "URL Canonique (Optionnel)",
+          "canonical_url_placeholder": "https://exemple.com/article-original",
+          "canonical_url_hint": "Laissez vide pour utiliser l'URL par défaut de l'article.",
+          "canonical_url_invalid": "Veuillez saisir une URL HTTP ou HTTPS valide.",
+          "seo_counter_range": "{count} / {min}–{max} caract.",
+          "seo_counter_optimal": "Longueur SEO optimale",
+          "seo_counter_short": "Recommandé : {min}–{max} caractères",
+          "seo_counter_long": "Plus de {max} caract. (peut être tronqué dans les résultats)",
           "field_categories": "Catégories",
           "add_category_placeholder": "Ajouter une catégorie...",
           "create_category": "Créer \"{category}\"",
@@ -931,6 +979,8 @@
         "drafts_desc": "Articles non publiés en révision",
         "users_title": "Utilisateurs Inscrits",
         "users_desc": "Gérés via la Gestion des Utilisateurs",
+        "views_title": "Vues Totales",
+        "views_desc": "Lectures cumulées des articles",
         "content_title": "Gestion de Contenu",
         "content_desc": "Créez et gérez vos articles dans plusieurs langues.",
         "access_title": "Accès et Sécurité",
@@ -977,6 +1027,7 @@
         "image": "Image",
         "video": "Vidéo",
         "table": "Tableau",
+        "chart": "Graphique",
         "task_list": "Liste de tâches",
         "bold": "Gras",
         "italic": "Italique",
@@ -1042,6 +1093,7 @@
         "type": {
           "tip": "Astuce",
           "info": "Information",
+          "note": "Note",
           "pencil": "Note",
           "quote": "Citation",
           "warning": "Avertissement",
@@ -1063,12 +1115,78 @@
         "copy": "Copier le code dans le presse-papiers",
         "copied": "Code copié dans le presse-papiers",
         "select_language": "Sélectionner le langage de programmation",
-        "actions": "Actions du bloc de code"
+        "actions": "Actions du bloc de code",
+        "filename_placeholder": "example.tsx",
+        "filename_label": "Nom du fichier",
+        "options": "Options du bloc de code",
+        "line_numbers": "Numéros de ligne",
+        "start_line": "Ligne de départ",
+        "highlight_lines": "Lignes mises en évidence",
+        "added_lines": "Lignes ajoutées (+)",
+        "removed_lines": "Lignes supprimées (-)",
+        "line_range_placeholder": "ex. 2, 4-6",
+        "clear_annotations": "Effacer les surlignages",
+        "cycle_line_state": "Cliquer pour basculer surligné / ajouté / supprimé"
       },
       "math": {
         "label": "Modifier la formule LaTeX",
         "placeholder": "Saisissez du LaTeX...",
         "hint": "Utilisez la syntaxe LaTeX, ex. x^2, \\frac{a}{b}, \\sum_{i=1}^{n}"
+      },
+      "chart": {
+        "untitled": "Graphique sans titre",
+        "types": {
+          "bar": "Barres",
+          "line": "Lignes",
+          "area": "Aires",
+          "pie": "Secteurs"
+        },
+        "formats": {
+          "number": "Nombre",
+          "currency": "Devise (USD)",
+          "percent": "Pourcentage (%)",
+          "compact": "Compact (1,2 k)"
+        },
+        "actions": {
+          "data": "Données",
+          "settings": "Paramètres",
+          "add_row": "Ajouter une ligne",
+          "add_series": "Ajouter une série",
+          "remove_row": "Supprimer la ligne",
+          "remove_series": "Supprimer la série",
+          "import_data": "Coller CSV / JSON",
+          "apply_import": "Appliquer les données",
+          "cancel": "Annuler"
+        },
+        "fields": {
+          "title": "Titre",
+          "title_placeholder": "ex. Utilisateurs actifs mensuels",
+          "description": "Description / Légende",
+          "description_placeholder": "Sous-titre optionnel ou source des données",
+          "x_label": "Libellé axe X",
+          "x_label_placeholder": "ex. Trimestre",
+          "y_label": "Libellé axe Y",
+          "y_label_placeholder": "ex. USD ($K)",
+          "value_format": "Format des valeurs",
+          "height": "Hauteur (px)",
+          "show_grid": "Afficher le quadrillage",
+          "show_legend": "Afficher la légende interactive",
+          "category_column": "Catégorie",
+          "series_name_placeholder": "Nom de la série",
+          "import_label": "Collez du CSV, TSV ou un tableau JSON d'objets",
+          "import_placeholder": "Mois,Revenus,Dépenses\nJan,42,28\nFév,58,33"
+        },
+        "errors": {
+          "empty": "Saisissez ou collez au moins une ligne de données.",
+          "invalid_json": "Impossible d'analyser le tableau JSON. Vérifiez la syntaxe.",
+          "invalid_tabular": "Au moins deux colonnes (catégorie et valeurs numériques) avec une ligne d'en-tête sont requises."
+        },
+        "pie_first_series_note": "Le mode secteurs affiche la première série : {series}",
+        "empty_data": "Aucune donnée numérique à afficher.",
+        "empty_pie_data": "Les graphiques en secteurs nécessitent des valeurs numériques positives.",
+        "invalid_chart": "Impossible d'afficher le graphique : données invalides ou incomplètes.",
+        "legend_aria": "Basculer la visibilité des séries",
+        "fallback_aria": "Graphique de visualisation de données"
       }
     },
     "hero": {

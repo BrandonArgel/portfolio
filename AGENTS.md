@@ -165,6 +165,7 @@ Client calls actions directly (`startTransition(async () => { const [err, res] =
 - Zustand persisted stores must be gated with `useStoreHydration` before reading.
 - Use `cn()` from `@/lib/utils` for class merging. Tailwind v4 syntax (`size-4`, `min-w-50`, `has-data-[...]`, `w-(--css-var)`).
 - Prefer `useIsMobile()` (`< 768px`) for JS layout branching; prefer responsive classes (`md:`) when CSS suffices.
+- Use `useCopyToClipboard` (`src/hooks/use-copy-to-clipboard.ts`) for all clipboard copy actions instead of calling `navigator.clipboard` directly.
 
 ## Layout / Scroll rules (dashboard editor)
 

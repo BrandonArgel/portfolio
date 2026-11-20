@@ -60,6 +60,15 @@ export interface BlogAnalyticsEvents {
     location: BlogInteractionLocation
   }
 
+  // Likes
+  Blog_Post_Liked: {
+    postId: string
+    slug: string
+    action: BlogBookmarkAction
+    authenticated: boolean
+    location: BlogInteractionLocation
+  }
+
   // Feed discovery & filtering
   Blog_Category_Filtered: {
     categorySlug: string

@@ -15,6 +15,7 @@ import { useMounted } from '@/hooks/use-mounted'
 import type { BlogFrontmatter } from '../schemas/post-schema'
 import { calculateReadTime } from '../utils/calculate-read-time'
 import { preprocessMdxContent } from '../utils/preprocess-mdx'
+import { rehypeCodeMeta } from '../utils/rehype-code-meta'
 import { mdxComponents } from './mdx'
 
 export interface BlogPostPreviewProps {
@@ -69,7 +70,7 @@ export function BlogPostPreview({
       options: {
         mdxOptions: {
           remarkPlugins: [remarkGfm, remarkUnwrapImages, remarkMath],
-          rehypePlugins: [rehypeKatex],
+          rehypePlugins: [rehypeCodeMeta, rehypeKatex],
         },
       },
     })
@@ -141,7 +142,7 @@ export function BlogPostPreview({
                 {/* biome-ignore lint/performance/noImgElement: Live preview supports arbitrary uploaded/external URLs */}
                 <img
                   src={frontmatter.coverImage}
-                  alt={displayTitle}
+                  alt={frontmatter.coverImageAlt?.trim() || displayTitle}
                   className="h-auto w-full object-cover"
                 />
               </div>

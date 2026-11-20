@@ -1,6 +1,7 @@
 import type { MDXRemoteProps } from 'next-mdx-remote/rsc'
 
 import { MdxCallout } from './mdx-callout'
+import { MdxChart } from './mdx-chart'
 import { Checklist } from './mdx-checklist'
 import { MdxCode, MdxPre } from './mdx-code-block'
 import { MdxInput, MdxLi, MdxOl, MdxUl } from './mdx-lists'
@@ -58,4 +59,5 @@ export const mdxComponents: NonNullable<MDXRemoteProps['components']> = {
   ),
   Callout: MdxCallout,
   Checklist,
+  Chart: MdxChart,
 }

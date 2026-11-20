@@ -19,10 +19,37 @@ type BlogDraftsStoreState = {
   drafts: Record<string, DraftState>
 }
 
+function normalizeDraftFrontmatter(frontmatter?: Partial<BlogFrontmatter>): BlogFrontmatter {
+  return {
+    ...defaultFrontmatter,
+    ...frontmatter,
+    coverImageAlt: frontmatter?.coverImageAlt ?? defaultFrontmatter.coverImageAlt,
+    canonicalUrl: frontmatter?.canonicalUrl ?? defaultFrontmatter.canonicalUrl,
+  }
+}
+
 export const useBlogDraftsStore = create<BlogDraftsStoreState>()(
   persist(() => ({ drafts: {} }), {
     name: 'blog-drafts-storage',
     storage: createJSONStorage(() => idbStorage),
+    merge: (persistedState, currentState) => {
+      const persisted = persistedState as Partial<BlogDraftsStoreState> | undefined
+      if (!persisted?.drafts) return currentState
+
+      const normalizedDrafts: Record<string, DraftState> = {}
+      for (const [key, draft] of Object.entries(persisted.drafts)) {
+        if (!draft) continue
+        normalizedDrafts[key] = {
+          ...draft,
+          frontmatter: normalizeDraftFrontmatter(draft.frontmatter),
+        }
+      }
+
+      return {
+        ...currentState,
+        drafts: normalizedDrafts,
+      }
+    },
   }),
 )
 
@@ -34,7 +61,7 @@ export const blogDraftsActions = {
         drafts: {
           ...prev.drafts,
           [id]: {
-            frontmatter: initialFrontmatter || defaultFrontmatter,
+            frontmatter: normalizeDraftFrontmatter(initialFrontmatter),
             content: initialContent || '',
             lastSaved: null,
           },
@@ -54,7 +81,10 @@ export const blogDraftsActions = {
           ...state.drafts,
           [id]: {
             ...currentDraft,
-            frontmatter: { ...currentDraft.frontmatter, draft: true },
+            frontmatter: {
+              ...normalizeDraftFrontmatter(currentDraft.frontmatter),
+              draft: true,
+            },
             content,
             lastSaved: Date.now(),
           },
@@ -69,7 +99,11 @@ export const blogDraftsActions = {
       return {
         drafts: {
           ...state.drafts,
-          [id]: { ...currentDraft, frontmatter, lastSaved: Date.now() },
+          [id]: {
+            ...currentDraft,
+            frontmatter: normalizeDraftFrontmatter(frontmatter),
+            lastSaved: Date.now(),
+          },
         },
       }
     })
@@ -80,7 +114,7 @@ export const blogDraftsActions = {
       drafts: {
         ...state.drafts,
         [id]: {
-          frontmatter,
+          frontmatter: normalizeDraftFrontmatter(frontmatter),
           content,
           lastSaved: Date.now(),
         },

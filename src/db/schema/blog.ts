@@ -28,8 +28,11 @@ export const posts = sqliteTable(
     content: text('content').notNull().default(''),
     draftContent: text('draft_content'),
     coverImage: text('cover_image'),
+    coverImageAlt: text('cover_image_alt'),
+    canonicalUrl: text('canonical_url'),
     published: integer('published', { mode: 'boolean' }).default(false).notNull(),
     draft: integer('draft', { mode: 'boolean' }).default(true).notNull(),
+    viewsCount: integer('views_count').notNull().default(0),
     locale: text('locale').default('en').notNull(),
     translationGroupId: text('translationGroupId'),
     authorId: text('authorId')
@@ -103,5 +106,25 @@ export const postBookmarks = sqliteTable(
     primaryKey({ columns: [t.userId, t.postId] }),
     index('idx_post_bookmarks_post_id').on(t.postId),
     index('idx_post_bookmarks_user_created_at').on(t.userId, t.createdAt),
+  ],
+)
+
+export const postLikes = sqliteTable(
+  'post_likes',
+  {
+    postId: text('postId')
+      .notNull()
+      .references(() => posts.id, { onDelete: 'cascade' }),
+    userId: text('userId')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    createdAt: integer('createdAt', { mode: 'timestamp' })
+      .default(sql`(unixepoch())`)
+      .$defaultFn(() => new Date())
+      .notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.postId, t.userId] }),
+    index('idx_post_likes_user_id').on(t.userId),
   ],
 )

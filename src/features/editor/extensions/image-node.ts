@@ -1,12 +1,12 @@
-import { nodeInputRule } from '@tiptap/core'
+import { InputRule } from '@tiptap/core'
 import Image, { type ImageOptions } from '@tiptap/extension-image'
 import type { Node as ProsemirrorNode } from '@tiptap/pm/model'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import type { EditorView } from '@tiptap/pm/view'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 
+import { IMAGE_INPUT_RULE } from '@/lib/markdown-regex'
 import { ImageComponent } from '../components/image'
-import { MDX_REGEX } from '../config/regex'
 
 interface CustomImageOptions extends ImageOptions {
   uploadFn?: (file: File) => Promise<string | undefined>
@@ -115,12 +115,34 @@ export const ImageNode = Image.extend<CustomImageOptions>({
 
   addInputRules() {
     return [
-      nodeInputRule({
-        find: MDX_REGEX.imagePrefix,
-        type: this.type,
-        getAttributes: (match) => {
-          const [, , alt, src, title] = match
-          return { src, alt, title }
+      new InputRule({
+        find: IMAGE_INPUT_RULE,
+        handler: ({ state, range, match }) => {
+          const [, fullImage = '', alt = '', src = '', title = ''] = match
+          if (!fullImage || !src) return null
+
+          const { tr } = state
+          const start = range.from + match[0].lastIndexOf(fullImage)
+          const end = range.to
+          const imageNode = this.type.create({ src, alt, title })
+          const $start = state.doc.resolve(start)
+
+          // When the image syntax spans the entire paragraph, replace the paragraph itself
+          // so we don't leave a stray empty paragraph above a block image node.
+          if (
+            this.type.isBlock &&
+            $start.depth > 0 &&
+            $start.parent.type.name === 'paragraph' &&
+            start === $start.start() &&
+            end === $start.end() &&
+            $start.node(-1).canReplaceWith($start.index(-1), $start.indexAfter(-1), this.type)
+          ) {
+            tr.replaceWith($start.before(), $start.after(), imageNode)
+          } else {
+            tr.replaceWith(start, end, imageNode)
+          }
+
+          tr.scrollIntoView()
         },
       }),
     ]

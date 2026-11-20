@@ -1,14 +1,14 @@
 import type { MarkdownToken } from '@tiptap/core'
 import TaskList from '@tiptap/extension-task-list'
 import { ReactNodeViewRenderer } from '@tiptap/react'
+import {
+  CHECKLIST_BLOCK,
+  CHECKLIST_DISABLED_ATTR,
+  CHECKLIST_INTERACTIVE_ATTR,
+  CHECKLIST_START,
+  LOOSE_TASK_GAP,
+} from '@/lib/markdown-regex'
 import { TaskListComponent } from '../components/task-list'
-
-const CHECKLIST_START_REGEX = /^[ \t]*<Checklist(?:\s|>)/m
-const CHECKLIST_BLOCK_REGEX =
-  /^[ \t]*<Checklist(?:\s+([^>]*))?>[ \t]*\r?\n([\s\S]*?)\r?\n[ \t]*<\/Checklist>[ \t]*(?:\r?\n|$)/
-const DISABLED_ATTR_REGEX = /\bdisabled(?:\s*=\s*(?:\{\s*(true|false)\s*\}|"([^"]*)"|'([^']*)'))?/i
-const INTERACTIVE_ATTR_REGEX = /\binteractive\s*=\s*(?:\{\s*(true|false)\s*\}|"([^"]*)"|'([^']*)')/i
-const LOOSE_TASK_GAP_REGEX = /\r?\n(?:[ \t]*\r?\n)+(?=[ \t]*[-+*]\s+\[[ xX]\]\s+)/g
 
 interface TaskListToken extends MarkdownToken {
   items?: MarkdownToken[]
@@ -18,7 +18,7 @@ interface TaskListToken extends MarkdownToken {
 function resolveChecklistInteractive(attrsRaw: string | undefined): boolean {
   if (!attrsRaw?.trim()) return true
 
-  const disabledMatch = DISABLED_ATTR_REGEX.exec(attrsRaw)
+  const disabledMatch = CHECKLIST_DISABLED_ATTR.exec(attrsRaw)
   if (disabledMatch) {
     const rawDisabled = (disabledMatch[1] ?? disabledMatch[2] ?? disabledMatch[3] ?? '').trim()
     if (rawDisabled.toLowerCase() !== 'false') {
@@ -26,7 +26,7 @@ function resolveChecklistInteractive(attrsRaw: string | undefined): boolean {
     }
   }
 
-  const interactiveMatch = INTERACTIVE_ATTR_REGEX.exec(attrsRaw)
+  const interactiveMatch = CHECKLIST_INTERACTIVE_ATTR.exec(attrsRaw)
   if (interactiveMatch) {
     const rawInteractive = (
       interactiveMatch[1] ??
@@ -71,7 +71,7 @@ export const TaskListNode = TaskList.extend({
     level: 'block',
 
     start(src) {
-      const checklistIndex = src.search(CHECKLIST_START_REGEX)
+      const checklistIndex = src.search(CHECKLIST_START)
       const parentStart =
         typeof parentTokenizer?.start === 'function' ? parentTokenizer.start.call(this, src) : -1
 
@@ -81,11 +81,11 @@ export const TaskListNode = TaskList.extend({
     },
 
     tokenize(src, tokens, lexer) {
-      const checklistMatch = CHECKLIST_BLOCK_REGEX.exec(src)
+      const checklistMatch = CHECKLIST_BLOCK.exec(src)
 
       if (checklistMatch) {
         const [, attrsRaw, innerBodyRaw] = checklistMatch
-        const normalizedBody = innerBodyRaw.trim().replace(LOOSE_TASK_GAP_REGEX, '\n')
+        const normalizedBody = innerBodyRaw.trim().replace(LOOSE_TASK_GAP, '\n')
         const innerToken = parentTokenizer?.tokenize.call(this, normalizedBody, tokens, lexer) as
           | TaskListToken
           | undefined
