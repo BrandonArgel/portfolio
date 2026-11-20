@@ -1,19 +1,157 @@
-import { type JSONContent, type MarkdownToken, mergeAttributes, Node } from '@tiptap/core'
-import { ReactNodeViewRenderer } from '@tiptap/react'
-import { CalloutComponent } from '../components/callout'
 import {
+  InputRule,
+  type JSONContent,
+  type MarkdownToken,
+  mergeAttributes,
+  Node,
+} from '@tiptap/core'
+import { Fragment, type NodeType } from '@tiptap/pm/model'
+import { type EditorState, TextSelection } from '@tiptap/pm/state'
+import { ReactNodeViewRenderer } from '@tiptap/react'
+
+import {
+  CALLOUT_ALERT_INPUT_RULE,
+  CALLOUT_BLOCK,
+  CALLOUT_BLOCK_START,
+  CALLOUT_DIRECTIVE_INPUT_RULE,
+  CALLOUT_LINE_PREFIX,
   type CalloutType,
   DEFAULT_CALLOUT_TYPE,
+  getCalloutLabel,
   isCalloutType,
   normalizeCalloutType,
-} from '../config/callout'
+} from '@/lib/markdown-regex'
+import { CalloutComponent } from '../components/callout'
 
 // ─── Token metadata shape ────────────────────────────────────────────────────
 
 interface CalloutTokenMeta {
   type: CalloutType
-  title: string
+  titleTokens: MarkdownToken[]
   bodyTokens: MarkdownToken[]
+}
+
+function isCalloutTokenMeta(value: unknown): value is CalloutTokenMeta {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'type' in value &&
+    isCalloutType(value.type) &&
+    'titleTokens' in value &&
+    Array.isArray(value.titleTokens) &&
+    'bodyTokens' in value &&
+    Array.isArray(value.bodyTokens)
+  )
+}
+
+function applyCalloutInputRule({
+  state,
+  range,
+  rawType,
+  calloutNodeType,
+  requireQuoteOrBlockquote,
+  rawMatch,
+}: {
+  state: EditorState
+  range: { from: number; to: number }
+  rawType: string | undefined
+  calloutNodeType: NodeType
+  requireQuoteOrBlockquote: boolean
+  rawMatch: string
+}): null | undefined {
+  const candidateType = rawType?.toLowerCase()
+  if (!isCalloutType(candidateType)) {
+    return null
+  }
+
+  const calloutTitleType = state.schema.nodes.calloutTitle
+  const paragraphType = state.schema.nodes.paragraph
+  if (!calloutTitleType || !paragraphType) {
+    return null
+  }
+
+  const { $from } = state.selection
+  if ($from.parent.type !== paragraphType || $from.depth < 1) {
+    return null
+  }
+
+  const parentDepth = $from.depth - 1
+  const parentNode = $from.node(parentDepth)
+  const isInsideBlockquote = parentDepth > 0 && parentNode.type.name === 'blockquote'
+  const hasQuotePrefix = CALLOUT_LINE_PREFIX.test(rawMatch.trimStart())
+
+  if (requireQuoteOrBlockquote && !hasQuotePrefix && !isInsideBlockquote) {
+    return null
+  }
+
+  if (isInsideBlockquote) {
+    const bqGrandParentDepth = parentDepth - 1
+    if (
+      !$from
+        .node(bqGrandParentDepth)
+        .canReplaceWith(
+          $from.index(bqGrandParentDepth),
+          $from.indexAfter(bqGrandParentDepth),
+          calloutNodeType,
+        )
+    ) {
+      return null
+    }
+  } else if (
+    !parentNode.canReplaceWith(
+      $from.index(parentDepth),
+      $from.indexAfter(parentDepth),
+      calloutNodeType,
+    )
+  ) {
+    return null
+  }
+
+  const { tr } = state
+  tr.delete(range.from, range.to)
+
+  const $afterDelete = tr.doc.resolve(range.from)
+  const titleNode = calloutTitleType.create(null, state.schema.text(getCalloutLabel(candidateType)))
+  const bodyParagraph = paragraphType.create(null, $afterDelete.parent.content)
+  const calloutNode = calloutNodeType.create({ type: candidateType }, [titleNode, bodyParagraph])
+
+  if (isInsideBlockquote) {
+    const bqDepth = $afterDelete.depth - 1
+    const bqStart = $afterDelete.before(bqDepth)
+    const bqEnd = $afterDelete.after(bqDepth)
+    const bqNode = $afterDelete.node(bqDepth)
+    const childIndex = $afterDelete.index(bqDepth)
+
+    const beforeItems = bqNode.content.content.slice(0, childIndex)
+    const afterItems = bqNode.content.content.slice(childIndex + 1)
+
+    const beforeBlockquote =
+      beforeItems.length > 0 ? bqNode.type.create(bqNode.attrs, Fragment.from(beforeItems)) : null
+    const afterBlockquote =
+      afterItems.length > 0 ? bqNode.type.create(bqNode.attrs, Fragment.from(afterItems)) : null
+
+    const replacementNodes = [
+      ...(beforeBlockquote ? [beforeBlockquote] : []),
+      calloutNode,
+      ...(afterBlockquote ? [afterBlockquote] : []),
+    ]
+
+    const calloutOffset = beforeBlockquote ? beforeBlockquote.nodeSize : 0
+    const bodyCursorPos = bqStart + calloutOffset + 1 + titleNode.nodeSize + 1
+
+    tr.replaceWith(bqStart, bqEnd, replacementNodes)
+    tr.setSelection(TextSelection.create(tr.doc, bodyCursorPos))
+    tr.scrollIntoView()
+    return
+  }
+
+  const pStart = $afterDelete.before()
+  const pEnd = $afterDelete.after()
+  const bodyCursorPos = pStart + 1 + titleNode.nodeSize + 1
+
+  tr.replaceWith(pStart, pEnd, calloutNode)
+  tr.setSelection(TextSelection.create(tr.doc, bodyCursorPos))
+  tr.scrollIntoView()
 }
 
 // ─── Node Definition ─────────────────────────────────────────────────────────
@@ -79,6 +217,35 @@ export const CalloutNode = Node.create({
     })
   },
 
+  addInputRules() {
+    return [
+      new InputRule({
+        find: CALLOUT_ALERT_INPUT_RULE,
+        handler: ({ state, range, match }) =>
+          applyCalloutInputRule({
+            state,
+            range,
+            rawType: match[1],
+            calloutNodeType: this.type,
+            requireQuoteOrBlockquote: true,
+            rawMatch: match[0],
+          }),
+      }),
+      new InputRule({
+        find: CALLOUT_DIRECTIVE_INPUT_RULE,
+        handler: ({ state, range, match }) =>
+          applyCalloutInputRule({
+            state,
+            range,
+            rawType: match[1],
+            calloutNodeType: this.type,
+            requireQuoteOrBlockquote: false,
+            rawMatch: match[0],
+          }),
+      }),
+    ]
+  },
+
   // ─── Markdown Tokenizer ──────────────────────────────────────────────────
   // Custom marked.js tokenizer that intercepts GFM blockquotes beginning
   // with the `[!TYPE]` marker.
@@ -88,13 +255,13 @@ export const CalloutNode = Node.create({
     level: 'block',
 
     start: (src) => {
-      const match = src.match(/^>\s*\[!/m)
+      const match = src.match(CALLOUT_BLOCK_START)
       return match?.index ?? -1
     },
 
     tokenize: (src, _tokens, lexer) => {
       // Match: > [!TYPE] optional title followed by continuation lines
-      const match = /^>\s*\[!([A-Za-z]+)\]\s*(.*?)(?:\n((?:>\s?.*(?:\n|$))*)|$)/.exec(src)
+      const match = CALLOUT_BLOCK.exec(src)
 
       if (!match) {
         return undefined
@@ -111,7 +278,7 @@ export const CalloutNode = Node.create({
       const bodyRaw = match[3] ?? ''
       const bodyContent = bodyRaw
         .split('\n')
-        .map((line) => line.replace(/^>\s?/, ''))
+        .map((line) => line.replace(CALLOUT_LINE_PREFIX, ''))
         .join('\n')
         .trim()
 
@@ -120,7 +287,7 @@ export const CalloutNode = Node.create({
         raw: match[0],
         meta: {
           type: rawType,
-          title,
+          titleTokens: title ? lexer.inlineTokens(title) : [],
           bodyTokens: bodyContent ? lexer.blockTokens(bodyContent) : [],
         } satisfies CalloutTokenMeta,
       }
@@ -130,20 +297,21 @@ export const CalloutNode = Node.create({
   // ─── Markdown Parser ──────────────────────────────────────────────────────
   // Converts a tokenized callout into the ProseMirror JSONContent tree:
   //   callout { type }
-  //     calloutTitle  →  inline text from the title capture
+  //     calloutTitle  →  inline content from the title tokens
   //     paragraph+    →  parsed from the body tokens
 
   parseMarkdown: (token, helpers) => {
-    const meta = token.meta as CalloutTokenMeta | undefined
+    const meta = token.meta
 
-    if (!meta) {
-      return null as unknown as JSONContent
+    if (!isCalloutTokenMeta(meta)) {
+      return []
     }
 
     const calloutType = normalizeCalloutType(meta.type)
 
     // Build the calloutTitle node
-    const titleContent: JSONContent[] = meta.title ? [helpers.createTextNode(meta.title)] : []
+    const titleContent: JSONContent[] =
+      meta.titleTokens.length > 0 ? helpers.parseInline(meta.titleTokens) : []
 
     const titleNode: JSONContent = {
       type: 'calloutTitle',
@@ -193,7 +361,7 @@ export const CalloutNode = Node.create({
       : `> [!${type.toUpperCase()}]`
 
     if (bodyNodes.length === 0) {
-      return `${headerLine}\n`
+      return headerLine
     }
 
     const prefix = '>'
@@ -217,11 +385,11 @@ export const CalloutNode = Node.create({
     })
 
     if (bodyBlocks.length === 0) {
-      return `${headerLine}\n`
+      return headerLine
     }
 
     // Add empty blockquote separator lines (`\n>\n`) between distinct block children
     const bodyMarkdown = bodyBlocks.join(`\n${prefix}\n`)
-    return `${headerLine}\n${bodyMarkdown}\n`
+    return `${headerLine}\n${bodyMarkdown}`
   },
 })

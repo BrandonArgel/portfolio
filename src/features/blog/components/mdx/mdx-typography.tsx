@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { normalizeEditorColor } from '@/features/editor/config/colors'
+import { CALLOUT_HEADER, CALLOUT_MARKER_STRIP } from '@/lib/markdown-regex'
 import { cn } from '@/lib/utils'
 import { MdxCallout } from './mdx-callout'
 import { extractText } from './mdx-utils'
@@ -171,7 +172,7 @@ function stripCalloutMarker(node: React.ReactNode): React.ReactNode {
   function clean(child: React.ReactNode): React.ReactNode {
     if (stripped) return child
     if (typeof child === 'string') {
-      const match = child.match(/^\s*\[!([a-zA-Z]+)\][^\n]*(?:\n)?/)
+      const match = child.match(CALLOUT_MARKER_STRIP)
       if (match) {
         stripped = true
         const remaining = child.slice(match[0].length)
@@ -203,15 +204,13 @@ function stripCalloutMarker(node: React.ReactNode): React.ReactNode {
   return clean(node)
 }
 
-const CALLOUT_HEADER_REGEX = /^\s*\[!([a-zA-Z]+)\](?:[ \t]+([^\n]*))?/
-
 export function MdxBlockquote({
   children,
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'blockquote'>) {
   const textContent = extractText(children).trim()
-  const match = textContent.match(CALLOUT_HEADER_REGEX)
+  const match = textContent.match(CALLOUT_HEADER)
 
   if (match) {
     const rawType = match[1].toLowerCase()

@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Spinner } from '@/components/ui/spinner'
 import { unbanUserAction } from '@/features/users/actions/users-action'
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { useUserErrors } from '../hooks/use-user-errors'
 import { BanUserDialog } from './ban-user-dialog'
 
@@ -36,20 +37,20 @@ export function UserActionsMenu({
   const { handleUserError } = useUserErrors()
   const [banDialogOpen, setBanDialogOpen] = useState(false)
   const [isUnbanning, startUnbanTransition] = useTransition()
-
-  const handleCopyId = async () => {
-    try {
-      await navigator.clipboard.writeText(userId)
+  const { copy } = useCopyToClipboard({
+    timeout: null,
+    onSuccess: (value) => {
       sileo.success({
         title: t('id_copied'),
-        description: userId,
+        description: value,
       })
-    } catch {
+    },
+    onError: () => {
       sileo.error({
         title: t('copy_id_error'),
       })
-    }
-  }
+    },
+  })
 
   const handleUnban = () => {
     if (isSelf || isUnbanning) return
@@ -88,7 +89,10 @@ export function UserActionsMenu({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="w-44 p-1">
-          <DropdownMenuItem onClick={handleCopyId} className="text-xs cursor-pointer gap-2">
+          <DropdownMenuItem
+            onClick={() => void copy(userId)}
+            className="text-xs cursor-pointer gap-2"
+          >
             <Copy className="size-3.5 text-muted-foreground" />
             <span>{t('copy_id')}</span>
           </DropdownMenuItem>

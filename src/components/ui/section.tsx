@@ -47,7 +47,7 @@ export function Section({
   ...props
 }: SectionProps) {
   return (
-    <section className={cn('relative my-20', className)} {...props}>
+    <section className={cn('relative my-4 xl:my-8', className)} {...props}>
       {withGlow && <SectionGlow topColor={topGlowColor} bottomColor={bottomGlowColor} />}
       <div className={cn('section-container', containerClassName)}>{children}</div>
     </section>

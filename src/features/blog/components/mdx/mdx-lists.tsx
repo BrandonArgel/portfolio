@@ -107,7 +107,7 @@ export function MdxUl({ className, ...props }: React.ComponentPropsWithoutRef<'u
   return (
     <ul
       className={cn(
-        'my-6 ml-6 list-disc [&>li]:mt-2 [&.contains-task-list]:ml-0 [&.contains-task-list]:list-none',
+        'list-disc [&.contains-task-list]:ml-0 [&.contains-task-list]:list-none',
         className,
       )}
       {...props}
@@ -116,7 +116,7 @@ export function MdxUl({ className, ...props }: React.ComponentPropsWithoutRef<'u
 }
 
 export function MdxOl({ className, ...props }: React.ComponentPropsWithoutRef<'ol'>) {
-  return <ol className={cn('my-6 ml-6 list-decimal [&>li]:mt-2', className)} {...props} />
+  return <ol className={cn('list-decimal', className)} {...props} />
 }
 
 export function MdxLi({ className, children, ...props }: React.ComponentPropsWithoutRef<'li'>) {

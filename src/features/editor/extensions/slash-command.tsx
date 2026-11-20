@@ -2,6 +2,7 @@ import { Extension } from '@tiptap/core'
 import { ReactRenderer } from '@tiptap/react'
 import Suggestion, { type SuggestionKeyDownProps, type SuggestionProps } from '@tiptap/suggestion'
 import {
+  BarChart3,
   Code,
   Heading1,
   Heading2,
@@ -22,6 +23,7 @@ import {
 } from 'lucide-react'
 import tippy, { type Instance as TippyInstance } from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
+import { DEFAULT_CHART_CONFIG } from '@/lib/chart-schema'
 import {
   type SlashMenuItem,
   SlashMenuList,
@@ -54,6 +56,7 @@ export const SlashCommand = Extension.create({
         image: 'Image',
         video: 'Video',
         table: 'Table',
+        chart: 'Chart',
         blockMath: 'Block Math',
       },
       suggestion: {
@@ -205,6 +208,18 @@ export const SlashCommand = Extension.create({
                   .focus()
                   .deleteRange(range)
                   .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+                  .run()
+              },
+            },
+            {
+              title: dict.chart,
+              icon: <BarChart3 className="size-4" />,
+              command: ({ editor, range }) => {
+                editor
+                  .chain()
+                  .focus()
+                  .deleteRange(range)
+                  .insertContent({ type: 'chart', attrs: DEFAULT_CHART_CONFIG })
                   .run()
               },
             },

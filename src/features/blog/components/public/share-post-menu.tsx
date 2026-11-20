@@ -2,7 +2,6 @@
 
 import { Check, Link2, Share2 } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
-import { useCallback, useEffect, useRef, useState } from 'react'
 import { sileo } from 'sileo'
 import { InstagramIcon, LinkedInIcon, WhatsAppIcon, XIcon } from '@/assets/icons/social'
 import {
@@ -14,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { type BlogInteractionLocation, type BlogSharePlatform, track } from '@/lib/analytics/events'
 import { cn } from '@/lib/utils'
 
@@ -32,61 +32,36 @@ export interface SharePostMenuProps {
 export function SharePostMenu({ post, location, variant = 'icon', className }: SharePostMenuProps) {
   const t = useTranslations('features.blog.reader')
   const locale = useLocale()
-  const [copied, setCopied] = useState(false)
-  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const { isCopied, copy } = useCopyToClipboard()
 
-  useEffect(() => {
-    return () => {
-      if (copyTimerRef.current) {
-        clearTimeout(copyTimerRef.current)
-      }
-    }
-  }, [])
-
-  const getCanonicalUrl = useCallback(() => {
+  const getCanonicalUrl = () => {
     if (typeof window === 'undefined') {
       return `/${locale}/blog/${post.slug}`
     }
     return `${window.location.origin}/${locale}/blog/${post.slug}`
-  }, [locale, post.slug])
+  }
 
-  const recordShare = useCallback(
-    (platform: BlogSharePlatform) => {
-      track('Blog_Post_Shared', {
-        postId: post.id,
-        slug: post.slug,
-        platform,
-        location,
-      })
-    },
-    [location, post.id, post.slug],
-  )
+  const recordShare = (platform: BlogSharePlatform) => {
+    track('Blog_Post_Shared', {
+      postId: post.id,
+      slug: post.slug,
+      platform,
+      location,
+    })
+  }
 
   const openExternalWindow = (url: string) => {
     window.open(url, '_blank', 'noopener,noreferrer')
   }
 
   const handleCopyLink = async () => {
-    const url = getCanonicalUrl()
-    recordShare('copy_link')
+    const ok = await copy(getCanonicalUrl())
 
-    try {
-      await navigator.clipboard.writeText(url)
-      setCopied(true)
-      if (copyTimerRef.current) {
-        clearTimeout(copyTimerRef.current)
-      }
-      copyTimerRef.current = setTimeout(() => {
-        setCopied(false)
-      }, 2000)
-
-      sileo.success({
-        title: t('actions.link_copied'),
-      })
-    } catch {
-      sileo.error({
-        title: t('actions.link_copy_error'),
-      })
+    if (ok) {
+      recordShare('copy_link')
+      sileo.success({ title: t('actions.link_copied') })
+    } else {
+      sileo.error({ title: t('actions.link_copy_error') })
     }
   }
 
@@ -115,15 +90,16 @@ export function SharePostMenu({ post, location, variant = 'icon', className }: S
 
   const handleInstagramOrNativeShare = async () => {
     const url = getCanonicalUrl()
-    recordShare('instagram_or_native')
+    const shareData = {
+      title: post.title,
+      text: post.description || post.title,
+      url,
+    }
 
     if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
       try {
-        await navigator.share({
-          title: post.title,
-          text: post.description || post.title,
-          url,
-        })
+        await navigator.share(shareData)
+        recordShare('instagram_or_native')
         return
       } catch (err) {
         if (err instanceof DOMException && err.name === 'AbortError') {
@@ -132,13 +108,14 @@ export function SharePostMenu({ post, location, variant = 'icon', className }: S
       }
     }
 
-    try {
-      await navigator.clipboard.writeText(url)
+    const ok = await copy(url)
+    if (ok) {
+      recordShare('instagram_or_native')
       sileo.success({
         title: t('actions.share_menu.instagram_copied_title'),
         description: t('actions.share_menu.instagram_copied_hint'),
       })
-    } catch {
+    } else {
       sileo.error({
         title: t('actions.link_copy_error'),
       })
@@ -160,7 +137,11 @@ export function SharePostMenu({ post, location, variant = 'icon', className }: S
         aria-label={t('actions.share')}
         title={t('actions.share')}
       >
-        {copied ? <Check className="size-3.5 text-emerald-500" /> : <Share2 className="size-3.5" />}
+        {isCopied ? (
+          <Check className="size-3.5 text-emerald-500" />
+        ) : (
+          <Share2 className="size-3.5" />
+        )}
         {variant === 'button' && <span>{t('actions.share')}</span>}
       </DropdownMenuTrigger>
 
@@ -174,13 +155,13 @@ export function SharePostMenu({ post, location, variant = 'icon', className }: S
             onClick={handleCopyLink}
             className="gap-2.5 px-2 py-1.5 text-xs font-medium cursor-pointer"
           >
-            {copied ? (
+            {isCopied ? (
               <Check className="size-3.5 text-emerald-500" />
             ) : (
               <Link2 className="size-3.5 text-muted-foreground" />
             )}
             <span>
-              {copied ? t('actions.share_menu.copied') : t('actions.share_menu.copy_link')}
+              {isCopied ? t('actions.share_menu.copied') : t('actions.share_menu.copy_link')}
             </span>
           </DropdownMenuItem>
         </DropdownMenuGroup>

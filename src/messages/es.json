@@ -321,6 +321,7 @@
       }
     },
     "blog": {
+      "author_subtitle": "Ingeniero de Software y Desarrollador Frontend",
       "reader": {
         "badge": "Blog & Artículos",
         "title_line1": "Perspectivas sobre",
@@ -377,6 +378,7 @@
         "error_loading_article": "Error cargando el artículo",
         "error_loading_article_description": "Hubo un problema de conexión. Intenta nuevamente más tarde.",
         "post_not_found": "Artículo no encontrado",
+        "views_count": "{count, plural, =1 {{formattedCount} vista} other {{formattedCount} vistas}}",
         "fallbackWarning": "Este artículo aún no está disponible en tu idioma. Mostrando la versión en {originalLocale, select, en {inglés} es {español} fr {francés} other {original}}.",
         "pagination": {
           "previous": "Anterior",
@@ -458,6 +460,34 @@
           "error_loading": "No se pudieron cargar los comentarios en este momento. Recarga la página para intentarlo de nuevo."
         }
       },
+      "like": {
+        "tooltip_like": "Me gusta este artículo",
+        "tooltip_unlike": "Quitar me gusta",
+        "aria_like": "Dar me gusta al artículo ({count, plural, =0 {0 me gusta} =1 {1 me gusta} other {# me gusta}})",
+        "aria_unlike": "Quitar me gusta al artículo ({count, plural, =0 {0 me gusta} =1 {1 me gusta} other {# me gusta}})",
+        "errors": {
+          "NOT_FOUND": {
+            "title": "Artículo no encontrado",
+            "description": "El artículo que intentas marcar no existe o fue eliminado."
+          },
+          "UNAUTHORIZED": {
+            "title": "Inicia sesión para dar me gusta",
+            "description": "Inicia sesión o crea una cuenta para apoyar este artículo."
+          },
+          "FORBIDDEN": {
+            "title": "Acción no permitida",
+            "description": "No tienes permiso para realizar esta acción en este artículo."
+          },
+          "VALIDATION_ERROR": {
+            "title": "Solicitud inválida",
+            "description": "No se pudo validar el identificador del artículo."
+          },
+          "DATABASE_ERROR": {
+            "title": "No se pudo actualizar el me gusta",
+            "description": "Ocurrió un error de base de datos al actualizar tu reacción. Inténtalo de nuevo."
+          }
+        }
+      },
       "management": {
         "title": "Mis Artículos",
         "session_as": "Sesión iniciada como: {name} ({role})",
@@ -493,6 +523,11 @@
         "next_page": "Siguiente",
         "dashboard": "Panel",
         "filter_all": "Todos",
+        "views_count": "{count, plural, =1 {{formattedCount} vista} other {{formattedCount} vistas}}",
+        "sort_latest": "Más recientes",
+        "sort_oldest": "Más antiguos",
+        "sort_most_viewed": "Más vistos",
+        "sort_least_viewed": "Menos vistos",
         "error_loading": "No se pudieron cargar los artículos",
         "error_loading_description": "Ocurrió un error en la base de datos al cargar los artículos. Inténtalo de nuevo."
       },
@@ -931,6 +966,8 @@
         "drafts_desc": "Artículos no publicados en revisión",
         "users_title": "Usuarios Registrados",
         "users_desc": "Gestionados vía Gestión de Usuarios",
+        "views_title": "Vistas Totales",
+        "views_desc": "Lecturas combinadas de artículos",
         "content_title": "Gestión de Contenido",
         "content_desc": "Crea y administra tus artículos en múltiples idiomas.",
         "access_title": "Acceso y Seguridad",
@@ -977,6 +1014,7 @@
         "image": "Imagen",
         "video": "Video",
         "table": "Tabla",
+        "chart": "Gráfica",
         "task_list": "Lista de tareas",
         "bold": "Negrita",
         "italic": "Cursiva",
@@ -1042,6 +1080,7 @@
         "type": {
           "tip": "Consejo",
           "info": "Información",
+          "note": "Nota",
           "pencil": "Nota",
           "quote": "Cita",
           "warning": "Advertencia",
@@ -1063,12 +1102,78 @@
         "copy": "Copiar código al portapapeles",
         "copied": "Código copiado al portapapeles",
         "select_language": "Seleccionar lenguaje de programación",
-        "actions": "Acciones del bloque de código"
+        "actions": "Acciones del bloque de código",
+        "filename_placeholder": "example.tsx",
+        "filename_label": "Nombre de archivo",
+        "options": "Opciones del bloque de código",
+        "line_numbers": "Números de línea",
+        "start_line": "Línea inicial",
+        "highlight_lines": "Resaltar líneas",
+        "added_lines": "Líneas agregadas (+)",
+        "removed_lines": "Líneas eliminadas (-)",
+        "line_range_placeholder": "ej. 2, 4-6",
+        "clear_annotations": "Limpiar resaltados",
+        "cycle_line_state": "Clic para alternar resaltado / agregado / eliminado"
       },
       "math": {
         "label": "Editar fórmula LaTeX",
         "placeholder": "Escribe LaTeX...",
         "hint": "Usa sintaxis LaTeX, ej. x^2, \\frac{a}{b}, \\sum_{i=1}^{n}"
+      },
+      "chart": {
+        "untitled": "Gráfica sin título",
+        "types": {
+          "bar": "Barras",
+          "line": "Líneas",
+          "area": "Área",
+          "pie": "Circular"
+        },
+        "formats": {
+          "number": "Número",
+          "currency": "Moneda (USD)",
+          "percent": "Porcentaje (%)",
+          "compact": "Compacto (1.2K)"
+        },
+        "actions": {
+          "data": "Datos",
+          "settings": "Ajustes",
+          "add_row": "Agregar fila",
+          "add_series": "Agregar serie",
+          "remove_row": "Eliminar fila",
+          "remove_series": "Eliminar serie",
+          "import_data": "Pegar CSV / JSON",
+          "apply_import": "Aplicar datos",
+          "cancel": "Cancelar"
+        },
+        "fields": {
+          "title": "Título",
+          "title_placeholder": "ej. Usuarios activos mensuales",
+          "description": "Descripción / Nota",
+          "description_placeholder": "Subtítulo opcional o fuente de datos",
+          "x_label": "Etiqueta eje X",
+          "x_label_placeholder": "ej. Trimestre",
+          "y_label": "Etiqueta eje Y",
+          "y_label_placeholder": "ej. USD ($K)",
+          "value_format": "Formato de valores",
+          "height": "Altura (px)",
+          "show_grid": "Mostrar cuadrícula",
+          "show_legend": "Mostrar leyenda interactiva",
+          "category_column": "Categoría",
+          "series_name_placeholder": "Nombre de la serie",
+          "import_label": "Pega CSV, TSV o un arreglo JSON de objetos",
+          "import_placeholder": "Mes,Ingresos,Gastos\nEne,42,28\nFeb,58,33"
+        },
+        "errors": {
+          "empty": "Ingresa o pega al menos una fila de datos.",
+          "invalid_json": "No se pudo analizar el arreglo JSON. Revisa la sintaxis e inténtalo de nuevo.",
+          "invalid_tabular": "Se esperan al menos dos columnas (categoría y valores numéricos) con encabezado."
+        },
+        "pie_first_series_note": "El modo circular muestra la primera serie: {series}",
+        "empty_data": "No hay datos numéricos para mostrar.",
+        "empty_pie_data": "Las gráficas circulares requieren valores numéricos positivos.",
+        "invalid_chart": "No se pudo renderizar la gráfica: datos inválidos o incompletos.",
+        "legend_aria": "Alternar visibilidad de las series",
+        "fallback_aria": "Gráfica de visualización de datos"
       }
     },
     "hero": {

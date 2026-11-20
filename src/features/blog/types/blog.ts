@@ -32,10 +32,12 @@ export interface BlogPost {
   translationGroupId?: string
   authorId: string
   authorName?: string
+  authorImage?: string | null
   lastModifiedBy?: string | null
   lastEditorName?: string | null
   categories: BlogCategory[]
   readTimeMinutes: number
+  viewsCount: number
   createdAt: Date
   updatedAt: Date
 }
@@ -67,6 +69,19 @@ export interface ToggleBookmarkResult {
   postId: string
   slug: string
   locale: string
+}
+
+export interface ToggleLikeResult {
+  liked: boolean
+  likesCount: number
+  postId: string
+  slug: string
+  locale: string
+}
+
+export interface PostLikeStatus {
+  likesCount: number
+  isLiked: boolean
 }
 
 export interface CommentAuthor {

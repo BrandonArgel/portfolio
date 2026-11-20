@@ -1,6 +1,7 @@
 import { getStyleProperty, type MarkdownToken } from '@tiptap/core'
 import Highlight, { type HighlightOptions } from '@tiptap/extension-highlight'
 
+import { HIGHLIGHT_TOKEN, MARK_TAG_PREFIX, MARK_TAG_START } from '@/lib/markdown-regex'
 import { extractColorFromAttrs, matchBalancedHtmlTag, normalizeEditorColor } from '../config/colors'
 
 interface HighlightMarkdownToken extends MarkdownToken {
@@ -80,14 +81,14 @@ export const HighlightMark = Highlight.extend<HighlightOptions>({
 
     start: (src: string) => {
       const eqIdx = src.indexOf('==')
-      const markIdx = src.search(/<mark\b/i)
+      const markIdx = src.search(MARK_TAG_START)
       if (eqIdx === -1) return markIdx
       if (markIdx === -1) return eqIdx
       return Math.min(eqIdx, markIdx)
     },
 
     tokenize(src, _tokens, lexer) {
-      if (/^<mark\b/i.test(src)) {
+      if (MARK_TAG_PREFIX.test(src)) {
         const matched = matchBalancedHtmlTag(src, 'mark')
         if (matched) {
           const rawColor = extractColorFromAttrs(matched.attrsRaw, 'background-color')
@@ -103,7 +104,7 @@ export const HighlightMark = Highlight.extend<HighlightOptions>({
         }
       }
 
-      const eqMatch = /^(==)(?!=)([\s\S]+?)(==)(?!=)/.exec(src)
+      const eqMatch = HIGHLIGHT_TOKEN.exec(src)
       if (eqMatch) {
         const innerContent = eqMatch[2].trim()
         if (!innerContent) return undefined

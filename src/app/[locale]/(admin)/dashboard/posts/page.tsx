@@ -1,4 +1,4 @@
-import { Edit3, FileText, PlusCircle, Tags } from 'lucide-react'
+import { Edit3, Eye, FileText, PlusCircle, Tags } from 'lucide-react'
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
@@ -22,6 +22,7 @@ import { LOCALE_META } from '@/config/locale'
 import { DeletePostButton } from '@/features/blog/components/admin/delete-button'
 import { PostTableToolbar } from '@/features/blog/components/admin/post-table-toolbar'
 import { PostPublishToggle } from '@/features/blog/components/admin/publish-toggle'
+import { normalizeAdminPostSort } from '@/features/blog/constants/blog'
 import { getAdminPosts, getAllCategoriesAdmin } from '@/features/blog/services/posts-service'
 import { Link } from '@/i18n/navigation'
 import { auth } from '@/lib/auth/auth'
@@ -33,6 +34,7 @@ interface DashboardPostsPageProps {
     q?: string
     locale?: string
     category?: string
+    sort?: string
     page?: string
   }>
 }
@@ -69,6 +71,7 @@ export default async function DashboardPostsPage({
   const searchQuery = sp.q || ''
   const localeFilter = sp.locale || ''
   const categoryFilter = sp.category || ''
+  const sortFilter = normalizeAdminPostSort(sp.sort)
 
   // 1. Fetch categories first to resolve slug to ID
   const [categoriesError, categoriesData] = await getAllCategoriesAdmin()
@@ -101,6 +104,7 @@ export default async function DashboardPostsPage({
       search: searchQuery || undefined,
       locale: localeFilter || undefined,
       categoryId: categoryIdForQuery,
+      sort: sortFilter,
       userId: session.user.id,
       isAdmin,
     }),
@@ -138,6 +142,7 @@ export default async function DashboardPostsPage({
     q: searchQuery || undefined,
     locale: localeFilter || undefined,
     category: categoryFilter || undefined,
+    sort: sortFilter !== 'latest' ? sortFilter : undefined,
   }
 
   return (
@@ -183,6 +188,7 @@ export default async function DashboardPostsPage({
         initialSearch={searchQuery}
         initialLocale={localeFilter}
         initialCategory={categoryFilter}
+        initialSort={sortFilter}
       />
 
       {/* Results count */}
@@ -251,6 +257,23 @@ export default async function DashboardPostsPage({
                   </div>
 
                   <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                    <span
+                      title={t('views_count', {
+                        count: post.viewsCount,
+                        formattedCount: format.number(post.viewsCount),
+                      })}
+                      className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border/60 bg-muted/40 px-2.5 text-xs font-medium text-muted-foreground tabular-nums"
+                    >
+                      <Eye className="size-3.5" aria-hidden="true" />
+                      <span aria-hidden="true">{format.number(post.viewsCount)}</span>
+                      <span className="sr-only">
+                        {t('views_count', {
+                          count: post.viewsCount,
+                          formattedCount: format.number(post.viewsCount),
+                        })}
+                      </span>
+                    </span>
+
                     <LinkButton
                       variant="outline"
                       size="sm"

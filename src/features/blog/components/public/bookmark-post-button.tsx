@@ -2,6 +2,7 @@
 
 import { Bookmark } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import type { BlogInteractionLocation } from '@/lib/analytics/events'
 import { cn } from '@/lib/utils'
 import { usePostBookmark } from '../../hooks/use-post-bookmark'
@@ -38,7 +39,9 @@ export function BookmarkPostButton({
     toggleBookmark()
   }
 
-  return (
+  const buttonLabel = isBookmarked ? t('actions.bookmarked_label') : t('actions.bookmark')
+
+  const triggerButton = (
     <button
       type="button"
       onClick={handleClick}
@@ -54,14 +57,23 @@ export function BookmarkPostButton({
           : 'text-muted-foreground hover:text-foreground hover:bg-muted',
         className,
       )}
-      aria-label={t('actions.bookmark')}
+      aria-label={buttonLabel}
       aria-pressed={isBookmarked}
-      title={t('actions.bookmark')}
+      title={buttonLabel}
     >
       <Bookmark className={cn('size-3.5 transition-all', isBookmarked && 'fill-primary')} />
-      {variant === 'button' && (
-        <span>{isBookmarked ? t('actions.bookmarked_label') : t('actions.bookmark')}</span>
-      )}
+      {variant === 'button' && <span>{buttonLabel}</span>}
     </button>
   )
+
+  if (variant === 'icon') {
+    return (
+      <Tooltip>
+        <TooltipTrigger render={triggerButton} />
+        <TooltipContent side="bottom">{buttonLabel}</TooltipContent>
+      </Tooltip>
+    )
+  }
+
+  return triggerButton
 }

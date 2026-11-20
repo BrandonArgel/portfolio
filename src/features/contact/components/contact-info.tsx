@@ -2,10 +2,10 @@
 
 import { Check, Copy, Mail, MapPin, MessageSquare } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
 import { sileo } from 'sileo'
 import { Badge } from '@/components/ui/badge'
 import { PingDot } from '@/components/ui/ping-dot'
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { cn } from '@/lib/utils'
 
 interface ContactInfoProps {
@@ -14,22 +14,16 @@ interface ContactInfoProps {
 
 export function ContactInfo({ className }: ContactInfoProps) {
   const t = useTranslations('features.contact')
-  const [copied, setCopied] = useState(false)
   const email = 'brandargel@gmail.com'
-
-  async function handleCopyEmail() {
-    try {
-      await navigator.clipboard.writeText(email)
-      setCopied(true)
+  const { isCopied, copy } = useCopyToClipboard({
+    timeout: 2500,
+    onSuccess: (value) => {
       sileo.success({
         title: t('actions.copied'),
-        description: email,
+        description: value,
       })
-      setTimeout(() => setCopied(false), 2500)
-    } catch (_error) {
-      // Fallback
-    }
-  }
+    },
+  })
 
   return (
     <div
@@ -77,12 +71,12 @@ export function ContactInfo({ className }: ContactInfoProps) {
 
             <button
               type="button"
-              onClick={handleCopyEmail}
+              onClick={() => void copy(email)}
               aria-label={t('actions.copy_email')}
               title={t('actions.copy_email')}
               className="flex size-9 cursor-pointer items-center justify-center rounded-lg border border-border/60 bg-background/80 text-muted-foreground transition-all duration-200 hover:border-primary/40 hover:text-primary active:scale-95"
             >
-              {copied ? <Check className="size-4 text-green-500" /> : <Copy className="size-4" />}
+              {isCopied ? <Check className="size-4 text-green-500" /> : <Copy className="size-4" />}
             </button>
           </div>
 

@@ -1,13 +1,14 @@
-import { FileText, PlusCircle, ShieldCheck, Users } from 'lucide-react'
+import { Eye, FileText, PlusCircle, ShieldCheck, Users } from 'lucide-react'
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
-import { getTranslations } from 'next-intl/server'
+import { getFormatter, getTranslations } from 'next-intl/server'
 import { DashboardErrorState } from '@/components/shared/dashboard-error-state'
 import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { getDashboardStats } from '@/features/shared/services/dashboard-stats-service'
 import { auth } from '@/lib/auth/auth'
+import { cn } from '@/lib/utils'
 import { assertNever } from '@/utils/result'
 
 interface DashboardPageProps {
@@ -29,7 +30,10 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
     headers: await headers(),
   })
 
-  const t = await getTranslations({ locale, namespace: 'features.dashboard' })
+  const [t, format] = await Promise.all([
+    getTranslations({ locale, namespace: 'features.dashboard' }),
+    getFormatter({ locale }),
+  ])
   const isAdmin = session?.user.role === 'admin'
 
   const [statsErr, stats] = await getDashboardStats(isAdmin)
@@ -52,7 +56,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
     )
   }
 
-  const { totalPosts, publishedPosts, draftPosts, totalUsers } = stats
+  const { totalPosts, publishedPosts, draftPosts, totalUsers, totalViews } = stats
 
   return (
     <div className="space-y-4 p-4">
@@ -80,7 +84,12 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div
+        className={cn(
+          'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4',
+          isAdmin && 'xl:grid-cols-5',
+        )}
+      >
         <Card className="border-border/70 shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -132,6 +141,21 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
               {draftPosts}
             </div>
             <p className="text-xs text-muted-foreground mt-1">{t('overview_stats.drafts_desc')}</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/70 shadow-xs">
+          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              {t('overview_stats.views_title')}
+            </CardTitle>
+            <Eye className="size-4 text-sky-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold tabular-nums text-sky-600 dark:text-sky-400">
+              {format.number(totalViews)}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">{t('overview_stats.views_desc')}</p>
           </CardContent>
         </Card>
 

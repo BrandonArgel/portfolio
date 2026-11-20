@@ -22,7 +22,7 @@ export async function ArticleCard({ post, isAuthenticated = false }: ArticleCard
     <article className="group flex flex-col h-full bg-card text-card-foreground hover:bg-card/90 border border-border hover:border-primary/40 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg">
       {/* Visual Cover Banner */}
       <Link href={`/blog/${post.slug}`} className="block overflow-hidden">
-        <div className="relative h-44 w-full overflow-hidden bg-muted/40 border-b border-border flex flex-col items-center justify-center p-4 text-center select-none group-hover:scale-[1.01] transition-transform duration-300">
+        <div className="relative aspect-video w-full overflow-hidden bg-muted/40 border-b border-border flex flex-col items-center justify-center p-4 text-center select-none">
           {post.coverImage ? (
             <Image
               src={post.coverImage}

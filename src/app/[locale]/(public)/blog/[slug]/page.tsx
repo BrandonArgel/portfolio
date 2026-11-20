@@ -8,8 +8,10 @@ import { siteConfig } from '@/config/site'
 import { BlogPostContent } from '@/features/blog/components/blog-post-content'
 import { PostCommentsSection } from '@/features/blog/components/comments'
 import { EditPostButton } from '@/features/blog/components/public/edit-post-button'
+import { PostViewTracker } from '@/features/blog/components/public/post-view-tracker'
 import { TranslationFallbackBanner } from '@/features/blog/components/public/translation-fallback-banner'
 import { isPostBookmarkedByUser } from '@/features/blog/services/bookmarks-service'
+import { getPostLikeStatus } from '@/features/blog/services/likes-service'
 import {
   getPostTranslationFallback,
   getPostTranslationsByGroupId,
@@ -87,7 +89,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   const userId = session?.user?.id
   const isAuthenticated = Boolean(userId)
-  const isBookmarked = userId ? await isPostBookmarkedByUser(userId, post.id) : false
+  const [isBookmarked, likeStatus] = await Promise.all([
+    userId ? isPostBookmarkedByUser(userId, post.id) : Promise.resolve(false),
+    getPostLikeStatus(post.id, userId),
+  ])
 
   let showFallbackBanner = false
 
@@ -121,6 +126,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <PostViewTracker postId={post.id} />
       <Section withGlow containerClassName="max-w-4xl">
         {showFallbackBanner && (
           <div className="mb-6">
@@ -130,6 +136,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <BlogPostContent
           post={post}
           isBookmarked={isBookmarked}
+          initialLikesCount={likeStatus.likesCount}
+          initialIsLiked={likeStatus.isLiked}
           isAuthenticated={isAuthenticated}
           action={<EditPostButton authorId={post.authorId} slug={post.slug} />}
         />

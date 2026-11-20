@@ -94,6 +94,7 @@ export async function seedTestPost(
       coverImage: overrides.coverImage ?? null,
       published: overrides.published ?? true,
       draft: overrides.draft ?? false,
+      viewsCount: overrides.viewsCount ?? 0,
       locale: overrides.locale ?? 'en',
       translationGroupId: overrides.translationGroupId ?? null,
       authorId: overrides.authorId,

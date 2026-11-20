@@ -321,6 +321,7 @@
       }
     },
     "blog": {
+      "author_subtitle": "Software Engineer & Frontend Developer",
       "reader": {
         "badge": "Blog & Articles",
         "title_line1": "Insights on",
@@ -377,6 +378,7 @@
         "error_loading_article": "Error loading the article",
         "error_loading_article_description": "There was a connection issue. Please try again later.",
         "post_not_found": "Post not found",
+        "views_count": "{count, plural, =1 {{formattedCount} view} other {{formattedCount} views}}",
         "fallbackWarning": "This article is not available in your language yet. Showing the {originalLocale, select, en {English} es {Spanish} fr {French} other {original}} version.",
         "pagination": {
           "previous": "Previous",
@@ -458,6 +460,34 @@
           "error_loading": "Unable to load comments right now. Please refresh to try again."
         }
       },
+      "like": {
+        "tooltip_like": "Like article",
+        "tooltip_unlike": "Remove like",
+        "aria_like": "Like article ({count, plural, =0 {0 likes} =1 {1 like} other {# likes}})",
+        "aria_unlike": "Remove like ({count, plural, =0 {0 likes} =1 {1 like} other {# likes}})",
+        "errors": {
+          "NOT_FOUND": {
+            "title": "Article not found",
+            "description": "The article you are trying to like no longer exists."
+          },
+          "UNAUTHORIZED": {
+            "title": "Sign in to like articles",
+            "description": "Sign in or create an account to like this article."
+          },
+          "FORBIDDEN": {
+            "title": "Action not allowed",
+            "description": "You do not have permission to like this article."
+          },
+          "VALIDATION_ERROR": {
+            "title": "Invalid request",
+            "description": "Could not validate the article identifier."
+          },
+          "DATABASE_ERROR": {
+            "title": "Could not update like",
+            "description": "A database error occurred while updating your like. Please try again."
+          }
+        }
+      },
       "management": {
         "title": "My Articles",
         "session_as": "Signed in as: {name} ({role})",
@@ -493,6 +523,11 @@
         "next_page": "Next",
         "dashboard": "Dashboard",
         "filter_all": "All",
+        "views_count": "{count, plural, =1 {{formattedCount} view} other {{formattedCount} views}}",
+        "sort_latest": "Newest first",
+        "sort_oldest": "Oldest first",
+        "sort_most_viewed": "Most viewed",
+        "sort_least_viewed": "Least viewed",
         "error_loading": "Unable to load articles",
         "error_loading_description": "A database error occurred while loading your articles. Please try again."
       },
@@ -931,6 +966,8 @@
         "drafts_desc": "Unpublished articles in review",
         "users_title": "Registered Users",
         "users_desc": "Managed via User Management",
+        "views_title": "Total Views",
+        "views_desc": "Combined article reads",
         "content_title": "Content Management",
         "content_desc": "Create and manage your articles across multiple languages.",
         "access_title": "Access & Security",
@@ -977,6 +1014,7 @@
         "image": "Image",
         "video": "Video",
         "table": "Table",
+        "chart": "Chart",
         "task_list": "Task List",
         "bold": "Bold",
         "italic": "Italic",
@@ -1042,6 +1080,7 @@
         "type": {
           "tip": "Tip",
           "info": "Info",
+          "note": "Note",
           "pencil": "Pencil",
           "quote": "Quote",
           "warning": "Warning",
@@ -1063,12 +1102,78 @@
         "copy": "Copy code to clipboard",
         "copied": "Copied code to clipboard",
         "select_language": "Select programming language",
-        "actions": "Code block actions"
+        "actions": "Code block actions",
+        "filename_placeholder": "example.tsx",
+        "filename_label": "Filename",
+        "options": "Code block options",
+        "line_numbers": "Line numbers",
+        "start_line": "Start line",
+        "highlight_lines": "Highlight lines",
+        "added_lines": "Added lines (+)",
+        "removed_lines": "Removed lines (-)",
+        "line_range_placeholder": "e.g. 2, 4-6",
+        "clear_annotations": "Clear highlights",
+        "cycle_line_state": "Click to cycle highlight / added / removed"
       },
       "math": {
         "label": "Edit LaTeX formula",
         "placeholder": "Enter LaTeX...",
         "hint": "Use LaTeX syntax"
+      },
+      "chart": {
+        "untitled": "Untitled Chart",
+        "types": {
+          "bar": "Bar",
+          "line": "Line",
+          "area": "Area",
+          "pie": "Pie"
+        },
+        "formats": {
+          "number": "Number",
+          "currency": "Currency (USD)",
+          "percent": "Percent (%)",
+          "compact": "Compact (1.2K)"
+        },
+        "actions": {
+          "data": "Data",
+          "settings": "Settings",
+          "add_row": "Add row",
+          "add_series": "Add series",
+          "remove_row": "Remove row",
+          "remove_series": "Remove series",
+          "import_data": "Paste CSV / JSON",
+          "apply_import": "Apply data",
+          "cancel": "Cancel"
+        },
+        "fields": {
+          "title": "Title",
+          "title_placeholder": "e.g. Monthly Active Users",
+          "description": "Description / Caption",
+          "description_placeholder": "Optional subtitle or data source note",
+          "x_label": "X-axis label",
+          "x_label_placeholder": "e.g. Quarter",
+          "y_label": "Y-axis label",
+          "y_label_placeholder": "e.g. USD ($K)",
+          "value_format": "Value format",
+          "height": "Height (px)",
+          "show_grid": "Show grid lines",
+          "show_legend": "Show interactive legend",
+          "category_column": "Category",
+          "series_name_placeholder": "Series name",
+          "import_label": "Paste CSV, TSV, or JSON array of objects",
+          "import_placeholder": "Month,Revenue,Expenses\nJan,42,28\nFeb,58,33"
+        },
+        "errors": {
+          "empty": "Enter or paste at least one row of chart data.",
+          "invalid_json": "Could not parse JSON array. Check syntax and try again.",
+          "invalid_tabular": "Expected at least two columns (category and numeric values) with a header row."
+        },
+        "pie_first_series_note": "Pie mode visualizes the first series: {series}",
+        "empty_data": "No numeric data to display.",
+        "empty_pie_data": "Pie charts require positive numeric values.",
+        "invalid_chart": "Unable to render chart: invalid or incomplete data.",
+        "legend_aria": "Toggle chart series visibility",
+        "fallback_aria": "Data visualization chart"
       }
     },
     "hero": {

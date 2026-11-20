@@ -1,12 +1,18 @@
 import type { Highlighter } from '@tanstack/highlight/core'
-import { findChildren } from '@tiptap/core'
+import { findChildren, textblockTypeInputRule } from '@tiptap/core'
 import CodeBlock, { type CodeBlockOptions } from '@tiptap/extension-code-block'
 import type { Node as ProseMirrorNode } from '@tiptap/pm/model'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 
+import {
+  normalizeStartLine,
+  parseCodeFenceInfo,
+  serializeCodeFenceInfo,
+} from '@/lib/code-block-meta'
 import { highlighter as defaultHighlighter } from '@/lib/highlighter'
+import { CODE_FENCE_INPUT_RULE } from '@/lib/markdown-regex'
 import { CodeBlockComponent } from '../components/code-block'
 
 interface CodeBlockHighlightOptions extends CodeBlockOptions {
@@ -114,6 +120,37 @@ export const CodeBlockNode = CodeBlock.extend<CodeBlockHighlightOptions>({
   addAttributes() {
     return {
       ...this.parent?.(),
+      title: {
+        default: '',
+        parseHTML: (element) => element.getAttribute('data-title') || '',
+        renderHTML: (attributes) =>
+          attributes.title ? { 'data-title': String(attributes.title) } : {},
+      },
+      highlight: {
+        default: '',
+        parseHTML: (element) => element.getAttribute('data-highlight') || '',
+        renderHTML: (attributes) =>
+          attributes.highlight ? { 'data-highlight': String(attributes.highlight) } : {},
+      },
+      add: {
+        default: '',
+        parseHTML: (element) => element.getAttribute('data-add') || '',
+        renderHTML: (attributes) => (attributes.add ? { 'data-add': String(attributes.add) } : {}),
+      },
+      remove: {
+        default: '',
+        parseHTML: (element) => element.getAttribute('data-remove') || '',
+        renderHTML: (attributes) =>
+          attributes.remove ? { 'data-remove': String(attributes.remove) } : {},
+      },
+      startLine: {
+        default: 1,
+        parseHTML: (element) => normalizeStartLine(element.getAttribute('data-start-line')),
+        renderHTML: (attributes) => {
+          const startLine = normalizeStartLine(attributes.startLine)
+          return startLine > 1 ? { 'data-start-line': String(startLine) } : {}
+        },
+      },
       lineNumbers: {
         default: true,
         parseHTML: (element) => element.getAttribute('data-line-numbers') !== 'false',
@@ -125,6 +162,63 @@ export const CodeBlockNode = CodeBlock.extend<CodeBlockHighlightOptions>({
         },
       },
     }
+  },
+
+  parseMarkdown: (token, helpers) => {
+    if (
+      !token.raw?.startsWith('```') &&
+      !token.raw?.startsWith('~~~') &&
+      token.codeBlockStyle !== 'indented'
+    ) {
+      return []
+    }
+
+    const parsed = parseCodeFenceInfo(typeof token.lang === 'string' ? token.lang : '')
+
+    return helpers.createNode(
+      'codeBlock',
+      {
+        language: parsed.language || null,
+        title: parsed.title,
+        highlight: parsed.highlight,
+        add: parsed.add,
+        remove: parsed.remove,
+        startLine: parsed.startLine,
+        lineNumbers: parsed.lineNumbers,
+      },
+      token.text ? [helpers.createTextNode(token.text)] : [],
+    )
+  },
+
+  renderMarkdown: (node, h) => {
+    const attrs = (node.attrs ?? {}) as {
+      language?: string | null
+      title?: string | null
+      highlight?: string | null
+      add?: string | null
+      remove?: string | null
+      startLine?: unknown
+      lineNumbers?: boolean | null
+    }
+    const fenceInfo = serializeCodeFenceInfo(attrs)
+
+    if (!node.content || node.content.length === 0) {
+      return `\`\`\`${fenceInfo}\n\n\`\`\``
+    }
+
+    return [`\`\`\`${fenceInfo}`, h.renderChildren(node.content), '```'].join('\n')
+  },
+
+  addInputRules() {
+    return [
+      textblockTypeInputRule({
+        find: CODE_FENCE_INPUT_RULE,
+        type: this.type,
+        getAttributes: (match) => ({
+          language: match[1] ? match[1].toLowerCase() : null,
+        }),
+      }),
+    ]
   },
 
   addNodeView() {

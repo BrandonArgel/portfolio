@@ -8,6 +8,20 @@ export type BlogError =
   | { reason: 'DATABASE_ERROR'; details?: unknown }
   | { reason: 'VALIDATION_ERROR' }
 
+/** Domain errors for post like queries and mutations (Result pattern). */
+export type LikeError =
+  | { reason: 'NOT_FOUND'; identifier?: string }
+  | { reason: 'UNAUTHORIZED' }
+  | { reason: 'FORBIDDEN' }
+  | { reason: 'VALIDATION_ERROR' }
+  | { reason: 'DATABASE_ERROR'; details?: unknown }
+
+/** Domain errors for post view tracking (Result pattern). */
+export type PostViewError =
+  | { reason: 'VALIDATION_ERROR' }
+  | { reason: 'NOT_FOUND'; identifier?: string }
+  | { reason: 'DATABASE_ERROR'; details?: unknown }
+
 /** Domain errors for blog post queries and mutations (Result pattern). */
 export type PostError =
   // Validation
