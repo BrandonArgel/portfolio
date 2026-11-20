@@ -31,7 +31,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Textarea } from '@/components/ui/textarea'
-import { COMMENT_MAX_LENGTH } from '@/features/blog/schemas/comment.schema'
+import { COMMENT_MAX_LENGTH } from '@/features/blog/schemas/comment-schema'
 import type { BlogComment, CommentAuthor } from '@/features/blog/types'
 import { useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'

@@ -7,8 +7,8 @@ import { Section } from '@/components/ui/section'
 import { siteConfig } from '@/config/site'
 import { BlogPostContent } from '@/features/blog/components/blog-post-content'
 import { PostCommentsSection } from '@/features/blog/components/comments'
-import { EditPostButton } from '@/features/blog/components/public/EditPostButton'
-import { TranslationFallbackBanner } from '@/features/blog/components/public/TranslationFallbackBanner'
+import { EditPostButton } from '@/features/blog/components/public/edit-post-button'
+import { TranslationFallbackBanner } from '@/features/blog/components/public/translation-fallback-banner'
 import { isPostBookmarkedByUser } from '@/features/blog/services/bookmarks-service'
 import {
   getPostTranslationFallback,
@@ -26,6 +26,7 @@ import { redirect } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { auth } from '@/lib/auth/auth'
 import { constructPageMetadata } from '@/lib/seo'
+import { assertNever } from '@/utils/result'
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -87,16 +88,23 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     auth.api.getSession({ headers: await headers() }),
   ])
 
-  if (err || !post) {
-    if (err && err.reason !== 'NOT_FOUND') {
-      return (
-        <Section withGlow containerClassName="max-w-4xl py-20 text-center">
-          <h1 className="text-2xl font-bold text-destructive">{t('error_loading_article')}</h1>
-          <p className="mt-2 text-muted-foreground">{t('error_loading_article_description')}</p>
-        </Section>
-      )
+  if (err) {
+    switch (err.reason) {
+      case 'POST_NOT_FOUND':
+        return notFound()
+      case 'DATABASE_ERROR':
+        return (
+          <Section withGlow containerClassName="max-w-4xl py-20 text-center">
+            <h1 className="text-2xl font-bold text-destructive">{t('error_loading_article')}</h1>
+            <p className="mt-2 text-muted-foreground">{t('error_loading_article_description')}</p>
+          </Section>
+        )
+      default:
+        return assertNever(err)
     }
+  }
 
+  if (!post) {
     return notFound()
   }
 

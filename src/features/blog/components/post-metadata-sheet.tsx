@@ -21,6 +21,7 @@ export function PostMetadataSheet({
   data,
   onChange,
   existingCategories,
+  isExistingPost,
   onTogglePublish,
   onDiscardDraft,
   isDiscardingDraft,
@@ -34,19 +35,20 @@ export function PostMetadataSheet({
         side="right"
         className="w-full data-[side=right]:sm:max-w-md flex flex-col gap-0 p-0 overflow-hidden"
       >
-        <SheetHeader className="border-b border-border px-6 py-4">
+        <SheetHeader className="border-b border-border px-6 py-4 shrink-0">
           <SheetTitle className="text-base font-semibold">{t('frontmatter.title')}</SheetTitle>
           <SheetDescription className="text-xs">
             {t('frontmatter.sheet_description')}
           </SheetDescription>
         </SheetHeader>
 
-        <div className="flex-1 overflow-y-auto px-6 py-5">
+        <div className="flex-1 min-h-0 overflow-y-auto px-6 py-5">
           <PostMetadataForm
             idPrefix="post-metadata-sheet"
             data={data}
             onChange={onChange}
             existingCategories={existingCategories}
+            isExistingPost={isExistingPost}
             onTogglePublish={onTogglePublish}
             onDiscardDraft={onDiscardDraft}
             isDiscardingDraft={isDiscardingDraft}

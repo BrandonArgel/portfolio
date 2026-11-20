@@ -4,25 +4,32 @@ import { Cookie, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { setCookieConsent } from '@/features/shared/actions/cookies.action'
+import { setCookieConsent } from '@/features/shared/actions/cookies-action'
 import { Link } from '@/i18n/navigation'
 import { track } from '@/lib/analytics/events'
+import { assertNever } from '@/utils/result'
 
 export function CookieBanner() {
   const [isVisible, setIsVisible] = useState(true)
   const t = useTranslations('components.layout.cookie_banner')
   const tGlobal = useTranslations('common.actions')
 
-  const handleAccept = async () => {
+  const persistConsent = async (accepted: boolean) => {
     setIsVisible(false)
-    await setCookieConsent(true)
-    track('Cookie_Accepted')
-  }
+    const [err] = await setCookieConsent(accepted)
 
-  const handleDismiss = async () => {
-    setIsVisible(false)
-    await setCookieConsent(false)
-    track('Cookie_Rejected')
+    if (err) {
+      switch (err.reason) {
+        case 'COOKIE_WRITE_FAILED':
+          console.error('Failed to persist cookie consent:', err.details)
+          setIsVisible(true)
+          return
+        default:
+          return assertNever(err.reason)
+      }
+    }
+
+    track(accepted ? 'Cookie_Accepted' : 'Cookie_Rejected')
   }
 
   if (!isVisible) return null
@@ -41,14 +48,14 @@ export function CookieBanner() {
       </div>
 
       <div className="flex justify-end-safe shrink-0 items-center gap-2">
-        <Button size="sm" onClick={handleAccept}>
+        <Button size="sm" onClick={() => persistConsent(true)}>
           {tGlobal('accept')}
         </Button>
         <Button
           variant="ghost"
           size="icon"
           className="h-8 w-8"
-          onClick={handleDismiss}
+          onClick={() => persistConsent(false)}
           aria-label={t('close_banner')}
         >
           <X className="h-4 w-4" />

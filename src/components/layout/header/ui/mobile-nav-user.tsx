@@ -2,6 +2,7 @@
 
 import { LayoutDashboard, LogOut, ShieldCheck, User, User as UserIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useUserSession } from '@/components/layout/user-menu/use-user-session'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -9,7 +10,6 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/ui/spinner'
 import { AuthButtons } from '@/features/auth/components/auth-buttons'
 import { Link } from '@/i18n/navigation'
-import { useUserSession } from '../hooks/use-user-session'
 
 export function MobileNavUser({ onNavigate }: { onNavigate: () => void }) {
   const tGlobal = useTranslations('common')

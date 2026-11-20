@@ -1,4 +1,4 @@
-import type { ImageUploadError, UploadTransportResponse } from '../types'
+import type { ImageUploadError } from '../types'
 
 export interface UploadFailureEnvironment {
   /** `navigator.onLine` at the time of the failure (injected to keep the mapper pure). */
@@ -28,33 +28,6 @@ function getErrorStatus(thrown: unknown): number | null {
   const record = thrown as { status?: unknown; statusCode?: unknown }
   const status = record.status ?? record.statusCode
   return typeof status === 'number' ? status : null
-}
-
-/**
- * Maps a failure reported by `next-safe-action` (middleware or framework level) to a reason.
- * Expected domain failures never reach this function: the action returns them as `Result` values.
- */
-export function mapActionFailure(
-  response: Pick<
-    UploadTransportResponse,
-    'serverError' | 'validationErrors' | 'bindArgsValidationErrors'
-  >,
-): ImageUploadError {
-  const { serverError } = response
-
-  if (serverError) {
-    const description = serverError.description?.toLowerCase() ?? ''
-
-    if (serverError.title === 'SESSION_REVOKED') {
-      return description.includes('suspend') ? { reason: 'FORBIDDEN' } : { reason: 'UNAUTHORIZED' }
-    }
-
-    if (serverError.title === 'Insufficient Permissions') {
-      return { reason: 'FORBIDDEN' }
-    }
-  }
-
-  return { reason: 'UNKNOWN_ERROR' }
 }
 
 /** Maps anything thrown while sending the request (network, timeout, body limit...) to a reason. */

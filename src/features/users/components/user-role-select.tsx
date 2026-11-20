@@ -2,8 +2,7 @@
 
 import { PenLine, ShieldCheck, User } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useAction } from 'next-safe-action/hooks'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { sileo } from 'sileo'
 import {
   Select,
@@ -12,13 +11,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { updateUserRoleAction } from '@/features/users/actions/users.action'
-import { checkAndHandleSessionRevoked } from '@/lib/auth-interceptor'
+import { updateUserRoleAction } from '@/features/users/actions/users-action'
+import type { UserRole } from '@/features/users/services/users-service'
 import { cn } from '@/lib/utils'
+import { useUserErrors } from '../hooks/use-user-errors'
 
 interface UserRoleSelectProps {
   userId: string
-  currentRole: 'admin' | 'editor' | 'user' | string
+  currentRole: UserRole | string
   userName?: string
   disabled?: boolean
 }
@@ -27,7 +27,7 @@ const ROLE_ICONS = {
   admin: ShieldCheck,
   editor: PenLine,
   user: User,
-} as const
+} as const satisfies Record<UserRole, typeof User>
 
 const ROLE_COLORS = {
   admin:
@@ -35,7 +35,14 @@ const ROLE_COLORS = {
   editor:
     'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800',
   user: 'text-zinc-600 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800',
-} as const
+} as const satisfies Record<UserRole, string>
+
+function toUserRole(value: string): UserRole {
+  if (value === 'admin' || value === 'editor' || value === 'user') {
+    return value
+  }
+  return 'user'
+}
 
 export function UserRoleSelect({
   userId,
@@ -44,40 +51,35 @@ export function UserRoleSelect({
   disabled = false,
 }: UserRoleSelectProps) {
   const t = useTranslations('features.users')
-  const [role, setRole] = useState<'admin' | 'editor' | 'user'>(
-    (currentRole as 'admin' | 'editor' | 'user') || 'user',
-  )
+  const { handleUserError } = useUserErrors()
+  const [role, setRole] = useState<UserRole>(() => toUserRole(currentRole))
+  const [isExecuting, startTransition] = useTransition()
 
-  const { execute, isExecuting } = useAction(updateUserRoleAction, {
-    onSuccess: (res) => {
-      if (res.data?.success && res.data.newRole) {
-        setRole(res.data.newRole)
-        sileo.success({
-          title: t('management.role_updated_title'),
-          description: t('management.role_updated_desc', {
-            name: userName || 'User',
-            role: t(`roles.${res.data.newRole}`),
-          }),
-        })
+  const handleRoleChange = (nextRole: string | null) => {
+    if (!nextRole || isExecuting) return
+    const validRole = toUserRole(nextRole)
+    if (validRole === role) return
+
+    startTransition(async () => {
+      const [err, res] = await updateUserRoleAction({ userId, newRole: validRole })
+
+      if (err) {
+        handleUserError(err)
+        return
       }
-    },
-    onError: ({ error }) => {
-      if (checkAndHandleSessionRevoked(error)) return
-      const serverError = error.serverError
-      sileo.error({
-        title: serverError?.title || t('management.role_update_error'),
-        description: serverError?.description,
-      })
-    },
-  })
 
-  const handleRoleChange = (newRole: string | null) => {
-    if (!newRole || newRole === role || isExecuting) return
-    const validRole = newRole as 'admin' | 'editor' | 'user'
-    execute({ userId, newRole: validRole })
+      setRole(res.newRole)
+      sileo.success({
+        title: t('management.role_updated_title'),
+        description: t('management.role_updated_desc', {
+          name: userName || t('roles.user'),
+          role: t(`roles.${res.newRole}`),
+        }),
+      })
+    })
   }
 
-  const CurrentIcon = ROLE_ICONS[role] || User
+  const CurrentIcon = ROLE_ICONS[role]
 
   return (
     <div className="flex items-center gap-2">
@@ -85,7 +87,7 @@ export function UserRoleSelect({
         <SelectTrigger
           className={cn(
             'w-32 h-8 text-xs font-medium cursor-pointer transition-all border',
-            ROLE_COLORS[role] || ROLE_COLORS.user,
+            ROLE_COLORS[role],
             isExecuting && 'opacity-60 cursor-wait',
           )}
         >

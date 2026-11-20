@@ -13,3 +13,9 @@ export type RegisterError =
   | { reason: 'UNKNOWN_ERROR' }
   | { reason: 'USER_ALREADY_EXISTS' }
   | { reason: 'WEAK_PASSWORD' }
+
+export type SocialAuthError =
+  | { reason: 'OAUTH_CALLBACK_ERROR' }
+  | { reason: 'ACCESS_DENIED' }
+  | { reason: 'OAUTH_CREATE_USER_ERROR' }
+  | { reason: 'UNKNOWN_ERROR' }

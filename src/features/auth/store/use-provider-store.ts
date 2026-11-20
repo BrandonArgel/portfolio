@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { SupportedOAuthProvider } from '../config/o-auth-providers'
+import type { SupportedOAuthProvider } from '@/config/o-auth-providers'
 
 type ProviderState = {
   provider: SupportedOAuthProvider | null

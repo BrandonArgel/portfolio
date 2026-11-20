@@ -3,6 +3,7 @@ import React from 'react'
 import { normalizeEditorColor } from '@/features/editor/config/colors'
 import { cn } from '@/lib/utils'
 import { MdxCallout } from './mdx-callout'
+import { extractText } from './mdx-utils'
 
 export function MdxH1({ className, ...props }: React.ComponentPropsWithoutRef<'h1'>) {
   return (
@@ -162,24 +163,6 @@ export function MdxSpan({
 
 export function MdxU({ className, ...props }: React.ComponentPropsWithoutRef<'u'>) {
   return <u className={cn('underline underline-offset-4', className)} {...props} />
-}
-
-function extractText(node: React.ReactNode): string {
-  if (typeof node === 'string' || typeof node === 'number') {
-    return String(node)
-  }
-  if (Array.isArray(node)) {
-    return node.map(extractText).join('')
-  }
-  if (
-    React.isValidElement(node) &&
-    node.props &&
-    typeof node.props === 'object' &&
-    'children' in node.props
-  ) {
-    return extractText((node.props as { children?: React.ReactNode }).children)
-  }
-  return ''
 }
 
 function stripCalloutMarker(node: React.ReactNode): React.ReactNode {

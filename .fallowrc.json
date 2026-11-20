@@ -1,0 +1,9 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  "entry": [
+    "src/data/client-env.ts",
+    "src/features/blog/actions/translate-post-action.ts",
+    "src/lib/analytics/server.ts"
+  ],
+  "ignoreFindings": ["src/components/ui/**"]
+}

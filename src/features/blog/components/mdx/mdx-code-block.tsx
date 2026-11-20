@@ -3,24 +3,7 @@ import React from 'react'
 import { highlighter } from '@/lib/highlighter'
 import { cn } from '@/lib/utils'
 import { MdxCopyButton } from './mdx-copy-button'
-
-function extractText(node: React.ReactNode): string {
-  if (typeof node === 'string' || typeof node === 'number') {
-    return String(node)
-  }
-  if (Array.isArray(node)) {
-    return node.map(extractText).join('')
-  }
-  if (
-    React.isValidElement(node) &&
-    node.props &&
-    typeof node.props === 'object' &&
-    'children' in node.props
-  ) {
-    return extractText((node.props as { children?: React.ReactNode }).children)
-  }
-  return ''
-}
+import { extractText } from './mdx-utils'
 
 function extractLanguageFromNode(node: React.ReactNode): string | undefined {
   if (Array.isArray(node)) {

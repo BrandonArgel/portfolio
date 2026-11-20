@@ -8,7 +8,7 @@ import { ReactNodeViewRenderer } from '@tiptap/react'
 import { ImageComponent } from '../components/image'
 import { MDX_REGEX } from '../config/regex'
 
-export interface CustomImageOptions extends ImageOptions {
+interface CustomImageOptions extends ImageOptions {
   uploadFn?: (file: File) => Promise<string | undefined>
 }
 

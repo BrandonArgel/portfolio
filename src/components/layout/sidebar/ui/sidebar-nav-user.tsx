@@ -1,18 +1,13 @@
 'use client'
 
-import { ChevronsUpDown, LogIn, LogOut, ShieldCheck, Sparkles, User } from 'lucide-react'
+import { ChevronsUpDown } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useUserSession } from '@/components/layout/header/hooks/use-user-session'
-import { LocaleSubMenu } from '@/components/layout/header/ui/locale-sub-menu'
-import { ThemeSubMenu } from '@/components/layout/header/ui/theme-sub-menu'
+import { useUserSession } from '@/components/layout/user-menu/use-user-session'
+import { UserMenuItems } from '@/components/layout/user-menu/user-menu-items'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
@@ -22,7 +17,6 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { Spinner } from '@/components/ui/spinner'
-import { Link } from '@/i18n/navigation'
 import type { Session } from '@/lib/auth/auth-client'
 import { cn } from '@/lib/utils'
 
@@ -36,8 +30,16 @@ export function SidebarNavUser({ initialSession, className }: SidebarNavUserProp
   const tHeader = useTranslations('components.layout.header')
   const { isMobile } = useSidebar()
 
-  const { user, initials, isAdmin, isEditor, isLoading, isSignOutPending, handleSignOut } =
-    useUserSession(initialSession)
+  const {
+    user,
+    initials,
+    isAdmin,
+    isEditor,
+    canAccessDashboard,
+    isLoading,
+    isSignOutPending,
+    handleSignOut,
+  } = useUserSession(initialSession)
 
   return (
     <SidebarMenu className={className}>
@@ -96,73 +98,15 @@ export function SidebarNavUser({ initialSession, className }: SidebarNavUserProp
             sideOffset={8}
             className="w-64 p-1.5 shadow-lg border-border/60"
           >
-            {user && (
-              <>
-                <div className="px-2 py-1.5 flex flex-col space-y-1">
-                  <div className="flex items-center gap-1.5">
-                    {isAdmin && (
-                      <Badge variant="softPrimary" className="w-fit text-xs h-4 px-1.5 py-0">
-                        <ShieldCheck className="size-2.5 mr-1 text-primary" />
-                        {tGlobal('labels.admin')}
-                      </Badge>
-                    )}
-                    {isEditor && !isAdmin && (
-                      <Badge
-                        variant="softBlue"
-                        className="w-fit text-xs h-4 px-1.5 py-0 font-medium"
-                      >
-                        <Sparkles className="size-2.5 mr-1" />
-                        Editor
-                      </Badge>
-                    )}
-                  </div>
-                  <p className="text-sm font-semibold truncate">
-                    {user.name || tGlobal('labels.user')}
-                  </p>
-                  <p className="text-xs text-muted-foreground truncate">{user.email}</p>
-                </div>
-                <DropdownMenuSeparator />
-              </>
-            )}
-
-            <DropdownMenuGroup>
-              {user && (
-                <DropdownMenuItem
-                  render={<Link href="/account" />}
-                  className="gap-2 cursor-pointer"
-                >
-                  <User className="size-4 text-muted-foreground" />
-                  <span>{tGlobal('labels.profile')}</span>
-                </DropdownMenuItem>
-              )}
-
-              <ThemeSubMenu />
-              <LocaleSubMenu />
-            </DropdownMenuGroup>
-
-            <DropdownMenuSeparator />
-
-            {user ? (
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={handleSignOut}
-                disabled={isSignOutPending}
-                className="gap-2 cursor-pointer"
-              >
-                <LogOut className="size-4" />
-                <span>
-                  {isSignOutPending ? tGlobal('states.signing_out') : tGlobal('actions.sign_out')}
-                </span>
-              </DropdownMenuItem>
-            ) : (
-              <DropdownMenuItem
-                render={<Link href="/login" />}
-                className="gap-2 cursor-pointer text-foreground hover:text-primary"
-              >
-                <LogIn className="size-4 text-primary" />
-                <span>{tGlobal('actions.sign_in')}</span>
-              </DropdownMenuItem>
-            )}
+            <UserMenuItems
+              user={user}
+              isAdmin={isAdmin}
+              isEditor={isEditor}
+              canAccessDashboard={canAccessDashboard}
+              showEditorIcon
+              isSignOutPending={isSignOutPending}
+              onSignOut={handleSignOut}
+            />
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

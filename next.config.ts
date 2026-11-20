@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   experimental: {
+    globalNotFound: true,
     serverActions: {
       // Must stay in sync with SERVER_BODY_SIZE_LIMIT in src/config/image-upload.ts
       // (4 MB max image + multipart overhead, under Vercel's ~4.5 MB request cap).

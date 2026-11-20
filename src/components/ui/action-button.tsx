@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { type ComponentProps, useState } from 'react'
 import { sileo } from 'sileo'
 import {
@@ -31,6 +32,7 @@ export function ActionButton({
   requireAreYouSure?: boolean
   areYouSureDescription?: React.ReactNode
 }) {
+  const tErrors = useTranslations('common.errors')
   const [internalIsLoading, setInternalIsLoading] = useState(false)
 
   const isLoading = externalIsLoading !== undefined ? externalIsLoading : internalIsLoading
@@ -43,13 +45,13 @@ export function ActionButton({
       const data = await action()
 
       if (data instanceof Error) {
-        sileo.error({ title: 'An unexpected error occurred.', description: data.message })
+        sileo.error({ title: tErrors('unexpected_title'), description: data.message })
       } else if (data?.error) {
-        sileo.error({ title: data.message ?? 'Error' })
+        sileo.error({ title: data.message ?? tErrors('unknown_title') })
       }
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error'
-      sileo.error({ title: 'An unexpected error occurred.', description: message })
+      const message = error instanceof Error ? error.message : tErrors('unknown_description')
+      sileo.error({ title: tErrors('unexpected_title'), description: message })
     } finally {
       setInternalIsLoading(false)
     }

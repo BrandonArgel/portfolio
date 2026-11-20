@@ -14,7 +14,7 @@ export const MAX_IMAGE_SIZE_BYTES = 4 * MB
  * It must be larger than `MAX_IMAGE_SIZE_BYTES` plus the multipart overhead (~10-20 KB),
  * and stay below the ~4.5 MB request cap of Vercel serverless functions.
  */
-export const SERVER_BODY_SIZE_LIMIT = '4.5mb'
+const _SERVER_BODY_SIZE_LIMIT = '4.5mb'
 
 /** Raster images bigger than this are re-encoded on the client before uploading. */
 export const COMPRESSION_THRESHOLD_BYTES = 1.5 * MB
@@ -28,7 +28,7 @@ export const COMPRESSION_QUALITY = 0.85
 /** Maximum time to wait for the upload request before reporting a timeout. */
 export const UPLOAD_TIMEOUT_MS = 60_000
 
-export const ALLOWED_IMAGE_MIME_TYPES = [
+const ALLOWED_IMAGE_MIME_TYPES = [
   'image/jpeg',
   'image/png',
   'image/webp',
@@ -42,7 +42,7 @@ export type AllowedImageMimeType = (typeof ALLOWED_IMAGE_MIME_TYPES)[number]
  * Raster formats that can be safely re-encoded through a canvas.
  * GIF (animation) and SVG (vector) are intentionally excluded and bypass compression.
  */
-export const COMPRESSIBLE_IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const
+const COMPRESSIBLE_IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const
 
 /**
  * Value for `<input type="file" accept>`. The explicit list (instead of `image/*`) makes iOS Safari

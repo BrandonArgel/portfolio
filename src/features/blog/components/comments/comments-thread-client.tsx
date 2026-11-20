@@ -10,6 +10,7 @@ import {
   deleteCommentAction,
   updateCommentAction,
 } from '@/features/blog/actions/comment-actions'
+import { useCommentErrors } from '@/features/blog/hooks/use-comment-errors'
 import type { BlogComment, CommentAuthor } from '@/features/blog/types'
 import { CommentComposer } from './comment-composer'
 import { CommentItem } from './comment-item'
@@ -137,6 +138,7 @@ export function CommentsThreadClient({
   currentUser,
 }: CommentsThreadClientProps) {
   const t = useTranslations('features.blog.reader.comments')
+  const { handleCommentError } = useCommentErrors()
 
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null)
   const [activeEditId, setActiveEditId] = useState<string | null>(null)
@@ -194,14 +196,14 @@ export function CommentsThreadClient({
       startTransition(async () => {
         dispatchOptimistic({ type: 'add', comment: optimisticComment })
 
-        const res = await createCommentAction({
+        const [err] = await createCommentAction({
           id: clientId,
           postId,
           parentId,
           content,
         })
 
-        if (res?.data?.success && res.data.comment) {
+        if (!err) {
           sileo.success({
             title: parentId ? t('notifications.reply_created') : t('notifications.created'),
           })
@@ -209,10 +211,7 @@ export function CommentsThreadClient({
           return
         }
 
-        sileo.error({
-          title: res?.serverError?.title ?? t('notifications.error'),
-          description: res?.serverError?.description,
-        })
+        handleCommentError(err)
         resolve(false)
       })
     })
@@ -230,21 +229,18 @@ export function CommentsThreadClient({
           updatedAt: now,
         })
 
-        const res = await updateCommentAction({
+        const [err] = await updateCommentAction({
           commentId,
           content,
         })
 
-        if (res?.data?.success) {
+        if (!err) {
           sileo.success({ title: t('notifications.updated') })
           resolve(true)
           return
         }
 
-        sileo.error({
-          title: res?.serverError?.title ?? t('notifications.error'),
-          description: res?.serverError?.description,
-        })
+        handleCommentError(err)
         resolve(false)
       })
     })
@@ -258,18 +254,15 @@ export function CommentsThreadClient({
           commentId,
         })
 
-        const res = await deleteCommentAction({ commentId })
+        const [err] = await deleteCommentAction({ commentId })
 
-        if (res?.data?.success) {
+        if (!err) {
           sileo.success({ title: t('notifications.deleted') })
           resolve(true)
           return
         }
 
-        sileo.error({
-          title: res?.serverError?.title ?? t('notifications.error'),
-          description: res?.serverError?.description,
-        })
+        handleCommentError(err)
         resolve(false)
       })
     })

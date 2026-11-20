@@ -9,7 +9,7 @@ import { ReactNodeViewRenderer } from '@tiptap/react'
 import { highlighter as defaultHighlighter } from '@/lib/highlighter'
 import { CodeBlockComponent } from '../components/code-block'
 
-export interface CodeBlockHighlightOptions extends CodeBlockOptions {
+interface CodeBlockHighlightOptions extends CodeBlockOptions {
   highlighter: Highlighter
 }
 

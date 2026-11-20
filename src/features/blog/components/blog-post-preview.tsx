@@ -12,7 +12,7 @@ import remarkUnwrapImages from 'remark-unwrap-images'
 import { Badge } from '@/components/ui/badge'
 import { Spinner } from '@/components/ui/spinner'
 import { useMounted } from '@/hooks/use-mounted'
-import type { BlogFrontmatter } from '../schemas/post.schema'
+import type { BlogFrontmatter } from '../schemas/post-schema'
 import { calculateReadTime } from '../utils/calculate-read-time'
 import { preprocessMdxContent } from '../utils/preprocess-mdx'
 import { mdxComponents } from './mdx'
@@ -93,7 +93,7 @@ export function BlogPostPreview({
   const displayTitle = frontmatter.title.trim() || tComposer('header.untitled_post')
 
   return (
-    <div className="h-full w-full overflow-y-auto rounded-lg border border-border bg-secondary-background shadow-sm">
+    <div className="flex-1 min-h-0 h-full w-full overflow-y-auto rounded-lg border border-border bg-secondary-background shadow-sm">
       <div className="mx-auto w-full max-w-4xl px-6 py-10 sm:px-10">
         <article className="w-full">
           <header className="mb-10 flex flex-col items-start gap-6 border-b border-border pb-10">

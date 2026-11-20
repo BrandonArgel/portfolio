@@ -1,24 +1,17 @@
 'use client'
 
-import { LayoutDashboard, LogIn, LogOut, ShieldCheck, User } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useUserSession } from '@/components/layout/user-menu/use-user-session'
+import { UserMenuItems } from '@/components/layout/user-menu/user-menu-items'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Spinner } from '@/components/ui/spinner'
-import { Link } from '@/i18n/navigation'
 import type { Session } from '@/lib/auth/auth-client'
 import { cn } from '@/lib/utils'
-import { useUserSession } from '../hooks/use-user-session'
-import { LocaleSubMenu } from './locale-sub-menu'
-import { ThemeSubMenu } from './theme-sub-menu'
 
 interface UserMenuProps {
   initialSession?: Session | null
@@ -26,7 +19,6 @@ interface UserMenuProps {
 }
 
 export function UserPreferencesMenu({ initialSession, className }: UserMenuProps) {
-  const tGlobal = useTranslations('common')
   const tHeader = useTranslations('components.layout.header')
 
   const {
@@ -76,71 +68,15 @@ export function UserPreferencesMenu({ initialSession, className }: UserMenuProps
         sideOffset={8}
         className="w-60 p-1.5 shadow-lg border-border/60"
       >
-        {user && (
-          <>
-            <div className="px-2 py-1.5 flex flex-col space-y-1">
-              {isAdmin && (
-                <Badge variant="softPrimary" className="w-fit text-xs h-4 px-1.5 py-0">
-                  <ShieldCheck className="size-2.5 mr-1 text-primary" />
-                  {tGlobal('labels.admin')}
-                </Badge>
-              )}
-              {isEditor && (
-                <Badge variant="softBlue" className="w-fit text-xs h-4 px-1.5 py-0 font-medium">
-                  Editor
-                </Badge>
-              )}
-              <p className="text-sm font-semibold truncate">
-                {user.name || tGlobal('labels.user')}
-              </p>
-              <p className="text-xs text-muted-foreground truncate">{user.email}</p>
-            </div>
-            <DropdownMenuSeparator />
-          </>
-        )}
-
-        <DropdownMenuGroup>
-          {user && (
-            <DropdownMenuItem render={<Link href="/account" />} className="gap-2 cursor-pointer">
-              <User className="size-4 text-muted-foreground" />
-              <span>{tGlobal('labels.profile')}</span>
-            </DropdownMenuItem>
-          )}
-
-          {user && canAccessDashboard && (
-            <DropdownMenuItem render={<Link href="/dashboard" />} className="gap-2 cursor-pointer">
-              <LayoutDashboard className="size-4 text-muted-foreground" />
-              <span>{tGlobal('labels.dashboard')}</span>
-            </DropdownMenuItem>
-          )}
-
-          <ThemeSubMenu />
-          <LocaleSubMenu />
-        </DropdownMenuGroup>
-
-        <DropdownMenuSeparator />
-
-        {user ? (
-          <DropdownMenuItem
-            variant="destructive"
-            onClick={handleSignOut}
-            disabled={isSignOutPending}
-            className="gap-2 cursor-pointer"
-          >
-            <LogOut className="size-4" />
-            <span>
-              {isSignOutPending ? tGlobal('states.signing_out') : tGlobal('actions.sign_out')}
-            </span>
-          </DropdownMenuItem>
-        ) : (
-          <DropdownMenuItem
-            render={<Link href="/login" />}
-            className="gap-2 cursor-pointer text-foreground hover:text-primary"
-          >
-            <LogIn className="size-4 text-primary" />
-            <span>{tGlobal('actions.sign_in')}</span>
-          </DropdownMenuItem>
-        )}
+        <UserMenuItems
+          user={user}
+          isAdmin={isAdmin}
+          isEditor={isEditor}
+          canAccessDashboard={canAccessDashboard}
+          showDashboardLink
+          isSignOutPending={isSignOutPending}
+          onSignOut={handleSignOut}
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   )

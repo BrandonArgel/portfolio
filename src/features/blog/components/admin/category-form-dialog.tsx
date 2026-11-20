@@ -19,7 +19,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { Textarea } from '@/components/ui/textarea'
 import { createCategoryAction, updateCategoryAction } from '../../actions/category-actions'
 import { useCategoryErrors } from '../../hooks/use-category-errors'
-import { normalizeCategorySlug } from '../../schemas/category.schema'
+import { normalizeCategorySlug } from '../../schemas/category-schema'
 import type { AdminCategoryItem } from '../../types'
 
 interface CategoryFormDialogProps {

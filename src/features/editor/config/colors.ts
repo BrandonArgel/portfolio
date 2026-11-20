@@ -1,6 +1,6 @@
 import type { Editor } from '@tiptap/core'
 
-export const EDITOR_COLOR_IDS = [
+const EDITOR_COLOR_IDS = [
   'default',
   'gray',
   'brown',
@@ -105,8 +105,8 @@ export interface RecentColorItem {
   id: EditorColorId
 }
 
-export const RECENT_COLORS_STORAGE_KEY = 'tiptap-editor-recent-colors'
-export const MAX_RECENT_COLORS = 5
+const RECENT_COLORS_STORAGE_KEY = 'tiptap-editor-recent-colors'
+const MAX_RECENT_COLORS = 5
 
 function isEditorColorId(value: unknown): value is EditorColorId {
   return typeof value === 'string' && EDITOR_COLOR_IDS.includes(value as EditorColorId)
