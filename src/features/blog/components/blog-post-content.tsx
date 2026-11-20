@@ -4,6 +4,7 @@ import { getFormatter, getTranslations } from 'next-intl/server'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { siteConfig } from '@/config/site'
 import { getInitials } from '@/utils/get-initials'
 import { PUBLIC_VIEWS_THRESHOLD } from '../constants/blog'
@@ -111,7 +112,21 @@ export async function BlogPostContent({
                   {getInitials(displayAuthorName)}
                 </AvatarFallback>
               </Avatar>
-              <BadgeCheck className="absolute bottom-0 -right-0.5 size-4 rounded-full border border-background bg-background fill-primary/25 text-primary" />
+              {post.authorEmailVerified && (
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <BadgeCheck
+                        aria-label={tBlog('verified_author')}
+                        className="absolute bottom-0 -right-0.5 size-4 rounded-full border border-background bg-background fill-primary/25 text-primary"
+                      />
+                    }
+                  />
+                  <TooltipContent side="bottom">
+                    <p>{tBlog('verified_author')}</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
             </div>
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold text-foreground">{displayAuthorName}</p>
@@ -150,7 +165,7 @@ export async function BlogPostContent({
           <div className="mt-2 w-full overflow-hidden rounded-2xl border border-border shadow-md">
             <Image
               src={post.coverImage}
-              alt={post.title}
+              alt={post.coverImageAlt?.trim() || post.title}
               width={1200}
               height={630}
               priority

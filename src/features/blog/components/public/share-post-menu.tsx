@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { type BlogInteractionLocation, type BlogSharePlatform, track } from '@/lib/analytics/events'
 import { cn } from '@/lib/utils'
@@ -124,26 +125,33 @@ export function SharePostMenu({ post, location, variant = 'icon', className }: S
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        onClick={(e) => {
-          e.stopPropagation()
-        }}
-        className={cn(
-          variant === 'button'
-            ? 'inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground cursor-pointer'
-            : 'p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer',
-          className,
-        )}
-        aria-label={t('actions.share')}
-        title={t('actions.share')}
-      >
-        {isCopied ? (
-          <Check className="size-3.5 text-emerald-500" />
-        ) : (
-          <Share2 className="size-3.5" />
-        )}
-        {variant === 'button' && <span>{t('actions.share')}</span>}
-      </DropdownMenuTrigger>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <DropdownMenuTrigger
+              onClick={(e) => {
+                e.stopPropagation()
+              }}
+              className={cn(
+                variant === 'button'
+                  ? 'inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground cursor-pointer'
+                  : 'p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer',
+                className,
+              )}
+              aria-label={t('actions.share')}
+              title={t('actions.share')}
+            >
+              {isCopied ? (
+                <Check className="size-3.5 text-emerald-500" />
+              ) : (
+                <Share2 className="size-3.5" />
+              )}
+              {variant === 'button' && <span>{t('actions.share')}</span>}
+            </DropdownMenuTrigger>
+          }
+        />
+        <TooltipContent side="bottom">{t('actions.share')}</TooltipContent>
+      </Tooltip>
 
       <DropdownMenuContent align="end" className="w-52 p-1.5">
         <DropdownMenuGroup>

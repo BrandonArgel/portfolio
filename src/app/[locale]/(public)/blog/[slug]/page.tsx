@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     ? await getPostTranslationsByGroupId(post.translationGroupId)
     : []
 
-  return buildBlogPostMetadata(post, siblings)
+  return buildBlogPostMetadata({ ...post, requestedLocale: safeLocale }, siblings)
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
@@ -116,6 +116,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     slug: post.slug,
     locale: post.locale,
     authorName,
+    authorImage: post.authorImage,
+    canonicalUrl: post.canonicalUrl,
     categoryNames: post.categories.map((category) => category.name),
     imageUrl: resolvePostOgImage(post).url,
     createdAt: post.createdAt,

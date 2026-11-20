@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { getBaseUrl } from '@/config/site'
+import { type AppDatabase, db } from '@/db'
 import { getAllPublishedPostsForSitemap } from '@/features/blog/services/posts-service'
 import {
   buildPostLanguageAlternates,
@@ -18,7 +19,7 @@ const STATIC_ROUTES = [
   { path: '/terms-of-service', priority: 0.3, changeFrequency: 'yearly' as const },
 ]
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default async function sitemap(database: AppDatabase = db): Promise<MetadataRoute.Sitemap> {
   const baseUrl = getBaseUrl()
   const defaultLocale = routing.defaultLocale
   const sitemapEntries: MetadataRoute.Sitemap = []
@@ -44,7 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  const publishedPosts = await getAllPublishedPostsForSitemap()
+  const publishedPosts = await getAllPublishedPostsForSitemap(database)
 
   const translationsByGroup = new Map<string, PostTranslationRef[]>()
 

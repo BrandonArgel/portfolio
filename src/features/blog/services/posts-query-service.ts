@@ -431,7 +431,7 @@ export const getPublishedPostBySlug = cache(
 // ── Shared helpers ──────────────────────────────────────────────
 
 const postWithRelations = {
-  author: { columns: { name: true, image: true } },
+  author: { columns: { name: true, image: true, emailVerified: true } },
   lastEditor: { columns: { name: true } },
   postCategories: { with: { category: true } },
 } as const
@@ -467,12 +467,15 @@ function mapDbPostToBlogPost(dbPost: DbPostWithRelations): BlogPost {
     draftContent: dbPost.draftContent,
     excerpt: extractExcerpt(dbPost.content),
     coverImage: dbPost.coverImage,
+    coverImageAlt: dbPost.coverImageAlt,
+    canonicalUrl: dbPost.canonicalUrl,
     locale: dbPost.locale,
     published: dbPost.published,
     draft: dbPost.draft,
     authorId: dbPost.authorId,
     authorName: dbPost.author.name,
     authorImage: dbPost.author.image,
+    authorEmailVerified: Boolean(dbPost.author.emailVerified),
     lastModifiedBy: dbPost.lastModifiedBy,
     lastEditorName: dbPost.lastEditor?.name ?? null,
     translationGroupId: dbPost.translationGroupId ?? undefined,

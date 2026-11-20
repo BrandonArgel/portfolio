@@ -57,6 +57,13 @@
       "when": 1795197303314,
       "tag": "0007_pale_sandman",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1795200546177,
+      "tag": "0008_icy_sunfire",
+      "breakpoints": true
     }
   ]
 }

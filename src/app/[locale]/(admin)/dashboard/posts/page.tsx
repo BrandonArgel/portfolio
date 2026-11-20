@@ -257,22 +257,28 @@ export default async function DashboardPostsPage({
                   </div>
 
                   <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
-                    <span
-                      title={t('views_count', {
-                        count: post.viewsCount,
-                        formattedCount: format.number(post.viewsCount),
-                      })}
-                      className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border/60 bg-muted/40 px-2.5 text-xs font-medium text-muted-foreground tabular-nums"
-                    >
-                      <Eye className="size-3.5" aria-hidden="true" />
-                      <span aria-hidden="true">{format.number(post.viewsCount)}</span>
-                      <span className="sr-only">
+                    <Tooltip>
+                      <TooltipTrigger
+                        render={
+                          <span className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border/60 bg-muted/40 px-2.5 text-xs font-medium text-muted-foreground tabular-nums">
+                            <Eye className="size-3.5" aria-hidden="true" />
+                            <span aria-hidden="true">{format.number(post.viewsCount)}</span>
+                            <span className="sr-only">
+                              {t('views_count', {
+                                count: post.viewsCount,
+                                formattedCount: format.number(post.viewsCount),
+                              })}
+                            </span>
+                          </span>
+                        }
+                      />
+                      <TooltipContent>
                         {t('views_count', {
                           count: post.viewsCount,
                           formattedCount: format.number(post.viewsCount),
                         })}
-                      </span>
-                    </span>
+                      </TooltipContent>
+                    </Tooltip>
 
                     <LinkButton
                       variant="outline"

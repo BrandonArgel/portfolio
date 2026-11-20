@@ -28,6 +28,8 @@ export const posts = sqliteTable(
     content: text('content').notNull().default(''),
     draftContent: text('draft_content'),
     coverImage: text('cover_image'),
+    coverImageAlt: text('cover_image_alt'),
+    canonicalUrl: text('canonical_url'),
     published: integer('published', { mode: 'boolean' }).default(false).notNull(),
     draft: integer('draft', { mode: 'boolean' }).default(true).notNull(),
     viewsCount: integer('views_count').notNull().default(0),

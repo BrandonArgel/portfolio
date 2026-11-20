@@ -26,6 +26,8 @@ export interface BlogPost {
   draftContent?: string | null
   excerpt: string
   coverImage?: string | null
+  coverImageAlt?: string | null
+  canonicalUrl?: string | null
   published: boolean
   draft: boolean
   locale: string
@@ -33,6 +35,7 @@ export interface BlogPost {
   authorId: string
   authorName?: string
   authorImage?: string | null
+  authorEmailVerified?: boolean
   lastModifiedBy?: string | null
   lastEditorName?: string | null
   categories: BlogCategory[]

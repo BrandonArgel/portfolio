@@ -23,6 +23,8 @@ export interface SavedPostSnapshot {
   title: string
   slug: string
   locale: string
+  coverImageAlt: string | null
+  canonicalUrl: string | null
   published: boolean
   draft: boolean
   updatedAt: string
@@ -203,7 +205,12 @@ export async function savePost(
     intent,
     categories: categoryNames,
     coverImage,
+    coverImageAlt,
+    canonicalUrl,
   } = validatedInput
+
+  const normalizedCoverImageAlt = coverImageAlt?.trim() || null
+  const normalizedCanonicalUrl = canonicalUrl?.trim() || null
 
   return tryCatchResult<SavePostResult, PostError, PostError>(
     async () => {
@@ -282,6 +289,8 @@ export async function savePost(
             content: nextContent,
             draftContent: nextDraftContent,
             coverImage: coverImage ?? null,
+            coverImageAlt: normalizedCoverImageAlt,
+            canonicalUrl: normalizedCanonicalUrl,
             locale,
             translationGroupId: finalTranslationGroupId,
             published: nextPublished,
@@ -313,6 +322,8 @@ export async function savePost(
             content,
             draftContent: nextDraft ? content : null,
             coverImage: coverImage ?? null,
+            coverImageAlt: normalizedCoverImageAlt,
+            canonicalUrl: normalizedCanonicalUrl,
             locale,
             translationGroupId: finalTranslationGroupId,
             published: nextPublished,
@@ -340,6 +351,8 @@ export async function savePost(
         title,
         slug,
         locale,
+        coverImageAlt: normalizedCoverImageAlt,
+        canonicalUrl: normalizedCanonicalUrl,
         published: nextPublished,
         draft: nextDraft,
         updatedAt: updatedAtIso,

@@ -142,7 +142,7 @@ export function BlogPostPreview({
                 {/* biome-ignore lint/performance/noImgElement: Live preview supports arbitrary uploaded/external URLs */}
                 <img
                   src={frontmatter.coverImage}
-                  alt={displayTitle}
+                  alt={frontmatter.coverImageAlt?.trim() || displayTitle}
                   className="h-auto w-full object-cover"
                 />
               </div>

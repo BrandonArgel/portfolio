@@ -1,10 +1,14 @@
 import { describe, expect, test } from 'bun:test'
+import { siteConfig } from '@/config/site'
 import {
   buildBlogPostingJsonLd,
   buildBlogPostMetadata,
   buildPostLanguageAlternates,
   buildSeoDescription,
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_WIDTH,
   resolvePostOgImage,
+  SEO_DESCRIPTION_MAX_LENGTH,
   stripMarkdown,
   toAbsoluteUrl,
   truncateText,
@@ -47,10 +51,11 @@ describe('truncateText / buildSeoDescription', () => {
     expect(buildSeoDescription('Hand-written **summary**', '# Body')).toBe('Hand-written summary')
   })
 
-  test('falls back to a clean excerpt when the description is empty', () => {
+  test('falls back to a clean excerpt when the description is empty (~155 chars max)', () => {
+    expect(SEO_DESCRIPTION_MAX_LENGTH).toBe(155)
     const result = buildSeoDescription('', `# Title\n\n${'word '.repeat(100)}`)
     expect(result.startsWith('Title word')).toBe(true)
-    expect(result.length).toBeLessThanOrEqual(160)
+    expect(result.length).toBeLessThanOrEqual(SEO_DESCRIPTION_MAX_LENGTH)
   })
 })
 
@@ -62,14 +67,20 @@ describe('resolvePostOgImage', () => {
     updatedAt: new Date('2026-01-01T00:00:00Z'),
   }
 
-  test('uses the cover image as an absolute URL', () => {
+  test('uses the cover image as an absolute URL and prefers coverImageAlt over title', () => {
     const image = resolvePostOgImage({ ...post, coverImage: '/uploads/a.jpg' }, BASE)
     expect(image).toEqual({
       url: `${BASE}/uploads/a.jpg`,
-      width: 1200,
-      height: 630,
+      width: OG_IMAGE_WIDTH,
+      height: OG_IMAGE_HEIGHT,
       alt: 'Hello',
     })
+
+    const withAlt = resolvePostOgImage(
+      { ...post, coverImage: '/uploads/a.jpg', coverImageAlt: '  Architecture diagram  ' },
+      BASE,
+    )
+    expect(withAlt.alt).toBe('Architecture diagram')
   })
 
   test('keeps absolute cover URLs untouched', () => {
@@ -207,6 +218,44 @@ describe('buildBlogPostMetadata', () => {
       },
     ])
   })
+
+  test('uses coverImageAlt, custom canonicalUrl, and noindex+follow on fallback locales', () => {
+    const fallbackMetadata = buildBlogPostMetadata(
+      {
+        ...basePost,
+        requestedLocale: 'fr',
+        coverImage: '/uploads/diagram.webp',
+        coverImageAlt: 'System architecture overview',
+      },
+      [],
+      BASE,
+    )
+
+    expect(fallbackMetadata.alternates?.canonical).toBe(
+      `${BASE}/en/blog/production-architecture-notes`,
+    )
+    expect(fallbackMetadata.robots).toEqual({
+      index: false,
+      follow: true,
+      googleBot: {
+        index: false,
+        follow: true,
+      },
+    })
+
+    const customCanonicalMetadata = buildBlogPostMetadata(
+      {
+        ...basePost,
+        canonicalUrl: 'https://external.example.com/posts/architecture',
+      },
+      [],
+      BASE,
+    )
+
+    expect(customCanonicalMetadata.alternates?.canonical).toBe(
+      'https://external.example.com/posts/architecture',
+    )
+  })
 })
 
 describe('buildPostLanguageAlternates', () => {
@@ -245,7 +294,7 @@ describe('buildPostLanguageAlternates', () => {
 })
 
 describe('buildBlogPostingJsonLd', () => {
-  test('includes the required BlogPosting fields', () => {
+  test('includes the required TechArticle fields, author image, sameAs, and custom canonicalUrl', () => {
     const data = buildBlogPostingJsonLd(
       {
         title: 'T',
@@ -253,6 +302,8 @@ describe('buildBlogPostingJsonLd', () => {
         slug: 's',
         locale: 'en',
         authorName: 'Brandon',
+        authorImage: '/uploads/avatar.png',
+        canonicalUrl: 'https://canonical.example.com/articles/s',
         categoryNames: ['TypeScript', 'Next.js'],
         imageUrl: `${BASE}/api/og?slug=s`,
         createdAt: new Date('2026-01-01T00:00:00Z'),
@@ -261,15 +312,25 @@ describe('buildBlogPostingJsonLd', () => {
       BASE,
     )
 
-    expect(data['@type']).toBe('BlogPosting')
+    expect(data['@type']).toBe('TechArticle')
     expect(data.headline).toBe('T')
     expect(data.image).toEqual([`${BASE}/api/og?slug=s`])
     expect(data.datePublished).toBe('2026-01-01T00:00:00.000Z')
     expect(data.dateModified).toBe('2026-02-01T00:00:00.000Z')
     expect(data.inLanguage).toBe('en')
-    expect(data.mainEntityOfPage).toEqual({ '@type': 'WebPage', '@id': `${BASE}/en/blog/s` })
+    expect(data.url).toBe('https://canonical.example.com/articles/s')
+    expect(data.mainEntityOfPage).toEqual({
+      '@type': 'WebPage',
+      '@id': 'https://canonical.example.com/articles/s',
+    })
     expect(data.keywords).toBe('TypeScript, Next.js')
-    expect((data.author as { '@type': string })['@type']).toBe('Person')
+    expect(data.author).toEqual({
+      '@type': 'Person',
+      name: 'Brandon',
+      url: siteConfig.author.url,
+      image: `${BASE}/uploads/avatar.png`,
+      sameAs: [siteConfig.links.github, siteConfig.links.linkedin, siteConfig.links.youtube],
+    })
     expect((data.publisher as { '@type': string })['@type']).toBe('Organization')
   })
 })

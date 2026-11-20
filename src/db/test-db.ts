@@ -92,6 +92,8 @@ export async function seedTestPost(
       content: overrides.content ?? 'Sample post markdown content.',
       draftContent: overrides.draftContent ?? null,
       coverImage: overrides.coverImage ?? null,
+      coverImageAlt: overrides.coverImageAlt ?? null,
+      canonicalUrl: overrides.canonicalUrl ?? null,
       published: overrides.published ?? true,
       draft: overrides.draft ?? false,
       viewsCount: overrides.viewsCount ?? 0,
