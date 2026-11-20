@@ -5,8 +5,8 @@ import { type Locale, routing } from '@/i18n/routing'
 function getAlternateLanguages(
   pathname = '',
   customSlugs?: Partial<Record<Locale, string>>,
+  baseUrl: string = getBaseUrl(),
 ): Record<string, string> {
-  const baseUrl = getBaseUrl()
   const defaultLocale = routing.defaultLocale
   const cleanPath = pathname.startsWith('/') ? pathname : pathname ? `/${pathname}` : ''
   const languages: Record<string, string> = {}
@@ -49,6 +49,7 @@ export interface PageMetadataParams {
   title: string
   description: string
   pathname?: string
+  baseUrl?: string
   image?: string
   imageAlt?: string
   imageWidth?: number
@@ -70,6 +71,7 @@ export function constructPageMetadata({
   title,
   description,
   pathname = '',
+  baseUrl,
   image,
   keywords,
   type = 'website',
@@ -84,11 +86,12 @@ export function constructPageMetadata({
   imageWidth = 1200,
   imageHeight = 630,
 }: PageMetadataParams): Metadata {
-  const baseUrl = getBaseUrl()
+  const resolvedBaseUrl = baseUrl ?? getBaseUrl()
   const cleanPath = pathname.startsWith('/') ? pathname : pathname ? `/${pathname}` : ''
-  const currentUrl = `${baseUrl}/${locale}${cleanPath}`
-  const ogImage = image || siteConfig.ogImage
-  const languages = languagesOverride ?? getAlternateLanguages(cleanPath, customSlugs)
+  const currentUrl = `${resolvedBaseUrl}/${locale}${cleanPath}`
+  const ogImage = image || `${resolvedBaseUrl}/opengraph-image.jpg`
+  const languages =
+    languagesOverride ?? getAlternateLanguages(cleanPath, customSlugs, resolvedBaseUrl)
   const ogLocale = toOpenGraphLocale(locale)
   const alternateOgLocales = Object.keys(languages)
     .filter((code) => code !== 'x-default' && code !== locale)
@@ -97,8 +100,8 @@ export function constructPageMetadata({
 
   const authorList =
     authors && authors.length > 0
-      ? authors.map((name) => ({ name, url: siteConfig.url }))
-      : [{ name: siteConfig.author.name, url: siteConfig.url }]
+      ? authors.map((name) => ({ name, url: resolvedBaseUrl }))
+      : [{ name: siteConfig.author.name, url: resolvedBaseUrl }]
 
   const metadata: Metadata = {
     title,

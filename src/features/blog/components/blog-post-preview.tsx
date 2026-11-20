@@ -100,9 +100,7 @@ export function BlogPostPreview({
             {frontmatter.categories && frontmatter.categories.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {frontmatter.categories.map((category) => (
-                  <Badge key={category} variant="secondary">
-                    {category}
-                  </Badge>
+                  <Badge key={category}>{category}</Badge>
                 ))}
               </div>
             )}
@@ -144,7 +142,7 @@ export function BlogPostPreview({
                 <img
                   src={frontmatter.coverImage}
                   alt={displayTitle}
-                  className="h-full w-full object-cover"
+                  className="h-auto w-full object-cover"
                 />
               </div>
             )}

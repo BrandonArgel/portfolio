@@ -1052,6 +1052,11 @@
           "example": "Exemple"
         }
       },
+      "task_list": {
+        "interactive": "Liste interactive",
+        "read_only": "Liste en lecture seule",
+        "toggle_interactive": "Basculer la liste interactive pour les lecteurs"
+      },
       "code_block": {
         "auto": "Automatique (Texte brut)",
         "plain_text": "Texte brut",

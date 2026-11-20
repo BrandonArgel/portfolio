@@ -1,19 +1,17 @@
-import { headers } from 'next/headers'
 import { getTranslations } from 'next-intl/server'
 import { Logo } from '@/components/shared/logo'
 import { Link } from '@/i18n/navigation'
-import { auth } from '@/lib/auth/auth'
+import { getOptionalSession } from '@/lib/auth/get-optional-session'
 import { CommandPalette } from '../command-palette'
 import { DesktopNav } from './ui/desktop-nav'
 import { MobileNav } from './ui/mobile-nav'
 import { UserPreferencesMenu } from './ui/user-menu'
 
 export async function Header() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
-
-  const t = await getTranslations('components.layout.header')
+  const [session, t] = await Promise.all([
+    getOptionalSession(),
+    getTranslations('components.layout.header'),
+  ])
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-md transition-colors supports-backdrop-filter:bg-background/60">
