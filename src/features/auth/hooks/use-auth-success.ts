@@ -1,6 +1,7 @@
 'use client'
 
 import { sileo } from 'sileo'
+import { getSafeCallbackUrlFromLocation } from '@/features/auth/utils/callback-url'
 import { useRouter } from '@/i18n/navigation'
 import { track } from '@/lib/analytics/events'
 import type { User } from '@/lib/auth/auth-client'
@@ -20,12 +21,7 @@ export function useAuthSuccess() {
 
     sileo.success({ title, description })
 
-    const rawCallbackUrl =
-      typeof window !== 'undefined'
-        ? new URLSearchParams(window.location.search).get('callbackUrl')
-        : null
-    const safeCallbackUrl =
-      rawCallbackUrl?.startsWith('/') && !rawCallbackUrl.startsWith('//') ? rawCallbackUrl : null
+    const safeCallbackUrl = getSafeCallbackUrlFromLocation()
 
     if (safeCallbackUrl) {
       router.push(safeCallbackUrl)

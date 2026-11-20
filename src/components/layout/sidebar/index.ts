@@ -1,7 +1,2 @@
-export type { DashboardResizableLayoutProps } from './dashboard-resizable-layout'
 export { DashboardResizableLayout } from './dashboard-resizable-layout'
-export type { DashboardSidebarProps } from './sidebar'
-export { DashboardSidebar, DashboardSidebar as Sidebar } from './sidebar'
-export { SidebarBrand } from './ui/sidebar-brand'
-export { SidebarNavMain } from './ui/sidebar-nav-main'
-export { SidebarNavUser } from './ui/sidebar-nav-user'
+export { DashboardSidebar } from './sidebar'

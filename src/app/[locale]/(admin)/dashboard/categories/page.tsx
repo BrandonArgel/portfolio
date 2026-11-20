@@ -2,9 +2,11 @@ import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
+import { DashboardErrorState } from '@/components/shared/dashboard-error-state'
 import { CategoriesManager } from '@/features/blog/components/admin/categories-manager'
 import { getAdminCategoriesWithMetrics } from '@/features/blog/services/categories-service'
 import { auth } from '@/lib/auth/auth'
+import { assertNever } from '@/utils/result'
 
 interface DashboardCategoriesPageProps {
   params: Promise<{ locale: string }>
@@ -35,8 +37,30 @@ export default async function DashboardCategoriesPage({ params }: DashboardCateg
     redirect(`/${locale}/login`)
   }
 
-  const [, categoriesData] = await getAdminCategoriesWithMetrics()
-  const categories = categoriesData ?? []
+  const [categoriesErr, categoriesData] = await getAdminCategoriesWithMetrics()
 
-  return <CategoriesManager initialCategories={categories} />
+  if (categoriesErr || !categoriesData) {
+    if (categoriesErr) {
+      switch (categoriesErr.reason) {
+        case 'DATABASE_ERROR':
+          break
+        default:
+          return assertNever(categoriesErr.reason)
+      }
+    }
+
+    const t = await getTranslations({
+      locale,
+      namespace: 'features.blog.categories',
+    })
+
+    return (
+      <DashboardErrorState
+        title={t('error_loading')}
+        description={t('error_loading_description')}
+      />
+    )
+  }
+
+  return <CategoriesManager initialCategories={categoriesData} />
 }

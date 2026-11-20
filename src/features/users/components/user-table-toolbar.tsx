@@ -2,7 +2,7 @@
 
 import { RotateCcw, Search } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useCallback, useEffect, useRef, useState, useTransition } from 'react'
+import { useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { usePathname, useRouter } from '@/i18n/navigation'
+import { useUrlTableFilters } from '@/hooks/use-url-table-filters'
 
 interface UserTableToolbarProps {
   initialSearch?: string
@@ -22,66 +22,22 @@ interface UserTableToolbarProps {
 export function UserTableToolbar({ initialSearch = '', initialRole = '' }: UserTableToolbarProps) {
   const t = useTranslations('features.users.management')
   const tRoles = useTranslations('features.users.roles')
-  const router = useRouter()
-  const pathname = usePathname()
-  const [isPending, startTransition] = useTransition()
 
-  const [searchValue, setSearchValue] = useState(initialSearch)
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const isInitialMount = useRef(true)
-
-  const pushParams = useCallback(
-    (updates: Record<string, string>) => {
-      const params = new URLSearchParams()
-
-      if (initialSearch) params.set('q', initialSearch)
-      if (initialRole) params.set('role', initialRole)
-
-      for (const [key, value] of Object.entries(updates)) {
-        if (value) {
-          params.set(key, value)
-        } else {
-          params.delete(key)
-        }
-      }
-
-      // Reset to page 1 on filter changes
-      params.delete('page')
-
-      const qs = params.toString()
-      startTransition(() => {
-        router.push(`${pathname}${qs ? `?${qs}` : ''}`)
-      })
-    },
-    [initialSearch, initialRole, pathname, router],
+  const initialParams = useMemo(
+    () => ({
+      q: initialSearch,
+      role: initialRole,
+    }),
+    [initialSearch, initialRole],
   )
 
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false
-      return
-    }
-
-    if (debounceRef.current) clearTimeout(debounceRef.current)
-
-    debounceRef.current = setTimeout(() => {
-      pushParams({ q: searchValue })
-    }, 300)
-
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current)
-    }
-  }, [searchValue, pushParams])
+  const { searchValue, setSearchValue, isPending, pushParams, handleReset } = useUrlTableFilters({
+    initialParams,
+    initialSearch,
+  })
 
   const handleRoleChange = (value: string | null) => {
     pushParams({ role: value || '' })
-  }
-
-  const handleReset = () => {
-    setSearchValue('')
-    startTransition(() => {
-      router.push(pathname)
-    })
   }
 
   const hasActiveFilters = Boolean(initialSearch || initialRole)

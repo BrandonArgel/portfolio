@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { getBaseUrl, siteConfig } from '@/config/site'
 import { type Locale, routing } from '@/i18n/routing'
 
-export function getAlternateLanguages(
+function getAlternateLanguages(
   pathname = '',
   customSlugs?: Partial<Record<Locale, string>>,
 ): Record<string, string> {
@@ -40,7 +40,7 @@ const OPEN_GRAPH_LOCALES: Record<Locale, string> = {
 }
 
 /** Open Graph expects `language_TERRITORY` (e.g. `en_US`), not a bare language code. */
-export function toOpenGraphLocale(locale: string): string {
+function toOpenGraphLocale(locale: string): string {
   return OPEN_GRAPH_LOCALES[locale as Locale] ?? locale
 }
 

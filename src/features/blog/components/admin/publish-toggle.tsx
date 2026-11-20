@@ -1,13 +1,13 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useAction } from 'next-safe-action/hooks'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { sileo } from 'sileo'
 import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
 import { togglePublishStatusAction } from '@/features/blog/actions/post-actions'
-import { checkAndHandleSessionRevoked } from '@/lib/auth-interceptor'
+import { usePostErrors } from '@/features/blog/hooks/use-post-errors'
+import { useRouter } from '@/i18n/navigation'
 
 interface PostPublishToggleProps {
   postId: string
@@ -16,33 +16,29 @@ interface PostPublishToggleProps {
 
 export function PostPublishToggle({ postId, initialPublished }: PostPublishToggleProps) {
   const t = useTranslations('features.blog.management')
+  const router = useRouter()
+  const { handlePostError } = usePostErrors()
   const [published, setPublished] = useState(initialPublished)
-
-  const { execute, isExecuting } = useAction(togglePublishStatusAction, {
-    onSuccess: (res) => {
-      if (res.data?.success) {
-        setPublished(res.data.published)
-        sileo.success({
-          title: res.data.published ? t('publish_success') : t('unpublish_success'),
-        })
-      }
-    },
-    onError: ({ error }) => {
-      if (checkAndHandleSessionRevoked(error)) return
-
-      // Revert optimistic state on error
-      setPublished(!published)
-      const serverError = error.serverError
-      sileo.error({
-        title: serverError?.title || t('status_update_error'),
-        description: serverError?.description,
-      })
-    },
-  })
+  const [isPending, startTransition] = useTransition()
 
   const handleCheckedChange = (checked: boolean) => {
     setPublished(checked)
-    execute({ postId, published: checked })
+
+    startTransition(async () => {
+      const [err, result] = await togglePublishStatusAction({ postId, published: checked })
+
+      if (err) {
+        setPublished(!checked)
+        handlePostError(err)
+        return
+      }
+
+      setPublished(result.published)
+      sileo.success({
+        title: result.published ? t('publish_success') : t('unpublish_success'),
+      })
+      router.refresh()
+    })
   }
 
   return (
@@ -50,7 +46,7 @@ export function PostPublishToggle({ postId, initialPublished }: PostPublishToggl
       <Switch
         checked={published}
         onCheckedChange={handleCheckedChange}
-        disabled={isExecuting}
+        disabled={isPending}
         aria-label={t('publish_toggle')}
       />
       {published ? (

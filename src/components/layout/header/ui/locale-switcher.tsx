@@ -1,11 +1,10 @@
 'use client'
 
 import { Check } from 'lucide-react'
-
+import { useLocaleSwitcher } from '@/components/layout/user-menu/use-locale-switcher'
 import { LOCALE_META } from '@/config/locale'
 import { routing } from '@/i18n/routing'
 import { cn } from '@/lib/utils'
-import { useLocaleSwitcher } from '../hooks/use-locale-switcher'
 
 interface LocaleSwitcherProps {
   className?: string

@@ -2,8 +2,7 @@
 
 import { AlertTriangle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useAction } from 'next-safe-action/hooks'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { sileo } from 'sileo'
 import { Button } from '@/components/ui/button'
 import {
@@ -24,8 +23,8 @@ import {
 } from '@/components/ui/select'
 import { Spinner } from '@/components/ui/spinner'
 import { Textarea } from '@/components/ui/textarea'
-import { banUserAction } from '@/features/users/actions/users.action'
-import { checkAndHandleSessionRevoked } from '@/lib/auth-interceptor'
+import { banUserAction } from '@/features/users/actions/users-action'
+import { useUserErrors } from '../hooks/use-user-errors'
 
 interface BanUserDialogProps {
   userId: string
@@ -43,46 +42,44 @@ export function BanUserDialog({
   onOpenChange,
 }: BanUserDialogProps) {
   const t = useTranslations('features.users.management')
+  const { handleUserError } = useUserErrors()
   const [duration, setDuration] = useState<string>('7')
   const [reason, setReason] = useState('')
   const [validationError, setValidationError] = useState<string | null>(null)
-
-  const { execute, isExecuting } = useAction(banUserAction, {
-    onSuccess: (res) => {
-      if (res.data?.success) {
-        sileo.success({
-          title: t('user_banned_success'),
-          description: `${userName || userEmail}`,
-        })
-        onOpenChange(false)
-        setReason('')
-        setDuration('7')
-        setValidationError(null)
-      }
-    },
-    onError: ({ error }) => {
-      if (checkAndHandleSessionRevoked(error)) return
-      sileo.error({
-        title: error.serverError?.title || 'Error',
-        description: error.serverError?.description,
-      })
-    },
-  })
+  const [isExecuting, startTransition] = useTransition()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!reason.trim()) {
+    const trimmedReason = reason.trim()
+    if (!trimmedReason) {
       setValidationError(t('ban_reason_required'))
       return
     }
 
     setValidationError(null)
     const durationInDays = duration === 'permanent' ? 'permanent' : Number(duration)
-    execute({
-      userId,
-      reason: reason.trim(),
-      durationInDays,
+
+    startTransition(async () => {
+      const [err] = await banUserAction({
+        userId,
+        reason: trimmedReason,
+        durationInDays,
+      })
+
+      if (err) {
+        handleUserError(err)
+        return
+      }
+
+      sileo.success({
+        title: t('user_banned_success'),
+        description: `${userName || userEmail}`,
+      })
+      onOpenChange(false)
+      setReason('')
+      setDuration('7')
+      setValidationError(null)
     })
   }
 

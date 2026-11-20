@@ -8,9 +8,7 @@ function makeFile(name: string, type: string, size = 1024): File {
   return new File([new Uint8Array(size)], name, { type })
 }
 
-const okTransport: UploadTransport = async () => ({
-  data: okay({ url: 'https://blob.example/photo.jpg' }),
-})
+const okTransport: UploadTransport = async () => okay({ url: 'https://blob.example/photo.jpg' })
 
 const passthroughPrepare = async (file: File): Promise<Result<File, ImageUploadError>> => okay(file)
 
@@ -105,27 +103,20 @@ describe('uploadImageService', () => {
 
   test('returns errors reported by the server action as values', async () => {
     const [err] = await uploadImageService(makeFile('a.jpg', 'image/jpeg'), {
-      transport: async () => ({ data: error({ reason: 'STORAGE_ERROR' }) }),
+      transport: async () => error({ reason: 'STORAGE_ERROR' }),
       prepare: passthroughPrepare,
     })
 
     expect(err).toEqual({ reason: 'STORAGE_ERROR' })
   })
 
-  test('maps auth failures raised by the action middleware', async () => {
+  test('propagates auth errors returned by the server action as values', async () => {
     const [unauthorized] = await uploadImageService(makeFile('a.jpg', 'image/jpeg'), {
-      transport: async () => ({
-        serverError: {
-          title: 'SESSION_REVOKED',
-          description: 'Your session is invalid or expired.',
-        },
-      }),
+      transport: async () => error({ reason: 'UNAUTHORIZED' }),
       prepare: passthroughPrepare,
     })
     const [forbidden] = await uploadImageService(makeFile('a.jpg', 'image/jpeg'), {
-      transport: async () => ({
-        serverError: { title: 'SESSION_REVOKED', description: 'Your account has been suspended.' },
-      }),
+      transport: async () => error({ reason: 'FORBIDDEN' }),
       prepare: passthroughPrepare,
     })
 

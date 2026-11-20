@@ -2,8 +2,7 @@
 
 import { Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useAction } from 'next-safe-action/hooks'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { sileo } from 'sileo'
 import {
   AlertDialog,
@@ -19,34 +18,31 @@ import {
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { deletePostAction } from '@/features/blog/actions/post-actions'
-import { checkAndHandleSessionRevoked } from '@/lib/auth-interceptor'
+import { usePostErrors } from '@/features/blog/hooks/use-post-errors'
+import { useRouter } from '@/i18n/navigation'
 
 export function DeletePostButton({ postId }: { postId: string }) {
   const t = useTranslations('features.blog.management')
+  const router = useRouter()
+  const { handlePostError } = usePostErrors()
   const [open, setOpen] = useState(false)
-
-  const { execute, isExecuting } = useAction(deletePostAction, {
-    onSuccess: (res) => {
-      if (res.data?.success) {
-        sileo.success({
-          title: t('delete_success'),
-        })
-        setOpen(false)
-      }
-    },
-    onError: ({ error }) => {
-      if (checkAndHandleSessionRevoked(error)) return
-
-      const serverError = error.serverError
-      sileo.error({
-        title: serverError?.title || t('delete_error'),
-        description: serverError?.description,
-      })
-    },
-  })
+  const [isPending, startTransition] = useTransition()
 
   const handleDelete = () => {
-    execute({ postId })
+    startTransition(async () => {
+      const [err] = await deletePostAction({ postId })
+
+      if (err) {
+        handlePostError(err)
+        return
+      }
+
+      sileo.success({
+        title: t('delete_success'),
+      })
+      setOpen(false)
+      router.refresh()
+    })
   }
 
   return (
@@ -57,10 +53,10 @@ export function DeletePostButton({ postId }: { postId: string }) {
             variant="destructive"
             size="sm"
             className="gap-1.5 cursor-pointer text-xs h-8"
-            disabled={isExecuting}
+            disabled={isPending}
           >
-            {isExecuting ? <Spinner className="size-3.5" /> : <Trash2 className="size-3.5" />}
-            <span>{isExecuting ? t('deleting') : t('delete')}</span>
+            {isPending ? <Spinner className="size-3.5" /> : <Trash2 className="size-3.5" />}
+            <span>{isPending ? t('deleting') : t('delete')}</span>
           </Button>
         }
       />
@@ -70,9 +66,9 @@ export function DeletePostButton({ postId }: { postId: string }) {
           <AlertDialogDescription>{t('delete_dialog_description')}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isExecuting}>{t('cancel')}</AlertDialogCancel>
-          <AlertDialogAction variant="destructive" onClick={handleDelete} disabled={isExecuting}>
-            {isExecuting ? <Spinner className="size-3.5 animate-spin mr-1.5" /> : null}
+          <AlertDialogCancel disabled={isPending}>{t('cancel')}</AlertDialogCancel>
+          <AlertDialogAction variant="destructive" onClick={handleDelete} disabled={isPending}>
+            {isPending ? <Spinner className="size-3.5 animate-spin mr-1.5" /> : null}
             {t('delete')}
           </AlertDialogAction>
         </AlertDialogFooter>

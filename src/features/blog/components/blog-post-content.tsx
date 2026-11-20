@@ -4,9 +4,9 @@ import { getFormatter, getTranslations } from 'next-intl/server'
 import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/ui/button'
 import type { BlogPost } from '../types'
-import { BookmarkPostButton } from './public/BookmarkPostButton'
-import { MdxContentServer } from './public/MdxContentServer'
-import { SharePostMenu } from './public/SharePostMenu'
+import { BookmarkPostButton } from './public/bookmark-post-button'
+import { MdxContentServer } from './public/mdx-content-server'
+import { SharePostMenu } from './public/share-post-menu'
 
 interface BlogPostContentProps {
   post: BlogPost

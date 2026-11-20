@@ -2,7 +2,7 @@
 
 import { RotateCcw, Search } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useCallback, useEffect, useRef, useState, useTransition } from 'react'
+import { useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { LOCALE_META } from '@/config/locale'
-import { usePathname, useRouter } from '@/i18n/navigation'
+import { useUrlTableFilters } from '@/hooks/use-url-table-filters'
 
 interface PostTableToolbarProps {
   categories: { id: string; name: string; slug: string }[]
@@ -29,60 +29,20 @@ export function PostTableToolbar({
   initialCategory = '',
 }: PostTableToolbarProps) {
   const t = useTranslations('features.blog.management')
-  const router = useRouter()
-  const pathname = usePathname()
-  const [isPending, startTransition] = useTransition()
 
-  const [searchValue, setSearchValue] = useState(initialSearch)
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const isInitialMount = useRef(true)
-
-  const pushParams = useCallback(
-    (updates: Record<string, string>) => {
-      const params = new URLSearchParams()
-
-      // Preserve current values as defaults
-      if (initialSearch) params.set('q', initialSearch)
-      if (initialLocale) params.set('locale', initialLocale)
-      if (initialCategory) params.set('category', initialCategory)
-
-      // Apply updates
-      for (const [key, value] of Object.entries(updates)) {
-        if (value) {
-          params.set(key, value)
-        } else {
-          params.delete(key)
-        }
-      }
-
-      // Always reset to page 1 when filters change
-      params.delete('page')
-
-      const qs = params.toString()
-      startTransition(() => {
-        router.push(`${pathname}${qs ? `?${qs}` : ''}`)
-      })
-    },
-    [initialSearch, initialLocale, initialCategory, pathname, router],
+  const initialParams = useMemo(
+    () => ({
+      q: initialSearch,
+      locale: initialLocale,
+      category: initialCategory,
+    }),
+    [initialSearch, initialLocale, initialCategory],
   )
 
-  // Debounced search
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false
-      return
-    }
-
-    if (debounceRef.current) clearTimeout(debounceRef.current)
-
-    debounceRef.current = setTimeout(() => {
-      pushParams({ q: searchValue })
-    }, 300)
-
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current)
-    }
-  }, [searchValue, pushParams])
+  const { searchValue, setSearchValue, isPending, pushParams, handleReset } = useUrlTableFilters({
+    initialParams,
+    initialSearch,
+  })
 
   const handleLocaleChange = (value: string | null) => {
     pushParams({ locale: value || '' })
@@ -90,13 +50,6 @@ export function PostTableToolbar({
 
   const handleCategoryChange = (value: string | null) => {
     pushParams({ category: value || '' })
-  }
-
-  const handleReset = () => {
-    setSearchValue('')
-    startTransition(() => {
-      router.push(pathname)
-    })
   }
 
   const hasActiveFilters = initialSearch || initialLocale || initialCategory

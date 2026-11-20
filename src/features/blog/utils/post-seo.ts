@@ -75,7 +75,7 @@ export function toAbsoluteUrl(url: string, baseUrl: string = getBaseUrl()): stri
   }
 }
 
-export function buildPostPath(locale: string, slug: string): string {
+function buildPostPath(locale: string, slug: string): string {
   return `/${locale}/blog/${slug}`
 }
 

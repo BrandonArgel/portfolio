@@ -1,4 +1,4 @@
-import type { MDXComponents } from 'mdx/types'
+import type { MDXRemoteProps } from 'next-mdx-remote/rsc'
 
 import { MdxCallout } from './mdx-callout'
 import { MdxCode, MdxPre } from './mdx-code-block'
@@ -21,7 +21,7 @@ import {
   MdxU,
 } from './mdx-typography'
 
-export const mdxComponents: MDXComponents = {
+export const mdxComponents: NonNullable<MDXRemoteProps['components']> = {
   h1: MdxH1,
   h2: MdxH2,
   h3: MdxH3,
@@ -56,36 +56,4 @@ export const mdxComponents: MDXComponents = {
     <MdxYouTube url={props.src ?? props.url} id={props.id} title={props.title} />
   ),
   Callout: MdxCallout,
-}
-
-export {
-  MdxA,
-  MdxBlockquote,
-  MdxCallout,
-  MdxCode,
-  MdxH1,
-  MdxH2,
-  MdxH3,
-  MdxH4,
-  MdxH5,
-  MdxH6,
-  MdxHr,
-  MdxIframe,
-  MdxImage,
-  MdxInput,
-  MdxLi,
-  MdxMark,
-  MdxOl,
-  MdxP,
-  MdxPre,
-  MdxSpan,
-  MdxTable,
-  MdxTbody,
-  MdxTd,
-  MdxTh,
-  MdxThead,
-  MdxTr,
-  MdxU,
-  MdxUl,
-  MdxYouTube,
 }

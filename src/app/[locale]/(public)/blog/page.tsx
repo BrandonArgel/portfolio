@@ -16,6 +16,7 @@ import {
 } from '@/features/blog/services/posts-service'
 import { auth } from '@/lib/auth/auth'
 import { constructPageMetadata } from '@/lib/seo'
+import { assertNever } from '@/utils/result'
 
 interface BlogPageProps {
   params: Promise<{ locale: string }>
@@ -69,6 +70,33 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
   const [bookmarksErr, userBookmarksData] = userId
     ? await getUserBookmarkedPosts(userId)
     : [null, []]
+
+  if (postsErr) {
+    switch (postsErr.reason) {
+      case 'DATABASE_ERROR':
+        break
+      default:
+        return assertNever(postsErr.reason)
+    }
+  }
+
+  if (categoriesErr) {
+    switch (categoriesErr.reason) {
+      case 'DATABASE_ERROR':
+        break
+      default:
+        return assertNever(categoriesErr.reason)
+    }
+  }
+
+  if (bookmarksErr) {
+    switch (bookmarksErr.reason) {
+      case 'DATABASE_ERROR':
+        break
+      default:
+        return assertNever(bookmarksErr.reason)
+    }
+  }
 
   const bookmarkedPosts = bookmarksErr || !userBookmarksData ? [] : userBookmarksData
   const bookmarkedPostIds = new Set(bookmarkedPosts.map((item) => item.id))

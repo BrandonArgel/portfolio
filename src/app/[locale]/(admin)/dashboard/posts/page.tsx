@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { getFormatter, getTranslations } from 'next-intl/server'
+import { AdminPagination } from '@/components/shared/admin-pagination'
+import { DashboardErrorState } from '@/components/shared/dashboard-error-state'
 import { Badge } from '@/components/ui/badge'
 import {
   Breadcrumb,
@@ -17,13 +19,13 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { LOCALE_META } from '@/config/locale'
-import { AdminPagination } from '@/features/blog/components/admin/admin-pagination'
 import { DeletePostButton } from '@/features/blog/components/admin/delete-button'
 import { PostTableToolbar } from '@/features/blog/components/admin/post-table-toolbar'
 import { PostPublishToggle } from '@/features/blog/components/admin/publish-toggle'
 import { getAdminPosts, getAllCategoriesAdmin } from '@/features/blog/services/posts-service'
 import { Link } from '@/i18n/navigation'
 import { auth } from '@/lib/auth/auth'
+import { assertNever } from '@/utils/result'
 
 interface DashboardPostsPageProps {
   params: Promise<{ locale: string }>
@@ -69,7 +71,16 @@ export default async function DashboardPostsPage({
   const categoryFilter = sp.category || ''
 
   // 1. Fetch categories first to resolve slug to ID
-  const [_, categoriesData] = await getAllCategoriesAdmin()
+  const [categoriesError, categoriesData] = await getAllCategoriesAdmin()
+  if (categoriesError) {
+    switch (categoriesError.reason) {
+      case 'DATABASE_ERROR':
+        console.error('Error fetching categories for dashboard posts:', categoriesError.details)
+        break
+      default:
+        return assertNever(categoriesError.reason)
+    }
+  }
   const allCategories = categoriesData ?? []
 
   // 2. Resolve category slug from URL to matching category id
@@ -97,19 +108,21 @@ export default async function DashboardPostsPage({
 
   const [postsError, postsData] = postsResult
 
-  if (postsError) {
-    // Fallback — show empty state on error
+  if (postsError || !postsData) {
+    if (postsError) {
+      switch (postsError.reason) {
+        case 'DATABASE_ERROR':
+          break
+        default:
+          return assertNever(postsError.reason)
+      }
+    }
+
     return (
-      <div className="py-6 space-y-6">
-        <Empty className="py-16">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <FileText />
-            </EmptyMedia>
-            <EmptyTitle>{t('no_posts')}</EmptyTitle>
-          </EmptyHeader>
-        </Empty>
-      </div>
+      <DashboardErrorState
+        title={t('error_loading')}
+        description={t('error_loading_description')}
+      />
     )
   }
 

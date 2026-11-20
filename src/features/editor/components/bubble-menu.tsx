@@ -21,8 +21,3 @@ export function BubbleMenu({ editor }: BubbleMenuProps) {
     </TooltipProvider>
   )
 }
-
-export { LinkDialog, type LinkDialogProps } from './bubble-menu/link-dialog'
-export { MenuToggleItem, type MenuToggleItemProps } from './bubble-menu/menu-toggle-item'
-export { TableBubbleMenu, type TableBubbleMenuProps } from './bubble-menu/table-bubble-menu'
-export { TextBubbleMenu, type TextBubbleMenuProps } from './bubble-menu/text-bubble-menu'
