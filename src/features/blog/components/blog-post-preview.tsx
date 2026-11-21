@@ -11,7 +11,9 @@ import remarkUnwrapImages from 'remark-unwrap-images'
 
 import { Spinner } from '@/components/ui/spinner'
 import { useMounted } from '@/hooks/use-mounted'
+import { normalizeCategorySlug } from '../schemas/category-schema'
 import type { BlogFrontmatter } from '../schemas/post-schema'
+import type { BlogCategory } from '../types'
 import { calculateReadTime } from '../utils/calculate-read-time'
 import { preprocessMdxContent } from '../utils/preprocess-mdx'
 import { rehypeCodeMeta } from '../utils/rehype-code-meta'
@@ -99,6 +101,10 @@ export function BlogPostPreview({
   }, [content])
 
   const displayTitle = frontmatter.title.trim() || tComposer('header.untitled_post')
+  const previewCategories: BlogCategory[] = frontmatter.categories.map((name) => {
+    const slug = normalizeCategorySlug(name) || name
+    return { id: slug, name, slug }
+  })
 
   return (
     <div className="flex-1 min-h-0 h-full w-full overflow-y-auto rounded-lg">
@@ -106,10 +112,8 @@ export function BlogPostPreview({
         <article className="w-full">
           <ArticlePostHeader
             title={displayTitle}
-            categories={frontmatter.categories?.map((category) => ({
-              key: category,
-              name: category,
-            }))}
+            categories={previewCategories}
+            interactiveCategories={false}
             authorName={authorName}
             authorImage={authorImage}
             authorEmailVerified={authorEmailVerified}

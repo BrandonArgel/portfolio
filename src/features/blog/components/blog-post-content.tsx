@@ -1,9 +1,9 @@
 import { ArrowLeft } from 'lucide-react'
 import { getFormatter, getTranslations } from 'next-intl/server'
-import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/ui/button'
 import type { BlogPost } from '../types'
 import { ArticlePostHeader } from './article-post-header'
+import { CategoryBadge } from './category-badge'
 import { BookmarkPostButton } from './public/bookmark-post-button'
 import { LikePostButton } from './public/like-post-button'
 import { MdxContentServer } from './public/mdx-content-server'
@@ -85,10 +85,7 @@ export async function BlogPostContent({
 
       <ArticlePostHeader
         title={post.title}
-        categories={post.categories?.map((category) => ({
-          key: category.id,
-          name: category.name,
-        }))}
+        categories={post.categories}
         authorName={post.authorName}
         authorImage={post.authorImage}
         authorEmailVerified={post.authorEmailVerified}
@@ -113,9 +110,12 @@ export async function BlogPostContent({
       <footer className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
         <div className="flex flex-wrap gap-2">
           {post.categories?.map((category) => (
-            <Badge key={category.id} variant="outline" className="text-xs">
-              {category.name}
-            </Badge>
+            <CategoryBadge
+              key={category.id}
+              category={category}
+              variant="outline"
+              className="text-xs"
+            />
           ))}
         </div>
 

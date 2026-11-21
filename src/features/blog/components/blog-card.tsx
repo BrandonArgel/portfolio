@@ -5,6 +5,7 @@ import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import type { BlogPostCardItem } from '../types'
 import { BlogThumbnail } from './blog-thumbnail'
+import { CategoryBadge } from './category-badge'
 
 interface BlogCardProps {
   post: BlogPostCardItem
@@ -53,12 +54,12 @@ export function BlogCard({ post, className }: BlogCardProps) {
         {post.categories && post.categories.length > 0 && (
           <div className="mt-4 mb-3 flex flex-wrap gap-1.5 sm:gap-2">
             {post.categories.map((category) => (
-              <span
+              <CategoryBadge
                 key={category.id}
-                className="inline-flex items-center rounded-md border border-border/60 bg-muted/40 dark:bg-slate-800/80 px-2.5 py-0.5 text-xs font-medium text-muted-foreground transition-colors group-hover/blog-card:border-primary/30 group-hover/blog-card:text-foreground"
-              >
-                {category.name}
-              </span>
+                category={category}
+                variant="outline"
+                className="rounded-md border-border/60 bg-muted/40 dark:bg-slate-800/80 px-2.5 py-0.5 text-muted-foreground group-hover/blog-card:border-primary/30 group-hover/blog-card:text-foreground"
+              />
             ))}
           </div>
         )}

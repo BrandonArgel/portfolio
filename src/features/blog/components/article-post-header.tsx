@@ -1,20 +1,17 @@
 import { BadgeCheck, Calendar, Clock, Eye } from 'lucide-react'
 import Image from 'next/image'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { siteConfig } from '@/config/site'
 import { getInitials } from '@/utils/get-initials'
 import { PUBLIC_VIEWS_THRESHOLD } from '../constants/blog'
-
-interface ArticlePostHeaderCategory {
-  key: string
-  name: string
-}
+import type { BlogCategory } from '../types'
+import { CategoryBadge } from './category-badge'
 
 interface ArticlePostHeaderProps {
   title: string
-  categories?: readonly ArticlePostHeaderCategory[]
+  categories?: readonly BlogCategory[]
+  interactiveCategories?: boolean
   authorName?: string | null
   authorImage?: string | null
   authorEmailVerified?: boolean
@@ -38,6 +35,7 @@ function isValidCoverImageSrc(src: string): boolean {
 export function ArticlePostHeader({
   title,
   categories = [],
+  interactiveCategories = true,
   authorName,
   authorImage,
   authorEmailVerified = false,
@@ -63,7 +61,11 @@ export function ArticlePostHeader({
       {categories.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {categories.map((category) => (
-            <Badge key={category.key}>{category.name}</Badge>
+            <CategoryBadge
+              key={category.id}
+              category={category}
+              interactive={interactiveCategories}
+            />
           ))}
         </div>
       )}
