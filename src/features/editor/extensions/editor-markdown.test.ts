@@ -406,4 +406,21 @@ describe('MarkdownManager round-trips for custom nodes and marks', () => {
     const serialized = parsed ? editor.markdown?.serialize(parsed) : ''
     expect(serialized).toBe(input)
   })
+
+  test('hydrates natural width and height on ImageNode from URL query params when parsing Markdown', () => {
+    const editor = setupEditor()
+    const input = '![Diagram](/blog-images/diagram.webp?w=1600&h=900 "Architecture")'
+
+    const parsed = editor.markdown?.parse(input)
+    expect(parsed?.content?.[0]).toEqual({
+      type: 'image',
+      attrs: {
+        src: '/blog-images/diagram.webp?w=1600&h=900',
+        title: 'Architecture',
+        alt: 'Diagram',
+        width: 1600,
+        height: 900,
+      },
+    })
+  })
 })

@@ -1,80 +1,110 @@
 'use client'
 
-import {
-  AlignLeft,
-  FileEdit,
-  Globe,
-  Hash,
-  Image as ImageIcon,
-  Languages,
-  Link2,
-  RefreshCw,
-  RotateCcw,
-  Trash2,
-  Type,
-  Upload,
-} from 'lucide-react'
+import dynamic from 'next/dynamic'
 import { useTranslations } from 'next-intl'
-import { useRef, useState } from 'react'
+import { type ChangeEvent, useRef, useState } from 'react'
 import { sileo } from 'sileo'
 import { z } from 'zod'
-import {
-  Attachment,
-  AttachmentAction,
-  AttachmentActions,
-  AttachmentContent,
-  AttachmentDescription,
-  AttachmentMedia,
-  AttachmentTitle,
-  AttachmentTrigger,
-} from '@/components/ui/attachment'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import {
-  Combobox,
-  ComboboxChip,
-  ComboboxChips,
-  ComboboxChipsInput,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-  ComboboxValue,
-  useComboboxAnchor,
-} from '@/components/ui/combobox'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import { Spinner } from '@/components/ui/spinner'
-import { Switch } from '@/components/ui/switch'
-import { Textarea } from '@/components/ui/textarea'
-import { IMAGE_INPUT_ACCEPT } from '@/config/image-upload'
-import { LOCALE_META } from '@/config/locale'
-import type { Locale } from '@/i18n/routing'
+import { isCompressibleImageMimeType } from '@/config/image-upload'
 import { cn } from '@/lib/utils'
 import { generateSlug } from '@/utils/string-utils'
 import { useImageUpload } from '../hooks/use-image-upload'
 import { type BlogFrontmatter, BlogFrontmatterSchema } from '../schemas/post-schema'
+import { applyTitleChangeToFrontmatter } from '../utils/blog-composer-utils'
+import { resolveImageMimeType } from '../utils/image-mime'
+import {
+  type CoverCropRect,
+  isExactCoverAspectRatio,
+  readImageNaturalDimensions,
+} from '../utils/optimize-cover-image'
+import {
+  MetadataCoverSection,
+  MetadataIdentitySection,
+  MetadataPublicationSection,
+  MetadataTaxonomyLocaleSection,
+} from './post-metadata-sections'
 
-const SEO_TITLE_MIN = 50
-const SEO_TITLE_MAX = 60
-const SEO_DESCRIPTION_MIN = 120
-const SEO_DESCRIPTION_MAX = 160
+const DynamicCoverCropDialog = dynamic(
+  () => import('./cover-crop-dialog').then((mod) => mod.CoverCropDialog),
+  { ssr: false },
+)
 
-type SeoLengthStatus = 'empty' | 'short' | 'optimal' | 'long'
-
-function getSeoLengthStatus(length: number, min: number, max: number): SeoLengthStatus {
-  if (length === 0) return 'empty'
-  if (length < min) return 'short'
-  if (length <= max) return 'optimal'
-  return 'long'
+interface PendingCoverCrop {
+  file: File
+  naturalWidth: number
+  naturalHeight: number
 }
 
-function getSeoLengthColorClass(status: SeoLengthStatus): string {
-  if (status === 'optimal') return 'text-emerald-600 dark:text-emerald-400'
-  if (status === 'long') return 'text-amber-600 dark:text-amber-400'
-  return 'text-muted-foreground'
+function useCoverUploadFlow(onUploaded: (url: string) => void) {
+  const t = useTranslations('features.blog.composer')
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const [pendingCoverCrop, setPendingCoverCrop] = useState<PendingCoverCrop | null>(null)
+  const { upload: uploadCover, isUploading: isUploadingCover } = useImageUpload({
+    context: 'cover',
+  })
+
+  const resetCoverFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
+  const runCoverUpload = async (file: File, cropRect?: CoverCropRect) => {
+    const url = await uploadCover(file, cropRect ? { cropRect } : undefined)
+    if (!url) return
+
+    onUploaded(url)
+    sileo.success({ title: t('notifications.cover_uploaded') })
+  }
+
+  const handleCoverUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    resetCoverFileInput()
+    if (!file) return
+
+    const mimeType = resolveImageMimeType(file)
+    if (!mimeType || !isCompressibleImageMimeType(mimeType)) {
+      await runCoverUpload(file)
+      return
+    }
+
+    const dims = await readImageNaturalDimensions(file)
+    if (!dims || isExactCoverAspectRatio(dims.width, dims.height)) {
+      await runCoverUpload(file)
+      return
+    }
+
+    setPendingCoverCrop({
+      file,
+      naturalWidth: dims.width,
+      naturalHeight: dims.height,
+    })
+  }
+
+  const handleCancelCoverCrop = () => {
+    resetCoverFileInput()
+    setPendingCoverCrop(null)
+  }
+
+  const handleConfirmCoverCrop = async (cropRect: CoverCropRect) => {
+    const pendingFile = pendingCoverCrop?.file
+    resetCoverFileInput()
+    setPendingCoverCrop(null)
+    if (!pendingFile) return
+
+    await runCoverUpload(pendingFile, cropRect)
+  }
+
+  return {
+    fileInputRef,
+    pendingCoverCrop,
+    isUploadingCover,
+    handleCoverUpload,
+    handleCancelCoverCrop,
+    handleConfirmCoverCrop,
+  }
 }
 
 export interface PostMetadataFormProps {
@@ -100,43 +130,25 @@ export function PostMetadataForm({
   idPrefix = 'post-metadata',
   className,
 }: PostMetadataFormProps) {
-  const t = useTranslations('features.blog.composer')
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
-  const [categoryInput, setCategoryInput] = useState('')
-  const chipsAnchor = useComboboxAnchor()
-
-  const filteredCategories = existingCategories.filter(
-    (c) => !data.categories.includes(c) && c.toLowerCase().includes(categoryInput.toLowerCase()),
-  )
-
-  const showCreate =
-    categoryInput.trim() !== '' &&
-    ![...filteredCategories, ...data.categories].some(
-      (c) => c.toLowerCase() === categoryInput.trim().toLowerCase(),
-    )
-
   const validation = BlogFrontmatterSchema.safeParse(data)
-  const errors = !validation.success ? z.flattenError(validation.error).fieldErrors : {}
+  const errors = validation.success ? {} : z.flattenError(validation.error).fieldErrors
 
   const updateField = <K extends keyof BlogFrontmatter>(
     key: K,
     value: BlogFrontmatter[K],
     markDraft = true,
   ) => {
-    const newData: BlogFrontmatter = {
+    if (key === 'title') {
+      const updated = applyTitleChangeToFrontmatter(data, value as string, isExistingPost)
+      onChange(markDraft ? updated : { ...updated, draft: data.draft })
+      return
+    }
+
+    onChange({
       ...data,
       [key]: value,
       ...(markDraft ? { draft: true } : {}),
-    }
-
-    if (key === 'title' && !isExistingPost) {
-      const currentGeneratedSlug = generateSlug(data.title)
-      if (!data.slug || data.slug === currentGeneratedSlug) {
-        newData.slug = generateSlug(value as string).replace(/^-+|-+$/g, '')
-      }
-    }
-
-    onChange(newData)
+    })
   }
 
   const handleRegenerateSlug = () => {
@@ -148,481 +160,73 @@ export function PostMetadataForm({
     })
   }
 
-  const handleCategoryKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-
-      const newCategory = categoryInput.trim()
-      if (newCategory) {
-        const exists = data.categories.some((c) => c.toLowerCase() === newCategory.toLowerCase())
-
-        if (!exists) {
-          updateField('categories', [...data.categories, newCategory])
-        }
-
-        setCategoryInput('')
-      }
+  const handlePublishedChange = (checked: boolean) => {
+    if (onTogglePublish) {
+      onTogglePublish(checked)
+      return
     }
+
+    onChange({
+      ...data,
+      published: checked,
+      draft: !checked ? true : data.draft,
+    })
   }
 
-  const { upload: uploadCover, isUploading: isUploadingCover } = useImageUpload({
-    context: 'cover',
-  })
-
-  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    e.target.value = ''
-    if (!file) return
-
-    const url = await uploadCover(file)
-    if (url) {
-      updateField('coverImage', url)
-      sileo.success({ title: t('notifications.cover_uploaded') })
-    }
-  }
-
-  const hasUnpublishedChanges = data.published && data.draft
-  const titleLength = data.title.trim().length
-  const titleSeoStatus = getSeoLengthStatus(titleLength, SEO_TITLE_MIN, SEO_TITLE_MAX)
-  const descriptionLength = data.description.trim().length
-  const descriptionSeoStatus = getSeoLengthStatus(
-    descriptionLength,
-    SEO_DESCRIPTION_MIN,
-    SEO_DESCRIPTION_MAX,
-  )
+  const coverFlow = useCoverUploadFlow((url) => updateField('coverImage', url))
 
   return (
     <div className={cn('space-y-6', className)}>
-      {/* 1. TITLE, SLUG & CANONICAL URL */}
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor={`${idPrefix}-title`} className="text-xs font-medium text-foreground">
-            <Type className="size-3.5 text-muted-foreground" />
-            {t('frontmatter.field_title')}
-          </Label>
-          <Input
-            id={`${idPrefix}-title`}
-            value={data.title}
-            onChange={(e) => updateField('title', e.target.value)}
-            placeholder={t('frontmatter.title_placeholder')}
-            aria-invalid={Boolean(errors.title)}
-          />
-          <div
-            className={cn(
-              'flex items-center justify-between gap-2 text-[11px]',
-              getSeoLengthColorClass(titleSeoStatus),
-            )}
-          >
-            <span>
-              {titleSeoStatus === 'optimal'
-                ? t('frontmatter.seo_counter_optimal')
-                : titleSeoStatus === 'long'
-                  ? t('frontmatter.seo_counter_long', { max: SEO_TITLE_MAX })
-                  : t('frontmatter.seo_counter_short', {
-                      min: SEO_TITLE_MIN,
-                      max: SEO_TITLE_MAX,
-                    })}
-            </span>
-            <span className="tabular-nums shrink-0">
-              {t('frontmatter.seo_counter_range', {
-                count: titleLength,
-                min: SEO_TITLE_MIN,
-                max: SEO_TITLE_MAX,
-              })}
-            </span>
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label htmlFor={`${idPrefix}-slug`} className="text-xs font-medium text-foreground">
-              <Link2 className="size-3.5 text-muted-foreground" />
-              {t('frontmatter.field_slug')}
-            </Label>
-            {data.title && data.slug !== generateSlug(data.title) && (
-              <Button
-                type="button"
-                variant="ghost"
-                size="xs"
-                onClick={handleRegenerateSlug}
-                className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground gap-1"
-              >
-                <RefreshCw className="size-3" />
-                {t('frontmatter.sync_slug')}
-              </Button>
-            )}
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="inline-flex h-8 items-center rounded-md border border-border bg-muted/40 px-2.5 text-xs text-muted-foreground select-none">
-              /blog/
-            </span>
-            <Input
-              id={`${idPrefix}-slug`}
-              value={data.slug}
-              onChange={(e) => updateField('slug', generateSlug(e.target.value))}
-              onBlur={() => updateField('slug', data.slug.replace(/^-+|-+$/g, ''), false)}
-              placeholder={t('frontmatter.slug_placeholder')}
-              className="flex-1 font-mono text-xs"
-              aria-invalid={Boolean(errors.slug)}
-            />
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label
-            htmlFor={`${idPrefix}-canonical-url`}
-            className="text-xs font-medium text-foreground"
-          >
-            <Link2 className="size-3.5 text-muted-foreground" />
-            {t('frontmatter.field_canonical_url')}
-          </Label>
-          <Input
-            id={`${idPrefix}-canonical-url`}
-            type="url"
-            value={data.canonicalUrl || ''}
-            onChange={(e) => updateField('canonicalUrl', e.target.value)}
-            onBlur={() => updateField('canonicalUrl', (data.canonicalUrl || '').trim(), false)}
-            placeholder={t('frontmatter.canonical_url_placeholder')}
-            className="font-mono text-xs"
-            aria-invalid={Boolean(errors.canonicalUrl)}
-          />
-          {errors.canonicalUrl ? (
-            <p className="text-[11px] text-destructive">{t('frontmatter.canonical_url_invalid')}</p>
-          ) : (
-            <p className="text-[11px] text-muted-foreground">
-              {t('frontmatter.canonical_url_hint')}
-            </p>
-          )}
-        </div>
-      </div>
+      <MetadataIdentitySection
+        idPrefix={idPrefix}
+        data={data}
+        errors={errors}
+        onUpdateField={updateField}
+        onRegenerateSlug={handleRegenerateSlug}
+      />
 
       <Separator />
 
-      {/* 2. DESCRIPTION */}
-      <div className="space-y-2">
-        <Label htmlFor={`${idPrefix}-description`} className="text-xs font-medium text-foreground">
-          <AlignLeft className="size-3.5 text-muted-foreground" />
-          {t('frontmatter.field_description')}
-        </Label>
-        <Textarea
-          id={`${idPrefix}-description`}
-          value={data.description}
-          onChange={(e) => updateField('description', e.target.value)}
-          rows={3}
-          placeholder={t('frontmatter.description_placeholder')}
-          className="resize-none text-sm"
+      <MetadataCoverSection
+        idPrefix={idPrefix}
+        data={data}
+        errors={errors}
+        fileInputRef={coverFlow.fileInputRef}
+        isUploadingCover={coverFlow.isUploadingCover}
+        onCoverFileChange={coverFlow.handleCoverUpload}
+        onUpdateField={updateField}
+      />
+
+      <Separator />
+
+      <MetadataTaxonomyLocaleSection
+        categories={data.categories}
+        locale={data.locale}
+        existingCategories={existingCategories}
+        onUpdateField={updateField}
+      />
+
+      <Separator />
+
+      <MetadataPublicationSection
+        published={data.published}
+        draft={data.draft}
+        onPublishedChange={handlePublishedChange}
+        onDraftChange={(checked) => updateField('draft', checked, false)}
+        onDiscardDraft={onDiscardDraft}
+        isDiscardingDraft={isDiscardingDraft}
+      />
+
+      {coverFlow.pendingCoverCrop && (
+        <DynamicCoverCropDialog
+          file={coverFlow.pendingCoverCrop.file}
+          naturalWidth={coverFlow.pendingCoverCrop.naturalWidth}
+          naturalHeight={coverFlow.pendingCoverCrop.naturalHeight}
+          onCancel={coverFlow.handleCancelCoverCrop}
+          onConfirm={coverFlow.handleConfirmCoverCrop}
+          isSubmitting={coverFlow.isUploadingCover}
         />
-        <div
-          className={cn(
-            'flex items-center justify-between gap-2 text-[11px]',
-            getSeoLengthColorClass(descriptionSeoStatus),
-          )}
-        >
-          <span>
-            {descriptionSeoStatus === 'optimal'
-              ? t('frontmatter.seo_counter_optimal')
-              : descriptionSeoStatus === 'long'
-                ? t('frontmatter.seo_counter_long', { max: SEO_DESCRIPTION_MAX })
-                : t('frontmatter.seo_counter_short', {
-                    min: SEO_DESCRIPTION_MIN,
-                    max: SEO_DESCRIPTION_MAX,
-                  })}
-          </span>
-          <span className="tabular-nums shrink-0">
-            {t('frontmatter.seo_counter_range', {
-              count: descriptionLength,
-              min: SEO_DESCRIPTION_MIN,
-              max: SEO_DESCRIPTION_MAX,
-            })}
-          </span>
-        </div>
-      </div>
-
-      <Separator />
-
-      {/* 3. COVER IMAGE (Attachment + Preview + URL) */}
-      <div className="space-y-3">
-        <Label className="text-xs font-medium text-foreground">
-          <ImageIcon className="size-3.5 text-muted-foreground" />
-          {t('frontmatter.field_cover_image')}
-        </Label>
-
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept={IMAGE_INPUT_ACCEPT}
-          className="hidden"
-          onChange={handleCoverUpload}
-        />
-
-        {data.coverImage ? (
-          <div className="space-y-2.5">
-            <div className="relative w-full overflow-hidden rounded-xl bg-muted/20">
-              <img
-                src={data.coverImage}
-                alt={data.coverImageAlt || data.title || 'Cover preview'}
-                className="h-full w-full object-cover"
-              />
-            </div>
-
-            <Attachment
-              state={isUploadingCover ? 'uploading' : 'done'}
-              className="w-full justify-between"
-            >
-              <AttachmentMedia variant="image">
-                {/* biome-ignore lint/performance/noImgElement: Attachment thumbnail */}
-                <img src={data.coverImage} alt="" />
-              </AttachmentMedia>
-              <AttachmentContent>
-                <AttachmentTitle>{t('frontmatter.cover_attached')}</AttachmentTitle>
-                <AttachmentDescription>{data.coverImage}</AttachmentDescription>
-              </AttachmentContent>
-              <AttachmentActions>
-                <AttachmentAction
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={isUploadingCover}
-                  aria-label={t('frontmatter.replace_cover')}
-                >
-                  {isUploadingCover ? <Spinner /> : <Upload />}
-                </AttachmentAction>
-                <AttachmentAction
-                  type="button"
-                  onClick={() => updateField('coverImage', '')}
-                  disabled={isUploadingCover}
-                  className="text-muted-foreground hover:text-destructive"
-                  aria-label={t('frontmatter.remove_cover')}
-                >
-                  <Trash2 />
-                </AttachmentAction>
-              </AttachmentActions>
-            </Attachment>
-          </div>
-        ) : (
-          <Attachment
-            state={isUploadingCover ? 'uploading' : 'idle'}
-            className="w-full cursor-pointer hover:border-primary/50 hover:bg-muted/30"
-          >
-            <AttachmentTrigger
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isUploadingCover}
-            />
-            <AttachmentMedia variant="icon">
-              {isUploadingCover ? <Spinner /> : <Upload />}
-            </AttachmentMedia>
-            <AttachmentContent>
-              <AttachmentTitle>{t('frontmatter.upload_cover')}</AttachmentTitle>
-              <AttachmentDescription>{t('frontmatter.upload_cover_hint')}</AttachmentDescription>
-            </AttachmentContent>
-          </Attachment>
-        )}
-
-        <Input
-          type="url"
-          value={data.coverImage || ''}
-          onChange={(e) => updateField('coverImage', e.target.value)}
-          placeholder={t('frontmatter.cover_image_placeholder')}
-          className="text-xs"
-        />
-
-        <div className="space-y-1.5 pt-1">
-          <Label
-            htmlFor={`${idPrefix}-cover-image-alt`}
-            className="text-xs font-medium text-foreground"
-          >
-            {t('frontmatter.field_cover_image_alt')}
-          </Label>
-          <Input
-            id={`${idPrefix}-cover-image-alt`}
-            value={data.coverImageAlt || ''}
-            onChange={(e) => updateField('coverImageAlt', e.target.value)}
-            placeholder={t('frontmatter.cover_image_alt_placeholder')}
-            maxLength={200}
-            className="text-xs"
-            aria-invalid={Boolean(errors.coverImageAlt)}
-          />
-          <p className="text-[11px] text-muted-foreground">
-            {t('frontmatter.cover_image_alt_hint')}
-          </p>
-        </div>
-      </div>
-
-      <Separator />
-
-      {/* 4. CATEGORIES */}
-      <div className="space-y-2">
-        <Label className="text-xs font-medium text-foreground">
-          <Hash className="size-3.5 text-muted-foreground" />
-          {t('frontmatter.field_categories')}
-        </Label>
-        <Combobox<string, true>
-          multiple
-          value={data.categories}
-          onValueChange={(value) => updateField('categories', value)}
-          onInputValueChange={(inputValue) => setCategoryInput(inputValue)}
-        >
-          <ComboboxValue>
-            {(selectedCategories: string[]) => (
-              <ComboboxChips ref={chipsAnchor} className="w-full">
-                {selectedCategories.map((cat) => (
-                  <ComboboxChip key={cat}>{cat}</ComboboxChip>
-                ))}
-                <ComboboxChipsInput
-                  onKeyDown={handleCategoryKeyDown}
-                  placeholder={t('frontmatter.add_category_placeholder')}
-                />
-              </ComboboxChips>
-            )}
-          </ComboboxValue>
-          <ComboboxContent anchor={chipsAnchor}>
-            <ComboboxList>
-              {filteredCategories.map((cat) => (
-                <ComboboxItem key={cat} value={cat}>
-                  {cat}
-                </ComboboxItem>
-              ))}
-              {showCreate && (
-                <ComboboxItem value={categoryInput.trim()}>
-                  {t('frontmatter.create_category', { category: categoryInput.trim() })}
-                </ComboboxItem>
-              )}
-            </ComboboxList>
-            {filteredCategories.length === 0 && !showCreate && (
-              <ComboboxEmpty>{t('frontmatter.no_categories_found')}</ComboboxEmpty>
-            )}
-          </ComboboxContent>
-        </Combobox>
-      </div>
-
-      <Separator />
-
-      {/* 5. LOCALE */}
-      <div className="space-y-2">
-        <Label className="text-xs font-medium text-foreground">
-          <Languages className="size-3.5 text-muted-foreground" />
-          {t('frontmatter.field_locale')}
-        </Label>
-        <Combobox<string>
-          value={data.locale}
-          onValueChange={(value) => {
-            if (value) updateField('locale', value as Locale)
-          }}
-          itemToStringLabel={(code) => LOCALE_META[code as Locale]?.nativeName ?? code}
-        >
-          <ComboboxInput
-            placeholder={t('frontmatter.select_locale_placeholder')}
-            className="w-full"
-          />
-          <ComboboxContent>
-            <ComboboxList>
-              {Object.entries(LOCALE_META).map(([code, meta]) => (
-                <ComboboxItem key={code} value={code}>
-                  <span>{meta.flag}</span>
-                  <span>{meta.nativeName}</span>
-                </ComboboxItem>
-              ))}
-            </ComboboxList>
-          </ComboboxContent>
-        </Combobox>
-      </div>
-
-      <Separator />
-
-      {/* 6. PUBLICATION STATUS CONTROLS */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <Label className="text-xs font-medium text-foreground">
-            <Globe className="size-3.5 text-muted-foreground" />
-            {t('frontmatter.publication_status')}
-          </Label>
-          {hasUnpublishedChanges ? (
-            <Badge variant="softOrange">{t('status.unpublished_changes')}</Badge>
-          ) : data.published ? (
-            <Badge variant="softGreen">{t('status.published')}</Badge>
-          ) : (
-            <Badge variant="softYellow">{t('status.draft')}</Badge>
-          )}
-        </div>
-
-        <div className="rounded-xl border border-border bg-muted/20 p-3.5 space-y-3">
-          <div className="flex items-center justify-between gap-3">
-            <div className="space-y-0.5">
-              <p className="text-xs font-medium text-foreground">
-                {t('frontmatter.field_published')}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {data.published
-                  ? t('frontmatter.published_hint')
-                  : t('frontmatter.unpublished_hint')}
-              </p>
-            </div>
-            <Switch
-              checked={data.published}
-              onCheckedChange={(checked) => {
-                if (onTogglePublish) {
-                  onTogglePublish(checked)
-                } else {
-                  onChange({
-                    ...data,
-                    published: checked,
-                    draft: !checked ? true : data.draft,
-                  })
-                }
-              }}
-            />
-          </div>
-
-          <Separator />
-
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <FileEdit
-                className={cn(
-                  'size-3.5 shrink-0',
-                  data.draft ? 'text-amber-500' : 'text-muted-foreground',
-                )}
-              />
-              <div className="space-y-0.5">
-                <p className="text-xs font-medium text-foreground">
-                  {t('frontmatter.draft_overlay_label')}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {data.draft
-                    ? t('frontmatter.draft_active_hint')
-                    : t('frontmatter.draft_synced_hint')}
-                </p>
-              </div>
-            </div>
-            <Switch
-              checked={data.draft}
-              onCheckedChange={(checked) => updateField('draft', checked, false)}
-            />
-          </div>
-
-          {hasUnpublishedChanges && onDiscardDraft && (
-            <>
-              <Separator />
-              <div className="pt-0.5">
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="sm"
-                  className="w-full gap-1.5"
-                  onClick={onDiscardDraft}
-                  disabled={isDiscardingDraft}
-                >
-                  {isDiscardingDraft ? (
-                    <Spinner className="size-3.5" />
-                  ) : (
-                    <RotateCcw className="size-3.5" />
-                  )}
-                  {t('frontmatter.discard_draft_changes')}
-                </Button>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+      )}
     </div>
   )
 }

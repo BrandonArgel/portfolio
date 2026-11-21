@@ -1,5 +1,6 @@
 'use client'
 
+import 'katex/dist/katex.min.css'
 import { Eye } from 'lucide-react'
 import { useFormatter, useTranslations } from 'next-intl'
 import { compileMDX } from 'next-mdx-remote/rsc'
@@ -13,6 +14,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { useMounted } from '@/hooks/use-mounted'
 import { normalizeCategorySlug } from '../schemas/category-schema'
 import type { BlogFrontmatter } from '../schemas/post-schema'
+import { useBlogDraftsStore } from '../store/use-blog-drafts-store'
 import type { BlogCategory } from '../types'
 import { calculateReadTime } from '../utils/calculate-read-time'
 import { preprocessMdxContent } from '../utils/preprocess-mdx'
@@ -21,8 +23,9 @@ import { ArticlePostHeader } from './article-post-header'
 import { mdxComponents } from './mdx'
 
 export interface BlogPostPreviewProps {
+  draftId: string
   frontmatter: BlogFrontmatter
-  content: string
+  fallbackContent?: string
   authorName: string
   authorImage?: string | null
   authorEmailVerified?: boolean
@@ -31,8 +34,9 @@ export interface BlogPostPreviewProps {
 }
 
 export function BlogPostPreview({
+  draftId,
   frontmatter,
-  content,
+  fallbackContent = '',
   authorName,
   authorImage,
   authorEmailVerified = false,
@@ -44,6 +48,8 @@ export function BlogPostPreview({
   const tComposer = useTranslations('features.blog.composer')
   const format = useFormatter()
   const isMounted = useMounted()
+  const storedContent = useBlogDraftsStore((state) => state.drafts[draftId]?.content)
+  const content = storedContent ?? fallbackContent
 
   const [compiledBody, setCompiledBody] = useState<ReactElement | null>(null)
   const [isCompiling, setIsCompiling] = useState(false)

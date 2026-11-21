@@ -3,7 +3,7 @@
 import { type NodeViewProps, NodeViewWrapper } from '@tiptap/react'
 import { ImagePlus, Link, Text, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -12,26 +12,27 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { IMAGE_INPUT_ACCEPT } from '@/config/image-upload'
 import { cn } from '@/lib/utils'
+import { normalizeUploadResult, type UploadedImageResult } from '../utils/image-upload-result'
+import { extractImageDimensionsFromUrl } from '../utils/optimize-inline-image'
 
 export function ImageComponent(props: NodeViewProps) {
   const { editor, node, selected: isSelected, updateAttributes, deleteNode } = props
   const t = useTranslations('features.editor')
   const { src, alt } = node.attrs
+  const currentSrc = src || ''
+  const currentAlt = alt || ''
   const [linkUrl, setLinkUrl] = useState('')
-  const [altText, setAltText] = useState(alt || '')
-  const [srcText, setSrcText] = useState(src || '')
+  const [draftSrc, setDraftSrc] = useState<{ base: string; value: string } | null>(null)
+  const [draftAlt, setDraftAlt] = useState<{ base: string; value: string } | null>(null)
+  const srcText = draftSrc && draftSrc.base === currentSrc ? draftSrc.value : currentSrc
+  const altText = draftAlt && draftAlt.base === currentAlt ? draftAlt.value : currentAlt
   const [localUploading, setLocalUploading] = useState(false)
   const [isToolbarFocused, setIsToolbarFocused] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    setAltText(alt || '')
-    setSrcText(src || '')
-  }, [alt, src])
-
   const isUploading = localUploading || Boolean(node.attrs.isUploading)
   const uploadFn = props.extension.options.uploadFn as
-    | ((file: File) => Promise<string | undefined>)
+    | ((file: File) => Promise<UploadedImageResult | undefined>)
     | undefined
 
   const stopInputPropagation = (e: React.SyntheticEvent) => {
@@ -49,11 +50,13 @@ export function ImageComponent(props: NodeViewProps) {
 
     setLocalUploading(true)
     try {
-      const url = await uploadFn(file)
-      if (url) {
+      const uploaded = normalizeUploadResult(await uploadFn(file))
+      if (uploaded) {
         updateAttributes({
-          src: url,
+          src: uploaded.src,
           alt: file.name.replace(/\.[^/.]+$/, ''),
+          width: uploaded.width,
+          height: uploaded.height,
           isUploading: false,
         })
       }
@@ -66,27 +69,36 @@ export function ImageComponent(props: NodeViewProps) {
   }
 
   const handleLinkSubmit = () => {
-    if (linkUrl.trim()) {
+    const trimmed = linkUrl.trim()
+    if (trimmed) {
+      const { width, height } = extractImageDimensionsFromUrl(trimmed)
       updateAttributes({
-        src: linkUrl.trim(),
+        src: trimmed,
         alt: 'Embedded image',
+        width,
+        height,
       })
     }
   }
 
   const handleAltCommit = () => {
-    if (altText !== alt) {
+    if (altText !== currentAlt) {
       updateAttributes({ alt: altText })
     }
+    setDraftAlt(null)
   }
 
   const handleSrcCommit = () => {
     const trimmed = srcText.trim()
-    if (trimmed && trimmed !== src) {
-      updateAttributes({ src: trimmed })
-    } else if (!trimmed) {
-      setSrcText(src || '')
+    if (trimmed && trimmed !== currentSrc) {
+      const { width, height } = extractImageDimensionsFromUrl(trimmed)
+      updateAttributes({
+        src: trimmed,
+        width,
+        height,
+      })
     }
+    setDraftSrc(null)
   }
 
   const showToolbar = editor.isEditable && (isSelected || isToolbarFocused)
@@ -234,6 +246,8 @@ export function ImageComponent(props: NodeViewProps) {
         <img
           src={src}
           alt={alt || ''}
+          width={node.attrs.width ?? undefined}
+          height={node.attrs.height ?? undefined}
           className="block h-auto w-auto max-w-full max-h-150 object-contain rounded-lg shadow-sm transition-all cursor-pointer"
         />
       </div>
@@ -261,7 +275,7 @@ export function ImageComponent(props: NodeViewProps) {
               <input
                 type="url"
                 value={srcText}
-                onChange={(e) => setSrcText(e.target.value)}
+                onChange={(e) => setDraftSrc({ base: currentSrc, value: e.target.value })}
                 onBlur={handleSrcCommit}
                 onKeyDown={(e) => {
                   stopInputPropagation(e)
@@ -271,7 +285,7 @@ export function ImageComponent(props: NodeViewProps) {
                     editor.commands.focus()
                   } else if (e.key === 'Escape') {
                     e.preventDefault()
-                    setSrcText(src || '')
+                    setDraftSrc(null)
                     editor.commands.focus()
                   }
                 }}
@@ -286,7 +300,7 @@ export function ImageComponent(props: NodeViewProps) {
               <input
                 type="text"
                 value={altText}
-                onChange={(e) => setAltText(e.target.value)}
+                onChange={(e) => setDraftAlt({ base: currentAlt, value: e.target.value })}
                 onBlur={handleAltCommit}
                 onKeyDown={(e) => {
                   stopInputPropagation(e)
@@ -296,7 +310,7 @@ export function ImageComponent(props: NodeViewProps) {
                     editor.commands.focus()
                   } else if (e.key === 'Escape') {
                     e.preventDefault()
-                    setAltText(alt || '')
+                    setDraftAlt(null)
                     editor.commands.focus()
                   }
                 }}

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import 'katex/dist/katex.min.css'
 import { notFound } from 'next/navigation'
 import { hasLocale } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
@@ -87,13 +88,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     return notFound()
   }
 
-  const userId = session?.user?.id
-  const isAuthenticated = Boolean(userId)
-  const [isBookmarked, likeStatus] = await Promise.all([
-    userId ? isPostBookmarkedByUser(userId, post.id) : Promise.resolve(false),
-    getPostLikeStatus(post.id, userId),
-  ])
-
   let showFallbackBanner = false
 
   if (post.locale !== activeLocale) {
@@ -107,6 +101,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
     showFallbackBanner = true
   }
+
+  const userId = session?.user?.id
+  const isAuthenticated = Boolean(userId)
+  const [isBookmarked, likeStatus] = await Promise.all([
+    userId ? isPostBookmarkedByUser(userId, post.id) : Promise.resolve(false),
+    getPostLikeStatus(post.id, userId),
+  ])
 
   const authorName = post.authorName || siteConfig.author.name
 

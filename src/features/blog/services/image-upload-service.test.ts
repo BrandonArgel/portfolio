@@ -2,7 +2,7 @@ import { describe, expect, mock, test } from 'bun:test'
 import { MAX_IMAGE_SIZE_BYTES } from '@/config/image-upload'
 import { error, okay, type Result } from '@/utils/result'
 import type { ImageUploadError, UploadTransport } from '../types'
-import { uploadImageService } from './image-upload-service'
+import { uploadCoverImageService, uploadImageService } from './image-upload-service'
 
 function makeFile(name: string, type: string, size = 1024): File {
   return new File([new Uint8Array(size)], name, { type })
@@ -156,5 +156,85 @@ describe('uploadImageService', () => {
     })
 
     expect(err).toEqual({ reason: 'UNKNOWN_ERROR' })
+  })
+})
+
+describe('uploadCoverImageService', () => {
+  test('uploads both primary (-1200.webp) and thumbnail (-600.webp) variants and returns primary URL', async () => {
+    const uuid = '550e8400-e29b-41d4-a716-446655440000'
+    const primary = makeFile(`${uuid}-1200.webp`, 'image/webp', 2048)
+    const thumbnail = makeFile(`${uuid}-600.webp`, 'image/webp', 1024)
+
+    const uploadedNames: string[] = []
+    const transport: UploadTransport = async (formData) => {
+      const sent = formData.get('file') as File
+      uploadedNames.push(sent.name)
+      return okay({ url: `https://blob.example/blog-images/${sent.name}` })
+    }
+
+    const result = await uploadCoverImageService(makeFile('cover.png', 'image/png'), {
+      transport,
+      optimize: async () => okay({ primary, thumbnail, deterministic: true }),
+    })
+
+    expect(result).toEqual([null, `https://blob.example/blog-images/${uuid}-1200.webp`])
+    expect(uploadedNames).toEqual([`${uuid}-1200.webp`, `${uuid}-600.webp`])
+  })
+
+  test('fails if thumbnail upload errors so -1200.webp is never stored without -600.webp', async () => {
+    const uuid = '550e8400-e29b-41d4-a716-446655440000'
+    const primary = makeFile(`${uuid}-1200.webp`, 'image/webp', 2048)
+    const thumbnail = makeFile(`${uuid}-600.webp`, 'image/webp', 1024)
+
+    const transport: UploadTransport = async (formData) => {
+      const sent = formData.get('file') as File
+      if (sent.name.endsWith('-600.webp')) {
+        return error({ reason: 'STORAGE_ERROR' })
+      }
+      return okay({ url: `https://blob.example/blog-images/${sent.name}` })
+    }
+
+    const [err] = await uploadCoverImageService(makeFile('cover.png', 'image/png'), {
+      transport,
+      optimize: async () => okay({ primary, thumbnail, deterministic: true }),
+    })
+
+    expect(err).toEqual({ reason: 'STORAGE_ERROR' })
+  })
+
+  test('uploads single file when optimize bypasses thumbnail generation (SVG/GIF)', async () => {
+    const svgFile = makeFile('banner.svg', 'image/svg+xml', 512)
+    const transport = mock<UploadTransport>(async (formData) => {
+      const sent = formData.get('file') as File
+      return okay({ url: `https://blob.example/blog-images/${sent.name}` })
+    })
+
+    const result = await uploadCoverImageService(svgFile, {
+      transport,
+      optimize: async (file) => okay({ primary: file, thumbnail: null, deterministic: false }),
+    })
+
+    expect(transport).toHaveBeenCalledTimes(1)
+    expect(result).toEqual([null, 'https://blob.example/blog-images/banner.svg'])
+  })
+
+  test('forwards custom cropRect to the cover optimizer', async () => {
+    const customCrop = { sx: 100, sy: 50, sw: 1200, sh: 630 }
+    const receivedCrops: unknown[] = []
+    const uuid = '550e8400-e29b-41d4-a716-446655440000'
+    const primary = makeFile(`${uuid}-1200.webp`, 'image/webp', 1024)
+    const thumbnail = makeFile(`${uuid}-600.webp`, 'image/webp', 512)
+
+    const result = await uploadCoverImageService(makeFile('cover.jpg', 'image/jpeg'), {
+      transport: okTransport,
+      cropRect: customCrop,
+      optimize: async (_file, crop) => {
+        receivedCrops.push(crop)
+        return okay({ primary, thumbnail, deterministic: true })
+      },
+    })
+
+    expect(result[0]).toBeNull()
+    expect(receivedCrops).toEqual([customCrop])
   })
 })

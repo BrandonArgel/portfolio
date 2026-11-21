@@ -1,5 +1,6 @@
 import { IMAGE_MIME_TO_EXTENSION, isAllowedImageMimeType } from '@/config/image-upload'
 import { resolveImageMimeType } from './image-mime'
+import { isDeterministicCoverFileName } from './optimize-cover-image'
 
 const MAX_BASE_NAME_LENGTH = 60
 
@@ -15,11 +16,15 @@ export function sanitizeImageBaseName(fileName: string): string {
 }
 
 /**
- * Builds the storage pathname. The extension is derived from the validated MIME type (not the
- * original file name) so e.g. a JPEG that kept a `.heic` name is stored as `.jpg`.
+ * Builds the storage pathname. Deterministic cover variants keep their shared `<uuid>-1200.webp`
+ * and `<uuid>-600.webp` filenames; all other uploads derive their extension from MIME type.
  */
 export function buildImagePathname(file: File, now: number = Date.now()): string {
   const mimeType = resolveImageMimeType(file)
+  if (mimeType === 'image/webp' && isDeterministicCoverFileName(file.name)) {
+    return `blog-images/${file.name.toLowerCase()}`
+  }
+
   const extension =
     mimeType && isAllowedImageMimeType(mimeType) ? IMAGE_MIME_TO_EXTENSION[mimeType] : 'bin'
 

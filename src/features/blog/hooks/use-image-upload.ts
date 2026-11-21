@@ -1,18 +1,25 @@
 'use client'
 
 import { useCallback, useState } from 'react'
+import { isCompressibleImageMimeType, MAX_IMAGE_SIZE_BYTES } from '@/config/image-upload'
 import { track } from '@/lib/analytics/events'
+import { error, okay } from '@/utils/result'
 import { uploadImageAction } from '../actions/image-action'
-import { uploadImageService } from '../services/image-upload-service'
+import { uploadCoverImageService, uploadImageService } from '../services/image-upload-service'
 import type { ImageUploadContext, UploadTransport } from '../types'
+import type { CoverCropRect } from '../utils/optimize-cover-image'
 import { useImageUploadErrors } from './use-image-upload-errors'
 
 /** Binds the transport abstraction to the real server action. */
 const uploadTransport: UploadTransport = (formData) => uploadImageAction(formData)
 
 export interface UseImageUploadOptions {
-  /** Where the upload was started from (telemetry only). */
+  /** Where the upload was started from (telemetry and pipeline selection). */
   context: ImageUploadContext
+}
+
+interface UploadImageOptions {
+  cropRect?: CoverCropRect
 }
 
 /**
@@ -25,11 +32,29 @@ export function useImageUpload({ context }: UseImageUploadOptions) {
   const [pendingUploads, setPendingUploads] = useState(0)
 
   const upload = useCallback(
-    async (file: File): Promise<string | undefined> => {
+    async (file: File, options?: UploadImageOptions): Promise<string | undefined> => {
       setPendingUploads((count) => count + 1)
 
       try {
-        const [uploadError, url] = await uploadImageService(file, { transport: uploadTransport })
+        const [uploadError, url] =
+          context === 'cover'
+            ? await uploadCoverImageService(file, {
+                transport: uploadTransport,
+                cropRect: options?.cropRect,
+              })
+            : await uploadImageService(file, {
+                transport: uploadTransport,
+                // Inline editor uploads run `optimizeInlineImage` before invoking `onImageUpload`.
+                prepare: async (prepared) => {
+                  if (
+                    isCompressibleImageMimeType(prepared.type) &&
+                    prepared.size > MAX_IMAGE_SIZE_BYTES
+                  ) {
+                    return error({ reason: 'IMAGE_PROCESSING_FAILED' })
+                  }
+                  return okay(prepared)
+                },
+              })
 
         if (uploadError) {
           handleImageUploadError(uploadError)

@@ -4,7 +4,7 @@ import type { Editor } from '@tiptap/react'
 import { useEditorState } from '@tiptap/react'
 import { Baseline } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -16,7 +16,6 @@ import { cn } from '@/lib/utils'
 import {
   EDITOR_COLOR_MAP,
   EDITOR_COLORS,
-  type EditorColorId,
   type EditorColorOption,
   getActiveMarkColor,
   loadRecentColors,
@@ -129,6 +128,158 @@ function BackgroundColorSwatch({ option, label, isActive, onSelect }: Background
   )
 }
 
+interface ColorPickerPopoverBodyProps {
+  editor: Editor
+  activeTextColor?: string | null
+  activeHighlightColor?: string | null
+  onClose: () => void
+}
+
+function ColorPickerPopoverBody({
+  editor,
+  activeTextColor,
+  activeHighlightColor,
+  onClose,
+}: ColorPickerPopoverBodyProps) {
+  const t = useTranslations('features.editor.bubble_menu')
+  const [recentColors, setRecentColors] = useState<RecentColorItem[]>(() => loadRecentColors())
+
+  const liveTextColor = useEditorState({
+    editor,
+    selector: ({ editor: currentEditor }) => {
+      const markColor = getActiveMarkColor(currentEditor, 'textStyle', 'text')
+      if (markColor) return markColor
+      const matched = EDITOR_COLORS.find(
+        (option) =>
+          option.textValue !== null &&
+          currentEditor.isActive('textStyle', { color: option.textValue }),
+      )
+      return matched?.textValue ?? null
+    },
+  })
+
+  const liveHighlightColor = useEditorState({
+    editor,
+    selector: ({ editor: currentEditor }) => {
+      const markColor = getActiveMarkColor(currentEditor, 'highlight', 'highlight')
+      if (markColor) return markColor
+      const matched = EDITOR_COLORS.find(
+        (option) =>
+          option.bgValue !== null && currentEditor.isActive('highlight', { color: option.bgValue }),
+      )
+      return matched?.bgValue ?? null
+    },
+  })
+
+  const resolvedTextColor = liveTextColor ?? normalizeEditorColor(activeTextColor, 'text')
+  const resolvedHighlightColor =
+    liveHighlightColor ?? normalizeEditorColor(activeHighlightColor, 'highlight')
+
+  const isTextColorActive = (option: EditorColorOption) => {
+    if (option.id === 'default') return !resolvedTextColor
+    return (
+      resolvedTextColor === option.textValue ||
+      editor.isActive('textStyle', { color: option.textValue })
+    )
+  }
+
+  const isHighlightColorActive = (option: EditorColorOption) => {
+    if (option.id === 'default') return !resolvedHighlightColor
+    return (
+      resolvedHighlightColor === option.bgValue ||
+      editor.isActive('highlight', { color: option.bgValue })
+    )
+  }
+
+  const handleSelectTextColor = (option: EditorColorOption) => {
+    if (option.textValue === null || isTextColorActive(option)) {
+      editor.chain().focus().unsetColor().run()
+    } else {
+      editor.chain().focus().setColor(option.textValue).run()
+    }
+    setRecentColors((prev) => pushRecentColor(prev, { type: 'text', id: option.id }))
+    onClose()
+  }
+
+  const handleSelectHighlightColor = (option: EditorColorOption) => {
+    if (option.bgValue === null || isHighlightColorActive(option)) {
+      editor.chain().focus().unsetHighlight().run()
+    } else {
+      editor.chain().focus().setHighlight({ color: option.bgValue }).run()
+    }
+    setRecentColors((prev) => pushRecentColor(prev, { type: 'highlight', id: option.id }))
+    onClose()
+  }
+
+  return (
+    <>
+      {recentColors.length > 0 && (
+        <div className="flex flex-col gap-1.5">
+          <SectionHeader label={t('colors.recently_used')} />
+          <div className="grid grid-cols-5 gap-1.5">
+            {recentColors.map((item) => {
+              const option = EDITOR_COLOR_MAP[item.id]
+              const colorName = t(`colors.${option.id}`)
+
+              if (item.type === 'text') {
+                return (
+                  <TextColorSwatch
+                    key={`recent-text-${option.id}`}
+                    option={option}
+                    label={colorName}
+                    isActive={isTextColorActive(option)}
+                    onSelect={handleSelectTextColor}
+                  />
+                )
+              }
+
+              return (
+                <BackgroundColorSwatch
+                  key={`recent-highlight-${option.id}`}
+                  option={option}
+                  label={colorName}
+                  isActive={isHighlightColorActive(option)}
+                  onSelect={handleSelectHighlightColor}
+                />
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      <div className="flex flex-col gap-1.5">
+        <SectionHeader label={t('colors.text_color')} />
+        <div className="grid grid-cols-5 gap-1.5">
+          {EDITOR_COLORS.map((option) => (
+            <TextColorSwatch
+              key={`text-${option.id}`}
+              option={option}
+              label={t(`colors.${option.id}`)}
+              isActive={isTextColorActive(option)}
+              onSelect={handleSelectTextColor}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <SectionHeader label={t('colors.background_color')} />
+        <div className="grid grid-cols-5 gap-1.5">
+          {EDITOR_COLORS.map((option) => (
+            <BackgroundColorSwatch
+              key={`bg-${option.id}`}
+              option={option}
+              label={t(`colors.${option.id}`)}
+              isActive={isHighlightColorActive(option)}
+              onSelect={handleSelectHighlightColor}
+            />
+          ))}
+        </div>
+      </div>
+    </>
+  )
+}
+
 export function ColorPickerPopover({
   editor,
   activeTextColor,
@@ -140,38 +291,12 @@ export function ColorPickerPopover({
 }: ColorPickerPopoverProps) {
   const t = useTranslations('features.editor.bubble_menu')
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false)
-  const [recentColors, setRecentColors] = useState<RecentColorItem[]>([])
 
   const open = controlledOpen ?? uncontrolledOpen
   const setOpen = setControlledOpen ?? setUncontrolledOpen
-  const editorColorState = useEditorState({
-    editor,
-    selector: ({ editor }) => {
-      const activeTextMarks = {} as Record<EditorColorId, boolean>
-      const activeHighlightMarks = {} as Record<EditorColorId, boolean>
 
-      for (const option of EDITOR_COLORS) {
-        activeTextMarks[option.id] = option.textValue
-          ? editor.isActive('textStyle', { color: option.textValue })
-          : false
-        activeHighlightMarks[option.id] = option.bgValue
-          ? editor.isActive('highlight', { color: option.bgValue })
-          : false
-      }
-
-      return {
-        activeTextColor: getActiveMarkColor(editor, 'textStyle', 'text'),
-        activeHighlightColor: getActiveMarkColor(editor, 'highlight', 'highlight'),
-        activeTextMarks,
-        activeHighlightMarks,
-      }
-    },
-  })
-
-  const resolvedTextColor =
-    editorColorState.activeTextColor ?? normalizeEditorColor(activeTextColor, 'text')
-  const resolvedHighlightColor =
-    editorColorState.activeHighlightColor ?? normalizeEditorColor(activeHighlightColor, 'highlight')
+  const resolvedTextColor = normalizeEditorColor(activeTextColor, 'text')
+  const resolvedHighlightColor = normalizeEditorColor(activeHighlightColor, 'highlight')
   const hasActiveColor = Boolean(resolvedTextColor || resolvedHighlightColor)
 
   useKeyboardShortcut(
@@ -185,44 +310,6 @@ export function ColorPickerPopover({
     },
   )
 
-  useEffect(() => {
-    setRecentColors(loadRecentColors())
-  }, [])
-
-  const isTextColorActive = (option: EditorColorOption) => {
-    if (option.id === 'default') return !resolvedTextColor
-    return (
-      resolvedTextColor === option.textValue || Boolean(editorColorState.activeTextMarks[option.id])
-    )
-  }
-
-  const isHighlightColorActive = (option: EditorColorOption) => {
-    if (option.id === 'default') return !resolvedHighlightColor
-    return (
-      resolvedHighlightColor === option.bgValue ||
-      Boolean(editorColorState.activeHighlightMarks[option.id])
-    )
-  }
-
-  const handleSelectTextColor = (option: EditorColorOption) => {
-    if (option.textValue === null || isTextColorActive(option)) {
-      editor.chain().focus().unsetColor().run()
-    } else {
-      editor.chain().focus().setColor(option.textValue).run()
-    }
-    setRecentColors((prev) => pushRecentColor(prev, { type: 'text', id: option.id }))
-    setOpen(false)
-  }
-
-  const handleSelectHighlightColor = (option: EditorColorOption) => {
-    if (option.bgValue === null || isHighlightColorActive(option)) {
-      editor.chain().focus().unsetHighlight().run()
-    } else {
-      editor.chain().focus().setHighlight({ color: option.bgValue }).run()
-    }
-    setRecentColors((prev) => pushRecentColor(prev, { type: 'highlight', id: option.id }))
-    setOpen(false)
-  }
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <Tooltip>
@@ -264,69 +351,14 @@ export function ColorPickerPopover({
       </Tooltip>
 
       <PopoverContent align="center" sideOffset={8} className="w-52 gap-3 p-3">
-        {recentColors.length > 0 && (
-          <div className="flex flex-col gap-1.5">
-            <SectionHeader label={t('colors.recently_used')} />
-            <div className="grid grid-cols-5 gap-1.5">
-              {recentColors.map((item) => {
-                const option = EDITOR_COLOR_MAP[item.id]
-                const colorName = t(`colors.${option.id}`)
-
-                if (item.type === 'text') {
-                  return (
-                    <TextColorSwatch
-                      key={`recent-text-${option.id}`}
-                      option={option}
-                      label={colorName}
-                      isActive={isTextColorActive(option)}
-                      onSelect={handleSelectTextColor}
-                    />
-                  )
-                }
-
-                return (
-                  <BackgroundColorSwatch
-                    key={`recent-highlight-${option.id}`}
-                    option={option}
-                    label={colorName}
-                    isActive={isHighlightColorActive(option)}
-                    onSelect={handleSelectHighlightColor}
-                  />
-                )
-              })}
-            </div>
-          </div>
+        {open && (
+          <ColorPickerPopoverBody
+            editor={editor}
+            activeTextColor={activeTextColor}
+            activeHighlightColor={activeHighlightColor}
+            onClose={() => setOpen(false)}
+          />
         )}
-
-        <div className="flex flex-col gap-1.5">
-          <SectionHeader label={t('colors.text_color')} />
-          <div className="grid grid-cols-5 gap-1.5">
-            {EDITOR_COLORS.map((option) => (
-              <TextColorSwatch
-                key={`text-${option.id}`}
-                option={option}
-                label={t(`colors.${option.id}`)}
-                isActive={isTextColorActive(option)}
-                onSelect={handleSelectTextColor}
-              />
-            ))}
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <SectionHeader label={t('colors.background_color')} />
-          <div className="grid grid-cols-5 gap-1.5">
-            {EDITOR_COLORS.map((option) => (
-              <BackgroundColorSwatch
-                key={`bg-${option.id}`}
-                option={option}
-                label={t(`colors.${option.id}`)}
-                isActive={isHighlightColorActive(option)}
-                onSelect={handleSelectHighlightColor}
-              />
-            ))}
-          </div>
-        </div>
       </PopoverContent>
     </Popover>
   )

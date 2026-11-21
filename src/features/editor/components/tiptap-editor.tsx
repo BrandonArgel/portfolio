@@ -1,17 +1,31 @@
 'use client'
 
+import 'katex/dist/katex.min.css'
 import { DragHandle } from '@tiptap/extension-drag-handle-react'
 import { EditorContent } from '@tiptap/react'
 import { GripVertical } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import { useTranslations } from 'next-intl'
 import { memo, useCallback, useState } from 'react'
+import { useBlogDraftsStore } from '@/features/blog/store/use-blog-drafts-store'
 
 import { useEditor } from '../hooks/use-editor'
+import { useEditorUI } from '../store/use-editor-ui'
 import { BubbleMenu } from './bubble-menu'
-import { EditorDialogs } from './editor-dialogs'
 import { EditorIndicators } from './editor-indicators'
 import { EditorLoader } from './editor-loader'
 import { MathBubbleMenu } from './math-bubble-menu'
+
+const DynamicEditorDialogs = dynamic(
+  () => import('./editor-dialogs').then((mod) => mod.EditorDialogs),
+  { ssr: false },
+)
+
+function EditorDialogsGate() {
+  const hasOpenDialog = useEditorUI((state) => state.videoDialog.isOpen || state.mathDialog.isOpen)
+  if (!hasOpenDialog) return null
+  return <DynamicEditorDialogs />
+}
 
 interface TiptapEditorProps {
   draftId: string
@@ -29,13 +43,16 @@ export const TiptapEditor = memo(function TiptapEditor({
   const t = useTranslations('features.editor')
 
   const [isSaving, setIsSaving] = useState(false)
+  const [resolvedInitialContent] = useState(
+    () => useBlogDraftsStore.getState().drafts[draftId]?.content ?? initialContent,
+  )
 
   const onSavingChange = useCallback((saving: boolean) => {
     setIsSaving(saving)
   }, [])
 
   const editor = useEditor({
-    initialContent,
+    initialContent: resolvedInitialContent,
     onChange,
     onImageUpload,
     onSavingChange,
@@ -58,7 +75,7 @@ export const TiptapEditor = memo(function TiptapEditor({
       />
       <BubbleMenu editor={editor} />
       <MathBubbleMenu editor={editor} />
-      <EditorDialogs />
+      <EditorDialogsGate />
     </div>
   )
 })

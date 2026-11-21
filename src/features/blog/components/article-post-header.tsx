@@ -136,9 +136,10 @@ export function ArticlePostHeader({
             alt={coverImageAlt?.trim() || title}
             width={1200}
             height={630}
-            priority={priorityCover}
+            preload={priorityCover}
+            fetchPriority={priorityCover ? 'high' : undefined}
             sizes="(max-width: 1200px) 100vw, 1200px"
-            className="h-auto w-full"
+            className="aspect-[1200/630] h-auto w-full object-cover"
           />
         </div>
       )}
