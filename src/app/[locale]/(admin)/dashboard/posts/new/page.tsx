@@ -37,5 +37,12 @@ export default async function NewPostPage() {
 
   const categoriesArray = categories?.map((c) => c.name) ?? []
 
-  return <BlogComposer existingCategories={categoriesArray} currentUserName={session?.user?.name} />
+  return (
+    <BlogComposer
+      existingCategories={categoriesArray}
+      currentUserName={session?.user?.name}
+      currentUserImage={session?.user?.image}
+      currentUserEmailVerified={Boolean(session?.user?.emailVerified)}
+    />
+  )
 }

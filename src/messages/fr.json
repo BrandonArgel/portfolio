@@ -1006,6 +1006,8 @@
       "image_link_placeholder": "Collez l'URL d'une image...",
       "image_embed_button": "Intégrer",
       "image_link_hint": "Fonctionne avec tout lien direct vers une image",
+      "delete_image": "Supprimer l'image",
+      "image_actions": "Actions de l'image",
       "show_preview": "Afficher Aperçu",
       "hide_preview": "Masquer Aperçu",
       "toggle_preview": "Basculer le panneau d'aperçu",
@@ -1126,7 +1128,8 @@
         "removed_lines": "Lignes supprimées (-)",
         "line_range_placeholder": "ex. 2, 4-6",
         "clear_annotations": "Effacer les surlignages",
-        "cycle_line_state": "Cliquer pour basculer surligné / ajouté / supprimé"
+        "cycle_line_state": "Cliquer pour basculer surligné / ajouté / supprimé",
+        "delete": "Supprimer le bloc de code"
       },
       "math": {
         "label": "Modifier la formule LaTeX",
@@ -1150,6 +1153,8 @@
         "actions": {
           "data": "Données",
           "settings": "Paramètres",
+          "toggle_data": "Modifier les données du graphique",
+          "toggle_settings": "Paramètres du graphique",
           "add_row": "Ajouter une ligne",
           "add_series": "Ajouter une série",
           "remove_row": "Supprimer la ligne",

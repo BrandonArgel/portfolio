@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import {
   CHART_MAX_HEIGHT,
   CHART_MIN_HEIGHT,
@@ -216,60 +217,92 @@ export function ChartNodeView({ node, selected, updateAttributes, deleteNode }: 
             {CHART_TYPES.map((chartType) => {
               const Icon = CHART_TYPE_ICONS[chartType]
               const isActive = config.type === chartType
+              const typeLabel = t(`types.${chartType}`)
               return (
-                <button
-                  key={chartType}
-                  type="button"
-                  title={t(`types.${chartType}`)}
-                  aria-label={t(`types.${chartType}`)}
-                  aria-pressed={isActive}
-                  onClick={() => updateConfig({ type: chartType })}
-                  className={cn(
-                    'inline-flex cursor-pointer items-center justify-center rounded-xs px-1.5 py-1 text-xs transition-colors',
-                    isActive
-                      ? 'bg-primary text-primary-foreground shadow-2xs'
-                      : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-                  )}
-                >
-                  <Icon className="size-3.5" />
-                </button>
+                <Tooltip key={chartType}>
+                  <TooltipTrigger
+                    render={
+                      <button
+                        type="button"
+                        aria-label={typeLabel}
+                        aria-pressed={isActive}
+                        onClick={() => updateConfig({ type: chartType })}
+                        className={cn(
+                          'inline-flex cursor-pointer items-center justify-center rounded-xs px-1.5 py-1 text-xs transition-colors',
+                          isActive
+                            ? 'bg-primary text-primary-foreground shadow-2xs'
+                            : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                        )}
+                      >
+                        <Icon className="size-3.5" />
+                      </button>
+                    }
+                  />
+                  <TooltipContent sideOffset={6}>{typeLabel}</TooltipContent>
+                </Tooltip>
               )
             })}
           </div>
 
-          <Button
-            type="button"
-            variant={activePanel === 'data' ? 'secondary' : 'ghost'}
-            size="xs"
-            onClick={() => togglePanel('data')}
-            className="gap-1"
-          >
-            <Table2 className="size-3.5" />
-            <span>{t('actions.data')}</span>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  type="button"
+                  variant={activePanel === 'data' ? 'secondary' : 'ghost'}
+                  size="xs"
+                  onClick={() => togglePanel('data')}
+                  className="gap-1"
+                >
+                  <Table2 className="size-3.5" />
+                  <span>{t('actions.data')}</span>
+                </Button>
+              }
+            />
+            <TooltipContent sideOffset={6}>{t('actions.toggle_data')}</TooltipContent>
+          </Tooltip>
 
-          <Button
-            type="button"
-            variant={activePanel === 'settings' ? 'secondary' : 'ghost'}
-            size="xs"
-            onClick={() => togglePanel('settings')}
-            className="gap-1"
-          >
-            <SlidersHorizontal className="size-3.5" />
-            <span>{t('actions.settings')}</span>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  type="button"
+                  variant={activePanel === 'settings' ? 'secondary' : 'ghost'}
+                  size="xs"
+                  onClick={() => togglePanel('settings')}
+                  className="gap-1"
+                >
+                  <SlidersHorizontal className="size-3.5" />
+                  <span>{t('actions.settings')}</span>
+                </Button>
+              }
+            />
+            <TooltipContent sideOffset={6}>{t('actions.toggle_settings')}</TooltipContent>
+          </Tooltip>
 
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-xs"
-            onClick={deleteNode}
-            aria-label={tActions('delete')}
-            title={tActions('delete')}
-            className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-          >
-            <Trash2 className="size-3.5" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-xs"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onPointerDown={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    deleteNode()
+                  }}
+                  aria-label={tActions('delete')}
+                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                >
+                  <Trash2 className="size-3.5" />
+                </Button>
+              }
+            />
+            <TooltipContent sideOffset={6}>{tActions('delete')}</TooltipContent>
+          </Tooltip>
         </div>
       </div>
 
@@ -359,30 +392,44 @@ export function ChartNodeView({ node, selected, updateAttributes, deleteNode }: 
                               className="h-7 min-w-20 border-transparent bg-transparent px-1.5 text-xs font-medium hover:border-input focus:border-input"
                             />
                             {config.series.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveSeries(sIdx)}
-                                aria-label={t('actions.remove_series')}
-                                title={t('actions.remove_series')}
-                                className="cursor-pointer rounded-xs p-0.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                              >
-                                <Trash2 className="size-3" />
-                              </button>
+                              <Tooltip>
+                                <TooltipTrigger
+                                  render={
+                                    <button
+                                      type="button"
+                                      onClick={() => handleRemoveSeries(sIdx)}
+                                      aria-label={t('actions.remove_series')}
+                                      className="cursor-pointer rounded-xs p-0.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                                    >
+                                      <Trash2 className="size-3" />
+                                    </button>
+                                  }
+                                />
+                                <TooltipContent sideOffset={6}>
+                                  {t('actions.remove_series')}
+                                </TooltipContent>
+                              </Tooltip>
                             )}
                           </div>
                         </th>
                       ))}
-                      <th className="w-8 px-1.5 py-1.5 text-right">
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon-xs"
-                          onClick={handleAddSeries}
-                          title={t('actions.add_series')}
-                          aria-label={t('actions.add_series')}
-                        >
-                          <Plus className="size-3.5" />
-                        </Button>
+                      <th className="w-12 px-1.5 py-1.5 text-right">
+                        <Tooltip>
+                          <TooltipTrigger
+                            render={
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon-xs"
+                                onClick={handleAddSeries}
+                                aria-label={t('actions.add_series')}
+                              >
+                                <Plus className="size-3.5" />
+                              </Button>
+                            }
+                          />
+                          <TooltipContent sideOffset={6}>{t('actions.add_series')}</TooltipContent>
+                        </Tooltip>
                       </th>
                     </tr>
                   </thead>
@@ -421,15 +468,23 @@ export function ChartNodeView({ node, selected, updateAttributes, deleteNode }: 
                         })}
                         <td className="px-1.5 py-1 text-right">
                           {config.data.length > 1 && (
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveRow(rowIdx)}
-                              aria-label={t('actions.remove_row')}
-                              title={t('actions.remove_row')}
-                              className="cursor-pointer rounded-xs p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                            >
-                              <Trash2 className="size-3" />
-                            </button>
+                            <Tooltip>
+                              <TooltipTrigger
+                                render={
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveRow(rowIdx)}
+                                    aria-label={t('actions.remove_row')}
+                                    className="cursor-pointer rounded-xs p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                                  >
+                                    <Trash2 className="size-3" />
+                                  </button>
+                                }
+                              />
+                              <TooltipContent sideOffset={6}>
+                                {t('actions.remove_row')}
+                              </TooltipContent>
+                            </Tooltip>
                           )}
                         </td>
                       </tr>

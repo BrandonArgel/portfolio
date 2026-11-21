@@ -2,7 +2,7 @@
 
 import type { NodeViewProps } from '@tiptap/react'
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react'
-import { Check, ChevronDown, Copy, RotateCcw, SlidersHorizontal } from 'lucide-react'
+import { Check, ChevronDown, RotateCcw, SlidersHorizontal, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type React from 'react'
 import { useId, useMemo } from 'react'
@@ -18,7 +18,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Switch } from '@/components/ui/switch'
-import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import {
   cycleLineAnnotation,
   formatLineRanges,
@@ -58,9 +58,8 @@ const STOP_EDITOR_PROPAGATION = {
   onKeyDown: stopPropagation,
 } as const
 
-export function CodeBlockComponent({ node, updateAttributes, editor }: NodeViewProps) {
+export function CodeBlockComponent({ node, updateAttributes, deleteNode, editor }: NodeViewProps) {
   const t = useTranslations('features.editor')
-  const { isCopied, copy } = useCopyToClipboard()
   const lineNumbersId = useId()
   const startLineId = useId()
   const highlightId = useId()
@@ -137,8 +136,11 @@ export function CodeBlockComponent({ node, updateAttributes, editor }: NodeViewP
     updateAttributes({ [attr]: formatLineRanges(parseLineRanges(value)) })
   }
 
-  const handleCopy = () => {
-    void copy(node.textContent)
+  const handleDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+    if (!editor.isEditable) return
+    deleteNode()
   }
 
   return (
@@ -171,20 +173,26 @@ export function CodeBlockComponent({ node, updateAttributes, editor }: NodeViewP
 
         <div className="flex shrink-0 items-center gap-1">
           <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <button
-                  type="button"
-                  disabled={!editor.isEditable}
-                  className="flex cursor-pointer items-center gap-1 rounded-md border border-border/50 bg-background/60 px-2 py-0.5 font-mono text-[11px] text-muted-foreground transition-colors hover:bg-background hover:text-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-default disabled:opacity-70"
-                  aria-label={t('code_block.select_language')}
-                  title={t('code_block.select_language')}
-                >
-                  <span>{displayLanguageBadge}</span>
-                  <ChevronDown className="size-3 text-muted-foreground" />
-                </button>
-              }
-            />
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <DropdownMenuTrigger
+                    render={
+                      <button
+                        type="button"
+                        disabled={!editor.isEditable}
+                        className="flex cursor-pointer items-center gap-1 rounded-md border border-border/50 bg-background/60 px-2 py-0.5 font-mono text-[11px] text-muted-foreground transition-colors hover:bg-background hover:text-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-default disabled:opacity-70"
+                        aria-label={t('code_block.select_language')}
+                      >
+                        <span>{displayLanguageBadge}</span>
+                        <ChevronDown className="size-3 text-muted-foreground" />
+                      </button>
+                    }
+                  />
+                }
+              />
+              <TooltipContent sideOffset={6}>{t('code_block.select_language')}</TooltipContent>
+            </Tooltip>
             <DropdownMenuContent align="end" className="max-h-64 w-44 overflow-y-auto">
               {codeLanguages.map((lang) => {
                 const isSelected =
@@ -207,28 +215,34 @@ export function CodeBlockComponent({ node, updateAttributes, editor }: NodeViewP
           </DropdownMenu>
 
           <Popover>
-            <PopoverTrigger
-              render={
-                <button
-                  type="button"
-                  disabled={!editor.isEditable}
-                  aria-label={t('code_block.options')}
-                  title={t('code_block.options')}
-                  className={cn(
-                    'relative flex cursor-pointer items-center justify-center rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted/70 hover:text-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-default disabled:opacity-50',
-                    hasCustomOptions && 'text-foreground',
-                  )}
-                >
-                  <SlidersHorizontal className="size-3.5" />
-                  {hasCustomOptions && (
-                    <span
-                      aria-hidden="true"
-                      className="absolute top-0.5 right-0.5 size-1.5 rounded-full bg-primary"
-                    />
-                  )}
-                </button>
-              }
-            />
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <PopoverTrigger
+                    render={
+                      <button
+                        type="button"
+                        disabled={!editor.isEditable}
+                        aria-label={t('code_block.options')}
+                        className={cn(
+                          'relative flex cursor-pointer items-center justify-center rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted/70 hover:text-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-default disabled:opacity-50',
+                          hasCustomOptions && 'text-foreground',
+                        )}
+                      >
+                        <SlidersHorizontal className="size-3.5" />
+                        {hasCustomOptions && (
+                          <span
+                            aria-hidden="true"
+                            className="absolute top-0.5 right-0.5 size-1.5 rounded-full bg-primary"
+                          />
+                        )}
+                      </button>
+                    }
+                  />
+                }
+              />
+              <TooltipContent sideOffset={6}>{t('code_block.options')}</TooltipContent>
+            </Tooltip>
             <PopoverContent align="end" className="w-72 p-3" {...STOP_EDITOR_PROPAGATION}>
               <div className="space-y-3">
                 <div className="flex items-center justify-between gap-2">
@@ -320,24 +334,24 @@ export function CodeBlockComponent({ node, updateAttributes, editor }: NodeViewP
             </PopoverContent>
           </Popover>
 
-          <button
-            type="button"
-            onClick={handleCopy}
-            aria-label={isCopied ? t('code_block.copied') : t('code_block.copy')}
-            title={isCopied ? t('code_block.copied') : t('code_block.copy')}
-            className={cn(
-              'flex cursor-pointer items-center gap-1.5 rounded-md px-2 py-1 font-mono text-xs transition-colors focus:outline-none focus:ring-1 focus:ring-ring',
-              isCopied
-                ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
-                : 'text-muted-foreground hover:bg-muted/70 hover:text-foreground',
-            )}
-          >
-            {isCopied ? (
-              <Check className="size-3.5 text-emerald-600 dark:text-emerald-400" />
-            ) : (
-              <Copy className="size-3.5" />
-            )}
-          </button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <button
+                  type="button"
+                  disabled={!editor.isEditable}
+                  onMouseDown={stopPropagation}
+                  onPointerDown={stopPropagation}
+                  onClick={handleDelete}
+                  aria-label={t('code_block.delete')}
+                  className="flex cursor-pointer items-center justify-center rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-default disabled:opacity-50"
+                >
+                  <Trash2 className="size-3.5" />
+                </button>
+              }
+            />
+            <TooltipContent sideOffset={6}>{t('code_block.delete')}</TooltipContent>
+          </Tooltip>
         </div>
       </div>
 
@@ -357,26 +371,34 @@ export function CodeBlockComponent({ node, updateAttributes, editor }: NodeViewP
               const sign = state === 'add' ? '+' : state === 'remove' ? '-' : ''
 
               return (
-                <button
-                  key={relativeLine}
-                  type="button"
-                  disabled={!editor.isEditable}
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onPointerDown={(e) => e.stopPropagation()}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleCycleLine(relativeLine)
-                  }}
-                  title={t('code_block.cycle_line_state')}
-                  className={cn(
-                    'flex h-[1.625em] w-full items-center justify-end gap-0.5 px-2.5 text-right opacity-65 transition-colors hover:bg-muted/60 hover:opacity-100',
-                    editor.isEditable ? 'cursor-pointer' : 'cursor-default',
-                    state && GUTTER_STATE_CLASSES[state],
-                  )}
-                >
-                  {sign && <span className="w-2.5 text-center font-semibold">{sign}</span>}
-                  <span>{displayedLine}</span>
-                </button>
+                <Tooltip key={relativeLine}>
+                  <TooltipTrigger
+                    render={
+                      <button
+                        type="button"
+                        disabled={!editor.isEditable}
+                        aria-label={t('code_block.cycle_line_state')}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleCycleLine(relativeLine)
+                        }}
+                        className={cn(
+                          'flex h-[1.625em] w-full items-center justify-end gap-0.5 px-2.5 text-right opacity-65 transition-colors hover:bg-muted/60 hover:opacity-100',
+                          editor.isEditable ? 'cursor-pointer' : 'cursor-default',
+                          state && GUTTER_STATE_CLASSES[state],
+                        )}
+                      >
+                        {sign && <span className="w-2.5 text-center font-semibold">{sign}</span>}
+                        <span>{displayedLine}</span>
+                      </button>
+                    }
+                  />
+                  <TooltipContent side="left" sideOffset={6}>
+                    {t('code_block.cycle_line_state')}
+                  </TooltipContent>
+                </Tooltip>
               )
             })}
           </div>

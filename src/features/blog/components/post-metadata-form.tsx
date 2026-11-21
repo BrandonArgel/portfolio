@@ -357,8 +357,7 @@ export function PostMetadataForm({
 
         {data.coverImage ? (
           <div className="space-y-2.5">
-            <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-muted/20">
-              {/* biome-ignore lint/performance/noImgElement: Dynamic cover preview */}
+            <div className="relative w-full overflow-hidden rounded-xl bg-muted/20">
               <img
                 src={data.coverImage}
                 alt={data.coverImageAlt || data.title || 'Cover preview'}
