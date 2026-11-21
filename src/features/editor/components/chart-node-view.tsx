@@ -15,7 +15,7 @@ import {
 import { useLocale, useTranslations } from 'next-intl'
 import { useId, useState } from 'react'
 
-import { TanStackChartRenderer } from '@/components/shared/tanstack-chart-renderer'
+import { DynamicTanStackChartRenderer } from '@/components/shared/dynamic-tanstack-chart-renderer'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -312,7 +312,7 @@ export function ChartNodeView({ node, selected, updateAttributes, deleteNode }: 
           <p className="mb-3 text-xs text-muted-foreground">{config.description}</p>
         )}
 
-        <TanStackChartRenderer
+        <DynamicTanStackChartRenderer
           config={config}
           locale={locale}
           emptyLabel={t('empty_data')}

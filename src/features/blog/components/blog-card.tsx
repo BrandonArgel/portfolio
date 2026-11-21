@@ -4,6 +4,7 @@ import { useFormatter, useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import type { BlogPostCardItem } from '../types'
+import { resolveCoverThumbnailUrl } from '../utils/optimize-cover-image'
 import { BlogThumbnail } from './blog-thumbnail'
 import { CategoryBadge } from './category-badge'
 
@@ -32,13 +33,14 @@ export function BlogCard({ post, className }: BlogCardProps) {
           className="block focus:outline-none overflow-hidden rounded-xl"
         >
           {post.coverImage ? (
-            <div className="relative aspect-16/10 w-full overflow-hidden rounded-xl border border-border/70 transition-transform duration-500 group-hover/blog-card:scale-[1.02]">
+            <div className="relative aspect-[1200/630] w-full overflow-hidden rounded-xl border border-border/70 transition-transform duration-500 group-hover/blog-card:scale-[1.02]">
               <Image
-                src={post.coverImage}
+                src={resolveCoverThumbnailUrl(post.coverImage)}
                 alt={post.title}
-                fill
+                width={600}
+                height={315}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover"
+                className="aspect-[1200/630] h-full w-full object-cover"
               />
             </div>
           ) : (

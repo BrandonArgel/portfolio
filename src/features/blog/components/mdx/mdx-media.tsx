@@ -1,9 +1,21 @@
 import type React from 'react'
 
+import { extractImageDimensionsFromUrl } from '@/features/editor/utils/optimize-inline-image'
 import { cn } from '@/lib/utils'
 
-export function MdxImage({ src, alt, className, ...props }: React.ComponentPropsWithoutRef<'img'>) {
+export function MdxImage({
+  src,
+  alt,
+  width,
+  height,
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<'img'>) {
   if (typeof src !== 'string' || !src) return null
+
+  const extracted = extractImageDimensionsFromUrl(src)
+  const resolvedWidth = width ?? extracted.width ?? undefined
+  const resolvedHeight = height ?? extracted.height ?? undefined
 
   return (
     <figure className="not-prose not-typeset my-8 flex flex-col items-center">
@@ -11,6 +23,8 @@ export function MdxImage({ src, alt, className, ...props }: React.ComponentProps
       <img
         src={src}
         alt={alt || 'Blog image'}
+        width={resolvedWidth}
+        height={resolvedHeight}
         loading="lazy"
         className={cn(
           'block h-auto w-auto max-w-full max-h-[600px] object-contain rounded-lg border border-border shadow-sm',

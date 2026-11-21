@@ -17,7 +17,7 @@ export function BlogThumbnail({
     <div
       aria-hidden="true"
       className={cn(
-        'relative aspect-16/10 w-full overflow-hidden rounded-xl border border-white/10 bg-linear-to-b from-neutral-900 via-slate-950 to-neutral-950 p-5 select-none transition-transform duration-500 group-hover/blog-card:scale-[1.02]',
+        'relative aspect-[1200/630] w-full overflow-hidden rounded-xl border border-white/10 bg-linear-to-b from-neutral-900 via-slate-950 to-neutral-950 p-5 select-none transition-transform duration-500 group-hover/blog-card:scale-[1.02]',
         className,
       )}
     >

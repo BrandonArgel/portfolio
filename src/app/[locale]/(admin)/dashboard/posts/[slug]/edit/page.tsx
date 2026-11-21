@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
-import { headers } from 'next/headers'
 import { notFound, redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { DashboardErrorState } from '@/components/shared/dashboard-error-state'
 import { BlogComposer } from '@/features/blog/components/blog-composer'
 import { getAllCategoriesAdmin, getPostBySlug } from '@/features/blog/services/posts-service'
 import type { Locale } from '@/i18n/routing'
-import { auth } from '@/lib/auth/auth'
+import { getOptionalSession } from '@/lib/auth/get-optional-session'
 import { assertNever } from '@/utils/result'
 
 interface EditPostPageProps {
@@ -18,8 +17,10 @@ interface EditPostPageProps {
 
 export async function generateMetadata({ params }: EditPostPageProps): Promise<Metadata> {
   const { slug, locale } = await params
-  const t = await getTranslations({ locale, namespace: 'features.blog.editor' })
-  const [err, post] = await getPostBySlug(slug)
+  const [t, [err, post]] = await Promise.all([
+    getTranslations({ locale, namespace: 'features.blog.editor' }),
+    getPostBySlug(slug),
+  ])
 
   if (err || !post) {
     return { title: `${t('post_not_found')}` }
@@ -31,12 +32,14 @@ export async function generateMetadata({ params }: EditPostPageProps): Promise<M
 }
 
 export default async function EditPostPage({ params }: EditPostPageProps) {
-  const { slug, locale } = await params
-  const session = await auth.api.getSession({ headers: await headers() })
+  const [{ slug, locale }, session] = await Promise.all([params, getOptionalSession()])
 
   if (!session?.user) redirect(`/${locale}/login`)
 
-  const [err, post] = await getPostBySlug(slug)
+  const [[err, post], [categoriesErr, allCategories]] = await Promise.all([
+    getPostBySlug(slug),
+    getAllCategoriesAdmin(),
+  ])
 
   if (err) {
     switch (err.reason) {
@@ -62,7 +65,6 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
     redirect(`/${locale}/dashboard/posts`)
   }
 
-  const [categoriesErr, allCategories] = await getAllCategoriesAdmin()
   if (categoriesErr) {
     switch (categoriesErr.reason) {
       case 'DATABASE_ERROR':

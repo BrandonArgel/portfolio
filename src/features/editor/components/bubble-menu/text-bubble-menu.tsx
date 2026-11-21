@@ -15,14 +15,64 @@ import {
   Strikethrough,
   Underline,
 } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import { useTranslations } from 'next-intl'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { ToggleGroup } from '@/components/ui/toggle-group'
 import { getActiveMarkColor } from '../../config/colors'
 import { ColorPickerPopover } from '../color-picker-popover'
-import { LinkDialog } from './link-dialog'
 import { MenuToggleItem } from './menu-toggle-item'
+
+const DynamicLinkDialog = dynamic(
+  () => import('./link-dialog').then((mod) => ({ default: mod.LinkDialog })),
+  { ssr: false },
+)
+
+interface BubbleMenuActiveStates {
+  isBold: boolean
+  isItalic: boolean
+  isUnderline: boolean
+  isStrike: boolean
+  isHighlight: boolean
+  isCode: boolean
+  isInlineMath: boolean
+  isLink: boolean
+  canToggleStrike: boolean
+  canShowBubbleMenu: boolean
+  activeTextColor: string | null
+  activeHighlightColor: string | null
+}
+
+const CLOSED_BUBBLE_STATE_STRIKE_DISABLED: BubbleMenuActiveStates = {
+  isBold: false,
+  isItalic: false,
+  isUnderline: false,
+  isStrike: false,
+  isHighlight: false,
+  isCode: false,
+  isInlineMath: false,
+  isLink: false,
+  canToggleStrike: false,
+  canShowBubbleMenu: false,
+  activeTextColor: null,
+  activeHighlightColor: null,
+}
+
+const CLOSED_BUBBLE_STATE_STRIKE_ENABLED: BubbleMenuActiveStates = {
+  isBold: false,
+  isItalic: false,
+  isUnderline: false,
+  isStrike: false,
+  isHighlight: false,
+  isCode: false,
+  isInlineMath: false,
+  isLink: false,
+  canToggleStrike: true,
+  canShowBubbleMenu: false,
+  activeTextColor: null,
+  activeHighlightColor: null,
+}
 
 export interface TextBubbleMenuProps {
   editor: Editor
@@ -60,24 +110,34 @@ export function TextBubbleMenu({ editor }: TextBubbleMenuProps) {
 
   const activeStates = useEditorState({
     editor,
-    selector: ({ editor }) => ({
-      isBold: editor.isActive('bold'),
-      isItalic: editor.isActive('italic'),
-      isUnderline: editor.isActive('underline'),
-      isStrike: editor.isActive('strike'),
-      isHighlight: editor.isActive('highlight'),
-      isCode: editor.isActive('code'),
-      isInlineMath: editor.isActive('inlineMath'),
-      isLink: editor.isActive('link'),
-      canToggleStrike:
+    selector: ({ editor }): BubbleMenuActiveStates => {
+      const canToggleStrike =
         editor.isEditable &&
         editor.isFocused &&
         !editor.isActive('codeBlock') &&
-        !editor.isActive('blockMath'),
-      canShowBubbleMenu: canShowTextBubbleMenu(editor),
-      activeTextColor: getActiveMarkColor(editor, 'textStyle', 'text'),
-      activeHighlightColor: getActiveMarkColor(editor, 'highlight', 'highlight'),
-    }),
+        !editor.isActive('blockMath')
+
+      if (!canShowTextBubbleMenu(editor)) {
+        return canToggleStrike
+          ? CLOSED_BUBBLE_STATE_STRIKE_ENABLED
+          : CLOSED_BUBBLE_STATE_STRIKE_DISABLED
+      }
+
+      return {
+        isBold: editor.isActive('bold'),
+        isItalic: editor.isActive('italic'),
+        isUnderline: editor.isActive('underline'),
+        isStrike: editor.isActive('strike'),
+        isHighlight: editor.isActive('highlight'),
+        isCode: editor.isActive('code'),
+        isInlineMath: editor.isActive('inlineMath'),
+        isLink: editor.isActive('link'),
+        canToggleStrike,
+        canShowBubbleMenu: true,
+        activeTextColor: getActiveMarkColor(editor, 'textStyle', 'text'),
+        activeHighlightColor: getActiveMarkColor(editor, 'highlight', 'highlight'),
+      }
+    },
   })
 
   const activeValues = useMemo(() => {
@@ -93,11 +153,11 @@ export function TextBubbleMenu({ editor }: TextBubbleMenuProps) {
     return values
   }, [activeStates])
 
-  useEffect(() => {
-    if (!activeStates.canShowBubbleMenu && isColorPickerOpen) {
-      setIsColorPickerOpen(false)
-    }
-  }, [activeStates.canShowBubbleMenu, isColorPickerOpen])
+  if (!activeStates.canShowBubbleMenu && isColorPickerOpen) {
+    setIsColorPickerOpen(false)
+  }
+
+  const effectiveColorPickerOpen = activeStates.canShowBubbleMenu && isColorPickerOpen
 
   const handleInlineMath = () => {
     if (editor.isActive('inlineMath')) {
@@ -224,7 +284,7 @@ export function TextBubbleMenu({ editor }: TextBubbleMenuProps) {
             editor={editor}
             activeTextColor={activeStates.activeTextColor}
             activeHighlightColor={activeStates.activeHighlightColor}
-            open={isColorPickerOpen}
+            open={effectiveColorPickerOpen}
             onOpenChange={setIsColorPickerOpen}
             shortcutKey="mod+shift+p"
             shortcutEnabled={isSelectionShortcutEnabled}
@@ -241,13 +301,15 @@ export function TextBubbleMenu({ editor }: TextBubbleMenuProps) {
         </ToggleGroup>
       </TiptapBubbleMenu>
 
-      <LinkDialog
-        open={isLinkDialogOpen}
-        onOpenChange={setIsLinkDialogOpen}
-        url={linkUrl}
-        onUrlChange={setLinkUrl}
-        onSave={handleSaveLink}
-      />
+      {isLinkDialogOpen && (
+        <DynamicLinkDialog
+          open={isLinkDialogOpen}
+          onOpenChange={setIsLinkDialogOpen}
+          url={linkUrl}
+          onUrlChange={setLinkUrl}
+          onSave={handleSaveLink}
+        />
+      )}
     </>
   )
 }

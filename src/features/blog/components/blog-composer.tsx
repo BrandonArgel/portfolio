@@ -1,6 +1,7 @@
 'use client'
 
 import { Settings2, X } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import { useTranslations } from 'next-intl'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { sileo } from 'sileo'
@@ -11,8 +12,10 @@ import {
   ResizablePanelGroup,
   usePanelRef,
 } from '@/components/ui/resizable'
+import { Spinner } from '@/components/ui/spinner'
 import { discardDraftChangesAction, savePostAction } from '@/features/blog/actions/post-actions'
 import { Editor } from '@/features/editor/components/editor'
+import { EditorLoader } from '@/features/editor/components/editor-loader'
 import { useIsMobile } from '@/hooks/use-is-mobile'
 import { useStoreHydration } from '@/hooks/use-store-hydration'
 import { useRouter } from '@/i18n/navigation'
@@ -28,10 +31,25 @@ import {
 } from '../schemas/post-schema'
 import type { SavePostResult } from '../services/posts-mutation-service'
 import { blogDraftsActions, useBlogDraftsStore } from '../store/use-blog-drafts-store'
-import { BlogPostPreview } from './blog-post-preview'
 import { EditorHeader } from './editor-header'
 import { PostMetadataForm } from './post-metadata-form'
-import { PostMetadataSheet } from './post-metadata-sheet'
+
+const DynamicBlogPostPreview = dynamic(
+  () => import('./blog-post-preview').then((mod) => mod.BlogPostPreview),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex flex-1 min-h-0 h-full w-full items-center justify-center">
+        <Spinner className="size-6 text-muted-foreground" />
+      </div>
+    ),
+  },
+)
+
+const DynamicPostMetadataSheet = dynamic(
+  () => import('./post-metadata-sheet').then((mod) => mod.PostMetadataSheet),
+  { ssr: false },
+)
 
 const AUTO_SAVE_INTERVAL_MS = 15_000
 
@@ -67,6 +85,7 @@ export function BlogComposer({
   currentUserEmailVerified,
 }: BlogComposerProps) {
   const t = useTranslations('features.blog.composer')
+  const tEditor = useTranslations('features.editor')
   const router = useRouter()
   const isMobile = useIsMobile()
   const metadataPanelRef = usePanelRef()
@@ -78,6 +97,7 @@ export function BlogComposer({
   const [isAutoSaving, setIsAutoSaving] = useState(false)
   const [isDiscardingDraft, setIsDiscardingDraft] = useState(false)
   const [isMetadataSheetOpen, setIsMetadataSheetOpen] = useState(false)
+  const [hasOpenedMetadataSheet, setHasOpenedMetadataSheet] = useState(false)
   const [isRightPanelCollapsed, setIsRightPanelCollapsed] = useState(false)
   const [isPreviewMode, setIsPreviewMode] = useState(false)
   const [serverUpdatedAt, setServerUpdatedAt] = useState<string | Date | null | undefined>(
@@ -93,16 +113,17 @@ export function BlogComposer({
   )
 
   const isHydrated = useStoreHydration(useBlogDraftsStore)
-  const draft = useBlogDraftsStore((state) => state.drafts[draftId])
+  const draftFrontmatter = useBlogDraftsStore((state) => state.drafts[draftId]?.frontmatter)
+  const draftLastSaved = useBlogDraftsStore((state) => state.drafts[draftId]?.lastSaved ?? null)
+  const hasDraft = useBlogDraftsStore((state) => Boolean(state.drafts[draftId]))
 
   useEffect(() => {
-    if (isHydrated && !draft) {
+    if (isHydrated && !hasDraft) {
       blogDraftsActions.initDraft(draftId, initialFrontmatter, initialContent)
     }
-  }, [isHydrated, draft, draftId, initialFrontmatter, initialContent])
+  }, [isHydrated, hasDraft, draftId, initialFrontmatter, initialContent])
 
-  const frontmatter = draft?.frontmatter || initialFrontmatter || defaultFrontmatter
-  const content = draft?.content ?? (initialContent || '')
+  const frontmatter = draftFrontmatter || initialFrontmatter || defaultFrontmatter
 
   const lastSyncedTimestampRef = useRef<number | null>(null)
 
@@ -112,6 +133,7 @@ export function BlogComposer({
 
   const openMetadataInspector = useCallback(() => {
     if (isMobile) {
+      setHasOpenedMetadataSheet(true)
       setIsMetadataSheetOpen(true)
     } else if (metadataPanelRef.current?.isCollapsed()) {
       metadataPanelRef.current.expand()
@@ -222,13 +244,14 @@ export function BlogComposer({
 
   // 15-Second Auto-Save Timer for in-progress draft edits
   useEffect(() => {
-    const lastSaved = draft?.lastSaved
-    if (!lastSaved) return
-    if (lastSyncedTimestampRef.current && lastSaved <= lastSyncedTimestampRef.current) return
+    if (!draftLastSaved) return
+    if (lastSyncedTimestampRef.current && draftLastSaved <= lastSyncedTimestampRef.current) return
     if (!frontmatter.title.trim() || !frontmatter.slug.trim()) return
 
     const timer = window.setTimeout(() => {
-      lastSyncedTimestampRef.current = lastSaved
+      const latestContent =
+        useBlogDraftsStore.getState().drafts[draftId]?.content ?? initialContent ?? ''
+      lastSyncedTimestampRef.current = draftLastSaved
       void executeAutoSave({
         id: postId,
         title: frontmatter.title,
@@ -240,7 +263,7 @@ export function BlogComposer({
         draft: true,
         intent: 'auto_save',
         categories: frontmatter.categories,
-        content,
+        content: latestContent,
         coverImage: frontmatter.coverImage || null,
         coverImageAlt: frontmatter.coverImageAlt || null,
         canonicalUrl: frontmatter.canonicalUrl || null,
@@ -248,10 +271,11 @@ export function BlogComposer({
     }, AUTO_SAVE_INTERVAL_MS)
 
     return () => window.clearTimeout(timer)
-  }, [content, draft?.lastSaved, executeAutoSave, frontmatter, postId])
+  }, [draftId, draftLastSaved, executeAutoSave, frontmatter, initialContent, postId])
 
   const handleToggleMetadata = useCallback(() => {
     if (isMobile) {
+      setHasOpenedMetadataSheet(true)
       setIsMetadataSheetOpen((prev) => !prev)
       return
     }
@@ -267,6 +291,9 @@ export function BlogComposer({
   }, [isMobile, metadataPanelRef])
 
   const handlePublish = useCallback(() => {
+    const latestContent =
+      useBlogDraftsStore.getState().drafts[draftId]?.content ?? initialContent ?? ''
+
     void executeSave({
       id: postId,
       title: frontmatter.title,
@@ -278,12 +305,12 @@ export function BlogComposer({
       draft: false,
       intent: 'publish',
       categories: frontmatter.categories,
-      content,
+      content: latestContent,
       coverImage: frontmatter.coverImage || null,
       coverImageAlt: frontmatter.coverImageAlt || null,
       canonicalUrl: frontmatter.canonicalUrl || null,
     })
-  }, [content, executeSave, frontmatter, postId])
+  }, [draftId, executeSave, frontmatter, initialContent, postId])
 
   const handleTogglePublish = useCallback(
     (nextPublished: boolean) => {
@@ -296,6 +323,9 @@ export function BlogComposer({
         return
       }
 
+      const latestContent =
+        useBlogDraftsStore.getState().drafts[draftId]?.content ?? initialContent ?? ''
+
       void executeSave({
         id: postId,
         title: frontmatter.title,
@@ -307,13 +337,13 @@ export function BlogComposer({
         draft: !nextPublished,
         intent: nextPublished ? 'publish' : 'unpublish',
         categories: frontmatter.categories,
-        content,
+        content: latestContent,
         coverImage: frontmatter.coverImage || null,
         coverImageAlt: frontmatter.coverImageAlt || null,
         canonicalUrl: frontmatter.canonicalUrl || null,
       })
     },
-    [content, draftId, executeSave, frontmatter, postId],
+    [draftId, executeSave, frontmatter, initialContent, postId],
   )
 
   const handleDiscardDraft = useCallback(async () => {
@@ -401,8 +431,69 @@ export function BlogComposer({
   const previewAuthorName = authorName || currentUserName || t('header.default_author')
   const previewAuthorImage = authorImage ?? currentUserImage ?? null
   const previewAuthorEmailVerified = authorEmailVerified ?? currentUserEmailVerified ?? false
-  const lastUpdatedAt = draft?.lastSaved || serverUpdatedAt || null
+  const lastUpdatedAt = draftLastSaved || serverUpdatedAt || null
   const isExistingPost = Boolean(postId)
+  const initialEditorContent = initialContent || ''
+
+  const editorHeaderBaseProps = {
+    title: frontmatter.title,
+    onTitleChange: handleTitleChange,
+    published: frontmatter.published,
+    draft: frontmatter.draft,
+    lastUpdatedAt,
+    editorDisplayName,
+    isSaving,
+    isAutoSaving,
+    isPreviewMode,
+    onPublish: handlePublish,
+    onPreview: handleTogglePreview,
+    onToggleMetadata: handleToggleMetadata,
+  }
+
+  const metadataFormProps = {
+    data: frontmatter,
+    onChange: handleFrontmatterChange,
+    existingCategories,
+    isExistingPost,
+    onTogglePublish: handleTogglePublish,
+    onDiscardDraft: postId ? handleDiscardDraft : undefined,
+    isDiscardingDraft,
+  }
+
+  const editorWorkspace = (
+    <div className="flex-1 min-h-0 w-full flex flex-col overflow-hidden">
+      <div
+        className={cn(
+          'flex-1 min-h-0 w-full flex p-3 md:p-4 justify-center overflow-hidden',
+          isPreviewMode && 'hidden',
+        )}
+      >
+        {isHydrated ? (
+          <Editor
+            key={`${draftId}-${editorResetKey}`}
+            draftId={draftId}
+            initialContent={initialEditorContent}
+            onChange={handleContentChange}
+            onImageUpload={handleImageUpload}
+          />
+        ) : (
+          <EditorLoader text={tEditor('loading')} />
+        )}
+      </div>
+      {isPreviewMode && (
+        <DynamicBlogPostPreview
+          draftId={draftId}
+          frontmatter={frontmatter}
+          fallbackContent={initialEditorContent}
+          authorName={previewAuthorName}
+          authorImage={previewAuthorImage}
+          authorEmailVerified={previewAuthorEmailVerified}
+          viewsCount={viewsCount}
+          updatedAt={lastUpdatedAt}
+        />
+      )}
+    </div>
+  )
 
   // Mobile Layout (< 768px): Full-width editor + Slide-over Sheet
   if (isMobile) {
@@ -411,61 +502,20 @@ export function BlogComposer({
         data-slot="blog-composer"
         className="flex-1 min-h-0 w-full flex flex-col overflow-hidden"
       >
-        <EditorHeader
-          title={frontmatter.title}
-          onTitleChange={handleTitleChange}
-          published={frontmatter.published}
-          draft={frontmatter.draft}
-          lastUpdatedAt={lastUpdatedAt}
-          editorDisplayName={editorDisplayName}
-          isSaving={isSaving}
-          isAutoSaving={isAutoSaving}
-          isMetadataOpen={isMetadataSheetOpen}
-          isPreviewMode={isPreviewMode}
-          onPublish={handlePublish}
-          onPreview={handleTogglePreview}
-          onToggleMetadata={handleToggleMetadata}
-        />
+        <EditorHeader {...editorHeaderBaseProps} isMetadataOpen={isMetadataSheetOpen} />
 
-        <div className="flex-1 min-h-0 w-full flex flex-col overflow-hidden">
-          <div
-            className={cn(
-              'flex-1 min-h-0 w-full flex p-3 justify-center overflow-hidden',
-              isPreviewMode && 'hidden',
-            )}
-          >
-            <Editor
-              key={`${draftId}-${editorResetKey}`}
-              draftId={draftId}
-              initialContent={content}
-              onChange={handleContentChange}
-              onImageUpload={handleImageUpload}
-            />
-          </div>
-          {isPreviewMode && (
-            <BlogPostPreview
-              frontmatter={frontmatter}
-              content={content}
-              authorName={previewAuthorName}
-              authorImage={previewAuthorImage}
-              authorEmailVerified={previewAuthorEmailVerified}
-              viewsCount={viewsCount}
-              updatedAt={lastUpdatedAt}
-            />
-          )}
-        </div>
+        {editorWorkspace}
 
-        <PostMetadataSheet
-          open={isMetadataSheetOpen}
-          onOpenChange={setIsMetadataSheetOpen}
-          data={frontmatter}
-          onChange={handleFrontmatterChange}
-          existingCategories={existingCategories}
-          isExistingPost={isExistingPost}
-          onTogglePublish={handleTogglePublish}
-          onDiscardDraft={postId ? handleDiscardDraft : undefined}
-          isDiscardingDraft={isDiscardingDraft}
-        />
+        {(hasOpenedMetadataSheet || isMetadataSheetOpen) && (
+          <DynamicPostMetadataSheet
+            open={isMetadataSheetOpen}
+            onOpenChange={(nextOpen) => {
+              if (nextOpen) setHasOpenedMetadataSheet(true)
+              setIsMetadataSheetOpen(nextOpen)
+            }}
+            {...metadataFormProps}
+          />
+        )}
       </div>
     )
   }
@@ -480,49 +530,9 @@ export function BlogComposer({
           minSize={50}
           className="flex h-full min-h-0 flex-col overflow-hidden"
         >
-          <EditorHeader
-            title={frontmatter.title}
-            onTitleChange={handleTitleChange}
-            published={frontmatter.published}
-            draft={frontmatter.draft}
-            lastUpdatedAt={lastUpdatedAt}
-            editorDisplayName={editorDisplayName}
-            isSaving={isSaving}
-            isAutoSaving={isAutoSaving}
-            isMetadataOpen={!isRightPanelCollapsed}
-            isPreviewMode={isPreviewMode}
-            onPublish={handlePublish}
-            onPreview={handleTogglePreview}
-            onToggleMetadata={handleToggleMetadata}
-          />
+          <EditorHeader {...editorHeaderBaseProps} isMetadataOpen={!isRightPanelCollapsed} />
 
-          <div className="flex-1 min-h-0 w-full flex flex-col overflow-hidden">
-            <div
-              className={cn(
-                'flex flex-1 min-h-0 w-full p-4 justify-center overflow-hidden',
-                isPreviewMode && 'hidden',
-              )}
-            >
-              <Editor
-                key={`${draftId}-${editorResetKey}`}
-                draftId={draftId}
-                initialContent={content}
-                onChange={handleContentChange}
-                onImageUpload={handleImageUpload}
-              />
-            </div>
-            {isPreviewMode && (
-              <BlogPostPreview
-                frontmatter={frontmatter}
-                content={content}
-                authorName={previewAuthorName}
-                authorImage={previewAuthorImage}
-                authorEmailVerified={previewAuthorEmailVerified}
-                viewsCount={viewsCount}
-                updatedAt={lastUpdatedAt}
-              />
-            )}
-          </div>
+          {editorWorkspace}
         </ResizablePanel>
 
         <ResizableHandle withHandle />
@@ -565,16 +575,7 @@ export function BlogComposer({
             </div>
 
             <div className="flex-1 min-h-0 overflow-y-auto px-5 py-5">
-              <PostMetadataForm
-                idPrefix="post-metadata-panel"
-                data={frontmatter}
-                onChange={handleFrontmatterChange}
-                existingCategories={existingCategories}
-                isExistingPost={isExistingPost}
-                onTogglePublish={handleTogglePublish}
-                onDiscardDraft={postId ? handleDiscardDraft : undefined}
-                isDiscardingDraft={isDiscardingDraft}
-              />
+              <PostMetadataForm idPrefix="post-metadata-panel" {...metadataFormProps} />
             </div>
           </aside>
         </ResizablePanel>

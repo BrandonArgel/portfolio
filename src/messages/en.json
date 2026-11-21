@@ -773,6 +773,17 @@
           "image_inserted": "Image inserted successfully",
           "cover_uploaded": "Cover image uploaded successfully"
         },
+        "cover_crop": {
+          "title": "Crop Cover Image",
+          "description": "Drag to reposition and zoom to frame your 1200×630 (1.91:1) article cover.",
+          "zoom_label": "Zoom",
+          "zoom_out": "Zoom out",
+          "zoom_in": "Zoom in",
+          "reset": "Reset",
+          "viewport_aria_label": "Cover image crop area — drag to reposition",
+          "cancel": "Cancel",
+          "confirm": "Crop & Upload"
+        },
         "frontmatter": {
           "title": "Article Metadata",
           "sheet_description": "Configure SEO details, cover image, categories, and publication status.",
@@ -1133,8 +1144,13 @@
       },
       "math": {
         "label": "Edit LaTeX formula",
+        "inline_title": "Inline LaTeX formula",
+        "block_title": "Block LaTeX formula",
         "placeholder": "Enter LaTeX...",
-        "hint": "Use LaTeX syntax"
+        "hint": "Use LaTeX syntax",
+        "confirm_shortcut": "Ctrl+Enter to confirm",
+        "cancel": "Cancel",
+        "confirm": "Confirm"
       },
       "chart": {
         "untitled": "Untitled Chart",

@@ -13,7 +13,7 @@ import { Markdown } from '@tiptap/markdown'
 import { useEditor as useTiptapEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { useTranslations } from 'next-intl'
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback'
 import { highlighter } from '@/lib/highlighter'
 import { cn } from '@/lib/utils'
@@ -30,6 +30,7 @@ import { TaskItemNode } from '../extensions/task-item-node'
 import { TaskListNode } from '../extensions/task-list-node'
 import { ColorExtension, TextStyleMark } from '../extensions/text-style-mark'
 import { UnderlineMark } from '../extensions/underline-mark'
+import { appendImageDimensionsToUrl, optimizeInlineImage } from '../utils/optimize-inline-image'
 
 interface UseBlogEditorProps {
   initialContent?: string
@@ -50,9 +51,11 @@ export function useEditor({
   const onImageUploadRef = useRef(onImageUpload)
   const onSavingChangeRef = useRef(onSavingChange)
 
-  onChangeRef.current = onChange
-  onImageUploadRef.current = onImageUpload
-  onSavingChangeRef.current = onSavingChange
+  useEffect(() => {
+    onChangeRef.current = onChange
+    onImageUploadRef.current = onImageUpload
+    onSavingChangeRef.current = onSavingChange
+  }, [onChange, onImageUpload, onSavingChange])
 
   const editorRef = useRef<Editor | null>(null)
 
@@ -150,7 +153,18 @@ export function useEditor({
       CalloutTitleNode,
       ImageNode.configure({
         uploadFn: async (file: File) => {
-          return onImageUploadRef.current?.(file)
+          const upload = onImageUploadRef.current
+          if (!upload) return undefined
+
+          const optimized = await optimizeInlineImage(file)
+          const url = await upload(optimized.file)
+          if (!url) return undefined
+
+          return {
+            url: appendImageDimensionsToUrl(url, optimized.width, optimized.height),
+            width: optimized.width,
+            height: optimized.height,
+          }
         },
       }),
       Markdown.configure({

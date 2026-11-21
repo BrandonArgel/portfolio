@@ -7,6 +7,12 @@ import {
   MAX_IMAGE_DIMENSION_PX,
   MAX_IMAGE_SIZE_BYTES,
 } from '@/config/image-upload'
+import {
+  canProcessCanvasImage,
+  canvasToBlob,
+  decodeImageBitmap,
+  renderBitmapToCanvas,
+} from '@/utils/canvas-image'
 import { error, okay, type Result } from '@/utils/result'
 import type { ImageUploadError } from '../types'
 import { resolveImageMimeType } from './image-mime'
@@ -15,30 +21,6 @@ export interface PrepareImageOptions {
   compressionThresholdBytes?: number
   maxDimensionPx?: number
   quality?: number
-}
-
-function canCompressInThisEnvironment(): boolean {
-  return typeof createImageBitmap === 'function' && typeof document !== 'undefined'
-}
-
-/**
- * Decodes the image honouring its EXIF orientation (phone photos are usually stored rotated).
- * Older engines reject the `from-image` option, so we retry without options.
- */
-async function decodeImage(file: Blob): Promise<ImageBitmap> {
-  try {
-    return await createImageBitmap(file, { imageOrientation: 'from-image' })
-  } catch {
-    return await createImageBitmap(file)
-  }
-}
-
-function canvasToBlob(
-  canvas: HTMLCanvasElement,
-  type: string,
-  quality: number,
-): Promise<Blob | null> {
-  return new Promise((resolve) => canvas.toBlob(resolve, type, quality))
 }
 
 function withExtensionFor(fileName: string, mimeType: string): string {
@@ -53,7 +35,7 @@ async function compressImage(
   mimeType: string,
   { compressionThresholdBytes, maxDimensionPx, quality }: Required<PrepareImageOptions>,
 ): Promise<File> {
-  const bitmap = await decodeImage(file)
+  const bitmap = await decodeImageBitmap(file)
 
   try {
     const longestSide = Math.max(bitmap.width, bitmap.height)
@@ -66,18 +48,7 @@ async function compressImage(
 
     const width = Math.max(1, Math.round(bitmap.width * scale))
     const height = Math.max(1, Math.round(bitmap.height * scale))
-
-    const canvas = document.createElement('canvas')
-    canvas.width = width
-    canvas.height = height
-
-    const context = canvas.getContext('2d')
-    if (!context) {
-      throw new Error('Canvas 2D context is not available')
-    }
-
-    context.imageSmoothingQuality = 'high'
-    context.drawImage(bitmap, 0, 0, width, height)
+    const canvas = renderBitmapToCanvas(bitmap, { width, height })
 
     // JPEG stays JPEG. PNG/WebP go to WebP (keeps transparency); if the browser cannot encode
     // WebP, `toBlob` silently returns PNG and we keep whatever type it produced.
@@ -116,7 +87,7 @@ export async function prepareImageFile(
 ): Promise<Result<File, ImageUploadError>> {
   const mimeType = resolveImageMimeType(file)
 
-  if (!mimeType || !isCompressibleImageMimeType(mimeType) || !canCompressInThisEnvironment()) {
+  if (!mimeType || !isCompressibleImageMimeType(mimeType) || !canProcessCanvasImage()) {
     return okay(file)
   }
 

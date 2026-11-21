@@ -773,6 +773,17 @@
           "image_inserted": "Imagen insertada con éxito",
           "cover_uploaded": "Imagen de portada subida con éxito"
         },
+        "cover_crop": {
+          "title": "Recortar Imagen de Portada",
+          "description": "Arrastra para recolocar y haz zoom para encuadrar tu portada de 1200×630 (1.91:1).",
+          "zoom_label": "Zoom",
+          "zoom_out": "Alejar",
+          "zoom_in": "Acercar",
+          "reset": "Restablecer",
+          "viewport_aria_label": "Área de recorte de portada — arrastra para mover",
+          "cancel": "Cancelar",
+          "confirm": "Recortar y Subir"
+        },
         "frontmatter": {
           "title": "Metadatos del Artículo",
           "sheet_description": "Configura detalles SEO, imagen de portada, categorías y estado de publicación.",
@@ -1133,8 +1144,13 @@
       },
       "math": {
         "label": "Editar fórmula LaTeX",
+        "inline_title": "Fórmula LaTeX en línea",
+        "block_title": "Fórmula LaTeX en bloque",
         "placeholder": "Escribe LaTeX...",
-        "hint": "Usa sintaxis LaTeX, ej. x^2, \\frac{a}{b}, \\sum_{i=1}^{n}"
+        "hint": "Usa sintaxis LaTeX, ej. x^2, \\frac{a}{b}, \\sum_{i=1}^{n}",
+        "confirm_shortcut": "Ctrl+Enter para confirmar",
+        "cancel": "Cancelar",
+        "confirm": "Confirmar"
       },
       "chart": {
         "untitled": "Gráfica sin título",

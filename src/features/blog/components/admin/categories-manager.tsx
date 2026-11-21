@@ -11,7 +11,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useMemo, useState, useTransition } from 'react'
+import { startTransition, useMemo, useOptimistic, useState, useTransition } from 'react'
 import { sileo } from 'sileo'
 import {
   AlertDialog,
@@ -49,13 +49,40 @@ interface CategoriesManagerProps {
   initialCategories: AdminCategoryItem[]
 }
 
+type CategoryOptimisticAction =
+  | { type: 'create'; category: AdminCategoryItem }
+  | { type: 'update'; category: AdminCategoryItem }
+  | { type: 'delete'; id: string }
+  | { type: 'delete_many'; ids: ReadonlySet<string> }
+
+function applyCategoryOptimisticAction(
+  state: AdminCategoryItem[],
+  action: CategoryOptimisticAction,
+): AdminCategoryItem[] {
+  switch (action.type) {
+    case 'create':
+      return [...state, action.category].sort((a, b) => a.name.localeCompare(b.name))
+    case 'update':
+      return state
+        .map((cat) => (cat.id === action.category.id ? action.category : cat))
+        .sort((a, b) => a.name.localeCompare(b.name))
+    case 'delete':
+      return state.filter((item) => item.id !== action.id)
+    case 'delete_many':
+      return state.filter((cat) => !action.ids.has(cat.id))
+  }
+}
+
 export function CategoriesManager({ initialCategories }: CategoriesManagerProps) {
   const t = useTranslations('features.blog.categories')
   const tManagement = useTranslations('features.blog.management')
   const router = useRouter()
   const { handleCategoryError } = useCategoryErrors()
 
-  const [categories, setCategories] = useState<AdminCategoryItem[]>(initialCategories)
+  const [categories, applyOptimisticCategories] = useOptimistic<
+    AdminCategoryItem[],
+    CategoryOptimisticAction
+  >(initialCategories, applyCategoryOptimisticAction)
   const [searchQuery, setSearchQuery] = useState('')
   const [filterMode, setFilterMode] = useState<'all' | 'unused'>('all')
 
@@ -67,10 +94,6 @@ export function CategoriesManager({ initialCategories }: CategoriesManagerProps)
 
   const [isPendingDelete, startDeleteTransition] = useTransition()
   const [isPendingClean, startCleanTransition] = useTransition()
-
-  useEffect(() => {
-    setCategories(initialCategories)
-  }, [initialCategories])
 
   const unusedCount = useMemo(
     () => categories.filter((cat) => cat.totalPosts === 0).length,
@@ -103,17 +126,17 @@ export function CategoriesManager({ initialCategories }: CategoriesManagerProps)
   }
 
   const handleCategoryCreated = (created: AdminCategoryItem) => {
-    setCategories((prev) => [...prev, created].sort((a, b) => a.name.localeCompare(b.name)))
-    router.refresh()
+    startTransition(() => {
+      applyOptimisticCategories({ type: 'create', category: created })
+      router.refresh()
+    })
   }
 
   const handleCategoryUpdated = (updated: AdminCategoryItem) => {
-    setCategories((prev) =>
-      prev
-        .map((cat) => (cat.id === updated.id ? updated : cat))
-        .sort((a, b) => a.name.localeCompare(b.name)),
-    )
-    router.refresh()
+    startTransition(() => {
+      applyOptimisticCategories({ type: 'update', category: updated })
+      router.refresh()
+    })
   }
 
   const handleDeleteCategory = (category: AdminCategoryItem) => {
@@ -132,8 +155,10 @@ export function CategoriesManager({ initialCategories }: CategoriesManagerProps)
         description: t('notifications.deleted_description', { name: result.name }),
       })
 
-      setCategories((prev) => prev.filter((item) => item.id !== category.id))
-      router.refresh()
+      startTransition(() => {
+        applyOptimisticCategories({ type: 'delete', id: category.id })
+        router.refresh()
+      })
     })
   }
 
@@ -154,11 +179,13 @@ export function CategoriesManager({ initialCategories }: CategoriesManagerProps)
       })
 
       const deletedSet = new Set(result.deletedIds)
-      setCategories((prev) => prev.filter((cat) => !deletedSet.has(cat.id)))
       if (filterMode === 'unused') {
         setFilterMode('all')
       }
-      router.refresh()
+      startTransition(() => {
+        applyOptimisticCategories({ type: 'delete_many', ids: deletedSet })
+        router.refresh()
+      })
     })
   }
 

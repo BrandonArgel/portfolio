@@ -14,6 +14,7 @@ import {
   Type,
   Upload,
 } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import { useTranslations } from 'next-intl'
 import { useRef, useState } from 'react'
 import { sileo } from 'sileo'
@@ -49,13 +50,24 @@ import { Separator } from '@/components/ui/separator'
 import { Spinner } from '@/components/ui/spinner'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { IMAGE_INPUT_ACCEPT } from '@/config/image-upload'
+import { IMAGE_INPUT_ACCEPT, isCompressibleImageMimeType } from '@/config/image-upload'
 import { LOCALE_META } from '@/config/locale'
 import type { Locale } from '@/i18n/routing'
 import { cn } from '@/lib/utils'
 import { generateSlug } from '@/utils/string-utils'
 import { useImageUpload } from '../hooks/use-image-upload'
 import { type BlogFrontmatter, BlogFrontmatterSchema } from '../schemas/post-schema'
+import { resolveImageMimeType } from '../utils/image-mime'
+import {
+  type CoverCropRect,
+  isExactCoverAspectRatio,
+  readImageNaturalDimensions,
+} from '../utils/optimize-cover-image'
+
+const DynamicCoverCropDialog = dynamic(
+  () => import('./cover-crop-dialog').then((mod) => mod.CoverCropDialog),
+  { ssr: false },
+)
 
 const SEO_TITLE_MIN = 50
 const SEO_TITLE_MAX = 60
@@ -103,6 +115,11 @@ export function PostMetadataForm({
   const t = useTranslations('features.blog.composer')
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [categoryInput, setCategoryInput] = useState('')
+  const [pendingCoverCrop, setPendingCoverCrop] = useState<{
+    file: File
+    naturalWidth: number
+    naturalHeight: number
+  } | null>(null)
   const chipsAnchor = useComboboxAnchor()
 
   const filteredCategories = existingCategories.filter(
@@ -169,16 +186,56 @@ export function PostMetadataForm({
     context: 'cover',
   })
 
-  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    e.target.value = ''
-    if (!file) return
+  const resetCoverFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
 
-    const url = await uploadCover(file)
+  const runCoverUpload = async (file: File, cropRect?: CoverCropRect) => {
+    const url = await uploadCover(file, cropRect ? { cropRect } : undefined)
     if (url) {
       updateField('coverImage', url)
       sileo.success({ title: t('notifications.cover_uploaded') })
     }
+  }
+
+  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    resetCoverFileInput()
+    if (!file) return
+
+    const mimeType = resolveImageMimeType(file)
+    if (!mimeType || !isCompressibleImageMimeType(mimeType)) {
+      await runCoverUpload(file)
+      return
+    }
+
+    const dims = await readImageNaturalDimensions(file)
+    if (!dims || isExactCoverAspectRatio(dims.width, dims.height)) {
+      await runCoverUpload(file)
+      return
+    }
+
+    setPendingCoverCrop({
+      file,
+      naturalWidth: dims.width,
+      naturalHeight: dims.height,
+    })
+  }
+
+  const handleCancelCoverCrop = () => {
+    resetCoverFileInput()
+    setPendingCoverCrop(null)
+  }
+
+  const handleConfirmCoverCrop = async (cropRect: CoverCropRect) => {
+    const pendingFile = pendingCoverCrop?.file
+    resetCoverFileInput()
+    setPendingCoverCrop(null)
+    if (!pendingFile) return
+    await runCoverUpload(pendingFile, cropRect)
   }
 
   const hasUnpublishedChanges = data.published && data.draft
@@ -358,6 +415,7 @@ export function PostMetadataForm({
         {data.coverImage ? (
           <div className="space-y-2.5">
             <div className="relative w-full overflow-hidden rounded-xl bg-muted/20">
+              {/* biome-ignore lint/performance/noImgElement: admin cover preview renders arbitrary external or blob URLs */}
               <img
                 src={data.coverImage}
                 alt={data.coverImageAlt || data.title || 'Cover preview'}
@@ -623,6 +681,17 @@ export function PostMetadataForm({
           )}
         </div>
       </div>
+
+      {pendingCoverCrop && (
+        <DynamicCoverCropDialog
+          file={pendingCoverCrop.file}
+          naturalWidth={pendingCoverCrop.naturalWidth}
+          naturalHeight={pendingCoverCrop.naturalHeight}
+          onCancel={handleCancelCoverCrop}
+          onConfirm={handleConfirmCoverCrop}
+          isSubmitting={isUploadingCover}
+        />
+      )}
     </div>
   )
 }

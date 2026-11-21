@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { getFormatter, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import type { BlogPostCardItem } from '../../types'
+import { resolveCoverThumbnailUrl } from '../../utils/optimize-cover-image'
 import { CategoryBadge } from '../category-badge'
 import { ArticleCardActions } from './article-card-actions'
 
@@ -23,29 +24,30 @@ export async function ArticleCard({ post, isAuthenticated = false }: ArticleCard
     <article className="group flex flex-col h-full bg-card text-card-foreground hover:bg-card/90 border border-border hover:border-primary/40 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg">
       {/* Visual Cover Banner */}
       <Link href={`/blog/${post.slug}`} className="block overflow-hidden">
-        <div className="relative aspect-video w-full overflow-hidden bg-muted/40 border-b border-border flex flex-col items-center justify-center p-4 text-center select-none">
-          {post.coverImage ? (
+        {post.coverImage ? (
+          <div className="relative aspect-[1200/630] w-full overflow-hidden bg-muted/40 border-b border-border select-none">
             <Image
-              src={post.coverImage}
+              src={resolveCoverThumbnailUrl(post.coverImage)}
               alt={post.title}
-              fill
+              width={600}
+              height={315}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="aspect-[1200/630] h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
-          ) : (
-            <>
-              <div className="absolute inset-0 bg-[radial-gradient(var(--color-border)_1px,transparent_1px)] bg-size-[16px_16px] opacity-40" />
+          </div>
+        ) : (
+          <div className="relative aspect-[1200/630] w-full overflow-hidden bg-muted/40 border-b border-border flex flex-col items-center justify-center p-4 text-center select-none">
+            <div className="absolute inset-0 bg-[radial-gradient(var(--color-border)_1px,transparent_1px)] bg-size-[16px_16px] opacity-40" />
 
-              {/* Centered card mockup badge */}
-              <div className="relative z-10 px-3 py-1.5 rounded-md bg-card text-card-foreground shadow-sm font-bold text-xs max-w-[90%] truncate border border-border">
-                {primaryBadge}
-              </div>
-              <span className="relative z-10 text-xs text-muted-foreground font-mono mt-1.5 tracking-wider uppercase">
-                {post.domainWatermark || 'brandonargel.com'}
-              </span>
-            </>
-          )}
-        </div>
+            {/* Centered card mockup badge */}
+            <div className="relative z-10 px-3 py-1.5 rounded-md bg-card text-card-foreground shadow-sm font-bold text-xs max-w-[90%] truncate border border-border">
+              {primaryBadge}
+            </div>
+            <span className="relative z-10 text-xs text-muted-foreground font-mono mt-1.5 tracking-wider uppercase">
+              {post.domainWatermark || 'brandonargel.com'}
+            </span>
+          </div>
+        )}
       </Link>
 
       {/* Card Body */}

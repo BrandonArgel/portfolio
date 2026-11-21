@@ -6,6 +6,7 @@ import { assertNever, error, okay } from '@/utils/result'
 import type { UploadImageActionResult } from '../types'
 import { buildImagePathname } from '../utils/build-image-pathname'
 import { resolveImageMimeType } from '../utils/image-mime'
+import { isDeterministicCoverFileName } from '../utils/optimize-cover-image'
 import { validateImageFile } from '../utils/validate-image-file'
 
 /**
@@ -43,11 +44,14 @@ export async function uploadImageAction(formData: FormData): Promise<UploadImage
     return error(validationError)
   }
 
+  const mimeType = resolveImageMimeType(file)
+  const isDeterministicCover = mimeType === 'image/webp' && isDeterministicCoverFileName(file.name)
+
   try {
     const blob = await put(buildImagePathname(file), file, {
       access: 'public',
-      addRandomSuffix: true,
-      contentType: resolveImageMimeType(file) ?? undefined,
+      addRandomSuffix: !isDeterministicCover,
+      contentType: mimeType ?? undefined,
     })
 
     return okay({ url: blob.url })

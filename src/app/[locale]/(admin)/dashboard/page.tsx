@@ -1,13 +1,12 @@
 import { Eye, FileText, PlusCircle, ShieldCheck, Users } from 'lucide-react'
 import type { Metadata } from 'next'
-import { headers } from 'next/headers'
 import { getFormatter, getTranslations } from 'next-intl/server'
 import { DashboardErrorState } from '@/components/shared/dashboard-error-state'
 import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { getDashboardStats } from '@/features/shared/services/dashboard-stats-service'
-import { auth } from '@/lib/auth/auth'
+import { getOptionalSession } from '@/lib/auth/get-optional-session'
 import { cn } from '@/lib/utils'
 import { assertNever } from '@/utils/result'
 
@@ -25,18 +24,14 @@ export async function generateMetadata({ params }: DashboardPageProps): Promise<
 }
 
 export default async function DashboardPage({ params }: DashboardPageProps) {
-  const { locale } = await params
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
-
-  const [t, format] = await Promise.all([
-    getTranslations({ locale, namespace: 'features.dashboard' }),
-    getFormatter({ locale }),
-  ])
+  const [{ locale }, session] = await Promise.all([params, getOptionalSession()])
   const isAdmin = session?.user.role === 'admin'
 
-  const [statsErr, stats] = await getDashboardStats(isAdmin)
+  const [t, format, [statsErr, stats]] = await Promise.all([
+    getTranslations({ locale, namespace: 'features.dashboard' }),
+    getFormatter({ locale }),
+    getDashboardStats(isAdmin),
+  ])
 
   if (statsErr || !stats) {
     if (statsErr) {

@@ -20,12 +20,12 @@ interface SlashMenuListProps {
 }
 
 export const SlashMenuList = ({ items, command, emptyText, ref }: SlashMenuListProps) => {
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [selection, setSelection] = useState<{ items: SlashMenuItem[]; index: number }>({
+    items,
+    index: 0,
+  })
 
-  useEffect(() => {
-    if (!items) return
-    setSelectedIndex(0)
-  }, [items])
+  const selectedIndex = selection.items === items ? selection.index : 0
 
   useEffect(() => {
     const activeElement = document.getElementById(`slash-menu-item-${selectedIndex}`)
@@ -48,12 +48,20 @@ export const SlashMenuList = ({ items, command, emptyText, ref }: SlashMenuListP
     ref,
     () => ({
       onKeyDown: ({ event }) => {
+        if (items.length === 0) return false
+
         if (event.key === 'ArrowUp') {
-          setSelectedIndex((prev) => (prev + items.length - 1) % items.length)
+          setSelection((prev) => {
+            const currentIndex = prev.items === items ? prev.index : 0
+            return { items, index: (currentIndex + items.length - 1) % items.length }
+          })
           return true
         }
         if (event.key === 'ArrowDown') {
-          setSelectedIndex((prev) => (prev + 1) % items.length)
+          setSelection((prev) => {
+            const currentIndex = prev.items === items ? prev.index : 0
+            return { items, index: (currentIndex + 1) % items.length }
+          })
           return true
         }
         if (event.key === 'Enter') {
@@ -63,7 +71,7 @@ export const SlashMenuList = ({ items, command, emptyText, ref }: SlashMenuListP
         return false
       },
     }),
-    [items.length, selectedIndex, selectItem],
+    [items, selectedIndex, selectItem],
   )
 
   return (
