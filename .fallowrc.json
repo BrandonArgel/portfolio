@@ -5,5 +5,14 @@
     "src/features/blog/actions/translate-post-action.ts",
     "src/lib/analytics/server.ts"
   ],
-  "ignoreFindings": ["src/components/ui/**"]
+  "ignoreFindings": ["src/components/ui/**"],
+  "health": {
+    "ignore": ["**/*.test.ts", "**/*.test.tsx", "src/db/test-db.ts", "src/db/seed.ts"]
+  },
+  "rules": {
+    "circular-dependencies": "error",
+    "unused-exports": "error",
+    "unused-types": "error",
+    "unused-files": "error"
+  }
 }

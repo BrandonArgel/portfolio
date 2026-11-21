@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { getFormatter, getTranslations } from 'next-intl/server'
 import { AdminPagination } from '@/components/shared/admin-pagination'
@@ -33,7 +32,7 @@ import {
   UserVerifiedBadge,
 } from '@/features/users'
 import { Link } from '@/i18n/navigation'
-import { auth } from '@/lib/auth/auth'
+import { getOptionalSession } from '@/lib/auth/get-optional-session'
 import { getInitials } from '@/utils/get-initials'
 import { assertNever } from '@/utils/result'
 
@@ -57,12 +56,7 @@ export async function generateMetadata({ params }: UsersPageProps): Promise<Meta
 }
 
 export default async function UsersPage({ params, searchParams }: UsersPageProps) {
-  const { locale } = await params
-  const sp = await searchParams
-
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const [{ locale }, sp, session] = await Promise.all([params, searchParams, getOptionalSession()])
 
   if (session?.user?.role !== 'admin') {
     redirect(`/${locale}/dashboard`)

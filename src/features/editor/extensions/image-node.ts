@@ -7,9 +7,57 @@ import { ReactNodeViewRenderer } from '@tiptap/react'
 
 import { IMAGE_INPUT_RULE } from '@/lib/markdown-regex'
 import { ImageComponent } from '../components/image'
+import { normalizeUploadResult, type UploadedImageResult } from '../utils/image-upload-result'
+import { extractImageDimensionsFromUrl } from '../utils/optimize-inline-image'
 
 interface CustomImageOptions extends ImageOptions {
-  uploadFn?: (file: File) => Promise<string | undefined>
+  uploadFn?: (file: File) => Promise<UploadedImageResult | undefined>
+}
+
+function buildImageAttrsWithDimensions(src: string, extra: { alt?: string; title?: string }) {
+  const { width, height } = extractImageDimensionsFromUrl(src)
+  return {
+    src,
+    ...extra,
+    ...(width !== null && height !== null ? { width, height } : {}),
+  }
+}
+
+function extractFirstImageFile(files: FileList | null | undefined): File | null {
+  return Array.from(files || []).find((file) => file.type.startsWith('image/')) ?? null
+}
+
+function startImageUploadTransaction(
+  view: EditorView,
+  imageFile: File,
+  uploadFn: (file: File) => Promise<UploadedImageResult | undefined>,
+  insertPos?: number,
+): boolean {
+  const imageType = view.state.schema.nodes.image
+  if (!imageType) {
+    return false
+  }
+
+  const uploadId =
+    typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID()
+      : String(Date.now() + Math.random())
+
+  const node = imageType.create({
+    src: '',
+    alt: imageFile.name.replace(/\.[^/.]+$/, ''),
+    isUploading: true,
+    uploadId,
+  })
+
+  const tr =
+    insertPos !== undefined
+      ? view.state.tr.insert(insertPos, node)
+      : view.state.tr.replaceSelectionWith(node)
+  view.dispatch(tr)
+
+  handleAsyncUpload(view, uploadId, imageFile, uploadFn)
+  return true
 }
 
 function findNodeByUploadId(
@@ -33,19 +81,22 @@ function handleAsyncUpload(
   view: EditorView,
   uploadId: string,
   file: File,
-  uploadFn: (file: File) => Promise<string | undefined>,
+  uploadFn: (file: File) => Promise<UploadedImageResult | undefined>,
 ) {
   uploadFn(file)
-    .then((url) => {
+    .then((result) => {
       const target = findNodeByUploadId(view.state.doc, uploadId)
       if (!target) {
         return
       }
 
-      if (url) {
+      const uploaded = normalizeUploadResult(result)
+      if (uploaded) {
         const tr = view.state.tr.setNodeMarkup(target.pos, undefined, {
           ...target.node.attrs,
-          src: url,
+          src: uploaded.src,
+          width: uploaded.width,
+          height: uploaded.height,
           alt: target.node.attrs.alt || file.name.replace(/\.[^/.]+$/, ''),
           isUploading: false,
           uploadId: null,
@@ -99,6 +150,14 @@ export const ImageNode = Image.extend<CustomImageOptions>({
     }
   },
 
+  parseMarkdown: (token, helpers) => {
+    const src = 'href' in token && typeof token.href === 'string' ? token.href : ''
+    const title = 'title' in token && typeof token.title === 'string' ? token.title : undefined
+    const alt = 'text' in token && typeof token.text === 'string' ? token.text : undefined
+
+    return helpers.createNode('image', buildImageAttrsWithDimensions(src, { title, alt }))
+  },
+
   addNodeView() {
     return ReactNodeViewRenderer(ImageComponent, {
       stopEvent: ({ event }) => {
@@ -124,7 +183,7 @@ export const ImageNode = Image.extend<CustomImageOptions>({
           const { tr } = state
           const start = range.from + match[0].lastIndexOf(fullImage)
           const end = range.to
-          const imageNode = this.type.create({ src, alt, title })
+          const imageNode = this.type.create(buildImageAttrsWithDimensions(src, { alt, title }))
           const $start = state.doc.resolve(start)
 
           // When the image syntax spans the entire paragraph, replace the paragraph itself
@@ -160,36 +219,13 @@ export const ImageNode = Image.extend<CustomImageOptions>({
               return false
             }
 
-            const files = Array.from(event.clipboardData.files || [])
-            const imageFile = files.find((file) => file.type.startsWith('image/'))
+            const imageFile = extractFirstImageFile(event.clipboardData.files)
             if (!imageFile) {
               return false
             }
 
             event.preventDefault()
-
-            const imageType = view.state.schema.nodes.image
-            if (!imageType) {
-              return false
-            }
-
-            const uploadId =
-              typeof crypto !== 'undefined' && crypto.randomUUID
-                ? crypto.randomUUID()
-                : String(Date.now() + Math.random())
-
-            const node = imageType.create({
-              src: '',
-              alt: imageFile.name.replace(/\.[^/.]+$/, ''),
-              isUploading: true,
-              uploadId,
-            })
-
-            const tr = view.state.tr.replaceSelectionWith(node)
-            view.dispatch(tr)
-
-            handleAsyncUpload(view, uploadId, imageFile, uploadFn)
-            return true
+            return startImageUploadTransaction(view, imageFile, uploadFn)
           },
 
           handleDrop: (view: EditorView, event: DragEvent) => {
@@ -197,8 +233,7 @@ export const ImageNode = Image.extend<CustomImageOptions>({
               return false
             }
 
-            const files = Array.from(event.dataTransfer.files || [])
-            const imageFile = files.find((file) => file.type.startsWith('image/'))
+            const imageFile = extractFirstImageFile(event.dataTransfer.files)
             if (!imageFile) {
               return false
             }
@@ -214,28 +249,7 @@ export const ImageNode = Image.extend<CustomImageOptions>({
               return false
             }
 
-            const imageType = view.state.schema.nodes.image
-            if (!imageType) {
-              return false
-            }
-
-            const uploadId =
-              typeof crypto !== 'undefined' && crypto.randomUUID
-                ? crypto.randomUUID()
-                : String(Date.now() + Math.random())
-
-            const node = imageType.create({
-              src: '',
-              alt: imageFile.name.replace(/\.[^/.]+$/, ''),
-              isUploading: true,
-              uploadId,
-            })
-
-            const tr = view.state.tr.insert(coordinates.pos, node)
-            view.dispatch(tr)
-
-            handleAsyncUpload(view, uploadId, imageFile, uploadFn)
-            return true
+            return startImageUploadTransaction(view, imageFile, uploadFn, coordinates.pos)
           },
 
           handleDOMEvents: {

@@ -773,6 +773,17 @@
           "image_inserted": "Image insérée avec succès",
           "cover_uploaded": "Image de couverture téléversée avec succès"
         },
+        "cover_crop": {
+          "title": "Recadrer l'image de couverture",
+          "description": "Faites glisser pour repositionner et zoomez pour cadrer votre couverture 1200×630 (1.91:1).",
+          "zoom_label": "Zoom",
+          "zoom_out": "Dézoomer",
+          "zoom_in": "Zoomer",
+          "reset": "Réinitialiser",
+          "viewport_aria_label": "Zone de recadrage de couverture — faites glisser pour déplacer",
+          "cancel": "Annuler",
+          "confirm": "Recadrer et téléverser"
+        },
         "frontmatter": {
           "title": "Métadonnées de l'Article",
           "sheet_description": "Configurez les détails SEO, l'image de couverture, les catégories et le statut de publication.",
@@ -1133,8 +1144,13 @@
       },
       "math": {
         "label": "Modifier la formule LaTeX",
+        "inline_title": "Formule LaTeX en ligne",
+        "block_title": "Formule LaTeX en bloc",
         "placeholder": "Saisissez du LaTeX...",
-        "hint": "Utilisez la syntaxe LaTeX, ex. x^2, \\frac{a}{b}, \\sum_{i=1}^{n}"
+        "hint": "Utilisez la syntaxe LaTeX, ex. x^2, \\frac{a}{b}, \\sum_{i=1}^{n}",
+        "confirm_shortcut": "Ctrl+Entrée pour confirmer",
+        "cancel": "Annuler",
+        "confirm": "Confirmer"
       },
       "chart": {
         "untitled": "Graphique sans titre",

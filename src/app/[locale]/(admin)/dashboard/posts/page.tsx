@@ -1,6 +1,5 @@
 import { Edit3, Eye, FileText, PlusCircle, Tags } from 'lucide-react'
 import type { Metadata } from 'next'
-import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { getFormatter, getTranslations } from 'next-intl/server'
 import { AdminPagination } from '@/components/shared/admin-pagination'
@@ -25,7 +24,7 @@ import { PostPublishToggle } from '@/features/blog/components/admin/publish-togg
 import { normalizeAdminPostSort } from '@/features/blog/constants/blog'
 import { getAdminPosts, getAllCategoriesAdmin } from '@/features/blog/services/posts-service'
 import { Link } from '@/i18n/navigation'
-import { auth } from '@/lib/auth/auth'
+import { getOptionalSession } from '@/lib/auth/get-optional-session'
 import { assertNever } from '@/utils/result'
 
 interface DashboardPostsPageProps {
@@ -55,12 +54,7 @@ export default async function DashboardPostsPage({
   params,
   searchParams,
 }: DashboardPostsPageProps) {
-  const { locale } = await params
-  const sp = await searchParams
-
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const [{ locale }, sp, session] = await Promise.all([params, searchParams, getOptionalSession()])
 
   if (!session?.user) {
     redirect(`/${locale}/login`)
@@ -73,8 +67,49 @@ export default async function DashboardPostsPage({
   const categoryFilter = sp.category || ''
   const sortFilter = normalizeAdminPostSort(sp.sort)
 
-  // 1. Fetch categories first to resolve slug to ID
-  const [categoriesError, categoriesData] = await getAllCategoriesAdmin()
+  const translationsPromise = getTranslations({
+    locale,
+    namespace: 'features.blog.management',
+  })
+  const formatterPromise = getFormatter({ locale })
+
+  const [t, format, [categoriesError, categoriesData], postsResult] = await (async () => {
+    if (categoryFilter) {
+      const catResult = await getAllCategoriesAdmin()
+      const categoryIdForQuery = (catResult[1] ?? []).find((c) => c.slug === categoryFilter)?.id
+      const [translations, formatter, posts] = await Promise.all([
+        translationsPromise,
+        formatterPromise,
+        getAdminPosts({
+          page: currentPage,
+          limit: 10,
+          search: searchQuery || undefined,
+          locale: localeFilter || undefined,
+          categoryId: categoryIdForQuery,
+          sort: sortFilter,
+          userId: session.user.id,
+          isAdmin,
+        }),
+      ])
+      return [translations, formatter, catResult, posts] as const
+    }
+
+    return Promise.all([
+      translationsPromise,
+      formatterPromise,
+      getAllCategoriesAdmin(),
+      getAdminPosts({
+        page: currentPage,
+        limit: 10,
+        search: searchQuery || undefined,
+        locale: localeFilter || undefined,
+        sort: sortFilter,
+        userId: session.user.id,
+        isAdmin,
+      }),
+    ])
+  })()
+
   if (categoriesError) {
     switch (categoriesError.reason) {
       case 'DATABASE_ERROR':
@@ -85,30 +120,6 @@ export default async function DashboardPostsPage({
     }
   }
   const allCategories = categoriesData ?? []
-
-  // 2. Resolve category slug from URL to matching category id
-  const categoryIdForQuery = categoryFilter
-    ? allCategories.find((c) => c.slug === categoryFilter)?.id
-    : undefined
-
-  // 3. Fetch translations, formatter, and admin posts using categoryIdForQuery
-  const [t, format, postsResult] = await Promise.all([
-    getTranslations({
-      locale,
-      namespace: 'features.blog.management',
-    }),
-    getFormatter({ locale }),
-    getAdminPosts({
-      page: currentPage,
-      limit: 10,
-      search: searchQuery || undefined,
-      locale: localeFilter || undefined,
-      categoryId: categoryIdForQuery,
-      sort: sortFilter,
-      userId: session.user.id,
-      isAdmin,
-    }),
-  ])
 
   const [postsError, postsData] = postsResult
 

@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
-import { headers } from 'next/headers'
 import { getTranslations } from 'next-intl/server'
 import { BlogComposer } from '@/features/blog/components/blog-composer'
 import { getAllCategoriesAdmin } from '@/features/blog/services/posts-service'
-import { auth } from '@/lib/auth/auth'
+import { getOptionalSession } from '@/lib/auth/get-optional-session'
 import { assertNever } from '@/utils/result'
 
 interface NewPostPageProps {
@@ -21,7 +20,7 @@ export async function generateMetadata({ params }: NewPostPageProps): Promise<Me
 
 export default async function NewPostPage() {
   const [session, [categoriesErr, categories]] = await Promise.all([
-    auth.api.getSession({ headers: await headers() }),
+    getOptionalSession(),
     getAllCategoriesAdmin(),
   ])
 

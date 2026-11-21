@@ -1,7 +1,12 @@
 import { UPLOAD_TIMEOUT_MS } from '@/config/image-upload'
-import { error, okay, type Result } from '@/utils/result'
+import { error, isErrorResult, okay, type Result } from '@/utils/result'
 import type { ImageUploadError, UploadTransport } from '../types'
 import { mapThrownError } from '../utils/map-image-upload-error'
+import {
+  type CoverCropRect,
+  type OptimizedCoverResult,
+  optimizeCoverImage,
+} from '../utils/optimize-cover-image'
 import { prepareImageFile } from '../utils/prepare-image-file'
 import { validateImageFormat, validateImageSize } from '../utils/validate-image-file'
 
@@ -9,6 +14,18 @@ export interface UploadImageServiceDeps {
   /** Sends the prepared form data to the server (abstraction over the server action). */
   transport: UploadTransport
   prepare?: (file: File) => Promise<Result<File, ImageUploadError>>
+  isOnline?: () => boolean
+  timeoutMs?: number
+}
+
+export interface UploadCoverImageServiceDeps {
+  /** Sends each prepared cover variant to the server (abstraction over the server action). */
+  transport: UploadTransport
+  cropRect?: CoverCropRect
+  optimize?: (
+    file: File,
+    cropRect?: CoverCropRect,
+  ) => Promise<Result<OptimizedCoverResult, ImageUploadError>>
   isOnline?: () => boolean
   timeoutMs?: number
 }
@@ -35,6 +52,44 @@ function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
       },
     )
   })
+}
+
+async function sendPreparedFile(
+  sizedFile: File,
+  {
+    transport,
+    isOnline,
+    timeoutMs,
+  }: {
+    transport: UploadTransport
+    isOnline: () => boolean
+    timeoutMs: number
+  },
+): Promise<Result<string, ImageUploadError>> {
+  if (!isOnline()) {
+    return error({ reason: 'OFFLINE' })
+  }
+
+  const formData = new FormData()
+  formData.append('file', sizedFile)
+
+  let response: Awaited<ReturnType<UploadTransport>>
+  try {
+    response = await withTimeout(transport(formData), timeoutMs)
+  } catch (thrown) {
+    return error(mapThrownError(thrown, { isOnline: isOnline() }))
+  }
+
+  if (!response) {
+    return error({ reason: 'UNKNOWN_ERROR' })
+  }
+
+  const [actionError, uploaded] = response
+  if (actionError) {
+    return error(actionError)
+  }
+
+  return okay(uploaded.url)
 }
 
 /**
@@ -71,28 +126,63 @@ export async function uploadImageService(
     return error(sizeError)
   }
 
-  if (!isOnline()) {
-    return error({ reason: 'OFFLINE' })
+  return sendPreparedFile(sizedFile, { transport, isOnline, timeoutMs })
+}
+
+/**
+ * Validates, center-crops into 1200x630 and 600x315 WebP variants with deterministic UUID names,
+ * and uploads both cover variants concurrently so cards always have their `-600.webp` sibling.
+ */
+export async function uploadCoverImageService(
+  file: File | null | undefined,
+  {
+    transport,
+    cropRect,
+    optimize = optimizeCoverImage,
+    isOnline = getIsOnline,
+    timeoutMs = UPLOAD_TIMEOUT_MS,
+  }: UploadCoverImageServiceDeps,
+): Promise<Result<string, ImageUploadError>> {
+  const [formatError, validFile] = validateImageFormat(file)
+  if (formatError) {
+    return error(formatError)
   }
 
-  const formData = new FormData()
-  formData.append('file', sizedFile)
-
-  let response: Awaited<ReturnType<UploadTransport>>
-  try {
-    response = await withTimeout(transport(formData), timeoutMs)
-  } catch (thrown) {
-    return error(mapThrownError(thrown, { isOnline: isOnline() }))
+  const [optimizeError, optimized] = await optimize(validFile, cropRect)
+  if (optimizeError) {
+    return error(optimizeError)
   }
 
-  if (!response) {
-    return error({ reason: 'UNKNOWN_ERROR' })
+  const [primarySizeError, sizedPrimary] = validateImageSize(optimized.primary)
+  if (primarySizeError) {
+    return error(primarySizeError)
   }
 
-  const [actionError, uploaded] = response
-  if (actionError) {
-    return error(actionError)
+  let sizedThumbnail: File | null = null
+  if (optimized.thumbnail) {
+    const [thumbSizeError, validThumb] = validateImageSize(optimized.thumbnail)
+    if (thumbSizeError) {
+      return error(thumbSizeError)
+    }
+    sizedThumbnail = validThumb
   }
 
-  return okay(uploaded.url)
+  if (!sizedThumbnail) {
+    return sendPreparedFile(sizedPrimary, { transport, isOnline, timeoutMs })
+  }
+
+  const [primaryResult, thumbnailResult] = await Promise.all([
+    sendPreparedFile(sizedPrimary, { transport, isOnline, timeoutMs }),
+    sendPreparedFile(sizedThumbnail, { transport, isOnline, timeoutMs }),
+  ])
+
+  if (isErrorResult(primaryResult)) {
+    return error(primaryResult[0])
+  }
+
+  if (isErrorResult(thumbnailResult)) {
+    return error(thumbnailResult[0])
+  }
+
+  return okay(primaryResult[1])
 }

@@ -21,6 +21,42 @@ interface CodeBlockHighlightOptions extends CodeBlockOptions {
 
 const highlightPluginKey = new PluginKey<DecorationSet>('tanstack-highlight')
 
+function buildBlockDecorations(
+  node: ProseMirrorNode,
+  pos: number,
+  highlighter: Highlighter,
+  defaultLanguage: string | null | undefined,
+): Decoration[] {
+  const code = node.textContent
+  if (!code) return []
+
+  const rawLang =
+    typeof node.attrs.language === 'string' && node.attrs.language
+      ? node.attrs.language
+      : (defaultLanguage ?? 'plaintext')
+
+  const { tokens } = highlighter.tokenize(code, { lang: rawLang })
+  const decorations: Decoration[] = []
+  let offset = pos + 1
+
+  for (const token of tokens) {
+    const from = offset
+    const to = from + token.value.length
+
+    if (token.className && to > from) {
+      decorations.push(
+        Decoration.inline(from, to, {
+          class: `th-token th-${token.className}`,
+        }),
+      )
+    }
+
+    offset = to
+  }
+
+  return decorations
+}
+
 function buildDecorations(
   doc: ProseMirrorNode,
   nodeName: string,
@@ -31,31 +67,7 @@ function buildDecorations(
   const codeBlocks = findChildren(doc, (node) => node.type.name === nodeName)
 
   for (const block of codeBlocks) {
-    const code = block.node.textContent
-    if (!code) continue
-
-    const rawLang =
-      typeof block.node.attrs.language === 'string' && block.node.attrs.language
-        ? block.node.attrs.language
-        : (defaultLanguage ?? 'plaintext')
-
-    const { tokens } = highlighter.tokenize(code, { lang: rawLang })
-    let offset = block.pos + 1
-
-    for (const token of tokens) {
-      const from = offset
-      const to = from + token.value.length
-
-      if (token.className && to > from) {
-        decorations.push(
-          Decoration.inline(from, to, {
-            class: `th-token th-${token.className}`,
-          }),
-        )
-      }
-
-      offset = to
-    }
+    decorations.push(...buildBlockDecorations(block.node, block.pos, highlighter, defaultLanguage))
   }
 
   return DecorationSet.create(doc, decorations)
@@ -82,15 +94,35 @@ function createHighlightPlugin({
         const oldBlocks = findChildren(oldState.doc, (node) => node.type.name === name)
         const newBlocks = findChildren(newState.doc, (node) => node.type.name === name)
 
-        const hasCodeBlockChanged =
-          oldBlocks.length !== newBlocks.length ||
-          newBlocks.some((newBlock, index) => oldBlocks[index]?.node !== newBlock.node)
-
-        if (hasCodeBlockChanged) {
+        if (oldBlocks.length !== newBlocks.length) {
           return buildDecorations(transaction.doc, name, highlighter, defaultLanguage)
         }
 
-        return decorationSet.map(transaction.mapping, transaction.doc)
+        let nextSet = decorationSet.map(transaction.mapping, transaction.doc)
+        const staleDecorations: Decoration[] = []
+        const freshDecorations: Decoration[] = []
+
+        for (let index = 0; index < newBlocks.length; index++) {
+          const oldBlock = oldBlocks[index]
+          const newBlock = newBlocks[index]
+          if (!oldBlock || !newBlock || oldBlock.node === newBlock.node) continue
+
+          const from = newBlock.pos + 1
+          const to = newBlock.pos + newBlock.node.nodeSize - 1
+          staleDecorations.push(...nextSet.find(from, to))
+          freshDecorations.push(
+            ...buildBlockDecorations(newBlock.node, newBlock.pos, highlighter, defaultLanguage),
+          )
+        }
+
+        if (staleDecorations.length > 0) {
+          nextSet = nextSet.remove(staleDecorations)
+        }
+        if (freshDecorations.length > 0) {
+          nextSet = nextSet.add(transaction.doc, freshDecorations)
+        }
+
+        return nextSet
       },
     },
     props: {

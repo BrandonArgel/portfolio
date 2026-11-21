@@ -30,4 +30,16 @@ describe('buildImagePathname', () => {
   test('uses the extension fallback when the type is empty', () => {
     expect(buildImagePathname(makeFile('camera.png', ''), 7)).toBe('blog-images/7-camera.png')
   })
+
+  test('preserves deterministic shared-UUID cover filenames without timestamp prefix', () => {
+    const primary = makeFile('550E8400-E29B-41D4-A716-446655440000-1200.webp', 'image/webp')
+    const thumbnail = makeFile('550E8400-E29B-41D4-A716-446655440000-600.webp', 'image/webp')
+
+    expect(buildImagePathname(primary, 999)).toBe(
+      'blog-images/550e8400-e29b-41d4-a716-446655440000-1200.webp',
+    )
+    expect(buildImagePathname(thumbnail, 999)).toBe(
+      'blog-images/550e8400-e29b-41d4-a716-446655440000-600.webp',
+    )
+  })
 })

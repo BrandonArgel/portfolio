@@ -1,7 +1,7 @@
-import { cookies, headers } from 'next/headers'
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { DashboardResizableLayout, DashboardSidebar } from '@/components/layout/sidebar'
-import { auth } from '@/lib/auth/auth'
+import { getOptionalSession } from '@/lib/auth/get-optional-session'
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -9,12 +9,11 @@ interface DashboardLayoutProps {
 }
 
 export default async function DashboardLayout({ children, params }: DashboardLayoutProps) {
-  const { locale } = await params
-  const cookieStore = await cookies()
-
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const [{ locale }, cookieStore, session] = await Promise.all([
+    params,
+    cookies(),
+    getOptionalSession(),
+  ])
 
   const isBanned = Boolean((session?.user as { banned?: boolean })?.banned)
 

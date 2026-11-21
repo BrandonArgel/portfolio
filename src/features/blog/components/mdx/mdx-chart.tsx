@@ -3,7 +3,7 @@
 import { AlertCircle } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 
-import { TanStackChartRenderer } from '@/components/shared/tanstack-chart-renderer'
+import { DynamicTanStackChartRenderer } from '@/components/shared/dynamic-tanstack-chart-renderer'
 import { parseChartMdxProps } from '@/lib/chart-schema'
 
 export interface MdxChartProps extends Record<string, unknown> {
@@ -53,7 +53,7 @@ export function MdxChart(props: MdxChartProps) {
         </header>
       )}
 
-      <TanStackChartRenderer
+      <DynamicTanStackChartRenderer
         config={config}
         locale={locale}
         emptyLabel={t('empty_data')}

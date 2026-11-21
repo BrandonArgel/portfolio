@@ -11,7 +11,6 @@ import { getBaseUrl, siteConfig } from '@/config/site'
 import { routing } from '@/i18n/routing'
 import { constructPageMetadata } from '@/lib/seo'
 import { AppProvider } from '@/providers/app-provider'
-import 'katex/dist/katex.min.css'
 import '../globals.css'
 
 interface RootLayoutProps {
@@ -56,11 +55,13 @@ export async function generateMetadata({
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const currentLocale = await getLocale()
-  const cookieStore = await cookies()
+  const [currentLocale, cookieStore, messages, timeZone] = await Promise.all([
+    getLocale(),
+    cookies(),
+    getMessages(),
+    getTimeZone(),
+  ])
   const hasConsentCookie = cookieStore.has('cookie-consent')
-  const messages = await getMessages()
-  const timeZone = await getTimeZone()
   return (
     <html
       lang={currentLocale}
