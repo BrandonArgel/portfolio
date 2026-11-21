@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { IMAGE_INPUT_ACCEPT } from '@/config/image-upload'
 import { cn } from '@/lib/utils'
 
@@ -102,19 +103,28 @@ export function ImageComponent(props: NodeViewProps) {
           defaultValue="upload"
           className="w-full relative border border-border rounded-xl shadow-sm bg-background p-2"
         >
-          <button
-            type="button"
-            onClick={(e) => {
-              stopInputPropagation(e)
-              deleteNode()
-            }}
-            onKeyDown={stopInputPropagation}
-            onMouseDown={stopInputPropagation}
-            className="absolute top-2 right-2 z-10 flex items-center justify-center size-7 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
-            aria-label="Delete image"
-          >
-            <Trash2 className="size-4" />
-          </button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    stopInputPropagation(e)
+                    deleteNode()
+                  }}
+                  onKeyDown={stopInputPropagation}
+                  onMouseDown={stopInputPropagation}
+                  onPointerDown={stopInputPropagation}
+                  className="absolute top-2 right-2 z-10 flex items-center justify-center size-7 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
+                  aria-label={t('delete_image')}
+                >
+                  <Trash2 className="size-4" />
+                </button>
+              }
+            />
+            <TooltipContent sideOffset={6}>{t('delete_image')}</TooltipContent>
+          </Tooltip>
 
           <TabsList
             variant="line"
@@ -231,7 +241,7 @@ export function ImageComponent(props: NodeViewProps) {
       {showToolbar && (
         <div
           role="toolbar"
-          aria-label="Image actions"
+          aria-label={t('image_actions')}
           data-image-toolbar
           contentEditable={false}
           onFocusCapture={() => setIsToolbarFocused(true)}
@@ -299,19 +309,28 @@ export function ImageComponent(props: NodeViewProps) {
 
           <div className="h-4 w-px bg-border shrink-0" />
 
-          <button
-            type="button"
-            onClick={(e) => {
-              stopInputPropagation(e)
-              deleteNode()
-            }}
-            onKeyDown={stopInputPropagation}
-            onMouseDown={stopInputPropagation}
-            className="flex items-center justify-center size-7 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer shrink-0"
-            aria-label="Delete image"
-          >
-            <Trash2 className="size-4" />
-          </button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    stopInputPropagation(e)
+                    deleteNode()
+                  }}
+                  onKeyDown={stopInputPropagation}
+                  onMouseDown={stopInputPropagation}
+                  onPointerDown={stopInputPropagation}
+                  className="flex items-center justify-center size-7 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer shrink-0"
+                  aria-label={t('delete_image')}
+                >
+                  <Trash2 className="size-4" />
+                </button>
+              }
+            />
+            <TooltipContent sideOffset={6}>{t('delete_image')}</TooltipContent>
+          </Tooltip>
         </div>
       )}
     </NodeViewWrapper>

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { getFormatter, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import type { BlogPostCardItem } from '../../types'
+import { CategoryBadge } from '../category-badge'
 import { ArticleCardActions } from './article-card-actions'
 
 interface ArticleCardProps {
@@ -54,12 +55,7 @@ export async function ArticleCard({ post, isAuthenticated = false }: ArticleCard
           {post.categories && post.categories.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-3">
               {post.categories.map((tag) => (
-                <span
-                  key={tag.id}
-                  className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-muted text-muted-foreground border border-border"
-                >
-                  {tag.name}
-                </span>
+                <CategoryBadge key={tag.id} category={tag} variant="outline" />
               ))}
             </div>
           )}

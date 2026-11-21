@@ -1,6 +1,6 @@
 'use client'
 
-import { Calendar, Clock, Eye, User } from 'lucide-react'
+import { Eye } from 'lucide-react'
 import { useFormatter, useTranslations } from 'next-intl'
 import { compileMDX } from 'next-mdx-remote/rsc'
 import { type ReactElement, useEffect, useMemo, useState } from 'react'
@@ -9,19 +9,24 @@ import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import remarkUnwrapImages from 'remark-unwrap-images'
 
-import { Badge } from '@/components/ui/badge'
 import { Spinner } from '@/components/ui/spinner'
 import { useMounted } from '@/hooks/use-mounted'
+import { normalizeCategorySlug } from '../schemas/category-schema'
 import type { BlogFrontmatter } from '../schemas/post-schema'
+import type { BlogCategory } from '../types'
 import { calculateReadTime } from '../utils/calculate-read-time'
 import { preprocessMdxContent } from '../utils/preprocess-mdx'
 import { rehypeCodeMeta } from '../utils/rehype-code-meta'
+import { ArticlePostHeader } from './article-post-header'
 import { mdxComponents } from './mdx'
 
 export interface BlogPostPreviewProps {
   frontmatter: BlogFrontmatter
   content: string
   authorName: string
+  authorImage?: string | null
+  authorEmailVerified?: boolean
+  viewsCount?: number
   updatedAt?: Date | number | string | null
 }
 
@@ -29,9 +34,13 @@ export function BlogPostPreview({
   frontmatter,
   content,
   authorName,
+  authorImage,
+  authorEmailVerified = false,
+  viewsCount = 0,
   updatedAt,
 }: BlogPostPreviewProps) {
   const tReader = useTranslations('features.blog.reader')
+  const tBlog = useTranslations('features.blog')
   const tComposer = useTranslations('features.blog.composer')
   const format = useFormatter()
   const isMounted = useMounted()
@@ -92,62 +101,36 @@ export function BlogPostPreview({
   }, [content])
 
   const displayTitle = frontmatter.title.trim() || tComposer('header.untitled_post')
+  const previewCategories: BlogCategory[] = frontmatter.categories.map((name) => {
+    const slug = normalizeCategorySlug(name) || name
+    return { id: slug, name, slug }
+  })
 
   return (
-    <div className="flex-1 min-h-0 h-full w-full overflow-y-auto rounded-lg border border-border bg-secondary-background shadow-sm">
+    <div className="flex-1 min-h-0 h-full w-full overflow-y-auto rounded-lg">
       <div className="mx-auto w-full max-w-4xl px-6 py-10 sm:px-10">
         <article className="w-full">
-          <header className="mb-10 flex flex-col items-start gap-6 border-b border-border pb-10">
-            {frontmatter.categories && frontmatter.categories.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {frontmatter.categories.map((category) => (
-                  <Badge key={category}>{category}</Badge>
-                ))}
-              </div>
-            )}
-
-            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              {displayTitle}
-            </h1>
-
-            {frontmatter.description.trim() && (
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                {frontmatter.description}
-              </p>
-            )}
-
-            <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
-              {authorName && (
-                <div className="flex items-center gap-2">
-                  <User className="size-4" />
-                  <span>{authorName}</span>
-                </div>
-              )}
-              {formattedDate && (
-                <div className="flex items-center gap-2">
-                  <Calendar className="size-4" />
-                  <time dateTime={parsedDate.toISOString()}>{formattedDate}</time>
-                </div>
-              )}
-              <div className="flex items-center gap-2">
-                <Clock className="size-4" />
-                <span>
-                  {readTimeMinutes} {tReader('read_time_suffix')}
-                </span>
-              </div>
-            </div>
-
-            {frontmatter.coverImage && (
-              <div className="relative aspect-video sm:aspect-21/9 w-full overflow-hidden rounded-2xl border border-border shadow-md mt-2">
-                {/* biome-ignore lint/performance/noImgElement: Live preview supports arbitrary uploaded/external URLs */}
-                <img
-                  src={frontmatter.coverImage}
-                  alt={frontmatter.coverImageAlt?.trim() || displayTitle}
-                  className="h-auto w-full object-cover"
-                />
-              </div>
-            )}
-          </header>
+          <ArticlePostHeader
+            title={displayTitle}
+            categories={previewCategories}
+            interactiveCategories={false}
+            authorName={authorName}
+            authorImage={authorImage}
+            authorEmailVerified={authorEmailVerified}
+            authorSubtitle={tBlog('author_subtitle')}
+            verifiedAuthorLabel={tBlog('verified_author')}
+            formattedDate={formattedDate}
+            dateTimeIso={parsedDate.toISOString()}
+            readTimeMinutes={readTimeMinutes}
+            readTimeSuffix={tReader('read_time_suffix')}
+            viewsCount={viewsCount}
+            viewsCountLabel={tReader('views_count', {
+              count: viewsCount,
+              formattedCount: format.number(viewsCount),
+            })}
+            coverImage={frontmatter.coverImage}
+            coverImageAlt={frontmatter.coverImageAlt}
+          />
 
           {!content.trim() ? (
             <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border/70 bg-muted/20 py-16 px-6 text-center text-muted-foreground">

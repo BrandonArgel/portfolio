@@ -15,9 +15,10 @@ import {
 import { LOCALE_META } from '@/config/locale'
 import { ADMIN_POST_SORT_OPTIONS, type AdminPostSort } from '@/features/blog/constants/blog'
 import { useUrlTableFilters } from '@/hooks/use-url-table-filters'
+import type { BlogCategory } from '../../types'
 
 interface PostTableToolbarProps {
-  categories: { id: string; name: string; slug: string }[]
+  categories: BlogCategory[]
   initialSearch?: string
   initialLocale?: string
   initialCategory?: string

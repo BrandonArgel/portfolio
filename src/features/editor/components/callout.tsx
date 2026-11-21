@@ -21,6 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { CALLOUT_TYPES, type CalloutType, isCalloutType } from '@/lib/markdown-regex'
 import { cn } from '@/lib/utils'
 
@@ -96,19 +97,26 @@ export function CalloutComponent(props: NodeViewProps) {
       className={cn('not-typeset group relative my-5 rounded-r-xl border-l-4', config.container)}
     >
       <div className="flex gap-3 p-4">
-        <div contentEditable={false} className="shrink-0 pt-0.5" aria-hidden="true">
+        <div contentEditable={false} className="shrink-0 pt-0.5">
           <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <button
-                  type="button"
-                  className="flex size-6 cursor-pointer items-center justify-center rounded-sm transition-colors hover:bg-black/10 dark:hover:bg-white/10"
-                  aria-label={t('change_type')}
-                >
-                  {config.icon}
-                </button>
-              }
-            />
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <DropdownMenuTrigger
+                    render={
+                      <button
+                        type="button"
+                        className="flex size-6 cursor-pointer items-center justify-center rounded-sm transition-colors hover:bg-black/10 dark:hover:bg-white/10"
+                        aria-label={t('change_type')}
+                      >
+                        {config.icon}
+                      </button>
+                    }
+                  />
+                }
+              />
+              <TooltipContent sideOffset={6}>{t('change_type')}</TooltipContent>
+            </Tooltip>
 
             <DropdownMenuContent align="start" className="w-48">
               {CALLOUT_TYPES.map((type) => {

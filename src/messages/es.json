@@ -1006,6 +1006,8 @@
       "image_link_placeholder": "Pega la URL de una imagen...",
       "image_embed_button": "Insertar",
       "image_link_hint": "Funciona con cualquier enlace directo de imagen de la web",
+      "delete_image": "Eliminar imagen",
+      "image_actions": "Acciones de imagen",
       "show_preview": "Mostrar Vista Previa",
       "hide_preview": "Ocultar Vista Previa",
       "toggle_preview": "Alternar panel de vista previa",
@@ -1126,7 +1128,8 @@
         "removed_lines": "Líneas eliminadas (-)",
         "line_range_placeholder": "ej. 2, 4-6",
         "clear_annotations": "Limpiar resaltados",
-        "cycle_line_state": "Clic para alternar resaltado / agregado / eliminado"
+        "cycle_line_state": "Clic para alternar resaltado / agregado / eliminado",
+        "delete": "Eliminar bloque de código"
       },
       "math": {
         "label": "Editar fórmula LaTeX",
@@ -1150,6 +1153,8 @@
         "actions": {
           "data": "Datos",
           "settings": "Ajustes",
+          "toggle_data": "Editar datos de la gráfica",
+          "toggle_settings": "Ajustes de la gráfica",
           "add_row": "Agregar fila",
           "add_series": "Agregar serie",
           "remove_row": "Eliminar fila",

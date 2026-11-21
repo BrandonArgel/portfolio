@@ -96,8 +96,13 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
       existingCategories={categoriesArray}
       initialUpdatedAt={post.updatedAt.toISOString()}
       authorName={post.authorName}
+      authorImage={post.authorImage}
+      authorEmailVerified={post.authorEmailVerified}
+      viewsCount={post.viewsCount}
       lastEditorName={post.lastEditorName}
       currentUserName={session.user.name}
+      currentUserImage={session.user.image}
+      currentUserEmailVerified={Boolean(session.user.emailVerified)}
     />
   )
 }
