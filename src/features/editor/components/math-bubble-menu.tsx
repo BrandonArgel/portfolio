@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl'
 import { useCallback } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 import { useEditorUI } from '../store/use-editor-ui'
 
@@ -17,6 +18,7 @@ interface MathBubbleMenuProps {
 
 export function MathBubbleMenu({ editor }: MathBubbleMenuProps) {
   const t = useTranslations('features.editor.math')
+  const tActions = useTranslations('common.actions')
 
   const { isInlineMath, latex } = useEditorState({
     editor,
@@ -90,14 +92,22 @@ export function MathBubbleMenu({ editor }: MathBubbleMenuProps) {
 
       <div className="h-4 w-px bg-border" />
 
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={handleDelete}
-        className="gap-1.5 h-7 px-2 text-xs text-destructive hover:text-destructive hover:bg-destructive/10"
-      >
-        <Trash2 className="size-3" />
-      </Button>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleDelete}
+              aria-label={tActions('delete')}
+              className="gap-1.5 h-7 px-2 text-xs text-destructive hover:text-destructive hover:bg-destructive/10"
+            >
+              <Trash2 className="size-3" />
+            </Button>
+          }
+        />
+        <TooltipContent sideOffset={8}>{tActions('delete')}</TooltipContent>
+      </Tooltip>
     </TiptapBubbleMenu>
   )
 }

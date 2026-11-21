@@ -1006,6 +1006,8 @@
       "image_link_placeholder": "Paste an image URL...",
       "image_embed_button": "Embed",
       "image_link_hint": "Works with any direct image link from the web",
+      "delete_image": "Delete image",
+      "image_actions": "Image actions",
       "show_preview": "Show Preview",
       "hide_preview": "Hide Preview",
       "toggle_preview": "Toggle preview panel",
@@ -1126,7 +1128,8 @@
         "removed_lines": "Removed lines (-)",
         "line_range_placeholder": "e.g. 2, 4-6",
         "clear_annotations": "Clear highlights",
-        "cycle_line_state": "Click to cycle highlight / added / removed"
+        "cycle_line_state": "Click to cycle highlight / added / removed",
+        "delete": "Delete code block"
       },
       "math": {
         "label": "Edit LaTeX formula",
@@ -1150,6 +1153,8 @@
         "actions": {
           "data": "Data",
           "settings": "Settings",
+          "toggle_data": "Edit chart data",
+          "toggle_settings": "Chart settings",
           "add_row": "Add row",
           "add_series": "Add series",
           "remove_row": "Remove row",

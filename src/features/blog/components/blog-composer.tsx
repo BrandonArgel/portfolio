@@ -42,8 +42,13 @@ export interface BlogComposerProps {
   existingCategories?: string[]
   initialUpdatedAt?: string | Date | null
   authorName?: string | null
+  authorImage?: string | null
+  authorEmailVerified?: boolean
+  viewsCount?: number
   lastEditorName?: string | null
   currentUserName?: string | null
+  currentUserImage?: string | null
+  currentUserEmailVerified?: boolean
 }
 
 export function BlogComposer({
@@ -53,8 +58,13 @@ export function BlogComposer({
   existingCategories,
   initialUpdatedAt,
   authorName,
+  authorImage,
+  authorEmailVerified,
+  viewsCount = 0,
   lastEditorName,
   currentUserName,
+  currentUserImage,
+  currentUserEmailVerified,
 }: BlogComposerProps) {
   const t = useTranslations('features.blog.composer')
   const router = useRouter()
@@ -388,6 +398,9 @@ export function BlogComposer({
 
   const editorDisplayName =
     serverLastEditor || authorName || currentUserName || t('header.default_author')
+  const previewAuthorName = authorName || currentUserName || t('header.default_author')
+  const previewAuthorImage = authorImage ?? currentUserImage ?? null
+  const previewAuthorEmailVerified = authorEmailVerified ?? currentUserEmailVerified ?? false
   const lastUpdatedAt = draft?.lastSaved || serverUpdatedAt || null
   const isExistingPost = Boolean(postId)
 
@@ -414,10 +427,10 @@ export function BlogComposer({
           onToggleMetadata={handleToggleMetadata}
         />
 
-        <div className="flex-1 min-h-0 w-full p-3 flex flex-col overflow-hidden">
+        <div className="flex-1 min-h-0 w-full flex flex-col overflow-hidden">
           <div
             className={cn(
-              'flex-1 min-h-0 w-full flex justify-center overflow-hidden',
+              'flex-1 min-h-0 w-full flex p-3 justify-center overflow-hidden',
               isPreviewMode && 'hidden',
             )}
           >
@@ -433,7 +446,10 @@ export function BlogComposer({
             <BlogPostPreview
               frontmatter={frontmatter}
               content={content}
-              authorName={editorDisplayName}
+              authorName={previewAuthorName}
+              authorImage={previewAuthorImage}
+              authorEmailVerified={previewAuthorEmailVerified}
+              viewsCount={viewsCount}
               updatedAt={lastUpdatedAt}
             />
           )}
@@ -480,10 +496,10 @@ export function BlogComposer({
             onToggleMetadata={handleToggleMetadata}
           />
 
-          <div className="flex-1 min-h-0 w-full p-4 flex flex-col overflow-hidden">
+          <div className="flex-1 min-h-0 w-full flex flex-col overflow-hidden">
             <div
               className={cn(
-                'flex-1 min-h-0 w-full flex justify-center overflow-hidden',
+                'flex flex-1 min-h-0 w-full p-4 justify-center overflow-hidden',
                 isPreviewMode && 'hidden',
               )}
             >
@@ -499,7 +515,10 @@ export function BlogComposer({
               <BlogPostPreview
                 frontmatter={frontmatter}
                 content={content}
-                authorName={editorDisplayName}
+                authorName={previewAuthorName}
+                authorImage={previewAuthorImage}
+                authorEmailVerified={previewAuthorEmailVerified}
+                viewsCount={viewsCount}
                 updatedAt={lastUpdatedAt}
               />
             )}

@@ -57,7 +57,6 @@ export function LikePostButton({
             disabled={isPending}
             aria-label={ariaLabel}
             aria-pressed={isLiked}
-            title={tooltipLabel}
             className={cn(
               'inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-lg border px-2.5 text-xs font-medium transition-colors disabled:opacity-70',
               isLiked

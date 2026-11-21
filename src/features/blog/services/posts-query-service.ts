@@ -201,7 +201,7 @@ export interface AdminPostItem {
   lastEditorName: string | null
   createdAt: Date
   updatedAt: Date
-  categories: { id: string; name: string; slug: string }[]
+  categories: BlogCategory[]
 }
 
 export interface PaginatedAdminPosts {
@@ -341,27 +341,9 @@ export function getAdminPosts(
 export function getAllCategoriesAdmin(
   locale?: string,
   database: AppDatabase = db,
-): Promise<Result<{ id: string; name: string; slug: string }[], DatabaseError>> {
-  return withDatabaseError<{ id: string; name: string; slug: string }[]>(
-    'Error fetching all categories for admin',
-    async () => {
-      if (locale) {
-        const dbCategories = await database
-          .select({
-            id: categories.id,
-            name: categories.name,
-            slug: categories.slug,
-          })
-          .from(categories)
-          .innerJoin(postsToCategories, eq(categories.id, postsToCategories.categoryId))
-          .innerJoin(posts, eq(postsToCategories.postId, posts.id))
-          .where(eq(posts.locale, locale))
-          .groupBy(categories.id, categories.name, categories.slug)
-          .orderBy(categories.name)
-
-        return okay(dbCategories)
-      }
-
+): Promise<Result<BlogCategory[], DatabaseError>> {
+  return withDatabaseError<BlogCategory[]>('Error fetching all categories for admin', async () => {
+    if (locale) {
       const dbCategories = await database
         .select({
           id: categories.id,
@@ -369,11 +351,26 @@ export function getAllCategoriesAdmin(
           slug: categories.slug,
         })
         .from(categories)
+        .innerJoin(postsToCategories, eq(categories.id, postsToCategories.categoryId))
+        .innerJoin(posts, eq(postsToCategories.postId, posts.id))
+        .where(eq(posts.locale, locale))
+        .groupBy(categories.id, categories.name, categories.slug)
         .orderBy(categories.name)
 
       return okay(dbCategories)
-    },
-  )
+    }
+
+    const dbCategories = await database
+      .select({
+        id: categories.id,
+        name: categories.name,
+        slug: categories.slug,
+      })
+      .from(categories)
+      .orderBy(categories.name)
+
+    return okay(dbCategories)
+  })
 }
 
 export function getPostBySlug(
